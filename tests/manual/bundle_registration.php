@@ -19,11 +19,15 @@ echo file_get_contents($copyFilename);
 $filesystem = new Filesystem();
 $editor = new LineEditor($filesystem);
 
-$add = '            new Gnugat\Bundle\WizardBundle\GnugatWizardBundle(),';
-$after = '            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),';
+$startBundleRegistration = '        $bundles = array(';
+$endBundleRegistration = '        );';
+$bundleToRegister =  '            new Gnugat\Bundle\WizardBundle\GnugatWizardBundle(),';
 
 $editor->open($copyFilename);
-$editor->addAfter($add, $after);
+$editor->jumpDownTo($startBundleRegistration);
+$editor->jumpDownTo($endBundleRegistration);
+$editor->addBefore($bundleToRegister);
+$editor->save();
 
 echo "\nFile after:\n";
 echo file_get_contents($copyFilename);
