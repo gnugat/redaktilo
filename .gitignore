@@ -1,0 +1,7 @@
+# Temporary files
+/tests/fixtures/copies/
+
+# Dependencies
+
+/vendor/
+/composer.lock

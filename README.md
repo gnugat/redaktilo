@@ -2,39 +2,42 @@
 
 A programatic editor:
 
+    #!/usr/bin/env php
     <?php
 
-    use Redaktilo\Editor;
+    require_once __DIR__.'/../../vendor/autoload.php';
 
-    $editor = new Editor();
-    $file = $editor->openFile(__DIR__.'/tests/fixtures/edit-me.txt');
+    use Gnugat\Redaktilo\File\Filesystem;
+    use Gnugat\Redaktilo\Editor\LineEditor;
 
-    if ($file->hasLine('grumpy')) {
-        $file->addLineAfter('cat', 'grumpy');
-    }
+    $filesystem = new Filesystem();
+    $editor = new LineEditor($filesystem);
 
-    $file->save();
+    $addLine = 'Cat';
+    $afterLine = 'Grumpy';
 
-Read more about this project in [its introduction](doc/01-introduction.md).
+    $editor->open('/tmp/edit-me.txt');
+    $editor->addAfter($addLine, $afterLine);
+
+Read more about this library in [its introduction](doc/01-introduction.md).
 
 ## Features
 
-    Editor:
+    Operations:
 
-    [ ] opens existing file
+    [x] opens existing file
     [ ] creates new file
+    [ ] hold many files
+    [ ] autosave configuration
+    [x] add after
+    [ ] add before
+    [ ] selector
 
-    File:
+    File types:
 
-    [ ] detects presence of line
-    [ ] adds new line after existing one
-    [ ] saves in the actual file
-
-    Indentation:
-
-    [ ] indents line with given depth
-    [ ] unindents line with given depth
-    [ ] guesses the identation depth of the given line
+    [x] lines
+    [ ] indented lines
+    [ ] PHP tokens
 
 Find out how to use it with the [usage guide](doc/03-usage.md).
 

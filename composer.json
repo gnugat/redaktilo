@@ -1,0 +1,20 @@
+{
+    "name": "gnugat/redaktilo",
+    "license": "MIT",
+    "type": "library",
+    "description": "An editor allowing you to modify files programmatically",
+    "autoload": {
+        "psr-4": {
+            "": "src"
+        }
+    },
+    "authors": [{
+        "name": "Loïc Chardonnet",
+        "role": "Lead developer"
+    }],
+    "require-dev": {
+        "phpspec/phpspec": "~2.0",
+        "bossa/phpspec2-expect": "~1.0",
+        "symfony/filesystem": "~2.4"
+    }
+}
