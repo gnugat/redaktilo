@@ -11,8 +11,6 @@
 
 namespace Gnugat\Redaktilo\Editor;
 
-use Gnugat\Redaktilo\File\Filesystem;
-
 /**
  * Allows File manipulations.
  *

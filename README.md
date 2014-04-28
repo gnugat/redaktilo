@@ -2,6 +2,7 @@
 
 A programatic editor:
 
+```php
     #!/usr/bin/env php
     <?php
 
@@ -18,8 +19,12 @@ A programatic editor:
 
     $editor->open('/tmp/edit-me.txt');
     $editor->addAfter($addLine, $afterLine);
+```
 
 Read more about this library in [its introduction](doc/01-introduction.md).
+
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/big.png)](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08)
+[![Travis CI](https://travis-ci.org/gnugat/redaktilo.png)](https://travis-ci.org/gnugat/redaktilo)
 
 ## Features
 
