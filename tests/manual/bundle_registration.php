@@ -22,7 +22,7 @@ $editor = new LineEditor($filesystem);
 $add = '            new Gnugat\Bundle\WizardBundle\GnugatWizardBundle(),';
 $after = '            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),';
 
-$editor->openFile($copyFilename);
+$editor->open($copyFilename);
 $editor->addAfter($add, $after);
 
 echo "\nFile after:\n";

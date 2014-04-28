@@ -36,7 +36,7 @@ class LineEditorSpec extends ObjectBehavior
         $file->write($afterLines)->shouldBeCalled();
         $filesystem->write($file)->shouldBeCalled();
 
-        $this->openFile(self::FILENAME);
+        $this->open(self::FILENAME);
         $this->addAfter('Cat', 'Grumpy');
     }
 }
