@@ -20,7 +20,7 @@ namespace Gnugat\Redaktilo\Editor;
 interface Editor
 {
     /**
-     * Opens an existing.
+     * Opens an existing file.
      *
      * @param string $filename
      */
