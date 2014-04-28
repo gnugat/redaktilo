@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 0.1.2: Fix open
+
+* fixed `openFile` to `open`
+
 ## 0.1.1: Continuous Integration
 
 * fixed Insight analysis 1
