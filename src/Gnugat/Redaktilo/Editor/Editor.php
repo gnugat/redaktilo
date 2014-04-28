@@ -12,10 +12,14 @@
 namespace Gnugat\Redaktilo\Editor;
 
 /**
- * Allows File manipulations.
+ * Allows File manipulations:
+ *
+ * + open an existing file
+ * + move the cursor to the desired area
+ * + insert whatever you want around the cursor
+ * + save your modifications
  *
  * Generally delegates read and write operations to Filesystem.
- * An Editor can hold many File, if necessary.
  */
 interface Editor
 {
@@ -27,11 +31,35 @@ interface Editor
     public function open($filename);
 
     /**
-     * Inserts $add after $after in the file.
-     * Does also write operations if `autosave` is enabled.
+     * Moves down the cursor until $to is encountered.
+     *
+     * @param mixed $to
+     */
+    public function jumpDownTo($to);
+
+    /**
+     * Moves up the cursor until $to is encountered.
+     *
+     * @param mixed $to
+     */
+    public function jumpUpTo($to);
+
+    /**
+     * Moves up the cursor and inserts $add.
      *
      * @param mixed $add
-     * @param mixed $after
      */
-    public function addAfter($add, $after);
+    public function addBefore($add);
+
+    /**
+     * Moves down the cursor and inserts $add.
+     *
+     * @param mixed $add
+     */
+    public function addAfter($add);
+
+    /**
+     * Backups the modifications.
+     */
+    public function save();
 }

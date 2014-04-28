@@ -15,19 +15,13 @@ class LineEditorSpec extends ObjectBehavior
         $this->beConstructedWith($filesystem);
     }
 
-    function it_edits_files(Filesystem $filesystem, LineFile $file)
+    function it_inserts_lines_before_cursor(Filesystem $filesystem, LineFile $file)
     {
-        $beforeLines = array(
-            'Grumpy',
-            '',
-        );
-        $afterLines = array(
-            'Grumpy',
-            'Cat',
-            '',
-        );
+        $beforeLines = array('We', 'are', 'knights', 'who', 'say', 'ni');
+        $afterLines = array('We', 'are', 'the', 'knights', 'who', 'say', 'ni');
 
         $file->read()->willReturn($beforeLines);
+        $file->getFilename()->willReturn('/monthy/python.txt');
         $filesystem
             ->read(self::FILENAME, Filesystem::LINE_FILE_TYPE)
             ->willReturn($file)
@@ -37,6 +31,8 @@ class LineEditorSpec extends ObjectBehavior
         $filesystem->write($file)->shouldBeCalled();
 
         $this->open(self::FILENAME);
-        $this->addAfter('Cat', 'Grumpy');
+        $this->jumpDownTo('knights');
+        $this->addBefore('the');
+        $this->save();
     }
 }

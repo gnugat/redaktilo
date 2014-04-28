@@ -22,14 +22,11 @@ class LineEditor implements Editor
     /** @var Filesystem */
     private $filesystem;
 
-    /** @var array of File */
-    private $files = array();
+    /** @var LineFile */
+    private $file;
 
     /** @var integer */
-    private $currentFile = -1;
-
-    /** @var Boolean */
-    private $autosave = true;
+    private $cursor = 0;
 
     /** @param Filesystem $filesystem */
     public function __construct(Filesystem $filesystem)
@@ -40,30 +37,92 @@ class LineEditor implements Editor
     /** {@inheritdoc} */
     public function open($filename)
     {
-        $file = $this->filesystem->read($filename, Filesystem::LINE_FILE_TYPE);
-
-        $this->files[] = $file;
-        $this->currentFile++;
+        $this->file = $this->filesystem->read($filename, Filesystem::LINE_FILE_TYPE);
+        $this->cursor = 0;
     }
 
     /**
-     * @param string $add
-     * @param string $after
+     * Moves down the cursor to the given line.
+     *
+     * @param string $to
      */
-    public function addAfter($add, $after)
+    public function jumpDownTo($to)
     {
-        $file = $this->files[$this->currentFile];
-        $preEditLines = $file->read();
+        $lines = $this->file->read();
+        $filename = $this->file->getFilename();
+        $length = count($lines);
+        for ($line = $this->cursor + 1; $line < $length; $line++) {
+            if ($lines[$line] === $to) {
+                $this->cursor = $line;
+
+                return;
+            }
+        }
+
+        throw new \Exception("Couldn't find line $to in $filename");
+    }
+
+    /**
+     * Moves up the cursor to the given line.
+     *
+     * @param string $to
+     */
+    public function jumpUpTo($to)
+    {
+        $lines = $this->file->read();
+        $filename = $this->file->getFilename();
+        for ($line = $this->cursor - 1; $line >= 0; $line--) {
+            if ($lines[$line] === $to) {
+                $this->cursor = $line;
+
+                return;
+            }
+        }
+
+        throw new \Exception("Couldn't find line $to in $filename");
+    }
+
+    /**
+     * Moves up the cursor and inserts the given line.
+     *
+     * @param string $add
+     */
+    public function addBefore($add)
+    {
+        $cursor = $this->cursor--;
+        $preEditLines = $this->file->read();
         $postEditLines = array();
-        foreach ($preEditLines as $line) {
+        foreach ($preEditLines as $lineNumber => $line) {
+            if ($cursor === $lineNumber) {
+                $postEditLines[] = $add;
+            }
             $postEditLines[] = $line;
-            if ($line === $after) {
+        }
+        $this->file->write($postEditLines);
+    }
+
+    /**
+     * Moves down the cursor and inserts the given line.
+     *
+     * @param string $add
+     */
+    public function addAfter($add)
+    {
+        $cursor = $this->cursor++;
+        $preEditLines = $this->file->read();
+        $postEditLines = array();
+        foreach ($preEditLines as $lineNumber => $line) {
+            $postEditLines[] = $line;
+            if ($cursor === $lineNumber) {
                 $postEditLines[] = $add;
             }
         }
-        $file->write($postEditLines);
-        if ($this->autosave) {
-            $this->filesystem->write($file);
-        }
+        $this->file->write($postEditLines);
+    }
+
+    /** {@inheritdoc} */
+    public function save()
+    {
+        $this->filesystem->write($this->file);
     }
 }

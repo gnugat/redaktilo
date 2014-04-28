@@ -49,7 +49,11 @@ class LineFile implements File
         return $this->content;
     }
 
-    /** @return array */
+    /**
+     * Returns file's lines.
+     *
+     * @return array
+     */
     public function read()
     {
         $lines = explode(PHP_EOL, $this->content);
@@ -57,7 +61,11 @@ class LineFile implements File
         return $lines;
     }
 
-    /** @param array $content */
+    /**
+     * Replaces the file's lines.
+     *
+     * @param array $content
+     */
     public function write($content)
     {
         $this->content = implode(PHP_EOL, $content);

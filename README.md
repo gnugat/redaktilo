@@ -14,11 +14,10 @@ A programatic editor:
     $filesystem = new Filesystem();
     $editor = new LineEditor($filesystem);
 
-    $addLine = 'Cat';
-    $afterLine = 'Grumpy';
-
     $editor->open('/tmp/edit-me.txt');
-    $editor->addAfter($addLine, $afterLine);
+    $editor->jumpDownTo('Grumpy');
+    $editor->addAfter('Cat');
+    $editor->save();
 ```
 
 Read more about this library in [its introduction](doc/01-introduction.md).
