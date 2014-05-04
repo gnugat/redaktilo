@@ -1,5 +1,14 @@
 # Changes between versions
 
+## 0.2.0: Jump to
+
+* added jump to methods to Editor
+* removed autosave
+* added manual save
+* added usage documentation
+* added use cases documentation
+* removed installer
+
 ## 0.1.2: Fix open
 
 * fixed `openFile` to `open`
