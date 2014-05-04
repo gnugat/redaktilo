@@ -1,20 +1,21 @@
 # Redaktilo
 
-Do you need to manipulate files in your scripts?
-Redaktilo allows your code to navigate in the file and edit it.
+Small and simple library allowing your code to edit files.
 
-Read more about this library in [its introduction](doc/01-introduction.md).
+**Caution**: under heavy development, new implementations and backward
+compatibility breaks are to be expected quite often.
+
+Read more about this library in [its documentation introduction](doc/01-introduction.md).
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/big.png)](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08)
 [![Travis CI](https://travis-ci.org/gnugat/redaktilo.png)](https://travis-ci.org/gnugat/redaktilo)
 
 ## Installation
 
-To download and install Redaktilo in your projects, run the following command:
+Use [Composer](http://getcomposer.org/) to download and install Redaktilo in
+your projects:
 
-    curl -sS https://raw.github.com/gnugat/redaktilo/master/bin/installer.sh | sh
-
-Learn more about the steps followed by the script by reading its [documentation](doc/02-installation.md).
+    composer require "gnugat/redaktilo:~0.2@dev"
 
 ## Getting started
 
@@ -62,7 +63,13 @@ $editor->save();
 wouldn't help you in this situation if you want to keep empty lines and
 comments.
 
-Find out about how to use it with the [usage guide](doc/03-usage.md).
+Find out about how to use it with the [usage guide](doc/usage/01-index.md).
+
+## Tests
+
+Run the following script to run the tests:
+
+    ./vendor/bin/phpspec run
 
 ## Further documentation
 

@@ -1,48 +1,24 @@
 # Introduction
 
-Have you ever wanted your code to be able to add a new line in a file?
+Redaktilo allows your code to add new content to any text files. Its name comes
+from "tekstoredaktilo" which means "text editor" in esperanto.
 
-That's what Redaktilo is there for!
+A "text file", as opposed to "binary files", can contain much more than plain
+text: JSON, YAML, PHP or anything you want!
 
-## What's the point?
+To see how to use it, have a look at the following documentation:
 
-I've encountered many times the need to edit files programmatically, here's some
-of my use cases.
+* [Usage introduction](usage/01-introduction.md)
+* [LineEditor usage](usage/02-line-editor.md)
 
-### Symfony2 Yaml dumper replacement
+This small and simple library has been created to meet some actual needs.
+You can discover them in the following use cases:
 
-The [Symfony2 Yaml component](http://symfony.com/doc/current/components/yaml/index.html)
-is a small library which can be used without the whole framework.
+* [Use cases introduction](use-cases/01-introduction.md)
+* [YAML configuration edition](use-cases/02-yaml-configuration-edition.md)
+* [JSON configuration edition](use-cases/03-json-configuration-edition.md)
+* [PHP source code edition](use-cases/04-php-source-code-edition.md)
 
-It allows you to convert a yaml file to a PHP array and vis-versa. The only
-problem with it: it doesn't keep comments or empty lines.
+You can find further information with:
 
-In most cases I just want to add a line in a yaml configuration file which
-contain some usefull comments. Redaktilo fits perfectly for the job here!
-
-### composer.json edition
-
-[Composer](https://getcomposer.org/) is a dependency manager for PHP which uses
-`composer.json` as configuration file.
-
-While the console tool provides some commands to edit it (like `require` for
-example) I some time still need to edit it, for example if I want to add a
-script.
-
-Redaktilo allows me to create installers in PHP which will be able to update
-this section.
-
-### Symfony2 bundle registration
-
-Symfony2 has a [large community which provides bundles for every needs](http://knpbundles.com/).
-However installing a bundle requires the developer to manually add a line in the
-`app/AppKernel.php` file.
-
-I created a composer plugin which will automatically do this task, using
-Redaktilo.
-
-## Next readings
-
-* [installation](02-installation.md)
-* [usage](03-usage.md)
-* [tests](04-tests.md)
+* [The vocabulary](02-vocabulary.md)
