@@ -12,7 +12,6 @@
 namespace Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\File\Filesystem;
-use Gnugat\Redaktilo\File;
 
 /**
  * Allows File manipulations:
