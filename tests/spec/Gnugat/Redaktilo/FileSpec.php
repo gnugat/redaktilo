@@ -7,7 +7,7 @@ use Symfony\Component\Filesystem\Filesystem as FileCopier;
 
 class FileSpec extends ObjectBehavior
 {
-    const FILENAME = '%s/tests/fixtures/%s/%s';
+    const FILENAME = '%s/tests/fixtures/%s/life-of-brian.txt';
 
     private $filename;
     private $content;
@@ -16,8 +16,8 @@ class FileSpec extends ObjectBehavior
     {
         $rootPath = __DIR__.'/../../../../';
 
-        $sourceFilename = sprintf(self::FILENAME, $rootPath, 'sources', 'copy-me.txt');
-        $copyFilename = sprintf(self::FILENAME, $rootPath, 'copies', 'edit-me.txt');
+        $sourceFilename = sprintf(self::FILENAME, $rootPath, 'sources');
+        $copyFilename = sprintf(self::FILENAME, $rootPath, 'copies');
 
         $fileCopier = new FileCopier();
         $fileCopier->copy($sourceFilename, $copyFilename, true);
@@ -47,12 +47,7 @@ class FileSpec extends ObjectBehavior
 
     function it_writes_content()
     {
-        $content = array(
-            'We are the knigths who say ni!',
-            'Grumpy',
-            'Cat',
-            '',
-        );
+        $content = explode(PHP_EOL, $this->content);
 
         $this->write($content);
         $this->getLines()->shouldBe($content);
