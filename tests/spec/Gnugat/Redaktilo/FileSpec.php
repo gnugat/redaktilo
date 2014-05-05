@@ -38,14 +38,11 @@ class FileSpec extends ObjectBehavior
         $this->getContent()->shouldBe($this->content);
     }
 
-    function it_reads_content()
+    function it_has_lines()
     {
-        $content = array(
-            'We are the knigths who say ni!',
-            '',
-        );
+        $lines = explode(PHP_EOL, $this->content);
 
-        $this->read()->shouldReturn($content);
+        $this->getLines()->shouldBe($lines);
     }
 
     function it_writes_content()
@@ -58,6 +55,6 @@ class FileSpec extends ObjectBehavior
         );
 
         $this->write($content);
-        $this->read()->shouldBe($content);
+        $this->getLines()->shouldBe($content);
     }
 }

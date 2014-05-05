@@ -58,7 +58,7 @@ class Editor
      */
     public function jumpDownTo($pattern)
     {
-        $lines = $this->file->read();
+        $lines = $this->file->getLines();
         $filename = $this->file->getFilename();
         $length = count($lines);
         for ($line = $this->cursor + 1; $line < $length; $line++) {
@@ -79,7 +79,7 @@ class Editor
      */
     public function jumpUpTo($pattern)
     {
-        $lines = $this->file->read();
+        $lines = $this->file->getLines();
         $filename = $this->file->getFilename();
         for ($line = $this->cursor - 1; $line >= 0; $line--) {
             if ($lines[$line] === $pattern) {
@@ -100,7 +100,7 @@ class Editor
     public function addBefore($add)
     {
         $cursor = $this->cursor--;
-        $preEditLines = $this->file->read();
+        $preEditLines = $this->file->getLines();
         $postEditLines = array();
         foreach ($preEditLines as $lineNumber => $line) {
             if ($cursor === $lineNumber) {
@@ -119,7 +119,7 @@ class Editor
     public function addAfter($add)
     {
         $cursor = $this->cursor++;
-        $preEditLines = $this->file->read();
+        $preEditLines = $this->file->getLines();
         $postEditLines = array();
         foreach ($preEditLines as $lineNumber => $line) {
             $postEditLines[] = $line;

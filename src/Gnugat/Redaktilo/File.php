@@ -53,7 +53,7 @@ class File
     }
 
     /** @return array of lines stripped of the newline character */
-    public function read()
+    public function getLines()
     {
         return explode(PHP_EOL, $this->content);
     }

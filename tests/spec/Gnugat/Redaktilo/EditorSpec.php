@@ -20,7 +20,7 @@ class EditorSpec extends ObjectBehavior
         $beforeLines = array('We', 'are', 'knights', 'who', 'say', 'ni');
         $afterLines = array('We', 'are', 'the', 'knights', 'who', 'say', 'ni');
 
-        $file->read()->willReturn($beforeLines);
+        $file->getLines()->willReturn($beforeLines);
         $file->getFilename()->willReturn('/monthy/python.txt');
         $filesystem
             ->read(self::FILENAME, Filesystem::LINE_FILE_TYPE)
