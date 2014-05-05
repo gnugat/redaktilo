@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the TempoSimple project.
+ * This file is part of the Redaktilo project.
  *
  * (c) Loïc Chardonnet <loic.chardonnet@gmail.com>
  *

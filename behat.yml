@@ -1,0 +1,7 @@
+default:
+    suites:
+        bundle_registration_script:
+            contexts:
+                - BundleRegistrationScriptContext
+            filters:
+                role: bundle installation script

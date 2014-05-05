@@ -13,8 +13,12 @@
         "role": "Lead developer"
     }],
     "require-dev": {
+        "symfony/filesystem": "~2.4",
+
         "phpspec/phpspec": "~2.0",
         "bossa/phpspec2-expect": "~1.0",
-        "symfony/filesystem": "~2.4"
+
+        "behat/behat": "~3.0",
+        "phpunit/phpunit": "~4.0"
     }
 }
