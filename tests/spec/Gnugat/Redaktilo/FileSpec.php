@@ -1,21 +1,18 @@
 <?php
 
-namespace spec\Gnugat\Redaktilo\File;
+namespace spec\Gnugat\Redaktilo;
 
 use PhpSpec\ObjectBehavior;
 
-class LineFileSpec extends ObjectBehavior
+class FileSpec extends ObjectBehavior
 {
-    private $sourceFilename;
-    private $copyFilename;
-
     function let()
     {
-        $this->sourceFilename = __DIR__.'/../../../../fixtures/sources/copy-me.txt';
-        $this->copyFilename = __DIR__.'/../../../../fixtures/copies/edit-me.txt';
-        $content = file_get_contents($this->sourceFilename);
+        $sourceFilename = __DIR__.'/../../../fixtures/sources/copy-me.txt';
+        $copyFilename = __DIR__.'/../../../fixtures/copies/edit-me.txt';
+        $content = file_get_contents($sourceFilename);
 
-        $this->beConstructedWith($this->copyFilename, $content);
+        $this->beConstructedWith($copyFilename, $content);
     }
 
     function it_reads_content()

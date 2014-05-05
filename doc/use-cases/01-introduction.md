@@ -13,4 +13,4 @@ the creation of Redaktilo.
 
 * [Global introduction](../01-introduction.md)
 * [Usage introduction](../usage/01-introduction.md)
-* [LineEditor usage](../usage/02-usage.md)
+* [Editor usage](../usage/02-editor.md)

@@ -21,4 +21,4 @@ Redaktilo fits perfectly for the job.
 * [Use cases introduction](01-introduction.md)
 * [Global introduction](../01-introduction.md)
 * [Usage introduction](../usage/01-introduction.md)
-* [LineEditor usage](../usage/02-usage.md)
+* [Editor usage](../usage/02-editor.md)
