@@ -3,16 +3,34 @@
 namespace spec\Gnugat\Redaktilo;
 
 use PhpSpec\ObjectBehavior;
+use Symfony\Component\Filesystem\Filesystem as FileCopier;
 
 class FileSpec extends ObjectBehavior
 {
+    const FILENAME = '%s/tests/fixtures/%s/%s';
+
+    private $filename;
+    private $content;
+
     function let()
     {
-        $sourceFilename = __DIR__.'/../../../fixtures/sources/copy-me.txt';
-        $copyFilename = __DIR__.'/../../../fixtures/copies/edit-me.txt';
-        $content = file_get_contents($sourceFilename);
+        $rootPath = __DIR__.'/../../../../';
 
-        $this->beConstructedWith($copyFilename, $content);
+        $sourceFilename = sprintf(self::FILENAME, $rootPath, 'sources', 'copy-me.txt');
+        $copyFilename = sprintf(self::FILENAME, $rootPath, 'copies', 'edit-me.txt');
+
+        $fileCopier = new FileCopier();
+        $fileCopier->copy($sourceFilename, $copyFilename, true);
+
+        $this->filename = $copyFilename;
+        $this->content = file_get_contents($copyFilename);
+
+        $this->beConstructedWith($this->filename, $this->content);
+    }
+
+    function it_has_a_filename()
+    {
+        $this->getFilename()->shouldBe($this->filename);
     }
 
     function it_reads_content()
