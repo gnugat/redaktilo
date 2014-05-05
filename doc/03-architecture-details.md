@@ -15,10 +15,8 @@ A domain model which incorporates data and behavior. It has:
 
 And it allows you to:
 
-* read the content in a special format
-* write the content in a special format
-
-`LineFile` splits its content by lines.
+* read the content in as an array of lines
+* write the content in as an array of lines
 
 ## Filesystem
 

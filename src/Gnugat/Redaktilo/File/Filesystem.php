@@ -11,6 +11,8 @@
 
 namespace Gnugat\Redaktilo\File;
 
+use Gnugat\Redaktilo\File;
+
 /**
  * Manages read and write operations using File as a data source.
  *
@@ -18,7 +20,7 @@ namespace Gnugat\Redaktilo\File;
  */
 class Filesystem
 {
-    const LINE_FILE_TYPE = 'Gnugat\Redaktilo\File\LineFile';
+    const LINE_FILE_TYPE = 'Gnugat\Redaktilo\File';
 
     /**
      * Makes a File of the given $fileType

@@ -9,17 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\File;
+namespace Gnugat\Redaktilo;
 
 /**
- * A File full of lines.
+ * A data source which contains:
  *
- * The content is represented as an array of lines from which the newline
- * character has been stripped.
+ * + the path to the file
+ * + the raw content
+ *
+ * Its read and write methods provide a representation of the content:
+ * an array of lines from which the newline character has been stripped.
  *
  * @author Loïc Chardonnet <loic.chardonnet@gmail.com>
  */
-class LineFile implements File
+class File
 {
     /** @var string */
     private $filename;
@@ -37,37 +40,27 @@ class LineFile implements File
         $this->content = $content;
     }
 
-    /** {@inheritdoc} */
+    /** @return string */
     public function getFilename()
     {
         return $this->filename;
     }
 
-    /** {@inheritdoc} */
+    /** @return string */
     public function getContent()
     {
         return $this->content;
     }
 
-    /**
-     * Returns file's lines.
-     *
-     * @return array
-     */
+    /** @return array of lines stripped of the newline character */
     public function read()
     {
-        $lines = explode(PHP_EOL, $this->content);
-
-        return $lines;
+        return explode(PHP_EOL, $this->content);
     }
 
-    /**
-     * Replaces the file's lines.
-     *
-     * @param array $content
-     */
-    public function write($content)
+    /** @param array $lines */
+    public function write(array $lines)
     {
-        $this->content = implode(PHP_EOL, $content);
+        $this->content = implode(PHP_EOL, $lines);
     }
 }
