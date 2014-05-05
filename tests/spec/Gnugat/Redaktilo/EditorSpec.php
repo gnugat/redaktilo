@@ -1,12 +1,12 @@
 <?php
 
-namespace spec\Gnugat\Redaktilo\Editor;
+namespace spec\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\File\Filesystem;
-use Gnugat\Redaktilo\File\LineFile;
+use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 
-class LineEditorSpec extends ObjectBehavior
+class EditorSpec extends ObjectBehavior
 {
     const FILENAME = '/tmp/file-to-edit.txt';
 
@@ -15,7 +15,7 @@ class LineEditorSpec extends ObjectBehavior
         $this->beConstructedWith($filesystem);
     }
 
-    function it_inserts_lines_before_cursor(Filesystem $filesystem, LineFile $file)
+    function it_inserts_lines_before_cursor(Filesystem $filesystem, File $file)
     {
         $beforeLines = array('We', 'are', 'knights', 'who', 'say', 'ni');
         $afterLines = array('We', 'are', 'the', 'knights', 'who', 'say', 'ni');

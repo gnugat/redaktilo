@@ -1,15 +1,15 @@
-# LineEditor usage
+# Editor usage
 
-If you need to manipulate lines, then `LineEditor` is what you're looking for.
+The `Editor` class allows you to manipulate files as array of lines.
 
 Here's how to initialize it:
 
 ```php
 use Gnugat\Redaktilo\File\Filesystem;
-use Gnugat\Redaktilo\Editor\LineEditor;
+use Gnugat\Redaktilo\Editor;
 
 $filesystem = new Filesystem();
-$editor = new LineEditor($filesystem);
+$editor = new Editor($filesystem);
 ```
 
 Let's consider the following file:

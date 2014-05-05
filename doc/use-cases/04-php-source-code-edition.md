@@ -19,7 +19,7 @@ Here's what the code would look like using Redaktilo's `LineEditor`:
 
 namespace Sensio\Bundle\GeneratorBundle\Manipulator;
 
-use Gnugat\Redaktilo\Editor\LineEditor;
+use Gnugat\Redaktilo\Editor;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class KernelManipulator extends Manipulator
@@ -27,7 +27,7 @@ class KernelManipulator extends Manipulator
     protected $kernel;
     protected $editor;
 
-    public function __construct(KernelInterface $kernel, LineEditor $editor)
+    public function __construct(KernelInterface $kernel, Editor $editor)
     {
         $this->kernel = $kernel;
         $this->editor = $editor;
@@ -55,9 +55,6 @@ class KernelManipulator extends Manipulator
 As you can see it's easier to read and understand than the original token
 parsing (plus the whole Reflection thing has been dropped).
 
-**Note**: `LineEditor` is only one kind of editor, Redaktilo can be extended to
-provide a `PhpEditor` which could use PHP token internally.
-
 ## Advised readings
 
 * [Use cases introduction](01-introduction.md)
@@ -65,4 +62,4 @@ provide a `PhpEditor` which could use PHP token internally.
 * [JSON configuration edition](03-json-configuration-edition.md)
 * [Global introduction](../01-introduction.md)
 * [Usage introduction](../usage/01-introduction.md)
-* [LineEditor usage](../usage/02-usage.md)
+* [Editor usage](../usage/02-editor.md)

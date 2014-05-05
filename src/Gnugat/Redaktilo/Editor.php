@@ -9,15 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Editor;
+namespace Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\File\Filesystem;
 use Gnugat\Redaktilo\File\File;
 
 /**
- * An editor which manipulates LineFile.
+ * Allows File manipulations:
+ *
+ * + open an existing file
+ * + move the cursor to the desired area
+ * + insert whatever you want around the cursor
+ * + save your modifications
+ *
+ * Generally delegates read and write operations to Filesystem.
  */
-class LineEditor implements Editor
+class Editor
 {
     /** @var Filesystem */
     private $filesystem;
@@ -34,7 +41,11 @@ class LineEditor implements Editor
         $this->filesystem = $filesystem;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * Opens an existing file.
+     *
+     * @param string $filename
+     */
     public function open($filename)
     {
         $this->file = $this->filesystem->read($filename, Filesystem::LINE_FILE_TYPE);
@@ -44,42 +55,42 @@ class LineEditor implements Editor
     /**
      * Moves down the cursor to the given line.
      *
-     * @param string $to
+     * @param string $pattern
      */
-    public function jumpDownTo($to)
+    public function jumpDownTo($pattern)
     {
         $lines = $this->file->read();
         $filename = $this->file->getFilename();
         $length = count($lines);
         for ($line = $this->cursor + 1; $line < $length; $line++) {
-            if ($lines[$line] === $to) {
+            if ($lines[$line] === $pattern) {
                 $this->cursor = $line;
 
                 return;
             }
         }
 
-        throw new \Exception("Couldn't find line $to in $filename");
+        throw new \Exception("Couldn't find line $pattern in $filename");
     }
 
     /**
      * Moves up the cursor to the given line.
      *
-     * @param string $to
+     * @param string $pattern
      */
-    public function jumpUpTo($to)
+    public function jumpUpTo($pattern)
     {
         $lines = $this->file->read();
         $filename = $this->file->getFilename();
         for ($line = $this->cursor - 1; $line >= 0; $line--) {
-            if ($lines[$line] === $to) {
+            if ($lines[$line] === $pattern) {
                 $this->cursor = $line;
 
                 return;
             }
         }
 
-        throw new \Exception("Couldn't find line $to in $filename");
+        throw new \Exception("Couldn't find line $pattern in $filename");
     }
 
     /**
@@ -120,7 +131,9 @@ class LineEditor implements Editor
         $this->file->write($postEditLines);
     }
 
-    /** {@inheritdoc} */
+    /**
+     * Backups the modifications.
+     */
     public function save()
     {
         $this->filesystem->write($this->file);

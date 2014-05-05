@@ -9,7 +9,7 @@ text: JSON, YAML, PHP or anything you want!
 To see how to use it, have a look at the following documentation:
 
 * [Usage introduction](usage/01-introduction.md)
-* [LineEditor usage](usage/02-line-editor.md)
+* [Editor usage](usage/02-editor.md)
 
 This small and simple library has been created to meet some actual needs.
 You can discover them in the following use cases:

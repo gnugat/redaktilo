@@ -18,4 +18,4 @@ Redaktilo is again a good candidate.
 * [YAML configuration edition](02-yaml-configuration-edition.md)
 * [Global introduction](../01-introduction.md)
 * [Usage introduction](../usage/01-introduction.md)
-* [LineEditor usage](../usage/02-usage.md)
+* [Editor usage](../usage/02-editor.md)

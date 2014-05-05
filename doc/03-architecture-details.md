@@ -39,7 +39,7 @@ other class:
 
 namespace Gnugat\Redaktilo\Editor;
 
-class LineEditor implements Editor
+class Editor
 {
     /**
      * Calls Filesystem to open a file and sets the cursor to its first line.

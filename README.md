@@ -46,10 +46,10 @@ we can use the following script:
 require_once __DIR__.'/../../vendor/autoload.php';
 
 use Gnugat\Redaktilo\File\Filesystem;
-use Gnugat\Redaktilo\Editor\LineEditor;
+use Gnugat\Redaktilo\Editor;
 
 $filesystem = new Filesystem();
-$editor = new LineEditor($filesystem);
+$editor = new Editor($filesystem);
 
 $editor->open('/tmp/config.yaml');
 $editor->jumpDownTo('            encode_as_base64: true');
