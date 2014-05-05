@@ -69,7 +69,7 @@ Find out about how to use it with the [usage guide](doc/usage/01-index.md).
 
 Run the following script to run the tests:
 
-    ./vendor/bin/phpspec run
+    ./bin/tester.sh
 
 ## Further documentation
 
