@@ -33,6 +33,11 @@ class FileSpec extends ObjectBehavior
         $this->getFilename()->shouldBe($this->filename);
     }
 
+    function it_has_a_content()
+    {
+        $this->getContent()->shouldBe($this->content);
+    }
+
     function it_reads_content()
     {
         $content = array(
