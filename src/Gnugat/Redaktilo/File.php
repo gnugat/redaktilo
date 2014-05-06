@@ -74,6 +74,27 @@ class File
         $this->currentLineNumber = $lineNumber;
     }
 
+    /** @param string $newLine */
+    public function insertBefore($newLine)
+    {
+        $lines = $this->getLines();
+        $editedLines = array();
+        foreach ($lines as $lineNumber => $line) {
+            if ($this->currentLineNumber === $lineNumber) {
+                $editedLines[] = $newLine;
+            }
+            $editedLines[] = $line;
+        }
+        $this->content = implode(PHP_EOL, $editedLines);
+    }
+
+    /** @param string $newLine */
+    public function insertAfter($newLine)
+    {
+        $this->currentLineNumber++;
+        $this->insertBefore($newLine);
+    }
+
     /** @param array $lines */
     public function write(array $lines)
     {
