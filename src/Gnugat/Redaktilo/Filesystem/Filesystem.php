@@ -13,6 +13,7 @@ namespace Gnugat\Redaktilo\Filesystem;
 
 use Gnugat\Redaktilo\File;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * Manages read and write operations using File as a data source.
@@ -56,9 +57,17 @@ class Filesystem
      * @param string $filename
      *
      * @return File
+     *
+     * @throws IOException If the file already exists
      */
     public function create($filename)
     {
+        if (file_exists($filename)) {
+            $message = sprintf('Failed to create "%s" because it already exists.', $filename);
+
+            throw new IOException($message, 0, null, $filename);
+        }
+
         return new File($filename, '');
     }
 

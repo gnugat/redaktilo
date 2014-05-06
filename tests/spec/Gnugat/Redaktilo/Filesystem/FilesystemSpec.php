@@ -48,6 +48,14 @@ class FilesystemSpec extends ObjectBehavior
         $file->shouldHaveType('Gnugat\Redaktilo\File');
     }
 
+    function it_cannot_create_existing_files()
+    {
+        $this->fileCopier->copy($this->sourceFilename, $this->copyFilename, true);
+
+        $exception = 'Symfony\Component\Filesystem\Exception\IOException';
+        $this->shouldThrow($exception)->duringCreate($this->copyFilename);
+    }
+
     function it_writes_files()
     {
         $content = <<< EOS
