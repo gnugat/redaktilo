@@ -20,6 +20,9 @@ use Gnugat\Redaktilo\File;
  */
 class Filesystem
 {
+    const LINE_BREAK_OTHER = "\n";
+    const LINE_BREAK_WINDOWS = "\r\n";
+
     /**
      * Makes a File of the given $fileType
      *
@@ -31,7 +34,15 @@ class Filesystem
     {
         $content = @file_get_contents($filename);
 
-        return new File($filename, $content);
+        if (empty($content)) {
+            $newLineCharacter = PHP_EOL;
+        } elseif (false !== strpos($content, self::LINE_BREAK_WINDOWS)) {
+            $newLineCharacter = self::LINE_BREAK_WINDOWS;
+        } else {
+            $newLineCharacter = self::LINE_BREAK_OTHER;
+        }
+
+        return new File($filename, $content, $newLineCharacter);
     }
 
     /**
