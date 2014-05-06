@@ -62,13 +62,23 @@ class Filesystem
      */
     public function create($filename)
     {
-        if (file_exists($filename)) {
+        if ($this->exists($filename)) {
             $message = sprintf('Failed to create "%s" because it already exists.', $filename);
 
             throw new IOException($message, 0, null, $filename);
         }
 
         return new File($filename, '');
+    }
+
+    /**
+     * @param string $filename
+     *
+     * @return bool
+     */
+    public function exists($filename)
+    {
+        return file_exists($filename);
     }
 
     /** @param File $file */

@@ -56,6 +56,17 @@ class FilesystemSpec extends ObjectBehavior
         $this->shouldThrow($exception)->duringCreate($this->copyFilename);
     }
 
+    function it_detects_if_file_exists()
+    {
+        @unlink($this->copyFilename);
+
+        $this->exists($this->copyFilename)->shouldBe(false);
+
+        $this->fileCopier->copy($this->sourceFilename, $this->copyFilename, true);
+
+        $this->exists($this->copyFilename)->shouldBe(true);
+    }
+
     function it_writes_files()
     {
         $content = <<< EOS
