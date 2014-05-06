@@ -37,15 +37,15 @@ class KernelManipulator extends Manipulator
     {
         $filename = $this->kernel->getRootDir().'/app/AppKernel.php';
 
-        $this->editor->open($filename);
+        $file = $this->editor->open($filename);
 
-        $this->editor->jumpDownTo('    public function registerBundles()');
-        $this->editor->jumpDownTo('        $bundles = array(');
-        $this->editor->jumpDownTo('        );');
+        $this->editor->jumpDownTo($file, '    public function registerBundles()');
+        $this->editor->jumpDownTo($file, '        $bundles = array(');
+        $this->editor->jumpDownTo($file, '        );');
 
-        $this->editor->addBefore(sprintf('            new %s(),', $bundle));
+        $this->editor->addBefore($file, sprintf('            new %s(),', $bundle));
 
-        $this->editor->save();
+        $this->editor->save($file);
 
         return true;
     }

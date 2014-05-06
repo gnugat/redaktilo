@@ -2,39 +2,81 @@
 
 namespace spec\Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
+use Symfony\Component\Filesystem\Filesystem as FileCopier;
 
 class FileSpec extends ObjectBehavior
 {
+    const FILENAME = '%s/tests/fixtures/%s/life-of-brian.txt';
+
+    private $filename;
+    private $content;
+
     function let()
     {
-        $sourceFilename = __DIR__.'/../../../fixtures/sources/copy-me.txt';
-        $copyFilename = __DIR__.'/../../../fixtures/copies/edit-me.txt';
-        $content = file_get_contents($sourceFilename);
+        $rootPath = __DIR__.'/../../../../';
 
-        $this->beConstructedWith($copyFilename, $content);
+        $sourceFilename = sprintf(self::FILENAME, $rootPath, 'sources');
+        $copyFilename = sprintf(self::FILENAME, $rootPath, 'copies');
+
+        $fileCopier = new FileCopier();
+        $fileCopier->copy($sourceFilename, $copyFilename, true);
+
+        $this->filename = $copyFilename;
+        $this->content = file_get_contents($copyFilename);
+
+        $this->beConstructedWith($this->filename, $this->content);
     }
 
-    function it_reads_content()
+    function it_has_a_filename()
     {
-        $content = array(
-            'We are the knigths who say ni!',
-            '',
-        );
-
-        $this->read()->shouldReturn($content);
+        $this->getFilename()->shouldBe($this->filename);
     }
 
-    function it_writes_content()
+    function it_has_a_content()
     {
-        $content = array(
-            'We are the knigths who say ni!',
-            'Grumpy',
-            'Cat',
-            '',
+        $newContent = 'This is an EX parrot!';
+
+        $this->read()->shouldBe($this->content);
+        $this->write($newContent);
+        $this->read()->shouldBe($newContent);
+    }
+
+    function it_has_lines()
+    {
+        $lines = explode(PHP_EOL, $this->content);
+        $newLines = array(
+            'And now for something',
+            'Completly different',
         );
 
-        $this->write($content);
-        $this->read()->shouldBe($content);
+        $this->readlines()->shouldBe($lines);
+        $this->writelines($newLines);
+        $this->readlines()->shouldBe($newLines);
+    }
+
+    function it_has_a_current_line()
+    {
+        $this->getCurrentLineNumber()->shouldBe(0);
+
+        $lines = explode(PHP_EOL, $this->content);
+        $middleLine = count($lines) / 2;
+
+        $this->setCurrentLineNumber($middleLine);
+        $this->getCurrentLineNumber()->shouldBe($middleLine);
+    }
+
+    function it_inserts_lines()
+    {
+        $rootPath = __DIR__.'/../../../../';
+        $expectedFilename = sprintf(self::FILENAME, $rootPath, 'expectations');
+        $expectedContent = file_get_contents($expectedFilename);
+
+        $line = "Pontius Pilate: '...Dickus?'";
+        $lineNumber = 6;
+
+        $this->insertLineAt($line, $lineNumber);
+        $this->read()->shouldBe($expectedContent);
     }
 }

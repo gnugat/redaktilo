@@ -3,8 +3,8 @@
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Gnugat\Redaktilo\Editor;
-use Gnugat\Redaktilo\File\Filesystem;
-use Symfony\Component\Filesystem\Filesystem as FileCopier;
+use Gnugat\Redaktilo\Filesystem;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class BundleRegistrationScriptContext implements SnippetAcceptingContext
 {
@@ -24,7 +24,7 @@ class BundleRegistrationScriptContext implements SnippetAcceptingContext
         $sourceFilename = sprintf(self::APP_KERNEL, $rootPath, 'sources');
         $copyFilename = sprintf(self::APP_KERNEL, $rootPath, 'copies');
 
-        $fileCopier = new FileCopier();
+        $fileCopier = new SymfonyFilesystem();
         $fileCopier->copy($sourceFilename, $copyFilename, true);
 
         $this->appKernelPath = $copyFilename;
@@ -43,18 +43,19 @@ class BundleRegistrationScriptContext implements SnippetAcceptingContext
      */
     public function iInsertItInTheApplicationKernel()
     {
-        $filesystem = new Filesystem();
+        $symfonyFilesystem = new SymfonyFilesystem();
+        $filesystem = new Filesystem($symfonyFilesystem);
         $editor = new Editor($filesystem);
 
-        $editor->open($this->appKernelPath);
+        $file = $editor->open($this->appKernelPath);
 
-        $editor->jumpDownTo('    public function registerBundles()');
-        $editor->jumpDownTo('        $bundles = array(');
-        $editor->jumpDownTo('        );');
+        $editor->jumpDownTo($file, '    public function registerBundles()');
+        $editor->jumpDownTo($file, '        $bundles = array(');
+        $editor->jumpDownTo($file, '        );');
 
-        $editor->addBefore($this->bundle);
+        $editor->addBefore($file, $this->bundle);
 
-        $editor->save();
+        $editor->save($file);
     }
 
     /**

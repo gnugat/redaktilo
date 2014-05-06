@@ -45,17 +45,19 @@ we can use the following script:
 
 require_once __DIR__.'/../../vendor/autoload.php';
 
-use Gnugat\Redaktilo\File\Filesystem;
 use Gnugat\Redaktilo\Editor;
+use Gnugat\Redaktilo\Filesystem;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-$filesystem = new Filesystem();
+$symfonyFilesystem = new SymfonyFilesystem();
+$filesystem = new Filesystem($symfonyFilesystem);
 $editor = new Editor($filesystem);
 
-$editor->open('/tmp/config.yaml');
-$editor->jumpDownTo('            encode_as_base64: true');
-$editor->jumpDownTo('            encode_as_base64: true');
-$editor->addBefore('            algorithm: sha512');
-$editor->save();
+$file = $editor->open('/tmp/config.yaml');
+$editor->jumpDownTo($file, '            encode_as_base64: true');
+$editor->jumpDownTo($file, '            encode_as_base64: true');
+$editor->addBefore($file, '            algorithm: sha512');
+$editor->save($file);
 ```
 
 **Note**: the usage of the

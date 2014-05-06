@@ -2,8 +2,8 @@
 
 namespace spec\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\File\Filesystem;
 use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Filesystem;
 use PhpSpec\ObjectBehavior;
 
 class EditorSpec extends ObjectBehavior
@@ -17,22 +17,77 @@ class EditorSpec extends ObjectBehavior
 
     function it_inserts_lines_before_cursor(Filesystem $filesystem, File $file)
     {
+        // Fixtures
         $beforeLines = array('We', 'are', 'knights', 'who', 'say', 'ni');
         $afterLines = array('We', 'are', 'the', 'knights', 'who', 'say', 'ni');
 
-        $file->read()->willReturn($beforeLines);
+        // Looking for the line "knights"
+        $file->readlines()->willReturn($beforeLines);
         $file->getFilename()->willReturn('/monthy/python.txt');
-        $filesystem
-            ->read(self::FILENAME, Filesystem::LINE_FILE_TYPE)
-            ->willReturn($file)
-        ;
+        $file->getCurrentLineNumber()->willReturn(0);
+        $file->setCurrentLineNumber(2)->shouldBeCalled();
+        $this->jumpDownTo($file, 'knights');
+    }
 
-        $file->write($afterLines)->shouldBeCalled();
+    function it_opens_existing_files(Filesystem $filesystem, File $file)
+    {
+        $filename = '/monty.py';
+
+        $filesystem->exists($filename)->willReturn(true);
+        $filesystem->open($filename)->willReturn($file);
+
+        $this->open($filename);
+    }
+
+    function it_cannot_open_new_files(Filesystem $filesystem, File $file)
+    {
+        $filename = '/monty.py';
+        $exception = 'Symfony\Component\Filesystem\Exception\FileNotFoundException';
+
+        $filesystem->exists($filename)->willReturn(false);
+        $filesystem->open($filename)->willThrow($exception);
+
+        $this->shouldThrow($exception)->duringOpen($filename);
+    }
+
+    function it_creates_new_files(Filesystem $filesystem, File $file)
+    {
+        $filename = '/monty.py';
+
+        $filesystem->exists($filename)->willReturn(false);
+        $filesystem->create($filename)->willReturn($file);
+
+        $this->open($filename, true);
+    }
+
+    function it_inserts_lines_before_current_one(File $file)
+    {
+        $line = 'We are the knights who say Ni!';
+        $lineNumber = 42;
+
+        $file->getCurrentLineNumber()->willReturn($lineNumber);
+        $file->insertLineAt($line, $lineNumber)->shouldBeCalled();
+
+        $this->addBefore($file, $line);
+    }
+
+    function it_inserts_lines_after_current_one(File $file)
+    {
+        $line = 'We are the knights who say Ni!';
+        $currentLineNumber = 42;
+        $lineNumber = $currentLineNumber + 1;
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+        $file->insertLineAt($line, $lineNumber)->shouldBeCalled();
+
+        $this->addAfter($file, $line);
+    }
+
+    function it_saves_files(Filesystem $filesystem, File $file)
+    {
         $filesystem->write($file)->shouldBeCalled();
 
-        $this->open(self::FILENAME);
-        $this->jumpDownTo('knights');
-        $this->addBefore('the');
-        $this->save();
+        $this->save($file);
     }
 }

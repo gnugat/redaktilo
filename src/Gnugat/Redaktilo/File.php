@@ -16,6 +16,7 @@ namespace Gnugat\Redaktilo;
  *
  * + the path to the file
  * + the raw content
+ * + a pointer to the current line
  *
  * Its read and write methods provide a representation of the content:
  * an array of lines from which the newline character has been stripped.
@@ -30,14 +31,22 @@ class File
     /** @var string */
     private $content;
 
+    /** @var string */
+    private $lineBreak;
+
+    /** @var integer */
+    private $currentLineNumber = 0;
+
     /**
      * @param string $filename
      * @param string $content
+     * @param string $lineBreak
      */
-    public function __construct($filename, $content)
+    public function __construct($filename, $content, $lineBreak = PHP_EOL)
     {
         $this->filename = $filename;
         $this->content = $content;
+        $this->lineBreak = $lineBreak;
     }
 
     /** @return string */
@@ -47,20 +56,51 @@ class File
     }
 
     /** @return string */
-    public function getContent()
+    public function read()
     {
         return $this->content;
     }
 
-    /** @return array of lines stripped of the newline character */
-    public function read()
+    /** @param string $newContent */
+    public function write($newContent)
     {
-        return explode(PHP_EOL, $this->content);
+        return $this->content = $newContent;
     }
 
-    /** @param array $lines */
-    public function write(array $lines)
+    /** @return array of lines stripped of the newline character */
+    public function readlines()
     {
-        $this->content = implode(PHP_EOL, $lines);
+        return explode($this->lineBreak, $this->content);
+    }
+
+    /** @param array $newLines */
+    public function writelines(array $newLines)
+    {
+        $this->content = implode($this->lineBreak, $newLines);
+    }
+
+    /** @return integer */
+    public function getCurrentLineNumber()
+    {
+        return $this->currentLineNumber;
+    }
+
+    /** @param integer $lineNumber */
+    public function setCurrentLineNumber($lineNumber)
+    {
+        $this->currentLineNumber = $lineNumber;
+    }
+
+    /**
+     * @param string $line
+     * @param string $lineNumber
+     */
+    public function insertLineAt($line, $lineNumber)
+    {
+        $lines = $this->readlines();
+
+        array_splice($lines, $lineNumber, 0, $line);
+
+        $this->writelines($lines);
     }
 }
