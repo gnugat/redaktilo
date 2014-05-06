@@ -51,16 +51,26 @@ class Filesystem
 
             throw new FileNotFoundException($message, 0, null, $filename);
         }
-
-        if (false === strpos($content, self::LINE_BREAK_OTHER)) {
-            $newLineCharacter = PHP_EOL;
-        } elseif (false !== strpos($content, self::LINE_BREAK_WINDOWS)) {
-            $newLineCharacter = self::LINE_BREAK_WINDOWS;
-        } else {
-            $newLineCharacter = self::LINE_BREAK_OTHER;
-        }
+        $newLineCharacter = $this->detectLineBreak($content);
 
         return new File($filename, $content, $newLineCharacter);
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return bool
+     */
+    public function detectLineBreak($content)
+    {
+        if (false === strpos($content, self::LINE_BREAK_OTHER)) {
+            return PHP_EOL;
+        }
+        if (false !== strpos($content, self::LINE_BREAK_WINDOWS)) {
+            return self::LINE_BREAK_WINDOWS;
+        }
+
+        return self::LINE_BREAK_OTHER;
     }
 
     /**

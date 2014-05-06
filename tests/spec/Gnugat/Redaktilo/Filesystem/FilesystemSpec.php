@@ -2,7 +2,7 @@
 
 namespace spec\Gnugat\Redaktilo\Filesystem;
 
-use Gnugat\Redaktilo\File\Filesystem;
+use Gnugat\Redaktilo\Filesystem\Filesystem;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -22,6 +22,22 @@ class FilesystemSpec extends ObjectBehavior
         $this->fileCopier = new SymfonyFilesystem();
 
         $this->beConstructedWith($symfonyFilesystem);
+    }
+
+    function it_detects_file_line_break()
+    {
+        $lines = array(
+            'King Arthur: One, two, five!',
+            'Sir Galahad: Three sir!',
+            'King Arthur: THREE!',
+        );
+        $fileWithoutLines = $lines[0];
+        $windowsFile = implode(Filesystem::LINE_BREAK_WINDOWS, $lines);
+        $otherFile = implode(Filesystem::LINE_BREAK_OTHER, $lines);
+
+        $this->detectLineBreak($fileWithoutLines)->shouldBe(PHP_EOL);
+        $this->detectLineBreak($windowsFile)->shouldBe(Filesystem::LINE_BREAK_WINDOWS);
+        $this->detectLineBreak($otherFile)->shouldBe(Filesystem::LINE_BREAK_OTHER);
     }
 
     function it_opens_existing_files()
