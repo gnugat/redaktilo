@@ -98,4 +98,17 @@ class File
         $this->currentLineNumber++;
         $this->insertBefore($newLine);
     }
+
+    /**
+     * @param string $line
+     * @param string $lineNumber
+     */
+    public function insertLineAt($line, $lineNumber)
+    {
+        $lines = $this->getLines();
+
+        array_splice($lines, $lineNumber, 0, $line);
+
+        $this->content = implode($this->newLineCharacter, $lines);
+    }
 }

@@ -57,6 +57,19 @@ class FileSpec extends ObjectBehavior
         $this->getCurrentLineNumber()->shouldBe($middleLine);
     }
 
+    function it_inserts_lines()
+    {
+        $rootPath = __DIR__.'/../../../../';
+        $expectedFilename = sprintf(self::FILENAME, $rootPath, 'expectations');
+        $expectedContent = file_get_contents($expectedFilename);
+
+        $line = "Pontius Pilate: '...Dickus?'";
+        $lineNumber = 6;
+
+        $this->insertLineAt($line, $lineNumber);
+        $this->getcontent()->shouldBe($expectedContent);
+    }
+
     function it_inserts_new_lines_before_the_current_one()
     {
         $newLineNumber = 6;
