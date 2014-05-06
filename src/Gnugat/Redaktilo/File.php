@@ -94,10 +94,4 @@ class File
         $this->currentLineNumber++;
         $this->insertBefore($newLine);
     }
-
-    /** @param array $lines */
-    public function write(array $lines)
-    {
-        $this->content = implode(PHP_EOL, $lines);
-    }
 }

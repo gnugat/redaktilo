@@ -86,12 +86,4 @@ class FileSpec extends ObjectBehavior
         $this->getLines()->shouldBe($expectedLines);
         $this->getCurrentLineNumber()->shouldBe($newLineNumber);
     }
-
-    function it_writes_content()
-    {
-        $content = explode(PHP_EOL, $this->content);
-
-        $this->write($content);
-        $this->getLines()->shouldBe($content);
-    }
 }
