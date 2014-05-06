@@ -52,6 +52,16 @@ class Filesystem
         return new File($filename, $content, $newLineCharacter);
     }
 
+    /**
+     * @param string $filename
+     *
+     * @return File
+     */
+    public function create($filename)
+    {
+        return new File($filename, '');
+    }
+
     /** @param File $file */
     public function write(File $file)
     {

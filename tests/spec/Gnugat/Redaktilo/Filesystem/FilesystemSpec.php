@@ -39,6 +39,15 @@ class FilesystemSpec extends ObjectBehavior
         $this->shouldThrow($exception)->duringOpen($this->copyFilename);
     }
 
+    function it_creates_new_files()
+    {
+        @unlink($this->copyFilename);
+
+        $file = $this->create($this->copyFilename);
+
+        $file->shouldHaveType('Gnugat\Redaktilo\File');
+    }
+
     function it_writes_files()
     {
         $content = <<< EOS
