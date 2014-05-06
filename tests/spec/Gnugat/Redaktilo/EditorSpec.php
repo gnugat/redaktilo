@@ -27,10 +27,6 @@ class EditorSpec extends ObjectBehavior
         $file->getCurrentLineNumber()->willReturn(0);
         $file->setCurrentLineNumber(2)->shouldBeCalled();
         $this->jumpDownTo($file, 'knights');
-
-        // Saving the file
-        $filesystem->write($file)->shouldBeCalled();
-        $this->save($file);
     }
 
     function it_opens_existing_files(Filesystem $filesystem, File $file)
@@ -76,5 +72,12 @@ class EditorSpec extends ObjectBehavior
         $newLine = 'We are the knights who say Ni!';
         $file->insertAfter($newLine)->shouldBeCalled();
         $this->addAfter($file, $newLine);
+    }
+
+    function it_saves_files(Filesystem $filesystem, File $file)
+    {
+        $filesystem->write($file)->shouldBeCalled();
+
+        $this->save($file);
     }
 }
