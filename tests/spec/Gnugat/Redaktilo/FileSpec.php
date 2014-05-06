@@ -69,34 +69,4 @@ class FileSpec extends ObjectBehavior
         $this->insertLineAt($line, $lineNumber);
         $this->getcontent()->shouldBe($expectedContent);
     }
-
-    function it_inserts_new_lines_before_the_current_one()
-    {
-        $newLineNumber = 6;
-        $newLine = "Pontius Pilate: '...'";
-
-        $expectedLines = explode(PHP_EOL, $this->content);
-        array_splice($expectedLines, $newLineNumber, 0, $newLine);
-
-        $this->setCurrentLineNumber($newLineNumber);
-        $this->insertBefore($newLine);
-
-        $this->getLines()->shouldBe($expectedLines);
-        $this->getCurrentLineNumber()->shouldBe($newLineNumber);
-    }
-
-    function it_inserts_new_lines_after_the_current_one()
-    {
-        $newLineNumber = 2;
-        $newLine = "Pontius Pilate: '...'";
-
-        $expectedLines = explode(PHP_EOL, $this->content);
-        array_splice($expectedLines, $newLineNumber, 0, $newLine);
-
-        $this->setCurrentLineNumber($newLineNumber - 1);
-        $this->insertAfter($newLine);
-
-        $this->getLines()->shouldBe($expectedLines);
-        $this->getCurrentLineNumber()->shouldBe($newLineNumber);
-    }
 }

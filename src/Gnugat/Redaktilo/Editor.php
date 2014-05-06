@@ -108,7 +108,9 @@ class Editor
      */
     public function addBefore(File $file, $add)
     {
-        $file->insertBefore($add);
+        $currentLineNumber = $file->getCurrentLineNumber();
+
+        $file->insertLineAt($add, $currentLineNumber);
     }
 
     /**
@@ -119,7 +121,11 @@ class Editor
      */
     public function addAfter(File $file, $add)
     {
-        $file->insertAfter($add);
+        $currentLineNumber = $file->getCurrentLineNumber();
+        $currentLineNumber++;
+        $file->setCurrentLineNumber($currentLineNumber);
+
+        $file->insertLineAt($add, $currentLineNumber);
     }
 
     /**

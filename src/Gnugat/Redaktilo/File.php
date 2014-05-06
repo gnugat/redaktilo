@@ -78,27 +78,6 @@ class File
         $this->currentLineNumber = $lineNumber;
     }
 
-    /** @param string $newLine */
-    public function insertBefore($newLine)
-    {
-        $lines = $this->getLines();
-        $editedLines = array();
-        foreach ($lines as $lineNumber => $line) {
-            if ($this->currentLineNumber === $lineNumber) {
-                $editedLines[] = $newLine;
-            }
-            $editedLines[] = $line;
-        }
-        $this->content = implode($this->newLineCharacter, $editedLines);
-    }
-
-    /** @param string $newLine */
-    public function insertAfter($newLine)
-    {
-        $this->currentLineNumber++;
-        $this->insertBefore($newLine);
-    }
-
     /**
      * @param string $line
      * @param string $lineNumber

@@ -62,16 +62,26 @@ class EditorSpec extends ObjectBehavior
 
     function it_inserts_lines_before_current_one(File $file)
     {
-        $newLine = 'We are the knights who say Ni!';
-        $file->insertBefore($newLine)->shouldBeCalled();
-        $this->addBefore($file, $newLine);
+        $line = 'We are the knights who say Ni!';
+        $lineNumber = 42;
+
+        $file->getCurrentLineNumber()->willReturn($lineNumber);
+        $file->insertLineAt($line, $lineNumber)->shouldBeCalled();
+
+        $this->addBefore($file, $line);
     }
 
     function it_inserts_lines_after_current_one(File $file)
     {
-        $newLine = 'We are the knights who say Ni!';
-        $file->insertAfter($newLine)->shouldBeCalled();
-        $this->addAfter($file, $newLine);
+        $line = 'We are the knights who say Ni!';
+        $currentLineNumber = 42;
+        $lineNumber = $currentLineNumber + 1;
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+        $file->insertLineAt($line, $lineNumber)->shouldBeCalled();
+
+        $this->addAfter($file, $line);
     }
 
     function it_saves_files(Filesystem $filesystem, File $file)
