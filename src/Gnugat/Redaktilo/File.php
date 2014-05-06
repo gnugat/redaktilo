@@ -32,7 +32,7 @@ class File
     private $content;
 
     /** @var string */
-    private $newLineCharacter;
+    private $lineBreak;
 
     /** @var integer */
     private $currentLineNumber = 0;
@@ -40,12 +40,13 @@ class File
     /**
      * @param string $filename
      * @param string $content
+     * @param string $lineBreak
      */
-    public function __construct($filename, $content, $newLineCharacter = PHP_EOL)
+    public function __construct($filename, $content, $lineBreak = PHP_EOL)
     {
         $this->filename = $filename;
         $this->content = $content;
-        $this->newLineCharacter = $newLineCharacter;
+        $this->lineBreak = $lineBreak;
     }
 
     /** @return string */
@@ -69,13 +70,13 @@ class File
     /** @return array of lines stripped of the newline character */
     public function readlines()
     {
-        return explode($this->newLineCharacter, $this->content);
+        return explode($this->lineBreak, $this->content);
     }
 
     /** @param array $newLines */
     public function writelines(array $newLines)
     {
-        $this->content = implode($this->newLineCharacter, $newLines);
+        $this->content = implode($this->lineBreak, $newLines);
     }
 
     /** @return integer */
