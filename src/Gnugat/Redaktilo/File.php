@@ -31,6 +31,9 @@ class File
     /** @var string */
     private $content;
 
+    /** @var string */
+    private $newLineCharacter;
+
     /** @var integer */
     private $currentLineNumber = 0;
 
@@ -38,10 +41,11 @@ class File
      * @param string $filename
      * @param string $content
      */
-    public function __construct($filename, $content)
+    public function __construct($filename, $content, $newLineCharacter = PHP_EOL)
     {
         $this->filename = $filename;
         $this->content = $content;
+        $this->newLineCharacter = $newLineCharacter;
     }
 
     /** @return string */
@@ -59,7 +63,7 @@ class File
     /** @return array of lines stripped of the newline character */
     public function getLines()
     {
-        return explode(PHP_EOL, $this->content);
+        return explode($this->newLineCharacter, $this->content);
     }
 
     /** @return integer */
@@ -85,7 +89,7 @@ class File
             }
             $editedLines[] = $line;
         }
-        $this->content = implode(PHP_EOL, $editedLines);
+        $this->content = implode($this->newLineCharacter, $editedLines);
     }
 
     /** @param string $newLine */
