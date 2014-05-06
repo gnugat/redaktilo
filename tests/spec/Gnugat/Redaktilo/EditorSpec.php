@@ -22,7 +22,7 @@ class EditorSpec extends ObjectBehavior
         $afterLines = array('We', 'are', 'the', 'knights', 'who', 'say', 'ni');
 
         // Looking for the line "knights"
-        $file->getLines()->willReturn($beforeLines);
+        $file->readlines()->willReturn($beforeLines);
         $file->getFilename()->willReturn('/monthy/python.txt');
         $file->getCurrentLineNumber()->willReturn(0);
         $file->setCurrentLineNumber(2)->shouldBeCalled();

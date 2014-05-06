@@ -61,7 +61,7 @@ class Editor
      */
     public function jumpDownTo(File $file, $pattern)
     {
-        $lines = $file->getLines();
+        $lines = $file->readlines();
         $filename = $file->getFilename();
         $currentLineNumber = $file->getCurrentLineNumber() + 1;
         $length = count($lines);
@@ -85,7 +85,7 @@ class Editor
      */
     public function jumpUpTo(File $file, $pattern)
     {
-        $lines = $file->getLines();
+        $lines = $file->readlines();
         $filename = $file->getFilename();
         $currentLineNumber = $file->getCurrentLineNumber() - 1;
         while (0 <= $currentLineNumber) {

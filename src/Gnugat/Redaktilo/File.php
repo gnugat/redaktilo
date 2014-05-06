@@ -67,9 +67,15 @@ class File
     }
 
     /** @return array of lines stripped of the newline character */
-    public function getLines()
+    public function readlines()
     {
         return explode($this->newLineCharacter, $this->content);
+    }
+
+    /** @param array $newLines */
+    public function writelines(array $newLines)
+    {
+        $this->content = implode($this->newLineCharacter, $newLines);
     }
 
     /** @return integer */
@@ -90,10 +96,10 @@ class File
      */
     public function insertLineAt($line, $lineNumber)
     {
-        $lines = $this->getLines();
+        $lines = $this->readlines();
 
         array_splice($lines, $lineNumber, 0, $line);
 
-        $this->content = implode($this->newLineCharacter, $lines);
+        $this->writelines($lines);
     }
 }
