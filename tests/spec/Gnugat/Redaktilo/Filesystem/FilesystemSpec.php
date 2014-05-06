@@ -31,6 +31,14 @@ class FilesystemSpec extends ObjectBehavior
         $file->shouldHaveType('Gnugat\Redaktilo\File');
     }
 
+    function it_cannot_open_new_files()
+    {
+        @unlink($this->copyFilename);
+
+        $exception = 'Symfony\Component\Filesystem\Exception\FileNotFoundException';
+        $this->shouldThrow($exception)->duringOpen($this->copyFilename);
+    }
+
     function it_writes_files()
     {
         $content = <<< EOS

@@ -12,6 +12,7 @@
 namespace Gnugat\Redaktilo\Filesystem;
 
 use Gnugat\Redaktilo\File;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Manages read and write operations using File as a data source.
@@ -27,12 +28,20 @@ class Filesystem
      * @param string $filename
      *
      * @return File
+     *
+     * @throws FileNotFoundException
      */
     public function open($filename)
     {
         $content = @file_get_contents($filename);
 
-        if (empty($content)) {
+        if (false === $content) {
+            $message = sprintf('Failed to open "%s" because it does not exist.', $filename);
+
+            throw new FileNotFoundException($message, 0, null, $filename);
+        }
+
+        if (false === strpos($content, self::LINE_BREAK_OTHER)) {
             $newLineCharacter = PHP_EOL;
         } elseif (false !== strpos($content, self::LINE_BREAK_WINDOWS)) {
             $newLineCharacter = self::LINE_BREAK_WINDOWS;

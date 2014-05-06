@@ -12,9 +12,10 @@
         "name": "Loïc Chardonnet",
         "role": "Lead developer"
     }],
+    "require": {
+        "symfony/filesystem": "~2.4"
+    },
     "require-dev": {
-        "symfony/filesystem": "~2.4",
-
         "phpspec/phpspec": "~2.0",
         "bossa/phpspec2-expect": "~1.0",
 
