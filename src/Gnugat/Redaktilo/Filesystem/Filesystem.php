@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\File;
+namespace Gnugat\Redaktilo\Filesystem;
 
 use Gnugat\Redaktilo\File;
 

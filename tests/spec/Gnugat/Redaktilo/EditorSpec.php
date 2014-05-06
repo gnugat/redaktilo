@@ -2,7 +2,7 @@
 
 namespace spec\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\File\Filesystem;
+use Gnugat\Redaktilo\Filesystem\Filesystem;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 

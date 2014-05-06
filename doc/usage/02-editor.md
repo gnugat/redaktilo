@@ -5,7 +5,7 @@ The `Editor` class allows you to manipulate files as array of lines.
 Here's how to initialize it:
 
 ```php
-use Gnugat\Redaktilo\File\Filesystem;
+use Gnugat\Redaktilo\Filesystem\Filesystem;
 use Gnugat\Redaktilo\Editor;
 
 $filesystem = new Filesystem();

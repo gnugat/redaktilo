@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Gnugat\Redaktilo\File;
+namespace spec\Gnugat\Redaktilo\Filesystem;
 
 use Gnugat\Redaktilo\File\Filesystem;
 use Gnugat\Redaktilo\File;
