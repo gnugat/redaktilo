@@ -38,11 +38,18 @@ class Editor
      * Opens an existing file.
      *
      * @param string $filename
+     * @param bool   $force
      *
      * @return File
+     *
+     * @throws Symfony\Component\Filesystem\Exception\FileNotFoundException
      */
-    public function open($filename)
+    public function open($filename, $force = false)
     {
+        if (!$this->filesystem->exists($filename) && $force) {
+            return $this->filesystem->create($filename);
+        }
+
         return $this->filesystem->open($filename);
     }
 

@@ -21,10 +21,6 @@ class EditorSpec extends ObjectBehavior
         $beforeLines = array('We', 'are', 'knights', 'who', 'say', 'ni');
         $afterLines = array('We', 'are', 'the', 'knights', 'who', 'say', 'ni');
 
-        // Openning
-        $filesystem->open(self::FILENAME)->willReturn($file);
-        $this->open(self::FILENAME);
-
         // Looking for the line "knights"
         $file->getLines()->willReturn($beforeLines);
         $file->getFilename()->willReturn('/monthy/python.txt');
@@ -35,6 +31,37 @@ class EditorSpec extends ObjectBehavior
         // Saving the file
         $filesystem->write($file)->shouldBeCalled();
         $this->save($file);
+    }
+
+    function it_opens_existing_files(Filesystem $filesystem, File $file)
+    {
+        $filename = '/monty.py';
+
+        $filesystem->exists($filename)->willReturn(true);
+        $filesystem->open($filename)->willReturn($file);
+
+        $this->open($filename);
+    }
+
+    function it_cannot_open_new_files(Filesystem $filesystem, File $file)
+    {
+        $filename = '/monty.py';
+        $exception = 'Symfony\Component\Filesystem\Exception\FileNotFoundException';
+
+        $filesystem->exists($filename)->willReturn(false);
+        $filesystem->open($filename)->willThrow($exception);
+
+        $this->shouldThrow($exception)->duringOpen($filename);
+    }
+
+    function it_creates_new_files(Filesystem $filesystem, File $file)
+    {
+        $filename = '/monty.py';
+
+        $filesystem->exists($filename)->willReturn(false);
+        $filesystem->create($filename)->willReturn($file);
+
+        $this->open($filename, true);
     }
 
     function it_inserts_lines_before_current_one(File $file)

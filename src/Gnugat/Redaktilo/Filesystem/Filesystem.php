@@ -17,7 +17,7 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
- * Manages read and write operations using File as a data source.
+ * Manages actual operations on the filesystem using File as a data source.
  *
  * @author Loïc Chardonnet <loic.chardonnet@gmail.com>
  */
