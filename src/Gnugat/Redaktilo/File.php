@@ -16,6 +16,7 @@ namespace Gnugat\Redaktilo;
  *
  * + the path to the file
  * + the raw content
+ * + a pointer to the current line
  *
  * Its read and write methods provide a representation of the content:
  * an array of lines from which the newline character has been stripped.
@@ -29,6 +30,9 @@ class File
 
     /** @var string */
     private $content;
+
+    /** @var integer */
+    private $currentLineNumber = 0;
 
     /**
      * @param string $filename
@@ -56,6 +60,18 @@ class File
     public function getLines()
     {
         return explode(PHP_EOL, $this->content);
+    }
+
+    /** @return integer */
+    public function getCurrentLineNumber()
+    {
+        return $this->currentLineNumber;
+    }
+
+    /** @param integer $lineNumber */
+    public function setCurrentLineNumber($lineNumber)
+    {
+        $this->currentLineNumber = $lineNumber;
     }
 
     /** @param array $lines */

@@ -45,6 +45,17 @@ class FileSpec extends ObjectBehavior
         $this->getLines()->shouldBe($lines);
     }
 
+    function it_has_a_current_line()
+    {
+        $this->getCurrentLineNumber()->shouldBe(0);
+
+        $lines = explode(PHP_EOL, $this->content);
+        $middleLine = count($lines) / 2;
+
+        $this->setCurrentLineNumber($middleLine);
+        $this->getCurrentLineNumber()->shouldBe($middleLine);
+    }
+
     function it_writes_content()
     {
         $content = explode(PHP_EOL, $this->content);
