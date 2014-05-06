@@ -105,7 +105,7 @@ class Filesystem
     public function write(File $file)
     {
         $filename = $file->getFilename();
-        $content = $file->getContent();
+        $content = $file->read();
 
         $this->symfonyFilesystem->dumpFile($filename, $content, null);
     }

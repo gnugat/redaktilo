@@ -36,7 +36,11 @@ class FileSpec extends ObjectBehavior
 
     function it_has_a_content()
     {
-        $this->getContent()->shouldBe($this->content);
+        $newContent = 'This is an EX parrot!';
+
+        $this->read()->shouldBe($this->content);
+        $this->write($newContent);
+        $this->read()->shouldBe($newContent);
     }
 
     function it_has_lines()
@@ -67,6 +71,6 @@ class FileSpec extends ObjectBehavior
         $lineNumber = 6;
 
         $this->insertLineAt($line, $lineNumber);
-        $this->getcontent()->shouldBe($expectedContent);
+        $this->read()->shouldBe($expectedContent);
     }
 }

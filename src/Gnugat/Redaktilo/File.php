@@ -55,9 +55,15 @@ class File
     }
 
     /** @return string */
-    public function getContent()
+    public function read()
     {
         return $this->content;
+    }
+
+    /** @param string $newContent */
+    public function write($newContent)
+    {
+        return $this->content = $newContent;
     }
 
     /** @return array of lines stripped of the newline character */
