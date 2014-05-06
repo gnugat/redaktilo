@@ -1,9 +1,9 @@
 <?php
 
-namespace spec\Gnugat\Redaktilo\Filesystem;
+namespace spec\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Filesystem\Filesystem;
 use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Filesystem;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -16,8 +16,8 @@ class FilesystemSpec extends ObjectBehavior
 
     function let(SymfonyFilesystem $symfonyFilesystem)
     {
-        $this->sourceFilename = __DIR__.'/../../../../fixtures/sources/copy-me.txt';
-        $this->copyFilename = __DIR__.'/../../../../fixtures/copies/edit-me.txt';
+        $this->sourceFilename = __DIR__.'/../../../fixtures/sources/copy-me.txt';
+        $this->copyFilename = __DIR__.'/../../../fixtures/copies/edit-me.txt';
 
         $this->fileCopier = new SymfonyFilesystem();
 

@@ -3,7 +3,7 @@
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Gnugat\Redaktilo\Editor;
-use Gnugat\Redaktilo\Filesystem\Filesystem;
+use Gnugat\Redaktilo\Filesystem;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class BundleRegistrationScriptContext implements SnippetAcceptingContext

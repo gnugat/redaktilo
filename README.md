@@ -45,8 +45,8 @@ we can use the following script:
 
 require_once __DIR__.'/../../vendor/autoload.php';
 
-use Gnugat\Redaktilo\Filesystem\Filesystem;
 use Gnugat\Redaktilo\Editor;
+use Gnugat\Redaktilo\Filesystem;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 $symfonyFilesystem = new SymfonyFilesystem();

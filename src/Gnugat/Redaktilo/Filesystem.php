@@ -9,9 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Filesystem;
+namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\File;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;

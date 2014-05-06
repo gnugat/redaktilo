@@ -2,8 +2,8 @@
 
 namespace spec\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Filesystem\Filesystem;
 use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Filesystem;
 use PhpSpec\ObjectBehavior;
 
 class EditorSpec extends ObjectBehavior
