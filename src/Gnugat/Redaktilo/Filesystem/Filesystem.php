@@ -14,6 +14,7 @@ namespace Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\File;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
  * Manages read and write operations using File as a data source.
@@ -24,6 +25,15 @@ class Filesystem
 {
     const LINE_BREAK_OTHER = "\n";
     const LINE_BREAK_WINDOWS = "\r\n";
+
+    /** @var SymfonyFilesystem */
+    private $symfonyFilesystem;
+
+    /** @param SymfonyFilesystem $symfonyFilesystem */
+    public function __construct(SymfonyFilesystem $symfonyFilesystem)
+    {
+        $this->symfonyFilesystem = $symfonyFilesystem;
+    }
 
     /**
      * @param string $filename
@@ -84,6 +94,9 @@ class Filesystem
     /** @param File $file */
     public function write(File $file)
     {
-        file_put_contents($file->getFilename(), $file->getContent());
+        $filename = $file->getFilename();
+        $content = $file->getContent();
+
+        $this->symfonyFilesystem->dumpFile($filename, $content, null);
     }
 }

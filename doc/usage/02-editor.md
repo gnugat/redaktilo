@@ -7,8 +7,10 @@ Here's how to initialize it:
 ```php
 use Gnugat\Redaktilo\Filesystem\Filesystem;
 use Gnugat\Redaktilo\Editor;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-$filesystem = new Filesystem();
+$symfonyFilesystem = new SymfonyFilesystem();
+$filesystem = new Filesystem($symfonyFilesystem);
 $editor = new Editor($filesystem);
 ```
 

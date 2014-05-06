@@ -5,7 +5,7 @@ namespace spec\Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\File\Filesystem;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
-use Symfony\Component\Filesystem\Filesystem as FileCopier;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class FilesystemSpec extends ObjectBehavior
 {
@@ -14,12 +14,14 @@ class FilesystemSpec extends ObjectBehavior
 
     private $fileCopier;
 
-    function let()
+    function let(SymfonyFilesystem $symfonyFilesystem)
     {
         $this->sourceFilename = __DIR__.'/../../../../fixtures/sources/copy-me.txt';
         $this->copyFilename = __DIR__.'/../../../../fixtures/copies/edit-me.txt';
 
-        $this->fileCopier = new FileCopier();
+        $this->fileCopier = new SymfonyFilesystem();
+
+        $this->beConstructedWith($symfonyFilesystem);
     }
 
     function it_opens_existing_files()
@@ -67,18 +69,14 @@ class FilesystemSpec extends ObjectBehavior
         $this->exists($this->copyFilename)->shouldBe(true);
     }
 
-    function it_writes_files()
+    function it_writes_files(SymfonyFilesystem $symfonyFilesystem)
     {
-        $content = <<< EOS
-We are the knigths who say ni!
-Grumpy
-Cat
-EOS;
+        $this->fileCopier->copy($this->sourceFilename, $this->copyFilename, true);
+        $content = file_get_contents($this->copyFilename);
         $file = new File($this->copyFilename, $content);
 
-        $this->write($file);
+        $symfonyFilesystem->dumpFile($this->copyFilename, $content, null)->shouldBeCalled();
 
-        $wroteContent = file_get_contents($this->copyFilename);
-        expect($wroteContent)->toBe($content);
+        $this->write($file);
     }
 }
