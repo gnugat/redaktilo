@@ -22,11 +22,11 @@ class FilesystemSpec extends ObjectBehavior
         $this->fileCopier = new FileCopier();
     }
 
-    function it_reads_files()
+    function it_opens_existing_files()
     {
         $this->fileCopier->copy($this->sourceFilename, $this->copyFilename, true);
 
-        $file = $this->read($this->copyFilename);
+        $file = $this->open($this->copyFilename);
 
         $file->shouldHaveType('Gnugat\Redaktilo\File');
     }

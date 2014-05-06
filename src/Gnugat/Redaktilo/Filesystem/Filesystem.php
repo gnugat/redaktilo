@@ -24,13 +24,11 @@ class Filesystem
     const LINE_BREAK_WINDOWS = "\r\n";
 
     /**
-     * Makes a File of the given $fileType
-     *
      * @param string $filename
      *
      * @return File
      */
-    public function read($filename)
+    public function open($filename)
     {
         $content = @file_get_contents($filename);
 
@@ -45,11 +43,7 @@ class Filesystem
         return new File($filename, $content, $newLineCharacter);
     }
 
-    /**
-     * Dumps a File
-     *
-     * @param File $file
-     */
+    /** @param File $file */
     public function write(File $file)
     {
         file_put_contents($file->getFilename(), $file->getContent());

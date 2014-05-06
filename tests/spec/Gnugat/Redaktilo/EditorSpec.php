@@ -22,7 +22,7 @@ class EditorSpec extends ObjectBehavior
         $afterLines = array('We', 'are', 'the', 'knights', 'who', 'say', 'ni');
 
         // Openning
-        $filesystem->read(self::FILENAME)->willReturn($file);
+        $filesystem->open(self::FILENAME)->willReturn($file);
         $this->open(self::FILENAME);
 
         // Looking for the line "knights"

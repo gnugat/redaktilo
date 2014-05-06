@@ -43,7 +43,7 @@ class Editor
      */
     public function open($filename)
     {
-        return $this->filesystem->read($filename);
+        return $this->filesystem->open($filename);
     }
 
     /**
