@@ -101,16 +101,7 @@ class Editor
      */
     public function addBefore(File $file, $add)
     {
-        $currentLineNumber = $file->getCurrentLineNumber();
-        $preEditLines = $file->getLines();
-        $postEditLines = array();
-        foreach ($preEditLines as $lineNumber => $line) {
-            if ($currentLineNumber === $lineNumber) {
-                $postEditLines[] = $add;
-            }
-            $postEditLines[] = $line;
-        }
-        $file->write($postEditLines);
+        $file->insertBefore($add);
     }
 
     /**
@@ -121,18 +112,7 @@ class Editor
      */
     public function addAfter(File $file, $add)
     {
-        $currentLineNumber = $file->getCurrentLineNumber();
-        $currentLineNumber++;
-        $file->setCurrentLineNumber($currentLineNumber);
-        $preEditLines = $file->getLines();
-        $postEditLines = array();
-        foreach ($preEditLines as $lineNumber => $line) {
-            $postEditLines[] = $line;
-            if ($currentLineNumber === $lineNumber) {
-                $postEditLines[] = $add;
-            }
-        }
-        $file->write($postEditLines);
+        $file->insertAfter($add);
     }
 
     /**

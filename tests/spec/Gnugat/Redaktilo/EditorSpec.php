@@ -32,13 +32,22 @@ class EditorSpec extends ObjectBehavior
         $file->setCurrentLineNumber(2)->shouldBeCalled();
         $this->jumpDownTo($file, 'knights');
 
-        // Inserting the line "the" before the line "knights"
-        $file->getCurrentLineNumber()->willReturn(2);
-        $file->write($afterLines)->shouldBeCalled();
-        $this->addBefore($file, 'the');
-
         // Saving the file
         $filesystem->write($file)->shouldBeCalled();
         $this->save($file);
+    }
+
+    function it_inserts_lines_before_current_one(File $file)
+    {
+        $newLine = 'We are the knights who say Ni!';
+        $file->insertBefore($newLine)->shouldBeCalled();
+        $this->addBefore($file, $newLine);
+    }
+
+    function it_inserts_lines_after_current_one(File $file)
+    {
+        $newLine = 'We are the knights who say Ni!';
+        $file->insertAfter($newLine)->shouldBeCalled();
+        $this->addAfter($file, $newLine);
     }
 }
