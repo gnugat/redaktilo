@@ -31,9 +31,6 @@ class Editor
     /** @var LineFile */
     private $file;
 
-    /** @var integer */
-    private $cursor = 0;
-
     /** @param Filesystem $filesystem */
     public function __construct(Filesystem $filesystem)
     {
@@ -48,7 +45,6 @@ class Editor
     public function open($filename)
     {
         $this->file = $this->filesystem->read($filename, Filesystem::LINE_FILE_TYPE);
-        $this->cursor = 0;
     }
 
     /**
@@ -60,13 +56,15 @@ class Editor
     {
         $lines = $this->file->getLines();
         $filename = $this->file->getFilename();
+        $currentLineNumber = $this->file->getCurrentLineNumber() + 1;
         $length = count($lines);
-        for ($line = $this->cursor + 1; $line < $length; $line++) {
-            if ($lines[$line] === $pattern) {
-                $this->cursor = $line;
+        while ($currentLineNumber < $length) {
+            if ($lines[$currentLineNumber] === $pattern) {
+                $this->file->setCurrentLineNumber($currentLineNumber);
 
                 return;
             }
+            $currentLineNumber++;
         }
 
         throw new \Exception("Couldn't find line $pattern in $filename");
@@ -81,12 +79,14 @@ class Editor
     {
         $lines = $this->file->getLines();
         $filename = $this->file->getFilename();
-        for ($line = $this->cursor - 1; $line >= 0; $line--) {
-            if ($lines[$line] === $pattern) {
-                $this->cursor = $line;
+        $currentLineNumber = $this->file->getCurrentLineNumber() - 1;
+        while (0 <= $currentLineNumber) {
+            if ($lines[$currentLineNumber] === $pattern) {
+                $this->file->setCurrentLineNumber($currentLineNumber);
 
                 return;
             }
+            $currentLineNumber--;
         }
 
         throw new \Exception("Couldn't find line $pattern in $filename");
@@ -99,11 +99,11 @@ class Editor
      */
     public function addBefore($add)
     {
-        $cursor = $this->cursor--;
+        $currentLineNumber = $this->file->getCurrentLineNumber();
         $preEditLines = $this->file->getLines();
         $postEditLines = array();
         foreach ($preEditLines as $lineNumber => $line) {
-            if ($cursor === $lineNumber) {
+            if ($currentLineNumber === $lineNumber) {
                 $postEditLines[] = $add;
             }
             $postEditLines[] = $line;
@@ -118,12 +118,14 @@ class Editor
      */
     public function addAfter($add)
     {
-        $cursor = $this->cursor++;
+        $currentLineNumber = $this->file->getCurrentLineNumber();
+        $currentLineNumber++;
+        $this->file->setCurrentLineNumber($currentLineNumber);
         $preEditLines = $this->file->getLines();
         $postEditLines = array();
         foreach ($preEditLines as $lineNumber => $line) {
             $postEditLines[] = $line;
-            if ($cursor === $lineNumber) {
+            if ($currentLineNumber === $lineNumber) {
                 $postEditLines[] = $add;
             }
         }
