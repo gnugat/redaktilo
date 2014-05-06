@@ -26,7 +26,7 @@ class FilesystemSpec extends ObjectBehavior
     {
         $this->fileCopier->copy($this->sourceFilename, $this->copyFilename, true);
 
-        $file = $this->read($this->copyFilename, Filesystem::LINE_FILE_TYPE);
+        $file = $this->read($this->copyFilename);
 
         $file->shouldHaveType('Gnugat\Redaktilo\File');
     }

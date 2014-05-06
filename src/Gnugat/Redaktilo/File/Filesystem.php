@@ -20,26 +20,18 @@ use Gnugat\Redaktilo\File;
  */
 class Filesystem
 {
-    const LINE_FILE_TYPE = 'Gnugat\Redaktilo\File';
-
     /**
      * Makes a File of the given $fileType
      *
      * @param string $filename
-     * @param string $fileType Only Filesystem::*_TYPE constants are supported
      *
-     * @return File of the given $fileType
-     *
-     * @throws Exception If the file type isn't supported
+     * @return File
      */
-    public function read($filename, $fileType)
+    public function read($filename)
     {
-        if (!$this->supports($fileType)) {
-            throw new \Exception(sprintf('Given file type "%s" not supported', $fileType));
-        }
         $content = @file_get_contents($filename);
 
-        return new $fileType($filename, $content);
+        return new File($filename, $content);
     }
 
     /**
@@ -50,19 +42,5 @@ class Filesystem
     public function write(File $file)
     {
         file_put_contents($file->getFilename(), $file->getContent());
-    }
-
-    /**
-     * @param string $fileType
-     *
-     * @return Boolean
-     */
-    private function supports($fileType)
-    {
-        $supportedTypes = array(
-            self::LINE_FILE_TYPE,
-        );
-
-        return in_array($fileType, $supportedTypes);
     }
 }

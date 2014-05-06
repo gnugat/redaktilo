@@ -43,7 +43,7 @@ class Editor
      */
     public function open($filename)
     {
-        return $this->filesystem->read($filename, Filesystem::LINE_FILE_TYPE);
+        return $this->filesystem->read($filename);
     }
 
     /**
