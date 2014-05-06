@@ -28,9 +28,6 @@ class Editor
     /** @var Filesystem */
     private $filesystem;
 
-    /** @var LineFile */
-    private $file;
-
     /** @param Filesystem $filesystem */
     public function __construct(Filesystem $filesystem)
     {
@@ -41,26 +38,29 @@ class Editor
      * Opens an existing file.
      *
      * @param string $filename
+     *
+     * @return File
      */
     public function open($filename)
     {
-        $this->file = $this->filesystem->read($filename, Filesystem::LINE_FILE_TYPE);
+        return $this->filesystem->read($filename, Filesystem::LINE_FILE_TYPE);
     }
 
     /**
      * Moves down the cursor to the given line.
      *
+     * @param File   $file
      * @param string $pattern
      */
-    public function jumpDownTo($pattern)
+    public function jumpDownTo(File $file, $pattern)
     {
-        $lines = $this->file->getLines();
-        $filename = $this->file->getFilename();
-        $currentLineNumber = $this->file->getCurrentLineNumber() + 1;
+        $lines = $file->getLines();
+        $filename = $file->getFilename();
+        $currentLineNumber = $file->getCurrentLineNumber() + 1;
         $length = count($lines);
         while ($currentLineNumber < $length) {
             if ($lines[$currentLineNumber] === $pattern) {
-                $this->file->setCurrentLineNumber($currentLineNumber);
+                $file->setCurrentLineNumber($currentLineNumber);
 
                 return;
             }
@@ -73,16 +73,17 @@ class Editor
     /**
      * Moves up the cursor to the given line.
      *
+     * @param File   $file
      * @param string $pattern
      */
-    public function jumpUpTo($pattern)
+    public function jumpUpTo(File $file, $pattern)
     {
-        $lines = $this->file->getLines();
-        $filename = $this->file->getFilename();
-        $currentLineNumber = $this->file->getCurrentLineNumber() - 1;
+        $lines = $file->getLines();
+        $filename = $file->getFilename();
+        $currentLineNumber = $file->getCurrentLineNumber() - 1;
         while (0 <= $currentLineNumber) {
             if ($lines[$currentLineNumber] === $pattern) {
-                $this->file->setCurrentLineNumber($currentLineNumber);
+                $file->setCurrentLineNumber($currentLineNumber);
 
                 return;
             }
@@ -95,12 +96,13 @@ class Editor
     /**
      * Moves up the cursor and inserts the given line.
      *
+     * @param File   $file
      * @param string $add
      */
-    public function addBefore($add)
+    public function addBefore(File $file, $add)
     {
-        $currentLineNumber = $this->file->getCurrentLineNumber();
-        $preEditLines = $this->file->getLines();
+        $currentLineNumber = $file->getCurrentLineNumber();
+        $preEditLines = $file->getLines();
         $postEditLines = array();
         foreach ($preEditLines as $lineNumber => $line) {
             if ($currentLineNumber === $lineNumber) {
@@ -108,20 +110,21 @@ class Editor
             }
             $postEditLines[] = $line;
         }
-        $this->file->write($postEditLines);
+        $file->write($postEditLines);
     }
 
     /**
      * Moves down the cursor and inserts the given line.
      *
+     * @param File   $file
      * @param string $add
      */
-    public function addAfter($add)
+    public function addAfter(File $file, $add)
     {
-        $currentLineNumber = $this->file->getCurrentLineNumber();
+        $currentLineNumber = $file->getCurrentLineNumber();
         $currentLineNumber++;
-        $this->file->setCurrentLineNumber($currentLineNumber);
-        $preEditLines = $this->file->getLines();
+        $file->setCurrentLineNumber($currentLineNumber);
+        $preEditLines = $file->getLines();
         $postEditLines = array();
         foreach ($preEditLines as $lineNumber => $line) {
             $postEditLines[] = $line;
@@ -129,14 +132,16 @@ class Editor
                 $postEditLines[] = $add;
             }
         }
-        $this->file->write($postEditLines);
+        $file->write($postEditLines);
     }
 
     /**
      * Backups the modifications.
+     *
+     * @param File $file
      */
-    public function save()
+    public function save(File $file)
     {
-        $this->filesystem->write($this->file);
+        $this->filesystem->write($file);
     }
 }

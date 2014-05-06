@@ -51,11 +51,11 @@ use Gnugat\Redaktilo\Editor;
 $filesystem = new Filesystem();
 $editor = new Editor($filesystem);
 
-$editor->open('/tmp/config.yaml');
-$editor->jumpDownTo('            encode_as_base64: true');
-$editor->jumpDownTo('            encode_as_base64: true');
-$editor->addBefore('            algorithm: sha512');
-$editor->save();
+$file = $editor->open('/tmp/config.yaml');
+$editor->jumpDownTo($file, '            encode_as_base64: true');
+$editor->jumpDownTo($file, '            encode_as_base64: true');
+$editor->addBefore($file, '            algorithm: sha512');
+$editor->save($file);
 ```
 
 **Note**: the usage of the

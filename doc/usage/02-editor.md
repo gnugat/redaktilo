@@ -22,13 +22,13 @@ When opening a file, the cursor is set to the first line:
 
 ```php
 $filename = '/tmp/menu.txt';
-$editor->open($filename); // Current line: 'Bacon'
+$file = $editor->open($filename); // Current line: 'Bacon'
 ```
 
 You can move the cursor to any existing lines:
 
 ```php
-$editor->jumpDownTo('Egg'); // Current line: 'Egg'
+$editor->jumpDownTo($file, 'Egg'); // Current line: 'Egg'
 ```
 
 As you can see, there's no need to add the newline character, `LineEditor` will
@@ -36,14 +36,14 @@ do it for you.
 The lookup is directional:
 
 ```php
-$editor->jumpDownTo('Bacon'); // Not found because 'Bacon' is above the current line
-$editor->jumpUpTo('Bacon'); // Current line: 'Bacon'
+$editor->jumpDownTo($file, 'Bacon'); // Not found because 'Bacon' is above the current line
+$editor->jumpUpTo($file, 'Bacon'); // Current line: 'Bacon'
 ```
 
 You can insert new lines:
 
 ```php
-$editor->addAfter('Spam'); // Line inserted after 'Bacon'. Current line: 'Spam'.
+$editor->addAfter($file, 'Spam'); // Line inserted after 'Bacon'. Current line: 'Spam'.
 ```
 
 The insertion is also directional: you can either insert a new line before the
@@ -55,7 +55,7 @@ For now the modification is only done in memory, to actually apply your changes
 to the file you need to save it:
 
 ```php
-$editor->save();
+$editor->save($file);
 ```
 
 The resulting file will be:

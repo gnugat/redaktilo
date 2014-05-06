@@ -46,15 +46,15 @@ class BundleRegistrationScriptContext implements SnippetAcceptingContext
         $filesystem = new Filesystem();
         $editor = new Editor($filesystem);
 
-        $editor->open($this->appKernelPath);
+        $file = $editor->open($this->appKernelPath);
 
-        $editor->jumpDownTo('    public function registerBundles()');
-        $editor->jumpDownTo('        $bundles = array(');
-        $editor->jumpDownTo('        );');
+        $editor->jumpDownTo($file, '    public function registerBundles()');
+        $editor->jumpDownTo($file, '        $bundles = array(');
+        $editor->jumpDownTo($file, '        );');
 
-        $editor->addBefore($this->bundle);
+        $editor->addBefore($file, $this->bundle);
 
-        $editor->save();
+        $editor->save($file);
     }
 
     /**

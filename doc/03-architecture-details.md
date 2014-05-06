@@ -40,27 +40,27 @@ namespace Gnugat\Redaktilo\Editor;
 class Editor
 {
     /**
-     * Calls Filesystem to open a file and sets the cursor to its first line.
+     * Calls Filesystem to return File.
      */
     public function open($filename);
 
     /**
      * Moves down or up the cursor in the file to the given line.
      */
-    public function jumpDownTo($to);
-    public function jumpUpTo($to);
+    public function jumpDownTo(File $file, $to);
+    public function jumpUpTo(File $file, $to);
 
     /**
      * Inserts the given line before or after the cursor.
      * Note 1: after the insertion, the cursor will be set to the new line.
      * Note 2: changes are only done in memory, see the `save` method.
      */
-    public function addBefore($add);
-    public function addAfter($add);
+    public function addBefore(File $file, $add);
+    public function addAfter(File $file, $add);
 
     /**
      * Actually applies the changes to the file.
      */
-    public function save();
+    public function save(File $file);
 }
 ```

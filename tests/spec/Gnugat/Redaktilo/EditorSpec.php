@@ -33,15 +33,15 @@ class EditorSpec extends ObjectBehavior
         $file->getFilename()->willReturn('/monthy/python.txt');
         $file->getCurrentLineNumber()->willReturn(0);
         $file->setCurrentLineNumber(2)->shouldBeCalled();
-        $this->jumpDownTo('knights');
+        $this->jumpDownTo($file, 'knights');
 
         // Inserting the line "the" before the line "knights"
         $file->getCurrentLineNumber()->willReturn(2);
         $file->write($afterLines)->shouldBeCalled();
-        $this->addBefore('the');
+        $this->addBefore($file, 'the');
 
         // Saving the file
         $filesystem->write($file)->shouldBeCalled();
-        $this->save();
+        $this->save($file);
     }
 }
