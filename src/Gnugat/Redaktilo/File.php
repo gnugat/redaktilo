@@ -12,16 +12,16 @@
 namespace Gnugat\Redaktilo;
 
 /**
- * A data source which contains:
+ * Representation of a file:
  *
- * + the path to the file
- * + the raw content
- * + a pointer to the current line
+ * + it has a filename
+ * + it has a content which can be read and writen
+ * + it has a pointer to a current line
  *
- * Its read and write methods provide a representation of the content:
- * an array of lines from which the newline character has been stripped.
+ * Also provides a line representation of the content with some basic
+ * manipulations.
  *
- * @author Loïc Chardonnet <loic.chardonnet@gmail.com>
+ * @api
  */
 class File
 {
@@ -49,31 +49,60 @@ class File
         $this->lineBreak = $lineBreak;
     }
 
-    /** @return string */
+    /**
+     * Returns the absolute path with the file name.
+     *
+     * @return string
+     *
+     * @api
+     */
     public function getFilename()
     {
         return $this->filename;
     }
 
-    /** @return string */
+    /**
+     * Returns the full content loaded in memory (doesn't actually read the
+     * file).
+     *
+     * @return string
+     *
+     * @api
+     */
     public function read()
     {
         return $this->content;
     }
 
-    /** @param string $newContent */
+    /**
+     * Replaces the full content loaded in memory (doesn't actually write in the
+     * file).
+     *
+     * @param string $newContent
+     *
+     * @api
+     */
     public function write($newContent)
     {
         return $this->content = $newContent;
     }
 
-    /** @return array of lines stripped of the newline character */
+    /**
+     * Splits the content into an array of lines, stripped of the line break.
+     *
+     * @return array
+     */
     public function readlines()
     {
         return explode($this->lineBreak, $this->content);
     }
 
-    /** @param array $newLines */
+    /**
+     * Merges the lines using the appropriate line break, and replaces the
+     * content with it.
+     *
+     * @param array $newLines
+     */
     public function writelines(array $newLines)
     {
         $this->content = implode($this->lineBreak, $newLines);
@@ -92,6 +121,11 @@ class File
     }
 
     /**
+     * If the line number is greater than the actual number of lines, inserts
+     * a new line at the end of the file.
+     * If the line number is negative, starts the count from the end of the
+     * file.
+     *
      * @param string $line
      * @param string $lineNumber
      */
