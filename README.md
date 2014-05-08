@@ -82,12 +82,6 @@ class KernelManipulator extends Manipulator
 As you can see it's easier to read and to understand than
 [the original PHP token parsing](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php).
 
-## Tests
-
-Run the following script to run the tests:
-
-    ./bin/tester.sh
-
 ## Further documentation
 
 You can see the current and past versions using one of the following:
