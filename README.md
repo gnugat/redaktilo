@@ -6,7 +6,7 @@ Redaktilo provides an Object Oriented way to manipulate files, through the
 editor metaphor:
 
 * you can open a file
-* you can then jump to given lines
+* you can then navigate in the file to select a line
 * next, you can insert a new line above/under the current line
 * finally you can save the changes on the filesystem
 
@@ -43,7 +43,7 @@ We'll describe here the
 use case: its [KernelManipulator](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
 edits a class to insert a line.
 
-Here's what the code would look like if it were using Redaktilo:
+Here's what the code would look like if it was using Redaktilo:
 
 ```php
 <?php
@@ -95,4 +95,10 @@ You can find more documentation at the following links:
 * [copyright and MIT license](LICENSE)
 * [versioning and branching models](VERSIONING.md)
 * [contribution instructions](CONTRIBUTING.md)
-* [documentation directory](doc)
+
+Next readings:
+
+* [Usage](doc/01-usage.md)
+* [Use cases](doc/02-use-cases.md)
+* [Architecture details](doc/03-architecture-details.md)
+* [Vocabulary](04-vocabulary.md)
