@@ -1,66 +1,100 @@
 # Architecture details
 
-Redaktilo is composed of 3 classes:
+This chapter explains the responsibility of each classes:
 
 * [File](#file)
 * [Filesystem](#filesystem)
 * [Editor](#editor)
+* [Next readings](#next-readings)
+* [Previous readings](#previous-readings)
 
 ## File
 
-A domain model which incorporates data and behavior. It has:
-
-* a `filename`
-* a `content`
-
-And it allows you to:
-
-* read the content in as an array of lines
-* write the content in as an array of lines
-
-## Filesystem
-
-A service which does the actual read and write operations.
-
-When asked to read a file, it creates an instance of `File`.
-
-When asked to write a file, it reads the unformated content of `File` and puts
-it on the file system.
-
-## Editor
-
-This is the public API of this library, developers shouldn't have to use any
-other class:
+Redaktilo is based on this domain object:
 
 ```php
 <?php
 
-namespace Gnugat\Redaktilo\Editor;
+namespace Gnugat\Redaktilo;
 
-class Editor
+class File
 {
-    /**
-     * Calls Filesystem to return File.
-     */
-    public function open($filename);
+    public function getFilename();
 
-    /**
-     * Moves down or up the cursor in the file to the given line.
-     */
-    public function jumpDownTo(File $file, $to);
-    public function jumpUpTo(File $file, $to);
+    public function read();
+    public function write($newContent);
 
-    /**
-     * Inserts the given line before or after the cursor.
-     * Note 1: after the insertion, the cursor will be set to the new line.
-     * Note 2: changes are only done in memory, see the `save` method.
-     */
-    public function addBefore(File $file, $add);
-    public function addAfter(File $file, $add);
-
-    /**
-     * Actually applies the changes to the file.
-     */
-    public function save(File $file);
+    // ...
 }
 ```
+
+The rest are only stateless services allowing you to manipulate it.
+
+Currently the file also have a cursor to the current line and the possibility
+to convert the content into an array of lines:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+class File
+{
+    // ...
+
+    public function readlines();
+    public function writelines(array $newLines);
+
+    public function getCurrentLineNumber();
+    public function setCurrentLineNumber($lineNumber);
+
+    public function insertLineAt($line, $lineNumber);
+}
+```
+
+## Filesystem
+
+A service which does the actual read and write operations:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+class Filesystem
+{
+    public function open($filename);
+    public function create($filename);
+
+    public function exists($filename);
+
+    public function write(File $file);
+
+    public function detectLineBreak($content);
+}
+```
+
+You can only open existing files and create new files. Those two methods will
+create an instance of `File`.
+
+The `detectLineBreak` method looks in the file's content to guess the line
+break: windows (`\r\n`) or other (`\n`).
+If there's no line yet, the system's one is used (PHP_EOL`).
+
+**Note**: `Filesystem` uses the
+[Symfony2 Filesystem component](http://symfony.com/doc/current/components/filesystem.html).
+
+## Editor
+
+`Editor` is intended to be a facade using every other services. It provides a
+unique API to developers with the editor metaphor.
+
+## Next readings
+
+* [Vocabulary](04-vocabulary.md)
+
+## Previous readings
+
+* [README](../README.md)
+* [Usage](doc/01-usage.md)
+* [Use cases](doc/02-use-cases.md)

@@ -17,3 +17,10 @@ To be opposed to "binary file". Can contain:
 * YAML
 * PHP
 * etc...
+
+## Previous readings
+
+* [README](../README.md)
+* [Usage](doc/01-usage.md)
+* [Use cases](doc/02-use-cases.md)
+* [Architecture details](doc/03-architecture-details.md)
