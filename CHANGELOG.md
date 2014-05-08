@@ -1,5 +1,16 @@
 # Changes between versions
 
+## 0.3.0: File coming out
+
+* added file existence check
+* added line break detection
+* added `bin/tester.sh` script
+* moved stateness from `Editor` to `File`
+* moved classes at the root
+* removed interfaces
+* compiled documentation
+* improved tests
+
 ## 0.2.0: Jump to
 
 * added jump to methods to Editor
