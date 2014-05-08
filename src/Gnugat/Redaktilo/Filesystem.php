@@ -18,7 +18,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 /**
  * Manages actual operations on the filesystem using File as a data source.
  *
- * @author Loïc Chardonnet <loic.chardonnet@gmail.com>
+ * @api
  */
 class Filesystem
 {
@@ -35,11 +35,15 @@ class Filesystem
     }
 
     /**
+     * Makes a File out of an existing file.
+     *
      * @param string $filename
      *
      * @return File
      *
      * @throws FileNotFoundException
+     *
+     * @api
      */
     public function open($filename)
     {
@@ -56,6 +60,11 @@ class Filesystem
     }
 
     /**
+     * PHP_EOL cannot be used to guess the line break of any files: a windows
+     * user (`\r\n`) can receive a file create on another OS (`\n`).
+     *
+     * If the given content hasn't any lines, use PHP_EOL.
+     *
      * @param string $content
      *
      * @return bool
@@ -73,16 +82,22 @@ class Filesystem
     }
 
     /**
+     * Makes a File out of a new file.
+     *
+     * @see exists()
+     *
      * @param string $filename
      *
      * @return File
      *
-     * @throws IOException If the file already exists
+     * @throws IOException If the path isn't accessible.
+     *
+     * @api
      */
     public function create($filename)
     {
         if ($this->exists($filename)) {
-            $message = sprintf('Failed to create "%s" because it already exists.', $filename);
+            $message = sprintf('Failed to create "%s" because its path is not accessible.', $filename);
 
             throw new IOException($message, 0, null, $filename);
         }
@@ -91,16 +106,28 @@ class Filesystem
     }
 
     /**
+     * Possible reasons of failure:
+     * + path doesn't exists
+     * + path isn't accessible
+     *
      * @param string $filename
      *
      * @return bool
+     *
+     * @api
      */
     public function exists($filename)
     {
         return file_exists($filename);
     }
 
-    /** @param File $file */
+    /**
+     * Atomically writes the given File's content on the actual file.
+     *
+     * @param File $file
+     *
+     * @api
+     */
     public function write(File $file)
     {
         $filename = $file->getFilename();
