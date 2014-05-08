@@ -1,71 +1,86 @@
 # Redaktilo
 
-Small and simple library allowing your code to edit files.
+*Because your code too needs an editor to manipulate files*.
 
-**Caution**: under heavy development, new implementations and backward
-compatibility breaks are to be expected quite often.
+Redaktilo provides an Object Oriented way to manipulate files, through the
+editor metaphor:
 
-Read more about this library in [its documentation introduction](doc/01-introduction.md).
+* you can open a file
+* you can then jump to given lines
+* next, you can insert a new line above/under the current line
+* finally you can save the changes on the filesystem
+
+**Caution**: still under heavy development (but BC breaks might not be frequent).
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/big.png)](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08)
 [![Travis CI](https://travis-ci.org/gnugat/redaktilo.png)](https://travis-ci.org/gnugat/redaktilo)
 
-## Installation
+## Getting started
 
 Use [Composer](http://getcomposer.org/) to download and install Redaktilo in
 your projects:
 
-    composer require "gnugat/redaktilo:~0.2@dev"
+    composer require "gnugat/redaktilo:~0.3@dev"
 
-## Getting started
-
-Let's say we have the following configuration file:
-
-```yaml
-# File: /tmp/config.yaml
-security:
-    encoders:
-        # Examples:
-        Acme\DemoBundle\Entity\User1:
-            algorithm: sha512
-            encode_as_base64: true
-            iterations: 5000
-
-        Acme\DemoBundle\Entity\User2:
-            encode_as_base64: true
-            iterations: 5000
-```
-
-If we want to insert `algorithm: sha512` after `Acme\DemoBundle\Entity\User2`,
-we can use the following script:
+The only class you should need to work with is the stateless service `Editor`,
+which means you can create it once and use it everywhere in your application:
 
 ```php
-#!/usr/bin/env php
 <?php
+require_once __DIR__.'/vendor/autoload.php';
 
-require_once __DIR__.'/../../vendor/autoload.php';
-
-use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\Filesystem;
+use Gnugat\Redaktilo\Editor;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 $symfonyFilesystem = new SymfonyFilesystem();
 $filesystem = new Filesystem($symfonyFilesystem);
 $editor = new Editor($filesystem);
-
-$file = $editor->open('/tmp/config.yaml');
-$editor->jumpDownTo($file, '            encode_as_base64: true');
-$editor->jumpDownTo($file, '            encode_as_base64: true');
-$editor->addBefore($file, '            algorithm: sha512');
-$editor->save($file);
 ```
 
-**Note**: the usage of the
-[Symfony2 Yaml component](http://symfony.com/doc/current/components/yaml/introduction.html)
-wouldn't help you in this situation if you want to keep empty lines and
-comments.
+We'll describe here the
+[SensioGeneratorBundle](https://github.com/sensiolabs/SensioGeneratorBundle)
+use case: its [KernelManipulator](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
+edits a class to insert a line.
 
-Find out about how to use it with the [usage guide](doc/usage/01-index.md).
+Here's what the code would look like if it were using Redaktilo:
+
+```php
+<?php
+
+namespace Sensio\Bundle\GeneratorBundle\Manipulator;
+
+use Gnugat\Redaktilo\Editor;
+
+class KernelManipulator extends Manipulator
+{
+    protected $editor;
+    protected $appKernelFilename;
+
+    public function __construct(Editor $editor, $appKernelFilename)
+    {
+        $this->editor = $editor;
+        $this->appKernelFilename = $appKernelFilename;
+    }
+
+    public function addBundle($bundle)
+    {
+        $file = $this->editor->open($this->appKernelFilename);
+        $lineToFind = '        );';
+        $newLine = sprintf('            new %s(),', $bundle);
+
+        $this->editor->jumpDownTo($file, $lineToFind);
+        $this->editor->addBefore($file, $newLine);
+
+        $this->editor->save($file);
+
+        return true;
+    }
+}
+```
+
+As you can see it's easier to read and to understand than
+[the original PHP token parsing](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php).
 
 ## Tests
 
