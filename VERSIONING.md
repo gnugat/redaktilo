@@ -25,17 +25,3 @@ The branching is inspired by [@jbenet](https://github.com/jbenet)
 > 1. `master` must always be deployable.
 > 2. **all changes** are made through feature branches (pull-request + merge)
 > 3. rebase to avoid/resolve conflicts; merge in to `master`
-
-### Branch naming
-
-Descriptive names are used for branches, for instance: `user/appkernel-1`.
-
-This example uses a prefix for the type of work done, and a suffix to point
-to the related issue.
-
-Examples of prefixes would be:
-
-* __user/*__ for User Stories
-* __tech/*__ for Tech Stories
-* __doc/*__ for documentation
-* __fix/*__ for bug fixes

@@ -10,10 +10,57 @@ awesome:
 Your work will then be reviewed as soon as possible (suggestions about some
 changes, improvements or alternatives may be given).
 
-Don't forget to add tests, make sure that they all pass and to fix the
-[coding standards](CONTRIBUTING.md#coding-standards)
+Here's some tips to make you the best contributor ever:
 
-## Help with Git
+* [Green tests](#green-tests)
+* [Standard code](#standard-code)
+* [Specifications](#specifications)
+* [Branch naming](#branch-naming)
+* [Keeping your fork up-to-date](#keeping-your-fork-up-to-date)
+
+## Green tests
+
+Run the tests using the following script:
+
+    bin/tester.sh
+
+## Standard code
+
+Use [PHP CS fixer](http://cs.sensiolabs.org/) to make your code compliant with
+Redaktilo's coding standards:
+
+    php-cs-fixer fix --config=sf23 .
+
+## Specifications
+
+Redaktilo drives its development using [phpspec](http://www.phpspec.net/):
+
+    # Generate the specification class:
+    phpspec describe 'Gnugat\Redaktilo\MyNewClass'
+
+    # Customize the specification class:
+    $EDITOR tests/spec/Gnugat/Redaktilo/MyNewClass.php
+
+    # Generate the specified class:
+    phpspec run
+
+    # Customize the class:
+    $EDITOR src/Gnugat/Redaktilo/MyNewClass.php
+
+    phpspec run # Should be green!
+
+## Branch naming
+
+Redaktilo uses the following prefixes for its branch names:
+
+* __user/*__ for User Stories
+* __tech/*__ for Tech Stories
+* __doc/*__ for documentation
+* __fix/*__ for bug fixes
+
+The second part is an helpful micro title.
+
+## Keeping your fork up-to-date
 
 Once the repository is forked, you should track the upstream (original) one
 using the following command:
@@ -39,15 +86,3 @@ Finally, publish your changes:
     git push -f origin <your-branch>
 
 You should be now ready to make a pull request.
-
-## Commit messages
-
-The cleaner the git history is, the better.
-
-Git messages should always have the micro title as a tag, written in CamelCase.
-The message itself should begin with a verb written in the past tense and
-should describe one action, because commits should be atomic (one action = one
-commit).
-
-For example, the branch `fix/negative-total-6` could have the commit
-`[NegativeTotal] Made the value absolute`.
