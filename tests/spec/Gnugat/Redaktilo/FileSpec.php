@@ -101,4 +101,16 @@ class FileSpec extends ObjectBehavior
         $this->changeLineTo($line, $lineNumber);
         $this->read()->shouldBe($expectedContent);
     }
+
+    function it_removes_lines()
+    {
+        $rootPath = __DIR__.'/../../../../';
+        $expectedFilename = sprintf('%s/tests/fixtures/%s/life-of-brian-2.txt', $rootPath, 'expectations');
+        $expectedContent = file_get_contents($expectedFilename);
+
+        $lineNumber = 1;
+
+        $this->removeLine($lineNumber);
+        $this->read()->shouldBe($expectedContent);
+    }
 }
