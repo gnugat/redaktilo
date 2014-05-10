@@ -27,13 +27,12 @@ class Editor
     public function open($filename, $force = false);
     public function save(File $file);
 
-    // Line insertion.
+    // Line manipulations.
     public function addBefore(File $file, $add);
     public function addAfter(File $file, $add);
-
-    // Line changing
     public function changeTo(File $file, $line);
     public function replaceWith(File $file, $regex, $replace);
+    public function remove(File $file); // Removes the current line.
 
     // Content navigation.
     public function jumpDownTo(File $file, $line);
@@ -102,22 +101,30 @@ $editor->addAfter($file, $secondLine);
 
 **Note**: after the insertion, the new line becomes the current one.
 
-## Changing the line
+## Changing the current line
 
 You can also change the current line to something else:
 
 ```php
-$edit->changeTo($file, 'We are the knights!');
+$editor->changeTo($file, 'We are the knights!');
 ```
 
 You can also use regular expressions to replace the current line. You can use
 both a replace string and callback:
 
 ```php
-$edit->replaceWith($file, '/Ni/', 'Peng');
-$edit->replaceWith($file, '/(Ni|Peng)/', function ($matches) {
+$editor->replaceWith($file, '/Ni/', 'Peng');
+$editor->replaceWith($file, '/(Ni|Peng)/', function ($matches) {
     return $matches[1] == 'Ni' ? 'Peng' : 'Ni';
 });
+```
+
+## Removing the current line
+
+Similarly, you can remove the current line:
+
+```php
+$editor->remove($file);
 ```
 
 ## Content navigation

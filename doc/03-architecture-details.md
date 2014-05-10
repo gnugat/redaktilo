@@ -49,6 +49,8 @@ class File
     public function setCurrentLineNumber($lineNumber);
 
     public function insertLineAt($line, $lineNumber);
+    public function changeLineTo($line, $lineNumber);
+    public function removeLine($lineNumber);
 }
 ```
 

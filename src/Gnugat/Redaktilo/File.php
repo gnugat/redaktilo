@@ -126,8 +126,8 @@ class File
      * If the line number is negative, starts the count from the end of the
      * file.
      *
-     * @param string $line
-     * @param string $lineNumber
+     * @param string  $line
+     * @param integer $lineNumber
      */
     public function insertLineAt($line, $lineNumber)
     {
@@ -138,6 +138,10 @@ class File
         $this->writelines($lines);
     }
 
+    /**
+     * @param string  $line
+     * @param integer $lineNumber
+     */
     public function changeLineTo($line, $lineNumber)
     {
         $lines = $this->readlines();
@@ -147,6 +151,7 @@ class File
         $this->writelines($lines);
     }
 
+    /** @param integer $lineNumber */
     public function removeLine($lineNumber)
     {
         $lines = $this->readlines();
