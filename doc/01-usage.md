@@ -31,6 +31,10 @@ class Editor
     public function addBefore(File $file, $add);
     public function addAfter(File $file, $add);
 
+    // Line changing
+    public function changeTo(File $file, $line);
+    public function replaceWith(File $file, $regex, $replace);
+
     // Content navigation.
     public function jumpDownTo(File $file, $line);
     public function jumpUpTo(File $file, $line);
@@ -85,9 +89,8 @@ filesystem as long as you don't call the save method.
 
 ## Line insertion
 
-Currently the only manipulation available is the insertion of new lines.
-
-This is done relatively to the current line, either above or under:
+Redaktilo allows you to the insert new lines. This is done relatively to the
+current line, either above or under:
 
 ```php
 $firstLine = 'We are the knights';
@@ -98,6 +101,24 @@ $editor->addAfter($file, $secondLine);
 ```
 
 **Note**: after the insertion, the new line becomes the current one.
+
+## Changing the line
+
+You can also change the current line to something else:
+
+```php
+$edit->changeTo($file, 'We are the knights!');
+```
+
+You can also use regular expressions to replace the current line. You can use
+both a replace string and callback:
+
+```php
+$edit->replaceWith($file, '/Ni/', 'Peng');
+$edit->replaceWith($file, '/(Ni|Peng)/', function ($matches) {
+    return $matches[1] == 'Ni' ? 'Peng' : 'Ni';
+});
+```
 
 ## Content navigation
 

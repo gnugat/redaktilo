@@ -93,6 +93,31 @@ class EditorSpec extends ObjectBehavior
         $this->addAfter($file, $line);
     }
 
+    function it_changes_the_current_line(File $file)
+    {
+        $line = 'We are the knights who say Ni!';
+        $newLine = 'We are knights who say Ni!';
+        $lineNumber = 42;
+
+        $file->getCurrentLineNumber()->willReturn($lineNumber);
+        $file->changeLineTo($newLine, $lineNumber)->shouldBeCalled();
+
+        $this->changeTo($file, $newLine);
+    }
+
+    function it_replaces_the_current_line(File $file)
+    {
+        $line = 'We are the knights who say Ni!';
+        $newLine = 'We are the knights who say Peng!';
+        $lineNumber = 42;
+
+        $file->getCurrentLineNumber()->willReturn($lineNumber);
+        $file->readlines()->willReturn(array($lineNumber => $line));
+        $file->changeLineTo($newLine, $lineNumber)->shouldBeCalled();
+
+        $this->replaceWith($file, '/Ni/', 'Peng');
+    }
+
     function it_saves_files(Filesystem $filesystem, File $file)
     {
         $filesystem->write($file)->shouldBeCalled();
