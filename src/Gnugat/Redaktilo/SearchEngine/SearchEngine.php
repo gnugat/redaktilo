@@ -11,6 +11,8 @@
 
 namespace Gnugat\Redaktilo\SearchEngine;
 
+use Gnugat\Redaktilo\File;
+
 /**
  * A lookup strategy supporting only one kind of pattern.
  *

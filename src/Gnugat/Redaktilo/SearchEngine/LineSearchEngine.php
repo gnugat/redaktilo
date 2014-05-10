@@ -11,6 +11,8 @@
 
 namespace Gnugat\Redaktilo\SearchEngine;
 
+use Gnugat\Redaktilo\File;
+
 /**
  * This strategy needs the content to be converted into an array of lines which
  * have been stripped from their line break.
@@ -22,7 +24,10 @@ class LineSearchEngine implements SearchEngine
     /** {@inheritdoc} */
     public function has(File $file, $pattern)
     {
+        $lines = $file->readlines();
+        $lineNumbers = array_flip($lines);
 
+        return isset($lineNumbers[$pattern]);
     }
 
     /** {@inheritdoc} */
