@@ -146,4 +146,13 @@ class File
 
         $this->writelines($lines);
     }
+
+    public function removeLine($lineNumber)
+    {
+        $lines = $this->readlines();
+
+        unset($lines[$lineNumber]);
+
+        $this->writelines($lines);
+    }
 }
