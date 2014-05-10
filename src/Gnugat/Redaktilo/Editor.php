@@ -85,7 +85,7 @@ class Editor
         $lines = $file->readlines();
         $filename = $file->getFilename();
         $currentLineNumber = $file->getCurrentLineNumber() + 1;
-        $length = count($lines);
+        $length = count($lines) - $currentLineNumber;
         while ($currentLineNumber < $length) {
             if ($lines[$currentLineNumber] === $pattern) {
                 $file->setCurrentLineNumber($currentLineNumber);
