@@ -125,6 +125,36 @@ class Editor
 
         throw new \Exception("Couldn't find line $pattern in $filename");
     }
+    
+    /**
+     * @param File    $file
+     * @param integer $lines
+     */
+    public function moveDown(File $file, $lines = 1)
+    {
+        $newLineNumber = $file->getCurrentLineNumber() + $lines;
+        $lenght = count($file->readlines());
+        
+        if ($newLineNumber > $lenght) {
+            $newLineNumber = $length;
+        }
+        $file->setCurrentLineNumber($newLineNumber);
+    }
+    
+    /**
+     * @param File    $file
+     * @param integer $lines
+     */
+    public function moveUp(File $file, $lines = 1)
+    {
+        $newLineNumber = $file->getCurrentLineNumber() - $lines;
+        
+        if ($newLineNumber < 0) {
+            $newLineNumber = 0;
+        }
+        
+        $file->setCurrentLineNumber($newLineNumber);
+    }
 
     /**
      * @param File   $file
