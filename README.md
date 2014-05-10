@@ -5,11 +5,13 @@
 Redaktilo provides an Object Oriented way to manipulate files, through the
 editor metaphor:
 
-* you can open a file
-* you can then navigate in the file to select a line
-* next, you can insert a new line above/under the current line or change the
-  current line
-* finally you can save the changes on the filesystem
+* your code can open a file
+* it can then navigate in the file to select a line
+* next, it can:
+  * insert a new line above/under the current line
+  * change the current line
+  * remove the current line
+* finally it can save the changes on the filesystem
 
 **Caution**: still under heavy development (but BC breaks might not be frequent).
 
@@ -21,7 +23,7 @@ editor metaphor:
 Use [Composer](http://getcomposer.org/) to download and install Redaktilo in
 your projects:
 
-    composer require "gnugat/redaktilo:~0.3@dev"
+    composer require "gnugat/redaktilo:~0.4@dev"
 
 The only class you should need to work with is the stateless service `Editor`,
 which means you can create it once and use it everywhere in your application:
