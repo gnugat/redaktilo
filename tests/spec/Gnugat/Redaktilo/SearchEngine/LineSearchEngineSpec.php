@@ -25,6 +25,7 @@ class LineSearchEngineSpec extends ObjectBehavior
         $filename = sprintf(self::FILENAME, $rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
+        $file->getFilename()->willReturn($filename);
         $file->readlines()->willReturn($lines);
     }
 
@@ -51,5 +52,20 @@ class LineSearchEngineSpec extends ObjectBehavior
 
         $this->has($file, $existingLine)->shouldBe(true);
         $this->has($file, $nonExistingLine)->shouldBe(false);
+    }
+
+    function it_finds_next_occurences(File $file)
+    {
+        $previousLine = '[A guard sniggers]';
+        $currentLine = '[More sniggering]';
+        $currentLineNumber = 3;
+        $nextLine = '[Sniggering]';
+        $nextLineNumber = 5;
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+
+        $this->shouldThrow('\Exception')->duringFindNext($file, $previousLine);
+        $this->shouldThrow('\Exception')->duringFindNext($file, $currentLine);
+        $this->findNext($file, $nextLine)->shouldBe($nextLineNumber);
     }
 }

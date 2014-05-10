@@ -33,7 +33,18 @@ class LineSearchEngine implements SearchEngine
     /** {@inheritdoc} */
     public function findNext(File $file, $pattern)
     {
+        $lines = $file->readlines();
+        $filename = $file->getFilename();
+        $currentLineNumber = $file->getCurrentLineNumber() + 1;
+        $length = count($lines);
+        while ($currentLineNumber < $length) {
+            if ($lines[$currentLineNumber] === $pattern) {
+                return $currentLineNumber;
+            }
+            $currentLineNumber++;
+        }
 
+        throw new \Exception("Couldn't find line $pattern in $filename");
     }
 
     /** {@inheritdoc} */
