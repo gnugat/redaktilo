@@ -113,4 +113,13 @@ class FileSpec extends ObjectBehavior
         $this->removeLine($lineNumber);
         $this->read()->shouldBe($expectedContent);
     }
+
+    function it_checks_line_presence()
+    {
+        $existingLine = '[Sniggering]';
+        $nonExistingLine = "Isn't there a Saint Aaaaarrrrrrggghhh's in Cornwall?";
+
+        $this->hasLine($existingLine)->shouldBe(true);
+        $this->hasLine($nonExistingLine)->shouldBe(false);
+    }
 }
