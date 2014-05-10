@@ -40,6 +40,11 @@ class LineSearchEngine implements SearchEngine
     /** {@inheritdoc} */
     public function supports($pattern)
     {
+        if (!is_string($pattern)) {
+            return false;
+        }
+        $hasNoLineBreak = (false === strpos($pattern, "\n"));
 
+        return $hasNoLineBreak;
     }
 }

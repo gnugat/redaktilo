@@ -19,4 +19,15 @@ class LineSearchEngineSpec extends ObjectBehavior
     {
         $this->shouldImplement('Gnugat\Redaktilo\SearchEngine\SearchEngine');
     }
+
+    function it_supports_lines()
+    {
+        $line = 'Sir Bedevere: Good. Now, why do witches burn?';
+        $rawLine = $line."\n";
+        $lineNumber = 42;
+
+        $this->supports($line)->shouldBe(true);
+        $this->supports($rawLine)->shouldBe(false);
+        $this->supports($lineNumber)->shouldBe(false);
+    }
 }
