@@ -35,7 +35,7 @@ class FileSpec extends ObjectBehavior
         $this->filename = $copyFilename;
         $this->content = file_get_contents($copyFilename);
 
-        $this->beConstructedWith($this->filename, $this->content);
+        $this->beConstructedWith($this->filename, $this->content, "\n");
     }
 
     function it_has_a_filename()
@@ -54,7 +54,7 @@ class FileSpec extends ObjectBehavior
 
     function it_has_lines()
     {
-        $lines = explode(PHP_EOL, $this->content);
+        $lines = explode("\n", $this->content);
         $newLines = array(
             'And now for something',
             'Completly different',
