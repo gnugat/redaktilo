@@ -137,4 +137,13 @@ class File
 
         $this->writelines($lines);
     }
+
+    public function changeLineTo($line, $lineNumber)
+    {
+        $lines = $this->readlines();
+
+        $lines[$lineNumber] = $line;
+
+        $this->writelines($lines);
+    }
 }

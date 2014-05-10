@@ -159,4 +159,19 @@ class Editor
 
         $file->insertLineAt($add, $currentLineNumber);
     }
+
+    /**
+     * Changes the current line to the given line.
+     *
+     * @param File   $file
+     * @param string $line
+     *
+     * @api
+     */
+    public function changeTo(File $file, $line)
+    {
+        $currentLineNumber = $file->getCurrentLineNumber();
+
+        $file->changeLineTo($line, $currentLineNumber);
+    }
 }

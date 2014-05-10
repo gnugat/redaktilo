@@ -88,4 +88,17 @@ class FileSpec extends ObjectBehavior
         $this->insertLineAt($line, $lineNumber);
         $this->read()->shouldBe($expectedContent);
     }
+
+    function it_changes_lines()
+    {
+        $rootPath = __DIR__.'/../../../../';
+        $expectedFilename = sprintf('%s/tests/fixtures/%s/life-of-brian-1.txt', $rootPath, 'expectations');
+        $expectedContent = file_get_contents($expectedFilename);
+
+        $line = "[Even more sniggering]";
+        $lineNumber = 5;
+
+        $this->changeLineTo($line, $lineNumber);
+        $this->read()->shouldBe($expectedContent);
+    }
 }

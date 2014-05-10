@@ -7,7 +7,8 @@ editor metaphor:
 
 * you can open a file
 * you can then navigate in the file to select a line
-* next, you can insert a new line above/under the current line
+* next, you can insert a new line above/under the current line or change the
+  current line
 * finally you can save the changes on the filesystem
 
 **Caution**: still under heavy development (but BC breaks might not be frequent).
