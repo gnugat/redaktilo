@@ -200,4 +200,11 @@ class Editor
 
         $file->changeLineTo($line, $currentLineNumber);
     }
+
+    public function remove(File $file)
+    {
+        $currentLineNumber = $file->getCurrentLineNumber();
+
+        $file->removeLine($currentLineNumber);
+    }
 }

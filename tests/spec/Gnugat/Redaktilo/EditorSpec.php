@@ -118,6 +118,16 @@ class EditorSpec extends ObjectBehavior
         $this->replaceWith($file, '/Ni/', 'Peng');
     }
 
+    function it_removes_the_current_line(File $file)
+    {
+        $lineNumber = 42;
+
+        $file->getCurrentLineNumber()->willReturn($lineNumber);
+        $file->removeLine($lineNumber)->shouldBeCalled();
+
+        $this->remove($file);
+    }
+
     function it_saves_files(Filesystem $filesystem, File $file)
     {
         $filesystem->write($file)->shouldBeCalled();
