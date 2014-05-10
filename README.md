@@ -74,7 +74,12 @@ class KernelManipulator extends Manipulator
         $newLine = sprintf('            new %s(),', $bundle);
 
 
-        throw new \RuntimeException(sprintf('Bundle "%s" is already defined in "AppKernel::registerBundles()".', $bundle));
+        if ($this->editor->has($file, $newLine)) {
+            throw new \RuntimeException(sprintf(
+                'Bundle "%s" is already defined in "AppKernel::registerBundles()".',
+                $bundle
+            ));
+        }
 
         $lineToFind = '        );';
 
