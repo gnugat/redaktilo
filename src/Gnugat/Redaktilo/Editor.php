@@ -74,20 +74,20 @@ class Editor
      * If the line is found, the current one is set to it.
      *
      * @param File   $file
-     * @param string $line
+     * @param string $pattern
      *
      * @throws \Exception If the line couldn't be found in the file
      *
      * @api
      */
-    public function jumpDownTo(File $file, $line)
+    public function jumpDownTo(File $file, $pattern)
     {
         $lines = $file->readlines();
         $filename = $file->getFilename();
         $currentLineNumber = $file->getCurrentLineNumber() + 1;
         $length = count($lines);
         while ($currentLineNumber < $length) {
-            if ($lines[$currentLineNumber] === $line) {
+            if ($lines[$currentLineNumber] === $pattern) {
                 $file->setCurrentLineNumber($currentLineNumber);
 
                 return;
@@ -95,7 +95,7 @@ class Editor
             $currentLineNumber++;
         }
 
-        throw new \Exception("Couldn't find line $line in $filename");
+        throw new \Exception("Couldn't find line $pattern in $filename");
     }
 
     /**
@@ -103,19 +103,19 @@ class Editor
      * If the line is found, the current one is set to it.
      *
      * @param File   $file
-     * @param string $line
+     * @param string $pattern
      *
      * @throws \Exception If the line couldn't be found in the file
      *
      * @api
      */
-    public function jumpUpTo(File $file, $line)
+    public function jumpUpTo(File $file, $pattern)
     {
         $lines = $file->readlines();
         $filename = $file->getFilename();
         $currentLineNumber = $file->getCurrentLineNumber() - 1;
         while (0 <= $currentLineNumber) {
-            if ($lines[$currentLineNumber] === $line) {
+            if ($lines[$currentLineNumber] === $pattern) {
                 $file->setCurrentLineNumber($currentLineNumber);
 
                 return;
@@ -123,7 +123,18 @@ class Editor
             $currentLineNumber--;
         }
 
-        throw new \Exception("Couldn't find line $line in $filename");
+        throw new \Exception("Couldn't find line $pattern in $filename");
+    }
+
+    /**
+     * @param File   $file
+     * @param string $pattern
+     *
+     * @return bool
+     */
+    public function has(File $file, $pattern)
+    {
+        return $file->hasLine($pattern);
     }
 
     /**
@@ -201,6 +212,7 @@ class Editor
         $file->changeLineTo($line, $currentLineNumber);
     }
 
+    /** @param File $file */
     public function remove(File $file)
     {
         $currentLineNumber = $file->getCurrentLineNumber();

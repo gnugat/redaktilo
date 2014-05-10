@@ -69,6 +69,15 @@ class EditorSpec extends ObjectBehavior
         $this->open($filename, true);
     }
 
+    function it_checks_line_existence(File $file)
+    {
+        $line = 'No one expects the spanish inquisition!';
+
+        $file->hasLine($line)->shouldBeCalled();
+
+        $this->has($file, $line);
+    }
+
     function it_inserts_lines_before_current_one(File $file)
     {
         $line = 'We are the knights who say Ni!';
