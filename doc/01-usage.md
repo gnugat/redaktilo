@@ -35,8 +35,10 @@ class Editor
     public function remove(File $file); // Removes the current line.
 
     // Content navigation.
-    public function jumpDownTo(File $file, $line);
-    public function jumpUpTo(File $file, $line);
+    public function jumpDownTo(File $file, $pattern);
+    public function jumpUpTo(File $file, $pattern);
+
+    public function has(File $file, $pattern);
 }
 ```
 
@@ -140,6 +142,19 @@ If the file contains two lines similar, two calls are necessary to jump to the
 second one.
 
 Trying to jump to an inexistent line will result in an exception.
+
+## Checking the presence of a line
+
+As we've seen above, the `jumpDownTo` and `jumpUpTo` methods can throw an
+exception when the line isn't found.
+
+However, if you just need to check the presence of a line in the whole file,
+without having to move the cursor to the current line, then `has` might be what
+you're looking for:
+
+```php
+$editor->has($file, "I don't like spam!")
+```
 
 ## Example
 

@@ -6,7 +6,8 @@ Redaktilo provides an Object Oriented way to manipulate files, through the
 editor metaphor:
 
 * your code can open a file
-* it can then navigate in the file to select a line
+* it can then check the presence of a line in it
+* it also can navigate in the file to select a line
 * next, it can:
   * insert a new line above/under the current line
   * change the current line
@@ -69,8 +70,13 @@ class KernelManipulator extends Manipulator
     public function addBundle($bundle)
     {
         $file = $this->editor->open($this->appKernelFilename);
-        $lineToFind = '        );';
+
         $newLine = sprintf('            new %s(),', $bundle);
+
+
+        throw new \RuntimeException(sprintf('Bundle "%s" is already defined in "AppKernel::registerBundles()".', $bundle));
+
+        $lineToFind = '        );';
 
         $this->editor->jumpDownTo($file, $lineToFind);
         $this->editor->addBefore($file, $newLine);
