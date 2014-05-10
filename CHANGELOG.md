@@ -1,6 +1,10 @@
 # Changes between versions
 
-* created changing a line
+## 0.4.0: Line manipulations
+
+* added line replacement
+* added line removal
+* added checking of line presence
 
 ## 0.3.0: File coming out
 
