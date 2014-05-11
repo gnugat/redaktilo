@@ -68,4 +68,19 @@ class LineSearchEngineSpec extends ObjectBehavior
         $this->shouldThrow('\Exception')->duringFindNext($file, $currentLine);
         $this->findNext($file, $nextLine)->shouldBe($nextLineNumber);
     }
+
+    function it_finds_previous_occurences(File $file)
+    {
+        $previousLine = '[A guard sniggers]';
+        $previousLineNumber = 1;
+        $currentLine = '[More sniggering]';
+        $currentLineNumber = 3;
+        $nextLine = '[Sniggering]';
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+
+        $this->shouldThrow('\Exception')->duringFindPrevious($file, $nextLine);
+        $this->shouldThrow('\Exception')->duringFindPrevious($file, $currentLine);
+        $this->findPrevious($file, $previousLine)->shouldBe($previousLineNumber);
+    }
 }

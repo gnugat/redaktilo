@@ -50,7 +50,17 @@ class LineSearchEngine implements SearchEngine
     /** {@inheritdoc} */
     public function findPrevious(File $file, $pattern)
     {
+        $lines = $file->readlines();
+        $filename = $file->getFilename();
+        $currentLineNumber = $file->getCurrentLineNumber() - 1;
+        while (0 <= $currentLineNumber) {
+            if ($lines[$currentLineNumber] === $pattern) {
+                return $currentLineNumber;
+            }
+            $currentLineNumber--;
+        }
 
+        throw new \Exception("Couldn't find line $pattern in $filename");
     }
 
     /** {@inheritdoc} */
