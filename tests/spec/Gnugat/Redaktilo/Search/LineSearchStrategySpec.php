@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Gnugat\Redaktilo\SearchEngine;
+namespace spec\Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 
-class LineSearchEngineSpec extends ObjectBehavior
+class LineSearchStrategySpec extends ObjectBehavior
 {
     const FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
 
@@ -29,9 +29,9 @@ class LineSearchEngineSpec extends ObjectBehavior
         $file->readlines()->willReturn($lines);
     }
 
-    function it_implements_search_engine()
+    function it_is_a_search_strategy()
     {
-        $this->shouldImplement('Gnugat\Redaktilo\SearchEngine\SearchEngine');
+        $this->shouldImplement('Gnugat\Redaktilo\Search\SearchStrategy');
     }
 
     function it_supports_lines()
@@ -64,8 +64,10 @@ class LineSearchEngineSpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->shouldThrow('\Exception')->duringFindNext($file, $previousLine);
-        $this->shouldThrow('\Exception')->duringFindNext($file, $currentLine);
+        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+
+        $this->shouldThrow($exception)->duringFindNext($file, $previousLine);
+        $this->shouldThrow($exception)->duringFindNext($file, $currentLine);
         $this->findNext($file, $nextLine)->shouldBe($nextLineNumber);
     }
 
@@ -79,8 +81,10 @@ class LineSearchEngineSpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->shouldThrow('\Exception')->duringFindPrevious($file, $nextLine);
-        $this->shouldThrow('\Exception')->duringFindPrevious($file, $currentLine);
+        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+
+        $this->shouldThrow($exception)->duringFindPrevious($file, $nextLine);
+        $this->shouldThrow($exception)->duringFindPrevious($file, $currentLine);
         $this->findPrevious($file, $previousLine)->shouldBe($previousLineNumber);
     }
 }

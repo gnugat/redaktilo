@@ -13,29 +13,17 @@ namespace spec\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Filesystem;
+use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Search\SearchStrategy;
 use PhpSpec\ObjectBehavior;
 
 class EditorSpec extends ObjectBehavior
 {
     const FILENAME = '/tmp/file-to-edit.txt';
 
-    function let(Filesystem $filesystem)
+    function let(Filesystem $filesystem, SearchEngine $searchEngine)
     {
-        $this->beConstructedWith($filesystem);
-    }
-
-    function it_inserts_lines_before_cursor(Filesystem $filesystem, File $file)
-    {
-        // Fixtures
-        $beforeLines = array('We', 'are', 'knights', 'who', 'say', 'ni');
-        $afterLines = array('We', 'are', 'the', 'knights', 'who', 'say', 'ni');
-
-        // Looking for the line "knights"
-        $file->readlines()->willReturn($beforeLines);
-        $file->getFilename()->willReturn('/monthy/python.txt');
-        $file->getCurrentLineNumber()->willReturn(0);
-        $file->setCurrentLineNumber(2)->shouldBeCalled();
-        $this->jumpDownTo($file, 'knights');
+        $this->beConstructedWith($filesystem, $searchEngine);
     }
 
     function it_opens_existing_files(Filesystem $filesystem, File $file)
@@ -69,13 +57,38 @@ class EditorSpec extends ObjectBehavior
         $this->open($filename, true);
     }
 
-    function it_checks_line_existence(File $file)
+    function it_moves_down_the_cursor(SearchEngine $searchEngine, SearchStrategy $searchStrategy, File $file)
     {
-        $line = 'No one expects the spanish inquisition!';
+        $pattern = 'No one expects the Spanish inquisition!';
+        $foundLineNumber = 42;
 
-        $file->hasLine($line)->shouldBeCalled();
+        $searchEngine->resolve($pattern)->willReturn($searchStrategy);
+        $searchStrategy->findNext($file, $pattern)->willReturn($foundLineNumber);
+        $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
-        $this->has($file, $line);
+        $this->jumpDownTo($file, $pattern);
+    }
+
+    function it_moves_up_the_cursor(SearchEngine $searchEngine, SearchStrategy $searchStrategy, File $file)
+    {
+        $pattern = 'Nobody expects the Spanish Inquisition!';
+        $foundLineNumber = 4423;
+
+        $searchEngine->resolve($pattern)->willReturn($searchStrategy);
+        $searchStrategy->findPrevious($file, $pattern)->willReturn($foundLineNumber);
+        $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
+
+        $this->jumpUpTo($file, $pattern);
+    }
+
+    function it_checks_pattern_existence(SearchEngine $searchEngine, SearchStrategy $searchStrategy, File $file)
+    {
+        $pattern = 'No one expects the spanish inquisition!';
+
+        $searchEngine->resolve($pattern)->willReturn($searchStrategy);
+        $searchStrategy->has($file, $pattern)->willReturn(true);
+
+        $this->has($file, $pattern)->shouldBe(true);
     }
 
     function it_inserts_lines_before_current_one(File $file)

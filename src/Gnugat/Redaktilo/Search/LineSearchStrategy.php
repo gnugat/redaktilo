@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\SearchEngine;
+namespace Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\File;
 
@@ -19,48 +19,43 @@ use Gnugat\Redaktilo\File;
  *
  * The match is done on the whole line.
  */
-class LineSearchEngine implements SearchEngine
+class LineSearchStrategy implements SearchStrategy
 {
     /** {@inheritdoc} */
     public function has(File $file, $pattern)
     {
         $lines = $file->readlines();
-        $lineNumbers = array_flip($lines);
 
-        return isset($lineNumbers[$pattern]);
+        return in_array($pattern, $lines, true);
     }
 
     /** {@inheritdoc} */
     public function findNext(File $file, $pattern)
     {
         $lines = $file->readlines();
-        $filename = $file->getFilename();
         $currentLineNumber = $file->getCurrentLineNumber() + 1;
-        $length = count($lines);
-        while ($currentLineNumber < $length) {
-            if ($lines[$currentLineNumber] === $pattern) {
-                return $currentLineNumber;
-            }
-            $currentLineNumber++;
+        $nextLines = array_slice($lines, $currentLineNumber, null, true);
+        $foundLineNumber = array_search($pattern, $nextLines, true);
+        if (false === $foundLineNumber) {
+            throw new PatternNotFoundException($file, $pattern);
         }
 
-        throw new \Exception("Couldn't find line $pattern in $filename");
+        return $foundLineNumber;
     }
 
     /** {@inheritdoc} */
     public function findPrevious(File $file, $pattern)
     {
         $lines = $file->readlines();
-        $filename = $file->getFilename();
         $currentLineNumber = $file->getCurrentLineNumber() - 1;
-        while (0 <= $currentLineNumber) {
-            if ($lines[$currentLineNumber] === $pattern) {
-                return $currentLineNumber;
-            }
-            $currentLineNumber--;
+        $previousLines = array_slice($lines, 0, $currentLineNumber, true);
+        $reversedPreviousLines = array_reverse($previousLines, true);
+        $foundLineNumber = array_search($pattern, $reversedPreviousLines, true);
+        if (false === $foundLineNumber) {
+            throw new PatternNotFoundException($file, $pattern);
         }
 
-        throw new \Exception("Couldn't find line $pattern in $filename");
+        return $foundLineNumber;
     }
 
     /** {@inheritdoc} */

@@ -34,7 +34,7 @@ class File
     /** @var string */
     private $lineBreak;
 
-    /** @var integer */
+    /** @var int */
     private $currentLineNumber = 0;
 
     /**
@@ -108,13 +108,13 @@ class File
         $this->content = implode($this->lineBreak, $newLines);
     }
 
-    /** @return integer */
+    /** @return int */
     public function getCurrentLineNumber()
     {
         return $this->currentLineNumber;
     }
 
-    /** @param integer $lineNumber */
+    /** @param int $lineNumber */
     public function setCurrentLineNumber($lineNumber)
     {
         $this->currentLineNumber = $lineNumber;
@@ -126,8 +126,8 @@ class File
      * If the line number is negative, starts the count from the end of the
      * file.
      *
-     * @param string  $line
-     * @param integer $lineNumber
+     * @param string $line
+     * @param int    $lineNumber
      */
     public function insertLineAt($line, $lineNumber)
     {
@@ -139,8 +139,8 @@ class File
     }
 
     /**
-     * @param string  $line
-     * @param integer $lineNumber
+     * @param string $line
+     * @param int    $lineNumber
      */
     public function changeLineTo($line, $lineNumber)
     {
@@ -151,7 +151,7 @@ class File
         $this->writelines($lines);
     }
 
-    /** @param integer $lineNumber */
+    /** @param int $lineNumber */
     public function removeLine($lineNumber)
     {
         $lines = $this->readlines();

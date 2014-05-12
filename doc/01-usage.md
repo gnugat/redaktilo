@@ -4,7 +4,10 @@ This chapter shows you how to use Redaktilo an contains the following sections:
 
 * [API](#api)
 * [Filesystem operations](#filesystem-operations)
-* [Line insertion](#line-insertion)
+* [Line manipulation](#line-manipulation)
+  * [insertion](#insertion)
+  * [replacement](#replacement)
+  * [removal](#removal)
 * [Content navigation](#content-navigation)
 * [Example](#example)
 * [Next readings](#next-readings)
@@ -34,10 +37,9 @@ class Editor
     public function replaceWith(File $file, $regex, $replace);
     public function remove(File $file); // Removes the current line.
 
-    // Content navigation.
+    // Content searching.
     public function jumpDownTo(File $file, $pattern);
     public function jumpUpTo(File $file, $pattern);
-
     public function has(File $file, $pattern);
 }
 ```
@@ -51,13 +53,24 @@ Here's how to initialize it:
 <?php
 require_once __DIR__.'/vendor/autoload.php';
 
-use Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\Editor;
+use Gnugat\Redaktilo\Filesystem;
+use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
+use Gnugat\Redaktilo\Search\LineSearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+
+$searchEngine = new SearchEngine();
+
+$lineSearchStrategy = new LineSearchStrategy();
+$searchEngine->registerStrategy($lineSearchStrategy);
+
+$lineNumberSearchStrategy = new LineNumberSearchStrategy();
+$searchEngine->registerStrategy($lineNumberSearchStrategy);
 
 $symfonyFilesystem = new SymfonyFilesystem();
 $filesystem = new Filesystem($symfonyFilesystem);
-$editor = new Editor($filesystem);
+$editor = new Editor($filesystem, $searchEngine);
 ```
 
 ## Filesystem operations
@@ -88,10 +101,14 @@ filesystem as long as you don't call the save method.
 
 **Note 2**: when opening a file, the current line is set to the first one.
 
-## Line insertion
+## Line manipulation
 
-Redaktilo allows you to the insert new lines. This is done relatively to the
-current line, either above or under:
+Redaktilo allows you to manipulate the lines of the opened File, relatively to
+the line currently selected.
+
+### Insertion
+
+New lines can be inserted above or under the current one:
 
 ```php
 $firstLine = 'We are the knights';
@@ -103,16 +120,16 @@ $editor->addAfter($file, $secondLine);
 
 **Note**: after the insertion, the new line becomes the current one.
 
-## Changing the current line
+### Replacement
 
-You can also change the current line to something else:
+The current line can also be replaced entirely:
 
 ```php
 $editor->changeTo($file, 'We are the knights!');
 ```
 
-You can also use regular expressions to replace the current line. You can use
-both a replace string and callback:
+Or you can replace  a small portion of the current line using regular
+expressions:
 
 ```php
 $editor->replaceWith($file, '/Ni/', 'Peng');
@@ -121,40 +138,69 @@ $editor->replaceWith($file, '/(Ni|Peng)/', function ($matches) {
 });
 ```
 
-## Removing the current line
+### Removal
 
-Similarly, you can remove the current line:
+Finally, the current line can be removed from the file:
 
 ```php
 $editor->remove($file);
 ```
 
-## Content navigation
+## Content searching
 
-You can change the current line by jumping to existing ones:
+You can change the current line by jumping to existing ones.
+
+The jump can be done in two directions, but trying to jump to an inexistent line
+will result in an exception
+(`Symfony\Component\Filesystem\Exception\FileNotFoundException`).
+
+### Exact line search
+
+You can pass the line where you want to jump to (if you know its exact value):
 
 ```php
-$editor->jumpDownTo($file, 'And now for something completly different');
-$editor->jumpUpTo($file, 'And now for something completly different');
+$editor->jumpDownTo($file, 'Existing line under the current one');
+$editor->jumpUpTo($file, 'Existing line above the current one');
 ```
 
 If the file contains two lines similar, two calls are necessary to jump to the
 second one.
 
-Trying to jump to an inexistent line will result in an exception.
-
-## Checking the presence of a line
-
-As we've seen above, the `jumpDownTo` and `jumpUpTo` methods can throw an
-exception when the line isn't found.
-
-However, if you just need to check the presence of a line in the whole file,
-without having to move the cursor to the current line, then `has` might be what
-you're looking for:
+To check the presence of a line in the file, use this:
 
 ```php
-$editor->has($file, "I don't like spam!")
+$editor->has($file, 'I came here to learn how to fly an airplane');
 ```
+
+### Go to a line number
+
+Going to a line number can be done directly with `File`:
+
+```php
+$file->setCurrentLineNumber(LineNumber::absolute(42));
+```
+
+`Editor` provides you with a way to check if the line you're about to set is
+within the file's range:
+
+```php
+$editor->has($file, LineNumber::absolute(42));
+```
+
+If you just want to jump 2 lines above the current one:
+
+```php
+$editor->jumpUpTo($file, LineNumber::up(2));
+```
+
+Or if you want to jump 5 lines under the current one:
+
+```php
+$editor->jumpDownTo($file, LineNumber::down(5));
+```
+
+**Note**: `Gnugat\Redaktilo\Search\FactoryMethod\LineNumber` returns the same
+number you passed to its method. Use it to make your code easier to read.
 
 ## Example
 

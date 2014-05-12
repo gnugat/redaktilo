@@ -9,16 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\SearchEngine;
+namespace Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\File;
 
 /**
- * A lookup strategy supporting only one kind of pattern.
+ * A lookup strategy supporting a specific kind of pattern.
  *
  * @api
  */
-interface SearchEngine
+interface SearchStrategy
 {
     /**
      * Checks the presence in the whole File's content.
@@ -27,6 +27,8 @@ interface SearchEngine
      * @param mixed $pattern
      *
      * @return bool
+     *
+     * @api
      */
     public function has(File $file, $pattern);
 
