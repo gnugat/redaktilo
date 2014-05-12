@@ -45,8 +45,6 @@ class LineNumber
      */
     public static function down($lines)
     {
-        $lines = intval($lines);
-
         return self::normalize($lines);
     }
 
