@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 0.5.0: SearchEngine
+
+* added `SearchEngine` to comply to the open/closed principle
+
 ## 0.4.0: Line manipulations
 
 * added line replacement
