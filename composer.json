@@ -5,7 +5,8 @@
     "description": "An editor allowing you to modify files programmatically",
     "autoload": {
         "psr-4": {
-            "": "src"
+            "": "src",
+            "example\\Gnugat\\Redaktilo\\": "tests/example"
         }
     },
     "authors": [{
@@ -17,9 +18,6 @@
     },
     "require-dev": {
         "phpspec/phpspec": "~2.0",
-        "bossa/phpspec2-expect": "~1.0",
-
-        "behat/behat": "~3.0",
         "phpunit/phpunit": "~4.0"
     }
 }
