@@ -13,6 +13,8 @@ use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\Filesystem;
+use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Search\LineSearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class BundleRegistrationScriptContext implements SnippetAcceptingContext
@@ -52,9 +54,13 @@ class BundleRegistrationScriptContext implements SnippetAcceptingContext
      */
     public function iInsertItInTheApplicationKernel()
     {
+        $lineSearchStrategy = new LineSearchStrategy();
+        $searchEngine = new SearchEngine();
+        $searchEngine->registerStrategy($lineSearchStrategy);
+
         $symfonyFilesystem = new SymfonyFilesystem();
         $filesystem = new Filesystem($symfonyFilesystem);
-        $editor = new Editor($filesystem);
+        $editor = new Editor($filesystem, $searchEngine);
 
         $file = $editor->open($this->appKernelPath);
 

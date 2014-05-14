@@ -33,13 +33,24 @@ which means you can create it once and use it everywhere in your application:
 <?php
 require_once __DIR__.'/vendor/autoload.php';
 
-use Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\Editor;
+use Gnugat\Redaktilo\Filesystem;
+use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
+use Gnugat\Redaktilo\Search\LineSearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+
+$searchEngine = new SearchEngine();
+
+$lineSearchStrategy = new LineSearchStrategy();
+$searchEngine->registerStrategy($lineSearchStrategy);
+
+$lineNumberSearchStrategy = new LineNumberSearchStrategy();
+$searchEngine->registerStrategy($lineNumberSearchStrategy);
 
 $symfonyFilesystem = new SymfonyFilesystem();
 $filesystem = new Filesystem($symfonyFilesystem);
-$editor = new Editor($filesystem);
+$editor = new Editor($filesystem, $searchEngine);
 ```
 
 We'll describe here the

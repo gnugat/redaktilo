@@ -11,6 +11,8 @@
 
 namespace Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\Search\SearchEngine;
+
 /**
  * Provides convenient methods for the following filesystem operations:
  *
@@ -29,10 +31,17 @@ class Editor
     /** @var Filesystem */
     private $filesystem;
 
-    /** @param Filesystem $filesystem */
-    public function __construct(Filesystem $filesystem)
+    /** @var SearchEngine */
+    private $searchEngine;
+
+    /**
+     * @param Filesystem   $filesystem
+     * @param SearchEngine $searchEngine
+     */
+    public function __construct(Filesystem $filesystem, SearchEngine $searchEngine)
     {
         $this->filesystem = $filesystem;
+        $this->searchEngine = $searchEngine;
     }
 
     /**
@@ -70,90 +79,43 @@ class Editor
     }
 
     /**
-     * Searches the given line in the file after the current one.
-     * If the line is found, the current one is set to it.
+     * Searches the given pattern in the File after the current line.
+     * If the pattern is found, the current line is set to it.
      *
      * @param File   $file
      * @param string $pattern
      *
-     * @throws \Exception If the line couldn't be found in the file
+     * @throws Gnugat\Redaktilo\Search\PatternNotFoundException
+     * @throws Gnugat\Redaktilo\Search\PatternNotSupportedException
      *
      * @api
      */
     public function jumpDownTo(File $file, $pattern)
     {
-        $lines = $file->readlines();
-        $filename = $file->getFilename();
-        $currentLineNumber = $file->getCurrentLineNumber() + 1;
-        $length = count($lines);
-        while ($currentLineNumber < $length) {
-            if ($lines[$currentLineNumber] === $pattern) {
-                $file->setCurrentLineNumber($currentLineNumber);
+        $searchStrategy = $this->searchEngine->resolve($pattern);
+        $foundLineNumber = $searchStrategy->findNext($file, $pattern);
 
-                return;
-            }
-            $currentLineNumber++;
-        }
-
-        throw new \Exception("Couldn't find line $pattern in $filename");
+        $file->setCurrentLineNumber($foundLineNumber);
     }
 
     /**
-     * Searches the given line in the file before the current one.
-     * If the line is found, the current one is set to it.
+     * Searches the given pattern in the File before the current line.
+     * If the pattern is found, the current line is set to it.
      *
      * @param File   $file
      * @param string $pattern
      *
-     * @throws \Exception If the line couldn't be found in the file
+     * @throws Gnugat\Redaktilo\Search\PatternNotFoundException
+     * @throws Gnugat\Redaktilo\Search\PatternNotSupportedException
      *
      * @api
      */
     public function jumpUpTo(File $file, $pattern)
     {
-        $lines = $file->readlines();
-        $filename = $file->getFilename();
-        $currentLineNumber = $file->getCurrentLineNumber() - 1;
-        while (0 <= $currentLineNumber) {
-            if ($lines[$currentLineNumber] === $pattern) {
-                $file->setCurrentLineNumber($currentLineNumber);
+        $searchStrategy = $this->searchEngine->resolve($pattern);
+        $foundLineNumber = $searchStrategy->findPrevious($file, $pattern);
 
-                return;
-            }
-            $currentLineNumber--;
-        }
-
-        throw new \Exception("Couldn't find line $pattern in $filename");
-    }
-    
-    /**
-     * @param File    $file
-     * @param integer $lines
-     */
-    public function moveDown(File $file, $lines = 1)
-    {
-        $newLineNumber = $file->getCurrentLineNumber() + $lines;
-        $lenght = count($file->readlines());
-        
-        if ($newLineNumber > $lenght) {
-            $newLineNumber = $length;
-        }
-        $file->setCurrentLineNumber($newLineNumber);
-    }
-    
-    /**
-     * @param File    $file
-     * @param integer $lines
-     */
-    public function moveUp(File $file, $lines = 1)
-    {
-        $newLineNumber = $file->getCurrentLineNumber() - $lines;
-        
-        if ($newLineNumber < 0) {
-            $newLineNumber = 0;
-        }
-        
-        $file->setCurrentLineNumber($newLineNumber);
+        $file->setCurrentLineNumber($foundLineNumber);
     }
 
     /**
@@ -161,10 +123,16 @@ class Editor
      * @param string $pattern
      *
      * @return bool
+     *
+     * @throws Gnugat\Redaktilo\Search\PatternNotSupportedException
+     *
+     * @api
      */
     public function has(File $file, $pattern)
     {
-        return $file->hasLine($pattern);
+        $searchStrategy = $this->searchEngine->resolve($pattern);
+
+        return $searchStrategy->has($file, $pattern);
     }
 
     /**
@@ -172,15 +140,15 @@ class Editor
      * Note: the current line is then set to the new one.
      *
      * @param File   $file
-     * @param string $add
+     * @param string $addition
      *
      * @api
      */
-    public function addBefore(File $file, $add)
+    public function addBefore(File $file, $addition)
     {
         $currentLineNumber = $file->getCurrentLineNumber();
 
-        $file->insertLineAt($add, $currentLineNumber);
+        $file->insertLineAt($addition, $currentLineNumber);
     }
 
     /**
@@ -188,17 +156,17 @@ class Editor
      * Note: the current line is then set to the new one.
      *
      * @param File   $file
-     * @param string $add
+     * @param string $addition
      *
      * @api
      */
-    public function addAfter(File $file, $add)
+    public function addAfter(File $file, $addition)
     {
         $currentLineNumber = $file->getCurrentLineNumber();
         $currentLineNumber++;
         $file->setCurrentLineNumber($currentLineNumber);
 
-        $file->insertLineAt($add, $currentLineNumber);
+        $file->insertLineAt($addition, $currentLineNumber);
     }
 
     /**
@@ -242,7 +210,11 @@ class Editor
         $file->changeLineTo($line, $currentLineNumber);
     }
 
-    /** @param File $file */
+    /**
+     * @param File $file
+     *
+     * @api
+     */
     public function remove(File $file)
     {
         $currentLineNumber = $file->getCurrentLineNumber();
