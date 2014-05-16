@@ -22,7 +22,7 @@ class BundleRegistrationTest extends ExampleTestCase
 
     protected function setUp()
     {
-        $rootPath = __DIR__.'/../../';
+        $rootPath = __DIR__.'/../..';
 
         $sourceFilename = sprintf(self::APP_KERNEL, $rootPath, 'sources');
         $copyFilename = sprintf(self::APP_KERNEL, $rootPath, 'copies');
