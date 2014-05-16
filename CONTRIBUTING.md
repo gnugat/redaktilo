@@ -15,6 +15,7 @@ Here's some tips to make you the best contributor ever:
 * [Green tests](#green-tests)
 * [Standard code](#standard-code)
 * [Specifications](#specifications)
+* [Use cases](#use-cases)
 * [Branch naming](#branch-naming)
 * [Keeping your fork up-to-date](#keeping-your-fork-up-to-date)
 
@@ -48,6 +49,13 @@ Redaktilo drives its development using [phpspec](http://www.phpspec.net/):
     $EDITOR src/Gnugat/Redaktilo/MyNewClass.php
 
     phpspec run # Should be green!
+
+## Use cases
+
+Redaktilo has been created to fulfill actual needs. To keep sure of it, use
+cases are created and are automated: they become part of the test suite.
+
+Have a look a `tests/examples`. You can add your own use cases.
 
 ## Branch naming
 
