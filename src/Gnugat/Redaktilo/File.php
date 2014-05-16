@@ -160,17 +160,4 @@ class File
 
         $this->writelines($lines);
     }
-
-    /**
-     * @param string $line
-     *
-     * @return bool
-     */
-    public function hasLine($line)
-    {
-        $lines = $this->readlines();
-        $lineNumbers = array_flip($lines);
-
-        return isset($lineNumbers[$line]);
-    }
 }
