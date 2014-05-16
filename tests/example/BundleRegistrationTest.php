@@ -52,4 +52,24 @@ class BundleRegistrationTest extends ExampleTestCase
 
         $this->assertSame($expected, $actual);
     }
+
+    public function testItDetectsBundlePresence()
+    {
+        $editor = $this->makeEditor();
+        $file = $editor->open($this->expectedAppKernelPath);
+
+        $isBundlePresent = $editor->has($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
+
+        $this->assertTrue($isBundlePresent);
+    }
+
+    public function testItDetectsBundleAbsence()
+    {
+        $editor = $this->makeEditor();
+        $file = $editor->open($this->appKernelPath);
+
+        $isBundlePresent = $editor->has($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
+
+        $this->assertFalse($isBundlePresent);
+    }
 }
