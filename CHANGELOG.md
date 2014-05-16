@@ -1,5 +1,10 @@
 # Changes between versions
 
+## 0.6.0
+
+* removed behat
+* added automated use cases, using PHPUnit
+
 ## 0.5.0: SearchEngine
 
 * added `SearchEngine` to comply to the open/closed principle
