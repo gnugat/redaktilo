@@ -15,7 +15,7 @@ use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\Engine\ReplaceEngine;
 use Gnugat\Redaktilo\Engine\SearchEngine;
 use Gnugat\Redaktilo\Filesystem;
-use Gnugat\Redaktilo\Replace\LineNumberReplaceStrategy;
+use Gnugat\Redaktilo\Replace\LineReplaceStrategy;
 use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
 use Gnugat\Redaktilo\Search\LineSearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -55,7 +55,7 @@ class ExampleTestCase extends \PHPUnit_Framework_TestCase
     {
         $replaceEngine = new ReplaceEngine();
 
-        $lineNumberReplaceStrategy = new LineNumberReplaceStrategy();
+        $lineNumberReplaceStrategy = new LineReplaceStrategy();
         $replaceEngine->registerStrategy($lineNumberReplaceStrategy);
 
         return $replaceEngine;

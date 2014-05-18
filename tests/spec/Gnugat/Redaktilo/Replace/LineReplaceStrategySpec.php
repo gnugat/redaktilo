@@ -14,7 +14,7 @@ namespace spec\Gnugat\Redaktilo\Replace;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 
-class LineNumberReplaceStrategySpec extends ObjectBehavior
+class LineReplaceStrategySpec extends ObjectBehavior
 {
     const ORIGINAL_FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
     const EXPECTED_FILENAME = '%s/tests/fixtures/expectations/life-of-brian-%s.txt';

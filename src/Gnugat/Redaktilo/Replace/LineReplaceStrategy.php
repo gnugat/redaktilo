@@ -13,7 +13,7 @@ namespace Gnugat\Redaktilo\Replace;
 
 use Gnugat\Redaktilo\File;
 
-class LineNumberReplaceStrategy implements ReplaceStrategy
+class LineReplaceStrategy implements ReplaceStrategy
 {
     /** {@inheritdoc} */
     public function supports($location)
