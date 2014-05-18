@@ -11,6 +11,7 @@
 
 namespace Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\Replace\ReplaceEngine;
 use Gnugat\Redaktilo\Search\SearchEngine;
 
 /**
@@ -31,16 +32,25 @@ class Editor
     /** @var Filesystem */
     private $filesystem;
 
+    /** @var ReplaceEngine */
+    private $replaceEngine;
+
     /** @var SearchEngine */
     private $searchEngine;
 
     /**
-     * @param Filesystem   $filesystem
-     * @param SearchEngine $searchEngine
+     * @param Filesystem    $filesystem
+     * @param SearchEngine  $searchEngine
+     * @param ReplaceEngine $replaceEngine
      */
-    public function __construct(Filesystem $filesystem, SearchEngine $searchEngine)
+    public function __construct(
+        Filesystem $filesystem,
+        SearchEngine $searchEngine,
+        ReplaceEngine $replaceEngine
+    )
     {
         $this->filesystem = $filesystem;
+        $this->replaceEngine = $replaceEngine;
         $this->searchEngine = $searchEngine;
     }
 
@@ -148,7 +158,8 @@ class Editor
     {
         $currentLineNumber = $file->getCurrentLineNumber();
 
-        $file->insertLineAt($addition, $currentLineNumber);
+        $replaceStrategy = $this->replaceEngine->resolve($currentLineNumber);
+        $replaceStrategy->insertAt($file, $currentLineNumber, $addition);
     }
 
     /**
@@ -164,24 +175,25 @@ class Editor
     {
         $currentLineNumber = $file->getCurrentLineNumber();
         $currentLineNumber++;
-        $file->setCurrentLineNumber($currentLineNumber);
 
-        $file->insertLineAt($addition, $currentLineNumber);
+        $replaceStrategy = $this->replaceEngine->resolve($currentLineNumber);
+        $replaceStrategy->insertAt($file, $currentLineNumber, $addition);
     }
 
     /**
      * Changes the current line to the given line.
      *
      * @param File   $file
-     * @param string $line
+     * @param string $replacement
      *
      * @api
      */
-    public function changeTo(File $file, $line)
+    public function changeTo(File $file, $replacement)
     {
         $currentLineNumber = $file->getCurrentLineNumber();
 
-        $file->changeLineTo($line, $currentLineNumber);
+        $replaceStrategy = $this->replaceEngine->resolve($currentLineNumber);
+        $replaceStrategy->replaceWith($file, $currentLineNumber, $replacement);
     }
 
     /**
@@ -219,6 +231,7 @@ class Editor
     {
         $currentLineNumber = $file->getCurrentLineNumber();
 
-        $file->removeLine($currentLineNumber);
+        $replaceStrategy = $this->replaceEngine->resolve($currentLineNumber);
+        $replaceStrategy->removeAt($file, $currentLineNumber);
     }
 }

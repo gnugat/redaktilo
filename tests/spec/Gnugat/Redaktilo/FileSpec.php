@@ -76,19 +76,6 @@ class FileSpec extends ObjectBehavior
         $this->getCurrentLineNumber()->shouldBe($middleLine);
     }
 
-    function it_inserts_lines()
-    {
-        $rootPath = __DIR__.'/../../../../';
-        $expectedFilename = sprintf(self::FILENAME, $rootPath, 'expectations');
-        $expectedContent = file_get_contents($expectedFilename);
-
-        $line = "Pontius Pilate: '...Dickus?'";
-        $lineNumber = 6;
-
-        $this->insertLineAt($line, $lineNumber);
-        $this->read()->shouldBe($expectedContent);
-    }
-
     function it_changes_lines()
     {
         $rootPath = __DIR__.'/../../../../';
@@ -99,18 +86,6 @@ class FileSpec extends ObjectBehavior
         $lineNumber = 5;
 
         $this->changeLineTo($line, $lineNumber);
-        $this->read()->shouldBe($expectedContent);
-    }
-
-    function it_removes_lines()
-    {
-        $rootPath = __DIR__.'/../../../../';
-        $expectedFilename = sprintf('%s/tests/fixtures/%s/life-of-brian-2.txt', $rootPath, 'expectations');
-        $expectedContent = file_get_contents($expectedFilename);
-
-        $lineNumber = 1;
-
-        $this->removeLine($lineNumber);
         $this->read()->shouldBe($expectedContent);
     }
 }

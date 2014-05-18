@@ -13,6 +13,8 @@ namespace example\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\Filesystem;
+use Gnugat\Redaktilo\Replace\ReplaceEngine;
+use Gnugat\Redaktilo\Replace\LineNumberReplaceStrategy;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
 use Gnugat\Redaktilo\Search\LineSearchStrategy;
@@ -22,6 +24,22 @@ class ExampleTestCase extends \PHPUnit_Framework_TestCase
 {
     protected function makeEditor()
     {
+        $searchEngine = $this->makeSearchEngine();
+        $replaceEngine = $this->makeReplaceEngine();
+
+        $symfonyFilesystem = new SymfonyFilesystem();
+        $filesystem = new Filesystem($symfonyFilesystem);
+        $editor = new Editor(
+            $filesystem,
+            $searchEngine,
+            $replaceEngine
+        );
+
+        return $editor;
+    }
+
+    private function makeSearchEngine()
+    {
         $searchEngine = new SearchEngine();
 
         $lineSearchStrategy = new LineSearchStrategy();
@@ -30,10 +48,16 @@ class ExampleTestCase extends \PHPUnit_Framework_TestCase
         $lineNumberSearchStrategy = new LineNumberSearchStrategy();
         $searchEngine->registerStrategy($lineNumberSearchStrategy);
 
-        $symfonyFilesystem = new SymfonyFilesystem();
-        $filesystem = new Filesystem($symfonyFilesystem);
-        $editor = new Editor($filesystem, $searchEngine);
+        return $searchEngine;
+    }
 
-        return $editor;
+    private function makeReplaceEngine()
+    {
+        $replaceEngine = new ReplaceEngine();
+
+        $lineNumberReplaceStrategy = new LineNumberReplaceStrategy();
+        $replaceEngine->registerStrategy($lineNumberReplaceStrategy);
+
+        return $replaceEngine;
     }
 }
