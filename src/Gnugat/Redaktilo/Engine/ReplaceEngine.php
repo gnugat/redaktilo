@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Replace;
+namespace Gnugat\Redaktilo\Engine;
 
-use Gnugat\Redaktilo\Search\PatternNotSupportedException;
+use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 
 /**
  * Holds ReplaceStrategy, and provides the appropriate one according to the given
@@ -35,22 +35,22 @@ class ReplaceEngine
     }
 
     /**
-     * @param mixed $pattern
+     * @param mixed $location
      *
      * @return ReplaceStrategy
      *
-     * @throws PatternNotSupportedException If the pattern isn't supported by any registered strategy
+     * @throws NotSupportedException If the location isn't supported by any registered strategy
      *
      * @api
      */
-    public function resolve($pattern)
+    public function resolve($location)
     {
         foreach ($this->repalceStrategies as $replaceStrategy) {
-            if ($replaceStrategy->supports($pattern)) {
+            if ($replaceStrategy->supports($location)) {
                 return $replaceStrategy;
             }
         }
 
-        throw new PatternNotSupportedException($pattern);
+        throw new NotSupportedException('ReplaceEngine', array($location));
     }
 }

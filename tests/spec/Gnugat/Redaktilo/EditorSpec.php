@@ -13,9 +13,9 @@ namespace spec\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Filesystem;
-use Gnugat\Redaktilo\Replace\ReplaceEngine;
+use Gnugat\Redaktilo\Engine\ReplaceEngine;
+use Gnugat\Redaktilo\Engine\SearchEngine;
 use Gnugat\Redaktilo\Replace\ReplaceStrategy;
-use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
 use PhpSpec\ObjectBehavior;
 

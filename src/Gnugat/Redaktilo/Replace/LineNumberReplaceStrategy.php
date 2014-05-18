@@ -16,32 +16,32 @@ use Gnugat\Redaktilo\File;
 class LineNumberReplaceStrategy implements ReplaceStrategy
 {
     /** {@inheritdoc} */
-    public function supports($pattern)
+    public function supports($location)
     {
-        return (is_int($pattern) && $pattern >= 0);
+        return (is_int($location) && $location >= 0);
     }
 
     /** {@inheritdoc} */
-    public function removeAt(File $file, $pattern)
+    public function removeAt(File $file, $location)
     {
         $lines = $file->readlines();
-        unset($lines[$pattern]);
+        unset($lines[$location]);
         $file->writelines($lines);
     }
 
     /** {@inheritdoc} */
-    public function replaceWith(File $file, $pattern, $replacement)
+    public function replaceWith(File $file, $location, $replacement)
     {
         $lines = $file->readlines();
-        $lines[$pattern] = $replacement;
+        $lines[$location] = $replacement;
         $file->writelines($lines);
     }
 
     /** {@inheritdoc} */
-    public function insertAt(File $file, $pattern, $addition)
+    public function insertAt(File $file, $location, $addition)
     {
         $lines = $file->readlines();
-        array_splice($lines, $pattern, 0, $addition);
+        array_splice($lines, $location, 0, $addition);
         $file->writelines($lines);
     }
 }

@@ -12,10 +12,10 @@
 namespace example\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Editor;
+use Gnugat\Redaktilo\Engine\ReplaceEngine;
+use Gnugat\Redaktilo\Engine\SearchEngine;
 use Gnugat\Redaktilo\Filesystem;
-use Gnugat\Redaktilo\Replace\ReplaceEngine;
 use Gnugat\Redaktilo\Replace\LineNumberReplaceStrategy;
-use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
 use Gnugat\Redaktilo\Search\LineSearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;

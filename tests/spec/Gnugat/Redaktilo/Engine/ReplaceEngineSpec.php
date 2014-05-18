@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Gnugat\Redaktilo\Replace;
+namespace spec\Gnugat\Redaktilo\Engine;
 
 use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 use PhpSpec\ObjectBehavior;
@@ -33,7 +33,7 @@ class ReplaceEngineSpec extends ObjectBehavior
     function it_fails_when_the_strategy_is_not_supported(ReplaceStrategy $replaceStrategy)
     {
         $pattern = 'We are now no longer the Knights who say Ni.';
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotSupportedException';
+        $exception = 'Gnugat\Redaktilo\Engine\NotSupportedException';
 
         $replaceStrategy->supports($pattern)->willReturn(false);
 

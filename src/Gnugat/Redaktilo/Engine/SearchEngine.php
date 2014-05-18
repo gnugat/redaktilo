@@ -9,7 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Search;
+namespace Gnugat\Redaktilo\Engine;
+
+use Gnugat\Redaktilo\Search\SearchStrategy;
 
 /**
  * Holds SearchStrategy, and provides the appropriate one according to the given
@@ -37,7 +39,7 @@ class SearchEngine
      *
      * @return SearchStrategy
      *
-     * @throws PatternNotSupportedException If the pattern isn't supported by any registered strategy
+     * @throws NotSupportedException If the pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -49,6 +51,6 @@ class SearchEngine
             }
         }
 
-        throw new PatternNotSupportedException($pattern);
+        throw new NotSupportedException('SearchEngine', array($pattern));
     }
 }

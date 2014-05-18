@@ -19,31 +19,31 @@ use Gnugat\Redaktilo\File;
 interface ReplaceStrategy
 {
     /**
-     * @param mixed $pattern
+     * @param mixed $location
      *
      * @return bool
      */
-    public function supports($pattern);
+    public function supports($location);
 
     /**
      * @param File  $file
-     * @param mixed $pattern
+     * @param mixed $location
      * @param mixed $replacement
      *
      * @api
      */
-    public function replaceWith(File $file, $pattern, $replacement);
+    public function replaceWith(File $file, $location, $replacement);
 
     /**
      * @param File  $file
-     * @param mixed $pattern
+     * @param mixed $location
      */
-    public function removeAt(File $file, $pattern);
+    public function removeAt(File $file, $location);
 
     /**
      * @param File  $file
-     * @param mixed $pattern
+     * @param mixed $location
      * @param mixed $addition
      */
-    public function insertAt(File $file, $pattern, $addition);
+    public function insertAt(File $file, $location, $addition);
 }

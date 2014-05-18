@@ -11,8 +11,8 @@
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Replace\ReplaceEngine;
-use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Engine\ReplaceEngine;
+use Gnugat\Redaktilo\Engine\SearchEngine;
 
 /**
  * Provides convenient methods for the following filesystem operations:

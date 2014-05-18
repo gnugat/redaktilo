@@ -79,7 +79,7 @@ class FileSpec extends ObjectBehavior
     function it_changes_lines()
     {
         $rootPath = __DIR__.'/../../../../';
-        $expectedFilename = sprintf('%s/tests/fixtures/%s/life-of-brian-1.txt', $rootPath, 'expectations');
+        $expectedFilename = sprintf('%s/tests/fixtures/%s/life-of-brian-replace.txt', $rootPath, 'expectations');
         $expectedContent = file_get_contents($expectedFilename);
 
         $line = "[Even more sniggering]";
