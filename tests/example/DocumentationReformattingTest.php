@@ -11,12 +11,13 @@
 
 namespace example\Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\DependencyInjection\StaticContainer;
 use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Search\FactoryMethod\LineNumber;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-class DocumentationReformattingTest extends ExampleTestCase
+class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
 {
     const APP_KERNEL = '%s/tests/fixtures/%s/doctrine.rst';
 
@@ -40,7 +41,7 @@ class DocumentationReformattingTest extends ExampleTestCase
 
     public function testItRegistersBundleInSymfonyApplication()
     {
-        $editor = $this->makeEditor();
+        $editor = StaticContainer::makeEditor();
         $file = $editor->open($this->originalPath);
 
         try {
