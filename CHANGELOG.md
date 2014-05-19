@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 0.6.1: Fixed DIC
+
+* fixed private methods into public static ones
+
 ## 0.6.0: ReplaceEngine
 
 * moved Engines into thei own directory
