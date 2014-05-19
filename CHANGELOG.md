@@ -1,9 +1,14 @@
 # Changes between versions
 
-## 0.6.0
+## 0.6.0: ReplaceEngine
 
-* removed behat
-* added automated use cases, using PHPUnit
+* moved Engines into thei own directory
+* added `ReplaceEngine` to comply to the open/closed principle
+* removed `File`'s `hasLine`
+* added a Dependency Injection Container
+* added a use case for line presence checking
+* added a use case for "documentation reformatting"
+* replaced Behat by PHPUnit for automated use cases
 
 ## 0.5.0: SearchEngine
 
