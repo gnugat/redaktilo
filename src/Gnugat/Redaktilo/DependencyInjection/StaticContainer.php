@@ -79,7 +79,7 @@ class StaticContainer
     }
 
     /** @return ReplaceEngine */
-    private function makeReplaceEngine()
+    public static function makeReplaceEngine()
     {
         if (null !== self::$replaceEngine) {
             return self::$replaceEngine;
@@ -92,7 +92,7 @@ class StaticContainer
     }
 
     /** @return LineReplaceStrategy */
-    private function makeLineReplaceStrategy()
+    public static function makeLineReplaceStrategy()
     {
         if (null !== self::$lineReplaceStrategy) {
             return self::$lineReplaceStrategy;
@@ -103,7 +103,7 @@ class StaticContainer
     }
 
     /** @return SearchEngine */
-    private function makeSearchEngine()
+    public static function makeSearchEngine()
     {
         if (null !== self::$searchEngine) {
             return self::$searchEngine;
@@ -118,7 +118,7 @@ class StaticContainer
     }
 
     /** @return LineSearchStrategy */
-    private function makeLineSearchStrategy()
+    public static function makeLineSearchStrategy()
     {
         if (null !== self::$lineSearchStrategy) {
             return self::$lineSearchStrategy;
@@ -129,7 +129,7 @@ class StaticContainer
     }
 
     /** @return LineNumberSearchStrategy */
-    private function makeLineNumberSearchStrategy()
+    public static function makeLineNumberSearchStrategy()
     {
         if (null !== self::$lineNumberSearchStrategy) {
             return self::$lineNumberSearchStrategy;
