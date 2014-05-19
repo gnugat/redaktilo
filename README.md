@@ -24,33 +24,18 @@ editor metaphor:
 Use [Composer](http://getcomposer.org/) to download and install Redaktilo in
 your projects:
 
-    composer require "gnugat/redaktilo:~0.4@dev"
+    composer require "gnugat/redaktilo:~0.6@dev"
 
-The only class you should need to work with is the stateless service `Editor`,
-which means you can create it once and use it everywhere in your application:
+A `StaticContainer` is provided to allow you to create lazily and quickly
+the only class you should need to work with: the stateless service `Editor`:
 
 ```php
 <?php
 require_once __DIR__.'/vendor/autoload.php';
 
-use Gnugat\Redaktilo\Editor;
-use Gnugat\Redaktilo\Filesystem;
-use Gnugat\Redaktilo\Search\SearchEngine;
-use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
-use Gnugat\Redaktilo\Search\LineSearchStrategy;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use Gnugat\Redaktilo\DependencyInjection\StaticContainer;
 
-$searchEngine = new SearchEngine();
-
-$lineSearchStrategy = new LineSearchStrategy();
-$searchEngine->registerStrategy($lineSearchStrategy);
-
-$lineNumberSearchStrategy = new LineNumberSearchStrategy();
-$searchEngine->registerStrategy($lineNumberSearchStrategy);
-
-$symfonyFilesystem = new SymfonyFilesystem();
-$filesystem = new Filesystem($symfonyFilesystem);
-$editor = new Editor($filesystem, $searchEngine);
+$editor = StaticContainer::makeEditor();
 ```
 
 We'll describe here the
@@ -83,7 +68,6 @@ class KernelManipulator extends Manipulator
         $file = $this->editor->open($this->appKernelFilename);
 
         $newLine = sprintf('            new %s(),', $bundle);
-
 
         if ($this->editor->has($file, $newLine)) {
             throw new \RuntimeException(sprintf(
