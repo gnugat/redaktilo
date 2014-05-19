@@ -22,9 +22,6 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 class Filesystem
 {
-    const LINE_BREAK_OTHER = "\n";
-    const LINE_BREAK_WINDOWS = "\r\n";
-
     /** @var SymfonyFilesystem */
     private $symfonyFilesystem;
 
@@ -54,31 +51,8 @@ class Filesystem
 
             throw new FileNotFoundException($message, 0, null, $filename);
         }
-        $newLineCharacter = $this->detectLineBreak($content);
 
-        return new File($filename, $content, $newLineCharacter);
-    }
-
-    /**
-     * PHP_EOL cannot be used to guess the line break of any files: a windows
-     * user (`\r\n`) can receive a file create on another OS (`\n`).
-     *
-     * If the given content hasn't any lines, use PHP_EOL.
-     *
-     * @param string $content
-     *
-     * @return bool
-     */
-    public function detectLineBreak($content)
-    {
-        if (false === strpos($content, self::LINE_BREAK_OTHER)) {
-            return PHP_EOL;
-        }
-        if (false !== strpos($content, self::LINE_BREAK_WINDOWS)) {
-            return self::LINE_BREAK_WINDOWS;
-        }
-
-        return self::LINE_BREAK_OTHER;
+        return new File($filename, $content);
     }
 
     /**

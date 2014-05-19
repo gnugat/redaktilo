@@ -52,19 +52,6 @@ class FileSpec extends ObjectBehavior
         $this->read()->shouldBe($newContent);
     }
 
-    function it_has_lines()
-    {
-        $lines = explode("\n", $this->content);
-        $newLines = array(
-            'And now for something',
-            'Completly different',
-        );
-
-        $this->readlines()->shouldBe($lines);
-        $this->writelines($newLines);
-        $this->readlines()->shouldBe($newLines);
-    }
-
     function it_has_a_current_line()
     {
         $this->getCurrentLineNumber()->shouldBe(0);

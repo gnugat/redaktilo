@@ -207,8 +207,9 @@ class Editor
      */
     public function replaceWith(File $file, $regex, $replace)
     {
+        $converter = new \Gnugat\Redaktilo\Converter\LineContentConverter();
         $currentLineNumber = $file->getCurrentLineNumber();
-        $lines = $file->readlines();
+        $lines = $converter->from($file);
         $line = $lines[$currentLineNumber];
 
         if (is_callable($replace)) {

@@ -11,10 +11,10 @@
 
 namespace spec\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\Engine\ReplaceEngine;
 use Gnugat\Redaktilo\Engine\SearchEngine;
+use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 use Gnugat\Redaktilo\Search\SearchStrategy;
 use PhpSpec\ObjectBehavior;
@@ -168,10 +168,10 @@ class EditorSpec extends ObjectBehavior
     {
         $line = 'We are the knights who say Ni!';
         $newLine = 'We are the knights who say Peng!';
-        $lineNumber = 42;
+        $lineNumber = 0;
 
         $file->getCurrentLineNumber()->willReturn($lineNumber);
-        $file->readlines()->willReturn(array($lineNumber => $line));
+        $file->read()->willReturn($line);
         $file->changeLineTo($newLine, $lineNumber)->shouldBeCalled();
 
         $this->replaceWith($file, '/Ni/', 'Peng');

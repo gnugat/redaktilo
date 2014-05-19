@@ -11,6 +11,7 @@
 
 namespace Gnugat\Redaktilo\DependencyInjection;
 
+use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\Engine\ReplaceEngine;
 use Gnugat\Redaktilo\Engine\SearchEngine;
@@ -38,6 +39,9 @@ class StaticContainer
 
     /** @var LineReplaceStrategy */
     private static $lineReplaceStrategy;
+
+    /** @var LineContentConverter */
+    private static $lineContentConverter;
 
     /** @var SearchEngine */
     private static $searchEngine;
@@ -97,7 +101,8 @@ class StaticContainer
         if (null !== self::$lineReplaceStrategy) {
             return self::$lineReplaceStrategy;
         }
-        self::$lineReplaceStrategy = new LineReplaceStrategy();
+        $lineContentConverter = self::makeLineContentConverter();
+        self::$lineReplaceStrategy = new LineReplaceStrategy($lineContentConverter);
 
         return self::$lineReplaceStrategy;
     }
@@ -123,7 +128,8 @@ class StaticContainer
         if (null !== self::$lineSearchStrategy) {
             return self::$lineSearchStrategy;
         }
-        self::$lineSearchStrategy = new LineSearchStrategy();
+        $lineContentConverter = self::makeLineContentConverter();
+        self::$lineSearchStrategy = new LineSearchStrategy($lineContentConverter);
 
         return self::$lineSearchStrategy;
     }
@@ -134,8 +140,20 @@ class StaticContainer
         if (null !== self::$lineNumberSearchStrategy) {
             return self::$lineNumberSearchStrategy;
         }
-        self::$lineNumberSearchStrategy = new LineNumberSearchStrategy();
+        $lineContentConverter = self::makeLineContentConverter();
+        self::$lineNumberSearchStrategy = new LineNumberSearchStrategy($lineContentConverter);
 
         return self::$lineNumberSearchStrategy;
+    }
+
+    /** @return LineContentConverter */
+    public static function makeLineContentConverter()
+    {
+        if (null !== self::$lineContentConverter) {
+            return self::$lineContentConverter;
+        }
+        self::$lineContentConverter = new LineContentConverter();
+
+        return self::$lineContentConverter;
     }
 }

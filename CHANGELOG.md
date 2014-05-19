@@ -1,5 +1,16 @@
 # Changes between versions
 
+## 0.7.0: ContentConverter
+
+* removed `Filesystem`'s `detectLineBreak` method
+* removed `File`'s `readlines` and `writelines` methods
+* injected `LineContentConverter` into:
+  + `LineReplaceStrategy`
+  + `LineSearchStrategy`
+  + `LineNumberSearchStrategy`
+* added `LineContentConverter`
+* added `ContentConverter`
+
 ## 0.6.1: Fixed DIC
 
 * fixed private methods into public static ones

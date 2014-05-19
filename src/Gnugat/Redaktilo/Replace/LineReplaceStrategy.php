@@ -11,10 +11,20 @@
 
 namespace Gnugat\Redaktilo\Replace;
 
+use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 class LineReplaceStrategy implements ReplaceStrategy
 {
+    /** @var LineContentConverter */
+    private $converter;
+
+    /** @param LineContentConverter */
+    public function __construct(LineContentConverter $converter)
+    {
+        $this->converter = $converter;
+    }
+
     /** {@inheritdoc} */
     public function supports($location)
     {
@@ -24,24 +34,24 @@ class LineReplaceStrategy implements ReplaceStrategy
     /** {@inheritdoc} */
     public function removeAt(File $file, $location)
     {
-        $lines = $file->readlines();
+        $lines = $this->converter->from($file);
         unset($lines[$location]);
-        $file->writelines($lines);
+        $this->converter->back($file, $lines);
     }
 
     /** {@inheritdoc} */
     public function replaceWith(File $file, $location, $replacement)
     {
-        $lines = $file->readlines();
+        $lines = $this->converter->from($file);
         $lines[$location] = $replacement;
-        $file->writelines($lines);
+        $this->converter->back($file, $lines);
     }
 
     /** {@inheritdoc} */
     public function insertAt(File $file, $location, $addition)
     {
-        $lines = $file->readlines();
+        $lines = $this->converter->from($file);
         array_splice($lines, $location, 0, $addition);
-        $file->writelines($lines);
+        $this->converter->back($file, $lines);
     }
 }

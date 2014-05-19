@@ -11,6 +11,7 @@
 
 namespace Gnugat\Redaktilo\Search;
 
+use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 /**
@@ -21,10 +22,19 @@ use Gnugat\Redaktilo\File;
  */
 class LineSearchStrategy implements SearchStrategy
 {
+    /** @var LineContentConverter */
+    private $converter;
+
+    /** @param LineContentConverter */
+    public function __construct(LineContentConverter $converter)
+    {
+        $this->converter = $converter;
+    }
+
     /** {@inheritdoc} */
     public function has(File $file, $pattern)
     {
-        $lines = $file->readlines();
+        $lines = $this->converter->from($file);
 
         return in_array($pattern, $lines, true);
     }
@@ -32,7 +42,7 @@ class LineSearchStrategy implements SearchStrategy
     /** {@inheritdoc} */
     public function findNext(File $file, $pattern)
     {
-        $lines = $file->readlines();
+        $lines = $this->converter->from($file);
         $currentLineNumber = $file->getCurrentLineNumber() + 1;
         $nextLines = array_slice($lines, $currentLineNumber, null, true);
         $foundLineNumber = array_search($pattern, $nextLines, true);
@@ -46,7 +56,7 @@ class LineSearchStrategy implements SearchStrategy
     /** {@inheritdoc} */
     public function findPrevious(File $file, $pattern)
     {
-        $lines = $file->readlines();
+        $lines = $this->converter->from($file);
         $currentLineNumber = $file->getCurrentLineNumber() - 1;
         $previousLines = array_slice($lines, 0, $currentLineNumber, true);
         $reversedPreviousLines = array_reverse($previousLines, true);

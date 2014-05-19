@@ -11,6 +11,7 @@
 
 namespace spec\Gnugat\Redaktilo\Replace;
 
+use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 
@@ -22,14 +23,15 @@ class LineReplaceStrategySpec extends ObjectBehavior
     private $rootPath;
     private $lines;
 
-    function let(File $file)
+    function let(File $file, LineContentConverter $converter)
     {
         $this->rootPath = __DIR__.'/../../../../../';
 
         $filename = sprintf(self::ORIGINAL_FILENAME, $this->rootPath);
         $this->lines = file($filename, FILE_IGNORE_NEW_LINES);
 
-        $file->readlines()->willReturn($this->lines);
+        $converter->from($file)->willReturn($this->lines);
+        $this->beConstructedWith($converter);
     }
 
     function it_is_a_replace_strategy()
@@ -48,7 +50,7 @@ class LineReplaceStrategySpec extends ObjectBehavior
         $this->supports($rawLine)->shouldBe(false);
     }
 
-    function it_removes_lines(File $file)
+    function it_removes_lines(File $file, LineContentConverter $converter)
     {
         $expectedFilename = sprintf(self::ORIGINAL_FILENAME, $this->rootPath);
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
@@ -56,11 +58,11 @@ class LineReplaceStrategySpec extends ObjectBehavior
         $lineNumber = 1;
         unset($expectedLines[$lineNumber]);
 
-        $file->writelines($expectedLines)->shouldBeCalled();
+        $converter->back($file, $expectedLines)->shouldBeCalled();
         $this->removeAt($file, $lineNumber);
     }
 
-    function it_replaces_line(File $file)
+    function it_replaces_line(File $file, LineContentConverter $converter)
     {
         $expectedFilename = sprintf(self::EXPECTED_FILENAME, $this->rootPath, 'replace');
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
@@ -68,12 +70,11 @@ class LineReplaceStrategySpec extends ObjectBehavior
         $replacement = "[Even more sniggering]";
         $lineNumber = 5;
 
-        $file->writelines($expectedLines)->shouldBeCalled();
-
+        $converter->back($file, $expectedLines)->shouldBeCalled();
         $this->replaceWith($file, $lineNumber, $replacement);
     }
 
-    function it_inserts_new_lines(File $file)
+    function it_inserts_new_lines(File $file, LineContentConverter $converter)
     {
         $expectedFilename = sprintf(self::EXPECTED_FILENAME, $this->rootPath, 'insert');
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
@@ -81,8 +82,7 @@ class LineReplaceStrategySpec extends ObjectBehavior
         $addition = "Pontius Pilate: '...Dickus?'";
         $lineNumber = 6;
 
-        $file->writelines($expectedLines)->shouldBeCalled();
-
+        $converter->back($file, $expectedLines)->shouldBeCalled();
         $this->insertAt($file, $lineNumber, $addition);
     }
 }

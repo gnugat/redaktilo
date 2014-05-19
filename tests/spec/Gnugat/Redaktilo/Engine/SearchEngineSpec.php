@@ -11,8 +11,8 @@
 
 namespace spec\Gnugat\Redaktilo\Engine;
 
-use Gnugat\Redaktilo\Search\SearchStrategy;
 use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Search\SearchStrategy;
 use PhpSpec\ObjectBehavior;
 
 class SearchEngineSpec extends ObjectBehavior

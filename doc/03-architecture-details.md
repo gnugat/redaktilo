@@ -4,6 +4,8 @@ This chapter explains the responsibility of each classes:
 
 * [File](#file)
 * [Filesystem](#filesystem)
+* [Converter](#converter)
+  * [LineContentConverter](#linecontentconverter)
 * [LineNumber](#linenumber)
 * [SearchStrategy](#searchstrategy)
   * [LineSearchStrategy](#linesearchstrategy)
@@ -18,7 +20,7 @@ This chapter explains the responsibility of each classes:
 
 ## File
 
-Redaktilo is based on this domain object:
+**Redaktilo** is based on this domain object:
 
 ```php
 <?php
@@ -39,8 +41,7 @@ class File
 Every single other classes in this project are stateless services allowing you
 to manipulate it.
 
-Currently the file also have a cursor to the current line and the possibility
-to convert the content into an array of lines:
+Currently the file also have a cursor to the current line:
 
 ```php
 <?php
@@ -50,9 +51,6 @@ namespace Gnugat\Redaktilo;
 class File
 {
     // ...
-
-    public function readlines();
-    public function writelines(array $newLines);
 
     public function getCurrentLineNumber();
     public function setCurrentLineNumber($lineNumber);
@@ -86,14 +84,43 @@ class Filesystem
 You can only open existing files and create new files. The first two methods
 will create an instance of `File`.
 
-There's another method, `detectLineBreak`, which looks in the file's content to
-guess the line break: windows (`\r\n`) or other (`\n`).
-If there's no line yet, the system's one is used (`PHP_EOL`).
-
-This one too might be extracted, so use it with caution.
-
 **Note**: `Filesystem` depends on the
 [Symfony2 Filesystem component](http://symfony.com/doc/current/components/filesystem.html).
+
+## Converter
+
+This interface allows you to extend **Redaktilo** in order to manipulate
+different representations of the `File`'s content:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Converter;
+
+use Gnugat\Redaktilo\File;
+
+interface ContentConverter
+{
+    public function from(File $file);
+    public function back(File $file, $convertedContent);
+}
+
+```
+
+Possible representations might be:
+
+* PHP tokens
+* JSON parameters
+
+### LineContentConverter
+
+**Redaktilo** relies heavily on this representation: a `File` should be composed
+of lines.
+
+This converter takes the content, detects its line break and splits it into an
+array of lines stripped from the line break character.
+
+It is also able to merge back those lines with the appropriate line break.
 
 ## LineNumber
 

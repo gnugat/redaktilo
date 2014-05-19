@@ -31,22 +31,17 @@ class File
     /** @var string */
     private $content;
 
-    /** @var string */
-    private $lineBreak;
-
     /** @var int */
     private $currentLineNumber = 0;
 
     /**
      * @param string $filename
      * @param string $content
-     * @param string $lineBreak
      */
-    public function __construct($filename, $content, $lineBreak = PHP_EOL)
+    public function __construct($filename, $content)
     {
         $this->filename = $filename;
         $this->content = $content;
-        $this->lineBreak = $lineBreak;
     }
 
     /**
@@ -87,27 +82,6 @@ class File
         return $this->content = $newContent;
     }
 
-    /**
-     * Splits the content into an array of lines, stripped of the line break.
-     *
-     * @return array
-     */
-    public function readlines()
-    {
-        return explode($this->lineBreak, $this->content);
-    }
-
-    /**
-     * Merges the lines using the appropriate line break, and replaces the
-     * content with it.
-     *
-     * @param array $newLines
-     */
-    public function writelines(array $newLines)
-    {
-        $this->content = implode($this->lineBreak, $newLines);
-    }
-
     /** @return int */
     public function getCurrentLineNumber()
     {
@@ -126,10 +100,11 @@ class File
      */
     public function changeLineTo($line, $lineNumber)
     {
-        $lines = $this->readlines();
+        $converter = new \Gnugat\Redaktilo\Converter\LineContentConverter();
+        $lines = $converter->from($this);
 
         $lines[$lineNumber] = $line;
 
-        $this->writelines($lines);
+        $converter->back($this, $lines);
     }
 }
