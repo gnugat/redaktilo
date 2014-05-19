@@ -1,6 +1,6 @@
 # Usage
 
-This chapter shows you how to use Redaktilo an contains the following sections:
+This chapter shows you how to use Redaktilo and contains the following sections:
 
 * [API](#api)
 * [Filesystem operations](#filesystem-operations)
@@ -30,7 +30,7 @@ class Editor
     public function open($filename, $force = false);
     public function save(File $file);
 
-    // Line manipulations.
+    // Manipulating the current line.
     public function addBefore(File $file, $add);
     public function addAfter(File $file, $add);
     public function changeTo(File $file, $line);
@@ -53,24 +53,9 @@ Here's how to initialize it:
 <?php
 require_once __DIR__.'/vendor/autoload.php';
 
-use Gnugat\Redaktilo\Editor;
-use Gnugat\Redaktilo\Filesystem;
-use Gnugat\Redaktilo\Search\SearchEngine;
-use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
-use Gnugat\Redaktilo\Search\LineSearchStrategy;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use Gnugat\Redaktilo\DependencyInjection\StaticContainer;
 
-$searchEngine = new SearchEngine();
-
-$lineSearchStrategy = new LineSearchStrategy();
-$searchEngine->registerStrategy($lineSearchStrategy);
-
-$lineNumberSearchStrategy = new LineNumberSearchStrategy();
-$searchEngine->registerStrategy($lineNumberSearchStrategy);
-
-$symfonyFilesystem = new SymfonyFilesystem();
-$filesystem = new Filesystem($symfonyFilesystem);
-$editor = new Editor($filesystem, $searchEngine);
+$editor = StaticContainer::makeEditor();
 ```
 
 ## Filesystem operations
@@ -82,8 +67,8 @@ $file = $editor->open('/tmp/monty.py');
 ```
 
 By default, if the file doesn't exist an exception will be thrown
-(`Symfony\Component\Filesystem\Exception\FileNotFoundException`). You need to
-pass the following argument to force a file creation:
+(`Symfony\Component\Filesystem\Exception\FileNotFoundException`).
+You need to pass the following argument to force a file creation:
 
 ```php
 $file = $editor->open('/tmp/monty.py', true);

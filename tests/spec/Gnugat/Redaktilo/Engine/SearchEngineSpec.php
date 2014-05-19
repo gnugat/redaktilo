@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Gnugat\Redaktilo\SearchEngine;
+namespace spec\Gnugat\Redaktilo\Engine;
 
 use Gnugat\Redaktilo\Search\SearchStrategy;
 use Gnugat\Redaktilo\File;
@@ -34,7 +34,7 @@ class SearchEngineSpec extends ObjectBehavior
     function it_fails_when_the_strategy_is_not_supported(SearchStrategy $searchStrategy)
     {
         $pattern = 'We are now no longer the Knights who say Ni.';
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotSupportedException';
+        $exception = 'Gnugat\Redaktilo\Engine\NotSupportedException';
 
         $searchStrategy->supports($pattern)->willReturn(false);
 

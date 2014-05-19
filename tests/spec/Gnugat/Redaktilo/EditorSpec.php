@@ -13,7 +13,9 @@ namespace spec\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Filesystem;
-use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Engine\ReplaceEngine;
+use Gnugat\Redaktilo\Engine\SearchEngine;
+use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 use Gnugat\Redaktilo\Search\SearchStrategy;
 use PhpSpec\ObjectBehavior;
 
@@ -21,9 +23,17 @@ class EditorSpec extends ObjectBehavior
 {
     const FILENAME = '/tmp/file-to-edit.txt';
 
-    function let(Filesystem $filesystem, SearchEngine $searchEngine)
+    function let(
+        Filesystem $filesystem,
+        SearchEngine $searchEngine,
+        ReplaceEngine $replaceEngine
+    )
     {
-        $this->beConstructedWith($filesystem, $searchEngine);
+        $this->beConstructedWith(
+            $filesystem,
+            $searchEngine,
+            $replaceEngine
+        );
     }
 
     function it_opens_existing_files(Filesystem $filesystem, File $file)
@@ -57,7 +67,11 @@ class EditorSpec extends ObjectBehavior
         $this->open($filename, true);
     }
 
-    function it_moves_down_the_cursor(SearchEngine $searchEngine, SearchStrategy $searchStrategy, File $file)
+    function it_moves_down_the_cursor(
+        SearchEngine $searchEngine,
+        SearchStrategy $searchStrategy,
+        File $file
+    )
     {
         $pattern = 'No one expects the Spanish inquisition!';
         $foundLineNumber = 42;
@@ -69,7 +83,11 @@ class EditorSpec extends ObjectBehavior
         $this->jumpDownTo($file, $pattern);
     }
 
-    function it_moves_up_the_cursor(SearchEngine $searchEngine, SearchStrategy $searchStrategy, File $file)
+    function it_moves_up_the_cursor(
+        SearchEngine $searchEngine,
+        SearchStrategy $searchStrategy,
+        File $file
+    )
     {
         $pattern = 'Nobody expects the Spanish Inquisition!';
         $foundLineNumber = 4423;
@@ -81,7 +99,11 @@ class EditorSpec extends ObjectBehavior
         $this->jumpUpTo($file, $pattern);
     }
 
-    function it_checks_pattern_existence(SearchEngine $searchEngine, SearchStrategy $searchStrategy, File $file)
+    function it_checks_pattern_existence(
+        SearchEngine $searchEngine,
+        SearchStrategy $searchStrategy,
+        File $file
+    )
     {
         $pattern = 'No one expects the spanish inquisition!';
 
@@ -91,40 +113,55 @@ class EditorSpec extends ObjectBehavior
         $this->has($file, $pattern)->shouldBe(true);
     }
 
-    function it_inserts_lines_before_current_one(File $file)
+    function it_inserts_lines_before_current_one(
+        ReplaceEngine $replaceEngine,
+        ReplaceStrategy $replaceStrategy,
+        File $file
+    )
     {
-        $line = 'We are the knights who say Ni!';
-        $lineNumber = 42;
-
-        $file->getCurrentLineNumber()->willReturn($lineNumber);
-        $file->insertLineAt($line, $lineNumber)->shouldBeCalled();
-
-        $this->addBefore($file, $line);
-    }
-
-    function it_inserts_lines_after_current_one(File $file)
-    {
-        $line = 'We are the knights who say Ni!';
         $currentLineNumber = 42;
-        $lineNumber = $currentLineNumber + 1;
+        $location = $currentLineNumber;
+        $addition = 'We are the knights who say Ni!';
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
-        $file->insertLineAt($line, $lineNumber)->shouldBeCalled();
+        $replaceEngine->resolve($location)->willReturn($replaceStrategy);
+        $replaceStrategy->insertAt($file, $location, $addition)->shouldBeCalled();
 
-        $this->addAfter($file, $line);
+        $this->addBefore($file, $addition);
     }
 
-    function it_changes_the_current_line(File $file)
+    function it_inserts_lines_after_current_one(
+        ReplaceEngine $replaceEngine,
+        ReplaceStrategy $replaceStrategy,
+        File $file
+    )
     {
-        $line = 'We are the knights who say Ni!';
-        $newLine = 'We are knights who say Ni!';
-        $lineNumber = 42;
+        $currentLineNumber = 42;
+        $location = $currentLineNumber + 1;
+        $addition = 'We are the knights who say Ni!';
 
-        $file->getCurrentLineNumber()->willReturn($lineNumber);
-        $file->changeLineTo($newLine, $lineNumber)->shouldBeCalled();
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $replaceEngine->resolve($location)->willReturn($replaceStrategy);
+        $replaceStrategy->insertAt($file, $location, $addition)->shouldBeCalled();
 
-        $this->changeTo($file, $newLine);
+        $this->addAfter($file, $addition);
+    }
+
+    function it_changes_the_current_line(
+        ReplaceEngine $replaceEngine,
+        ReplaceStrategy $replaceStrategy,
+        File $file
+    )
+    {
+        $currentLineNumber = 42;
+        $location = $currentLineNumber;
+        $replacement = 'We are knights who say Ni!';
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $replaceEngine->resolve($location)->willReturn($replaceStrategy);
+        $replaceStrategy->replaceWith($file, $location, $replacement)->shouldBeCalled();
+
+        $this->changeTo($file, $replacement);
     }
 
     function it_replaces_the_current_line(File $file)
@@ -140,12 +177,18 @@ class EditorSpec extends ObjectBehavior
         $this->replaceWith($file, '/Ni/', 'Peng');
     }
 
-    function it_removes_the_current_line(File $file)
+    function it_removes_the_current_line(
+        ReplaceEngine $replaceEngine,
+        ReplaceStrategy $replaceStrategy,
+        File $file
+    )
     {
-        $lineNumber = 42;
+        $currentLineNumber = 42;
+        $location = $currentLineNumber;
 
-        $file->getCurrentLineNumber()->willReturn($lineNumber);
-        $file->removeLine($lineNumber)->shouldBeCalled();
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $replaceEngine->resolve($location)->willReturn($replaceStrategy);
+        $replaceStrategy->removeAt($file, $location)->shouldBeCalled();
 
         $this->remove($file);
     }

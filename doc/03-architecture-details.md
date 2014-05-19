@@ -9,6 +9,9 @@ This chapter explains the responsibility of each classes:
   * [LineSearchStrategy](#linesearchstrategy)
   * [LineNumberSearchStrategy](#linenumbersearchstrategy)
 * [SearchEngine](#searchengine)
+* [ReplaceStrategy](#replacestrategy)
+  * [LineReplaceStrategy](#linereplacestrategy)
+* [ReplaceEngine](#replaceengine)
 * [Editor](#editor)
 * [Next readings](#next-readings)
 * [Previous readings](#previous-readings)
@@ -54,10 +57,7 @@ class File
     public function getCurrentLineNumber();
     public function setCurrentLineNumber($lineNumber);
 
-    public function insertLineAt($line, $lineNumber);
     public function changeLineTo($line, $lineNumber);
-    public function removeLine($lineNumber);
-    public function hasLine($line);
 }
 ```
 
@@ -117,7 +117,7 @@ class LineNumber
 
 ## SearchStrategy
 
-Another stateless service, whic allows you to search patterns in the File's
+Another stateless service, which allows you to search patterns in the File's
 content.
 
 This is actually an interface allowing you to extend Redaktilo. By default, two
@@ -168,12 +168,58 @@ the given pattern:
 ```php
 <?php
 
-namespace Gnugat\Redaktilo\Search;
+namespace Gnugat\Redaktilo\Engine;
 
 class SearchEngine
 {
     public function registerStrategy(SearchStrategy $searchStrategy);
     public function resolve($pattern);
+}
+
+```
+
+## ReplaceStrategy
+
+Allows you to the replacements in the File's content.
+
+This is actually an interface allowing you to extend Redaktilo. By default, one
+implementation is provided.
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Replace;
+
+use Gnugat\Redaktilo\File;
+
+interface ReplaceStrategy
+{
+    public function replaceWith(File $file, $location, $replacement);
+    public function removeAt(File $file, $location);
+    public function insertAt(File $file, $location, $addition);
+
+    public function supports($location);
+}
+```
+
+### LineReplaceStrategy
+
+Allows you to manipulate a line, givne its number.
+
+## ReplaceEngine
+
+Allows you to register many `ReplaceStrategy` and to return the one that
+supports the given location:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Engine;
+
+class ReplaceEngine
+{
+    public function registerStrategy(ReplaceStrategy $replaceStrategy);
+    public function resolve($location);
 }
 
 ```

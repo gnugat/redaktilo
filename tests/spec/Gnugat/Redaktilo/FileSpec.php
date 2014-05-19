@@ -76,23 +76,10 @@ class FileSpec extends ObjectBehavior
         $this->getCurrentLineNumber()->shouldBe($middleLine);
     }
 
-    function it_inserts_lines()
-    {
-        $rootPath = __DIR__.'/../../../../';
-        $expectedFilename = sprintf(self::FILENAME, $rootPath, 'expectations');
-        $expectedContent = file_get_contents($expectedFilename);
-
-        $line = "Pontius Pilate: '...Dickus?'";
-        $lineNumber = 6;
-
-        $this->insertLineAt($line, $lineNumber);
-        $this->read()->shouldBe($expectedContent);
-    }
-
     function it_changes_lines()
     {
         $rootPath = __DIR__.'/../../../../';
-        $expectedFilename = sprintf('%s/tests/fixtures/%s/life-of-brian-1.txt', $rootPath, 'expectations');
+        $expectedFilename = sprintf('%s/tests/fixtures/%s/life-of-brian-replace.txt', $rootPath, 'expectations');
         $expectedContent = file_get_contents($expectedFilename);
 
         $line = "[Even more sniggering]";
@@ -100,26 +87,5 @@ class FileSpec extends ObjectBehavior
 
         $this->changeLineTo($line, $lineNumber);
         $this->read()->shouldBe($expectedContent);
-    }
-
-    function it_removes_lines()
-    {
-        $rootPath = __DIR__.'/../../../../';
-        $expectedFilename = sprintf('%s/tests/fixtures/%s/life-of-brian-2.txt', $rootPath, 'expectations');
-        $expectedContent = file_get_contents($expectedFilename);
-
-        $lineNumber = 1;
-
-        $this->removeLine($lineNumber);
-        $this->read()->shouldBe($expectedContent);
-    }
-
-    function it_checks_line_presence()
-    {
-        $existingLine = '[Sniggering]';
-        $nonExistingLine = "Isn't there a Saint Aaaaarrrrrrggghhh's in Cornwall?";
-
-        $this->hasLine($existingLine)->shouldBe(true);
-        $this->hasLine($nonExistingLine)->shouldBe(false);
     }
 }

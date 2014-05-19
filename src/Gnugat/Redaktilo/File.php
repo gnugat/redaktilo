@@ -121,24 +121,6 @@ class File
     }
 
     /**
-     * If the line number is greater than the actual number of lines, inserts
-     * a new line at the end of the file.
-     * If the line number is negative, starts the count from the end of the
-     * file.
-     *
-     * @param string $line
-     * @param int    $lineNumber
-     */
-    public function insertLineAt($line, $lineNumber)
-    {
-        $lines = $this->readlines();
-
-        array_splice($lines, $lineNumber, 0, $line);
-
-        $this->writelines($lines);
-    }
-
-    /**
      * @param string $line
      * @param int    $lineNumber
      */
@@ -149,28 +131,5 @@ class File
         $lines[$lineNumber] = $line;
 
         $this->writelines($lines);
-    }
-
-    /** @param int $lineNumber */
-    public function removeLine($lineNumber)
-    {
-        $lines = $this->readlines();
-
-        unset($lines[$lineNumber]);
-
-        $this->writelines($lines);
-    }
-
-    /**
-     * @param string $line
-     *
-     * @return bool
-     */
-    public function hasLine($line)
-    {
-        $lines = $this->readlines();
-        $lineNumbers = array_flip($lines);
-
-        return isset($lineNumbers[$line]);
     }
 }
