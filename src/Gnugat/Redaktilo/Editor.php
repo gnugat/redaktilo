@@ -178,6 +178,7 @@ class Editor
 
         $replaceStrategy = $this->replaceEngine->resolve($currentLineNumber);
         $replaceStrategy->insertAt($file, $currentLineNumber, $addition);
+        $file->setCurrentLineNumber($currentLineNumber);
     }
 
     /**

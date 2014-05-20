@@ -141,6 +141,7 @@ class EditorSpec extends ObjectBehavior
         $addition = 'We are the knights who say Ni!';
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $file->setCurrentLineNumber($location)->shouldBeCalled();
         $replaceEngine->resolve($location)->willReturn($replaceStrategy);
         $replaceStrategy->insertAt($file, $location, $addition)->shouldBeCalled();
 

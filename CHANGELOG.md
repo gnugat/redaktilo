@@ -2,6 +2,7 @@
 
 ## 0.7.0: ContentConverter
 
+* fixed `Editor::addAfter` by moving down the cursor
 * added `Line` factory method for empty ones
 * added `Filesystem` factory method to force creation
 * moved factory methods into `Gnugat\Redaktilo`
