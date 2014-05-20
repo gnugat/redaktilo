@@ -9,21 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Search\FactoryMethod;
+namespace Gnugat\Redaktilo\FactoryMethod;
 
 /**
- * A convenient wrapper to keep readability when searching line numbers.
+ * A convenient wrapper to keep readability when manipulating line numbers.
  *
  * @api
  */
 class LineNumber
 {
     /**
-     * To use with:
-     *
-     * + $lineNumberSearchStrategy->has()
-     * + $editor->has()
-     *
      * @param int $lineNumber
      *
      * @return int
@@ -34,11 +29,6 @@ class LineNumber
     }
 
     /**
-     * To use with:
-     *
-     * + $lineNumberSearchStrategy->findNext()
-     * + $editor->jumpDownTo()
-     *
      * @param int $lines
      *
      * @return int
@@ -49,11 +39,6 @@ class LineNumber
     }
 
     /**
-     * To use with:
-     *
-     * + $lineNumberSearchStrategy->findPrevious()
-     * + $editor->jumpUpTo()
-     *
      * @param int $lines
      *
      * @return int
@@ -64,7 +49,7 @@ class LineNumber
     }
 
     /**
-     * Line numbers should be strictly posotive integers.
+     * Line numbers should be strictly positive integers.
      *
      * @param int $number
      *

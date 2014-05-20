@@ -13,7 +13,7 @@ namespace spec\Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\Search\FactoryMethod\LineNumber;
+use Gnugat\Redaktilo\FactoryMethod\LineNumber;
 use PhpSpec\ObjectBehavior;
 
 class LineNumberSearchStrategySpec extends ObjectBehavior

@@ -2,6 +2,9 @@
 
 ## 0.7.0: ContentConverter
 
+* added `Line` factory method for empty ones
+* added `Filesystem` factory method to force creation
+* moved factory methods into `Gnugat\Redaktilo`
 * removed `Filesystem`'s `detectLineBreak` method
 * removed `File`'s `readlines` and `writelines` methods
 * injected `LineContentConverter` into:
