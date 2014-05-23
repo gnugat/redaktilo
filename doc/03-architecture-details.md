@@ -5,15 +5,20 @@ This chapter explains the responsibility of each classes:
 * [File](#file)
 * [Filesystem](#filesystem)
 * [Converter](#converter)
-  * [LineContentConverter](#linecontentconverter)
-* [LineNumber](#linenumber)
-* [SearchStrategy](#searchstrategy)
-  * [LineSearchStrategy](#linesearchstrategy)
-  * [LineNumberSearchStrategy](#linenumbersearchstrategy)
-* [SearchEngine](#searchengine)
-* [ReplaceStrategy](#replacestrategy)
-  * [LineReplaceStrategy](#linereplacestrategy)
-* [ReplaceEngine](#replaceengine)
+    * [LineContentConverter](#linecontentconverter)
+* [DependencyInjection](#dependencyinjection)
+* [FactoryMethod](#factorymethod)
+    * [Filesystem2](#filesystem2)
+    * [Line](#line)
+    * [LineNumber](#linenumber)
+* [Search](#search)
+    * [LineSearchStrategy](#linesearchstrategy)
+    * [LineNumberSearchStrategy](#linenumbersearchstrategy)
+* [Replace](#replace)
+    * [LineReplaceStrategy](#linereplacestrategy)
+* [Engine](#engine)
+    * [SearchEngine](#searchengine)
+    * [ReplaceEngine](#replaceengine)
 * [Editor](#editor)
 * [Next readings](#next-readings)
 * [Previous readings](#previous-readings)
@@ -104,7 +109,6 @@ interface ContentConverter
     public function from(File $file);
     public function back(File $file, $convertedContent);
 }
-
 ```
 
 Possible representations might be:
@@ -122,11 +126,122 @@ array of lines stripped from the line break character.
 
 It is also able to merge back those lines with the appropriate line break.
 
-## LineNumber
+## DependencyInjection
 
-A convenient Method Factory allowing you to make your code easier to read. Its
-methods normalize the given line number and return it, to make sure you use only
-positive integers.
+The `StaticContainer` allows you to lazily create the services.
+
+Yep, "lazily", because you call the same method a second time it will return the
+same instance. It is possible because the services are stateless: calling them
+many times in different orders doesn' affect their behavior.
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\DependencyInjection;
+
+class StaticContainer
+{
+    public static function makeEditor();
+
+    public static function makeFilesystem();
+
+    public static function makeReplaceEngine();
+    public static function makeLineReplaceStrategy();
+
+    public static function makeSearchEngine();
+    public static function makeLineSearchStrategy();
+    public static function makeLineNumberSearchStrategy();
+
+    public static function makeLineContentConverter();
+}
+```
+
+## FactoryMethod
+
+Factory methods don't have any real behavior, their purpose is to make the code
+easier to read by making things more literal.
+
+### Filesystem2
+
+`Editor` can open existing files. You can force it to open new files by passing
+`true` as a second argument:
+
+```php
+$editor->open($filename, true);
+```
+
+This factory method allows you to make this argument more explicit:
+
+```php
+$editor->open($filename, Filesystem::forceCreation());
+```
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\FactoryMethod;
+
+class Filesystem
+{
+    public static function forceCreation();
+}
+```
+
+### Line
+
+Somtimes you'll need to insert empty lines:
+
+```php
+$editor->addAfter($file, '');
+```
+
+This factory method allows you to make this more explicit:
+
+```php
+$editor->addAfter($file, Line::emptyOne());
+```
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\FactoryMethod;
+
+class Line
+{
+    public static function emptyOne();
+}
+```
+
+### LineNumber
+
+You might want to jump a number of line above or under the current one:
+
+```php
+$editor->jumpUpTo($file, 3);
+$editor->jumpDownTo($file, 5);
+```
+
+This factory method allows you to make this more explicit:
+
+```php
+$editor->jumpUpTo($file, LineNumber::up(3));
+$editor->jumpDownTo($file, LineNumber::down(5));
+```
+
+You might also want to set the current line to a given line number:
+
+```php
+$file->setCurrentLineNumber(42);
+```
+
+Again, you cn make it more explicit:
+
+```php
+$file->setCurrentLineNumber(LineNumber::absolute(42));
+```
+
+`LineNumber` also normalizes the given parameter to make sure it is a positive
+integer.
 
 ```php
 <?php
@@ -135,14 +250,14 @@ namespace Gnugat\Redaktilo\Search\FactoryMethod;
 
 class LineNumber
 {
-    public static function absolute($lineNumber);
-
-    public static function down($lines);
     public static function up($lines);
+    public static function down($lines);
+
+    public static function absolute($lineNumber);
 }
 ```
 
-## SearchStrategy
+## Search
 
 Another stateless service, which allows you to search patterns in the File's
 content.
@@ -187,25 +302,7 @@ The `findNext` method will jump `n` lines under the current one,  while
 The `has` method just checks that the given line number is within the boundary
 of the file.
 
-## SearchEngine
-
-Allows you to register many `SearchStrategy` and to return the one that supports
-the given pattern:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\Engine;
-
-class SearchEngine
-{
-    public function registerStrategy(SearchStrategy $searchStrategy);
-    public function resolve($pattern);
-}
-
-```
-
-## ReplaceStrategy
+## Replace
 
 Allows you to the replacements in the File's content.
 
@@ -233,7 +330,34 @@ interface ReplaceStrategy
 
 Allows you to manipulate a line, givne its number.
 
-## ReplaceEngine
+## Engine
+
+The strategies seen above can be gathered in an engine. This is used in the
+`Editor` to allow extension without having to modify it.
+
+For example, its `jumpDownTo` method can accept both a string or an integer.
+It is passes its argument to the engine's `resolve` method: if the engine has
+a registered strategy which supports it, it returns it. `Editor` can then tell
+the strategy to do the work.
+
+### SearchEngine
+
+Allows you to register many `SearchStrategy` and to return the one that supports
+the given pattern:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Engine;
+
+class SearchEngine
+{
+    public function registerStrategy(SearchStrategy $searchStrategy);
+    public function resolve($pattern);
+}
+```
+
+### ReplaceEngine
 
 Allows you to register many `ReplaceStrategy` and to return the one that
 supports the given location:
@@ -248,7 +372,6 @@ class ReplaceEngine
     public function registerStrategy(ReplaceStrategy $replaceStrategy);
     public function resolve($location);
 }
-
 ```
 
 ## Editor

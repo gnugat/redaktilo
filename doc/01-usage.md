@@ -37,9 +37,11 @@ class Editor
     public function replaceWith(File $file, $regex, $replace);
     public function remove(File $file); // Removes the current line.
 
-    // Content searching.
+    // Content navigation.
     public function jumpDownTo(File $file, $pattern);
     public function jumpUpTo(File $file, $pattern);
+
+    // Content searching.
     public function has(File $file, $pattern);
 }
 ```
@@ -71,8 +73,12 @@ By default, if the file doesn't exist an exception will be thrown
 You need to pass the following argument to force a file creation:
 
 ```php
-$file = $editor->open('/tmp/monty.py', true);
+$file = $editor->open('/tmp/monty.py', Filesystem::forceCreation());
 ```
+
+**Note**: `Gnugat\Redaktilo\FactoryMethod\Filesystem` returns `true`, which is
+the expected value to force file creation. Use it to make your code easier to
+read.
 
 Any changes are done in memory, if you want to apply them you need to save the
 file:
@@ -184,7 +190,7 @@ Or if you want to jump 5 lines under the current one:
 $editor->jumpDownTo($file, LineNumber::down(5));
 ```
 
-**Note**: `Gnugat\Redaktilo\Search\FactoryMethod\LineNumber` returns the same
+**Note**: `Gnugat\Redaktilo\FactoryMethod\LineNumber` returns the same
 number you passed to its method. Use it to make your code easier to read.
 
 ## Example

@@ -2,6 +2,9 @@
 
 ## 0.7.0: ContentConverter
 
+* added vocabulary (cursor and line)
+* added static DIC documentation
+* added factory methods documentation
 * added `BundleRouting` example
 * fixed `Editor::addAfter` by moving down the cursor
 * added `Line` factory method for empty ones
