@@ -14,6 +14,8 @@ namespace Gnugat\Redaktilo\Replace;
 use Gnugat\Redaktilo\File;
 
 /**
+ * A replace strategy supporting a specific kind of location.
+ *
  * @api
  */
 interface ReplaceStrategy

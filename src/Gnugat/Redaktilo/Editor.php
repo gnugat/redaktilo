@@ -62,7 +62,7 @@ class Editor
      *
      * @return File
      *
-     * @throws Symfony\Component\Filesystem\Exception\FileNotFoundException
+     * @throws Symfony\Component\Filesystem\Exception\FileNotFoundException If the file hasn't be found.
      *
      * @api
      */
@@ -81,6 +81,8 @@ class Editor
      *
      * @param File $file
      *
+     * @throws Symfony\Component\Filesystem\Exception\IOException If the file cannot be written to.
+     *
      * @api
      */
     public function save(File $file)
@@ -92,11 +94,11 @@ class Editor
      * Searches the given pattern in the File after the current line.
      * If the pattern is found, the current line is set to it.
      *
-     * @param File   $file
-     * @param string $pattern
+     * @param File  $file
+     * @param mixed $pattern
      *
-     * @throws Gnugat\Redaktilo\Search\PatternNotFoundException
-     * @throws Gnugat\Redaktilo\Search\PatternNotSupportedException
+     * @throws Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
+     * @throws Gnugat\Redaktilo\Engine\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -112,11 +114,11 @@ class Editor
      * Searches the given pattern in the File before the current line.
      * If the pattern is found, the current line is set to it.
      *
-     * @param File   $file
-     * @param string $pattern
+     * @param File  $file
+     * @param mixed $pattern
      *
-     * @throws Gnugat\Redaktilo\Search\PatternNotFoundException
-     * @throws Gnugat\Redaktilo\Search\PatternNotSupportedException
+     * @throws Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
+     * @throws Gnugat\Redaktilo\Engine\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -129,12 +131,12 @@ class Editor
     }
 
     /**
-     * @param File   $file
-     * @param string $pattern
+     * @param File  $file
+     * @param mixed $pattern
      *
      * @return bool
      *
-     * @throws Gnugat\Redaktilo\Search\PatternNotSupportedException
+     * @throws Gnugat\Redaktilo\Engine\NotSupportedException If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -151,6 +153,8 @@ class Editor
      *
      * @param File   $file
      * @param string $addition
+     *
+     * @throws Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
      *
      * @api
      */
@@ -169,6 +173,8 @@ class Editor
      * @param File   $file
      * @param string $addition
      *
+     * @throws Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
+     *
      * @api
      */
     public function addAfter(File $file, $addition)
@@ -186,6 +192,8 @@ class Editor
      *
      * @param File   $file
      * @param string $replacement
+     *
+     * @throws Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
      *
      * @api
      */

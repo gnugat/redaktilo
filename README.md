@@ -8,10 +8,10 @@ editor metaphor:
 * your code can open a file
 * it can then check the presence of a line in it
 * it also can navigate in the file to select a line
-* next, it can:
-  * insert a new line above/under the current line
-  * change the current line
-  * remove the current line
+* next, it can manipulate the current line:
+  * insert a new one above/under it
+  * replace it
+  * remove it
 * finally it can save the changes on the filesystem
 
 **Caution**: still under heavy development (but BC breaks might not be frequent).
@@ -24,10 +24,10 @@ editor metaphor:
 Use [Composer](http://getcomposer.org/) to download and install Redaktilo in
 your projects:
 
-    composer require "gnugat/redaktilo:~0.6@dev"
+    composer require "gnugat/redaktilo:~0.7@dev"
 
-A `StaticContainer` is provided to allow you to create lazily and quickly
-the only class you should need to work with: the stateless service `Editor`:
+Create the only stateless service you're going to use with the help of
+`StaticContainer`:
 
 ```php
 <?php
@@ -107,7 +107,7 @@ You can find more documentation at the following links:
 
 Next readings:
 
-* [Usage](doc/01-usage.md)
+* [Tutorial](doc/01-tutorial.md)
 * [Use cases](doc/02-use-cases.md)
-* [Architecture details](doc/03-architecture-details.md)
+* [Reference](doc/03-reference.md)
 * [Vocabulary](04-vocabulary.md)

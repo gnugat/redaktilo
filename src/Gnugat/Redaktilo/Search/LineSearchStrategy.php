@@ -15,10 +15,11 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 /**
- * This strategy needs the content to be converted into an array of lines which
- * have been stripped from their line break.
+ * This strategy manipulates lines stripped of their line break character.
  *
  * The match is done on the whole line.
+ *
+ * @api
  */
 class LineSearchStrategy implements SearchStrategy
 {
@@ -31,7 +32,16 @@ class LineSearchStrategy implements SearchStrategy
         $this->converter = $converter;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * Checks if the given line is present at least once in the file.
+     *
+     * @param File   $file
+     * @param string $pattern
+     *
+     * @return bool
+     *
+     * @api
+     */
     public function has(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -39,7 +49,17 @@ class LineSearchStrategy implements SearchStrategy
         return in_array($pattern, $lines, true);
     }
 
-    /** {@inheritdoc} */
+    /**
+     * Returns the number of the given line if it is present after the current
+     * one.
+     *
+     * @param File   $file
+     * @param string $pattern
+     *
+     * @return integer
+     *
+     * @throws PatternNotFoundException If the line hasn't be found after the current one
+     */
     public function findNext(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -53,7 +73,17 @@ class LineSearchStrategy implements SearchStrategy
         return $foundLineNumber;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * Returns the number of the given line if it is present before the current
+     * one.
+     *
+     * @param File   $file
+     * @param string $pattern
+     *
+     * @return integer
+     *
+     * @throws PatternNotFoundException If the line hasn't be found before the current one
+     */
     public function findPrevious(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -68,7 +98,13 @@ class LineSearchStrategy implements SearchStrategy
         return $foundLineNumber;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * @param mixed $pattern
+     *
+     * @return bool
+     *
+     * @api
+     */
     public function supports($pattern)
     {
         if (!is_string($pattern)) {

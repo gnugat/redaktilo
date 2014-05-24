@@ -15,11 +15,9 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 /**
- * This strategy manipulates directly line numbers:
+ * This strategy manipulates directly line numbers.
  *
- * + `has` checks if the line exists
- * + `findNext` increments the current line number
- * + `findPrevious` decrements the current line number
+ * @api
  */
 class LineNumberSearchStrategy implements SearchStrategy
 {
@@ -32,7 +30,16 @@ class LineNumberSearchStrategy implements SearchStrategy
         $this->converter = $converter;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * Checks if the file has more lines than the given number.
+     *
+     * @param File    $file
+     * @param integer $pattern
+     *
+     * @return bool
+     *
+     * @api
+     */
     public function has(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -41,7 +48,16 @@ class LineNumberSearchStrategy implements SearchStrategy
         return 0 <= $pattern && $pattern < $totalLines;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * Increments the current line number.
+     *
+     * @param File    $file
+     * @param integer $pattern
+     *
+     * @return integer
+     *
+     * @api
+     */
     public function findNext(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -55,7 +71,16 @@ class LineNumberSearchStrategy implements SearchStrategy
         return $foundLineNumber;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * Decrements the current line number.
+     *
+     * @param File    $file
+     * @param integer $pattern
+     *
+     * @return integer
+     *
+     * @api
+     */
     public function findPrevious(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -69,7 +94,13 @@ class LineNumberSearchStrategy implements SearchStrategy
         return $foundLineNumber;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * @param mixed $pattern
+     *
+     * @return bool
+     *
+     * @api
+     */
     public function supports($pattern)
     {
         return (is_int($pattern) && $pattern >= 0);

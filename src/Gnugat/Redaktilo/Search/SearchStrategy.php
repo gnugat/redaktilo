@@ -40,6 +40,8 @@ interface SearchStrategy
      *
      * @return mixed
      *
+     * @throws PatternNotFoundException If the pattern hasn't be found
+     *
      * @api
      */
     public function findNext(File $file, $pattern);
@@ -51,6 +53,8 @@ interface SearchStrategy
      * @param mixed $pattern
      *
      * @return mixed
+     *
+     * @throws PatternNotFoundException If the pattern hasn't be found
      *
      * @api
      */

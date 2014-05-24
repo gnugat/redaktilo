@@ -14,6 +14,11 @@ namespace Gnugat\Redaktilo\Replace;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
+/**
+ * This strategy manipulates lines stripped of their line break character.
+ *
+ * @api
+ */
 class LineReplaceStrategy implements ReplaceStrategy
 {
     /** @var LineContentConverter */
