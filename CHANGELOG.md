@@ -2,6 +2,8 @@
 
 ## 0.7.0: ContentConverter
 
+* replaced introduction with tutorial
+* replaced architecture details with reference
 * added vocabulary (cursor and line)
 * added static DIC documentation
 * added factory methods documentation
