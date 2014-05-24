@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 0.7.2: Fixed routing test
+
+* fixed the routing test by removing the dependency on sf2's DI component
+
 ## 0.7.1: Fixed line break
 
 * fixed line break in line content converter's back method
