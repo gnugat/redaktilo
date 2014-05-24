@@ -100,6 +100,8 @@ class Filesystem
      *
      * @param File $file
      *
+     * @throws IOException If the file cannot be written to.
+     *
      * @api
      */
     public function write(File $file)

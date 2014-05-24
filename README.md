@@ -107,7 +107,7 @@ You can find more documentation at the following links:
 
 Next readings:
 
-* [Usage](doc/01-usage.md)
+* [Tutorial](doc/01-tutorial.md)
 * [Use cases](doc/02-use-cases.md)
-* [Architecture details](doc/03-architecture-details.md)
+* [Reference](doc/03-reference.md)
 * [Vocabulary](04-vocabulary.md)

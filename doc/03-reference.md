@@ -20,6 +20,10 @@ This chapter explains the responsibility of each classes:
     * [SearchEngine](#searchengine)
     * [ReplaceEngine](#replaceengine)
 * [Editor](#editor)
+    * [Filesystem operations](#filesystem-operations)
+    * [Manipulating the current line](#manipulating-the-current-line)
+    * [Content navigation](#content-navigation)
+    * [Content searching](#content-searching)
 * [Next readings](#next-readings)
 * [Previous readings](#previous-readings)
 
@@ -46,7 +50,7 @@ class File
 Every single other classes in this project are stateless services allowing you
 to manipulate it.
 
-Currently the file also have a cursor to the current line:
+Currently the file also have some other methods:
 
 ```php
 <?php
@@ -66,6 +70,13 @@ class File
 
 I wouldn't rely on them too much as they might be moved outside.
 
+One last thing: creating a `File` sets its cursor to the first line:
+
+```php
+$file = new File($filename, $content);
+echo $file->getCurrentLineNumber(); // 0
+```
+
 ## Filesystem
 
 A service which does the actual read and write operations:
@@ -75,14 +86,17 @@ A service which does the actual read and write operations:
 
 namespace Gnugat\Redaktilo;
 
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Exception\IOException;
+
 class Filesystem
 {
-    public function open($filename);
-    public function create($filename);
+    public function open($filename); // Throws FileNotFoundException if the file doesn't exist
+    public function create($filename); // Throws IOException if the path isn't accessible
 
     public function exists($filename);
 
-    public function write(File $file);
+    public function write(File $file); // Throws IOException If the file cannot be written to
 }
 ```
 
@@ -189,7 +203,7 @@ class Filesystem
 
 ### Line
 
-Somtimes you'll need to insert empty lines:
+Sometimes you'll need to insert empty lines:
 
 ```php
 $editor->addAfter($file, '');
@@ -234,7 +248,7 @@ You might also want to set the current line to a given line number:
 $file->setCurrentLineNumber(42);
 ```
 
-Again, you cn make it more explicit:
+Again, you can make it more explicit:
 
 ```php
 $file->setCurrentLineNumber(LineNumber::absolute(42));
@@ -246,7 +260,7 @@ integer.
 ```php
 <?php
 
-namespace Gnugat\Redaktilo\Search\FactoryMethod;
+namespace Gnugat\Redaktilo\FactoryMethod;
 
 class LineNumber
 {
@@ -276,6 +290,7 @@ interface SearchStrategy
 {
     public function has(File $file, $pattern);
 
+    // Throw PatternNotFoundException if the pattern hasn't be found
     public function findNext(File $file, $pattern);
     public function findPrevious(File $file, $pattern);
 
@@ -353,7 +368,7 @@ namespace Gnugat\Redaktilo\Engine;
 class SearchEngine
 {
     public function registerStrategy(SearchStrategy $searchStrategy);
-    public function resolve($pattern);
+    public function resolve($pattern); // Throws NotSupportedException If the pattern isn't supported by any registered strategy
 }
 ```
 
@@ -370,14 +385,120 @@ namespace Gnugat\Redaktilo\Engine;
 class ReplaceEngine
 {
     public function registerStrategy(ReplaceStrategy $replaceStrategy);
-    public function resolve($location);
+    public function resolve($location); // Throws NotSupportedException If the location isn't supported by any registered strategy
 }
 ```
 
 ## Editor
 
 `Editor` is intended to be a facade using every other services. It provides
-developers a unique API implementing the editor metaphor.
+developers with a unique API implementing the text editor metaphor:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+use Gnugat\Redaktilo\Engine\NotSupportedException;
+use Gnugat\Redaktilo\Search\PatternNotFoundException;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Exception\IOException;
+
+class Editor
+{
+    public function __construct(Filesystem $filesystem);
+
+    // Filesystem operations.
+    public function open($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
+    public function save(File $file); // Throws IOException if the file cannot be written to
+
+    // Manipulating the current line.
+    public function addBefore(File $file, $addition);
+    public function addAfter(File $file, $addition);
+    public function changeTo(File $file, $replacement); // Will be renamed to `replace`
+    public function remove(File $file); // Removes the current line.
+
+    // Global manipulations.
+    public function replaceWith(File $file, $regex, $replacement); // Will be renamed to `replaceAll`
+
+    // Content navigation.
+    // Throw PatternNotFoundException If the pattern hasn't been found
+    // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
+    public function jumpDownTo(File $file, $pattern);
+    public function jumpUpTo(File $file, $pattern);
+
+    // Content searching.
+    public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
+}
+```
+
+### Filesystem operations
+
+While using `save` is exactly the same as calling directly `Filesystem::write`,
+the `open` method is a wrapper allowing you to open or create files:
+
+```php
+$editor->open($filename); // Throws an exception if the file doesn't exist
+$editor->open($filename, true); // Creates a new file if it doesn't exist
+```
+
+If you want to make the second argument more explicit, use the following factory
+method:
+
+```php
+use Gnugat\Redaktilo\FactoryMethod\Filesystem;
+
+$editor->open($filename, Filesystem::forceCreation());
+```
+
+One last thing: opening or creating a file sets its cursor to the first line:
+
+```php
+$file = $this->open($filename);
+echo $file->getCurrentLineNumber(); // 0
+```
+
+### Manipulating the current line
+
+You can insert additions above or under the current line. Just keep in mind that
+the cursor will be set to the added line:
+
+```php
+use Gnugat\Redaktilo\FactoryMethod\Line;
+
+{
+echo $file->getCurrentLineNumber(); // 5
+$editor->addAfter($file, Line::emptyOne());
+echo $file->getCurrentLineNumber(); // 6
+```
+
+You can also replace the current line with a new value, or remove it.
+
+### Content navigation
+
+You can jump down or up to a line which correspond to the given pattern:
+
+```php
+use Gnugat\Redaktilo\FactoryMethod\LineNumber
+
+$editor->jumpdDownTo($file, 'The exact value of the line');
+$editor->jumpdDownTo($file, LineNumber::down(2)); // Jumps two lines under the current one.
+```
+
+You should keep in mind that the search is done relatively to the current one:
+
+```php
+$editor->jumpDownTo($file, $linePresentAbove); // Will throw an exception.
+```
+
+### Content searching
+
+If you don't want to handle exceptions just to make sure that a line is present
+in the file, use the following:
+
+```php
+$editor->has($file, $line);
+```
 
 ## Next readings
 
@@ -386,5 +507,5 @@ developers a unique API implementing the editor metaphor.
 ## Previous readings
 
 * [README](../README.md)
-* [Usage](doc/01-usage.md)
+* [Tutorial](doc/01-tutorial.md)
 * [Use cases](doc/02-use-cases.md)

@@ -14,8 +14,8 @@ namespace Gnugat\Redaktilo\Engine;
 use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 
 /**
- * Holds ReplaceStrategy, and provides the appropriate one according to the given
- * pattern.
+ * Holds ReplaceStrategy, and provides the appropriate one according to the
+ * given pattern.
  *
  * @api
  */
