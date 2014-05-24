@@ -14,7 +14,6 @@ namespace Sensio\Bundle\GeneratorBundle\Manipulator;
 use Gnugat\Redaktilo\DependencyInjection\StaticContainer;
 use Gnugat\Redaktilo\FactoryMethod\Filesystem;
 use Gnugat\Redaktilo\FactoryMethod\Line;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -44,18 +43,14 @@ class RoutingManipulator extends \PHPUnit_Framework_TestCase
 
     public function testItAddsAnnotatedRoute()
     {
-        $bundle = 'AcmeDemoBundle';
-        $format = 'annotation';
-        $prefix = '/';
-
         $editor = StaticContainer::makeEditor();
 
         $file = $editor->open($this->configPath, Filesystem::forceCreation());
 
-        $definitionLine = $this->makeDefinitionLine($bundle, $prefix);
-        $resourceLine = $this->makeResourceLine($bundle, $format);
+        $definitionLine = 'acme_demo:';
+        $resourceLine = '    resource: "@AcmeDemoBundle/Controller/"';
         $typeLine = '    type: annotation';
-        $prefixLine = "    prefix: $prefix";
+        $prefixLine = '    prefix: /';
 
         $editor->addBefore($file, $definitionLine);
         $editor->addAfter($file, $resourceLine);
@@ -69,26 +64,5 @@ class RoutingManipulator extends \PHPUnit_Framework_TestCase
         $actual = file_get_contents($this->configPath);
 
         $this->assertSame($expected, $actual);
-    }
-
-    private function makeDefinitionLine($bundle, $prefix)
-    {
-        $unsuffixedBundleName = substr($bundle, 0, -6);
-        $snakeCaseBundleName = Container::underscore($unsuffixedBundleName);
-        $route = '';
-        if ('/' !== $prefix) {
-            $route .= str_replace('/', '_', $prefix);
-        }
-
-        return sprintf('%s:', $snakeCaseBundleName.$route);
-    }
-
-    private function makeResourceLine($bundle, $format)
-    {
-        if ('annotation' === $format) {
-            return sprintf('    resource: "@%s/Controller/"', $bundle);
-        }
-
-        return sprintf('    resource: "@%s/Resources/config/routing.yml"', $bundle);
     }
 }
