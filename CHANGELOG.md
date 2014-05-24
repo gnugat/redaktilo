@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 0.7.1: Fixed line break
+
+* fixed line break in line content converter's back method
+
 ## 0.7.0: ContentConverter
 
 * replaced introduction with tutorial

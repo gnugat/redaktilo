@@ -38,7 +38,7 @@ class LineContentConverter implements ContentConverter
     {
         $content = $file->read();
         $lineBreak = $this->detectLineBreak($content);
-        $file->write(implode("\n", $convertedContent));
+        $file->write(implode($lineBreak, $convertedContent));
     }
 
     /**
