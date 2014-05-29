@@ -19,6 +19,7 @@ use Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\Replace\LineReplaceStrategy;
 use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
 use Gnugat\Redaktilo\Search\LineSearchStrategy;
+use Gnugat\Redaktilo\Search\LineRegexSearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SfFilesystem;
 
 /**
@@ -51,6 +52,9 @@ class StaticContainer
 
     /** @var LineNumberSearchStrategy */
     private static $lineNumberSearchStrategy;
+
+    /** @var LineRegexSearchStrategy */
+    private static $lineRegexSearchStrategy;
 
     /** @return Editor */
     public static function makeEditor()
@@ -115,7 +119,9 @@ class StaticContainer
         }
         $lineSearchStrategy = self::makeLineSearchStrategy();
         $lineNumberSearchStrategy = self::makeLineNumberSearchStrategy();
+        $lineRegexSearchStrategy = self::makeLineRegexSearchStrategy();
         self::$searchEngine = new SearchEngine();
+        self::$searchEngine->registerStrategy($lineRegexSearchStrategy);
         self::$searchEngine->registerStrategy($lineSearchStrategy);
         self::$searchEngine->registerStrategy($lineNumberSearchStrategy);
 
@@ -144,6 +150,18 @@ class StaticContainer
         self::$lineNumberSearchStrategy = new LineNumberSearchStrategy($lineContentConverter);
 
         return self::$lineNumberSearchStrategy;
+    }
+
+    /** @return LineRegexSearchStrategy */
+    public static function makeLineRegexSearchStrategy()
+    {
+        if (null !== self::$lineRegexSearchStrategy) {
+            return self::$lineRegexSearchStrategy;
+        }
+        $lineContentConverter = self::makeLineContentConverter();
+        self::$lineRegexSearchStrategy = new LineRegexSearchStrategy($lineContentConverter);
+
+        return self::$lineRegexSearchStrategy;
     }
 
     /** @return LineContentConverter */
