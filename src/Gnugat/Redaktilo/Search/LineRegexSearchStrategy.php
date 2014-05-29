@@ -46,6 +46,7 @@ class LineRegexSearchStrategy implements SearchStrategy
     {
         $lines = $this->converter->from($file);
         $found = preg_grep($pattern, $lines);
+
         return count($found) > 0;
     }
 
@@ -111,6 +112,7 @@ class LineRegexSearchStrategy implements SearchStrategy
         if (!is_string($pattern)) {
             return false;
         }
+
         return !(false === @preg_match($pattern, ''));
     }
 }
