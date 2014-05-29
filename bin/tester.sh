@@ -12,7 +12,7 @@ $redaktilo/vendor/bin/phpunit
 
 phpunit=$?
 
-if [ $phpspec -eq 0 ] && [ $phpunit -eq 0]; then
+if [ "$phpspec" -eq 0 ] && [ "$phpunit" -eq 0]; then
     exit 0
 else
     exit 1
