@@ -37,7 +37,7 @@ persist it to the database and fetch it back out.
 
     .. code-block:: bash
 
-        $ php app/console generate:bundle --namespace=Acme/StoreBundle
+        php app/console generate:bundle --namespace=Acme/StoreBundle
 
 Configuring the Database
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -135,8 +135,8 @@ for you:
 
     .. code-block:: bash
 
-        $ php app/console doctrine:database:drop --force
-        $ php app/console doctrine:database:create
+        php app/console doctrine:database:drop --force
+        php app/console doctrine:database:create
 
     There's no way to configure these defaults inside Doctrine, as it tries to be
     as agnostic as possible in terms of environment configuration. One way to solve
@@ -231,7 +231,7 @@ just a simple PHP class.
 
     .. code-block:: bash
 
-        $ php app/console doctrine:generate:entity
+        php app/console doctrine:generate:entity
 
 .. index::
     single: Doctrine; Adding mapping metadata

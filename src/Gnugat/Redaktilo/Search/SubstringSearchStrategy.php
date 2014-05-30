@@ -17,11 +17,11 @@ use Gnugat\Redaktilo\File;
 /**
  * This strategy manipulates lines stripped of their line break character.
  *
- * The match is done using a regex on the whole line.
+ * The match is done on the given substring.
  *
  * @api
  */
-class LineRegexSearchStrategy implements SearchStrategy
+class SubstringSearchStrategy implements SearchStrategy
 {
     /** @var LineContentConverter */
     private $converter;
@@ -33,7 +33,7 @@ class LineRegexSearchStrategy implements SearchStrategy
     }
 
     /**
-     * Checks if the given regex matches at least one line.
+     * Checks if the given substring is present at least once in the file.
      *
      * @param File   $file
      * @param string $pattern
@@ -45,9 +45,13 @@ class LineRegexSearchStrategy implements SearchStrategy
     public function has(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
-        $found = preg_grep($pattern, $lines);
+        foreach ($lines as $line) {
+            if (false !== strpos($line, $pattern)) {
+                return true;
+            }
+        }
 
-        return count($found) > 0;
+        return false;
     }
 
     /**
@@ -66,13 +70,13 @@ class LineRegexSearchStrategy implements SearchStrategy
         $lines = $this->converter->from($file);
         $currentLineNumber = $file->getCurrentLineNumber() + 1;
         $nextLines = array_slice($lines, $currentLineNumber, null, true);
-        $found = preg_grep($pattern, $nextLines);
-        if (count($found) < 1) {
-            throw new PatternNotFoundException($file, $pattern);
+        foreach ($nextLines as $lineNumber => $line) {
+            if (false !== strpos($line, $pattern)) {
+                return $lineNumber;
+            }
         }
-        reset($found);
 
-        return key($found);
+        throw new PatternNotFoundException($file, $pattern);
     }
 
     /**
@@ -91,13 +95,14 @@ class LineRegexSearchStrategy implements SearchStrategy
         $lines = $this->converter->from($file);
         $currentLineNumber = $file->getCurrentLineNumber() - 1;
         $previousLines = array_slice($lines, 0, $currentLineNumber, true);
-        $found = preg_grep($pattern, $previousLines);
-        if (count($found) < 1) {
-            throw new PatternNotFoundException($file, $pattern);
+        $reversedPreviousLines = array_reverse($previousLines, true);
+        foreach ($reversedPreviousLines as $lineNumber => $line) {
+            if (false !== strpos($line, $pattern)) {
+                return $lineNumber;
+            }
         }
-        end($found);
 
-        return key($found);
+        throw new PatternNotFoundException($file, $pattern);
     }
 
     /**
@@ -112,7 +117,8 @@ class LineRegexSearchStrategy implements SearchStrategy
         if (!is_string($pattern)) {
             return false;
         }
+        $hasNoLineBreak = (false === strpos($pattern, "\n"));
 
-        return !(false === @preg_match($pattern, ''));
+        return $hasNoLineBreak;
     }
 }

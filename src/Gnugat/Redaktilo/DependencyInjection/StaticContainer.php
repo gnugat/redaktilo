@@ -20,6 +20,7 @@ use Gnugat\Redaktilo\Replace\LineReplaceStrategy;
 use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
 use Gnugat\Redaktilo\Search\LineSearchStrategy;
 use Gnugat\Redaktilo\Search\LineRegexSearchStrategy;
+use Gnugat\Redaktilo\Search\SubstringSearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SfFilesystem;
 
 /**
@@ -55,6 +56,9 @@ class StaticContainer
 
     /** @var LineRegexSearchStrategy */
     private static $lineRegexSearchStrategy;
+
+    /** @var SubstringSearchStrategy */
+    private static $substringSearchStrategy;
 
     /** @return Editor */
     public static function makeEditor()
@@ -117,12 +121,12 @@ class StaticContainer
         if (null !== self::$searchEngine) {
             return self::$searchEngine;
         }
-        $lineSearchStrategy = self::makeLineSearchStrategy();
+        $substringSearchStrategy = self::makeSubstringSearchStrategy();
         $lineNumberSearchStrategy = self::makeLineNumberSearchStrategy();
         $lineRegexSearchStrategy = self::makeLineRegexSearchStrategy();
         self::$searchEngine = new SearchEngine();
         self::$searchEngine->registerStrategy($lineRegexSearchStrategy);
-        self::$searchEngine->registerStrategy($lineSearchStrategy);
+        self::$searchEngine->registerStrategy($substringSearchStrategy);
         self::$searchEngine->registerStrategy($lineNumberSearchStrategy);
 
         return self::$searchEngine;
@@ -162,6 +166,18 @@ class StaticContainer
         self::$lineRegexSearchStrategy = new LineRegexSearchStrategy($lineContentConverter);
 
         return self::$lineRegexSearchStrategy;
+    }
+
+    /** @return SubstringSearchStrategy */
+    public static function makeSubstringSearchStrategy()
+    {
+        if (null !== self::$substringSearchStrategy) {
+            return self::$substringSearchStrategy;
+        }
+        $lineContentConverter = self::makeLineContentConverter();
+        self::$substringSearchStrategy = new SubstringSearchStrategy($lineContentConverter);
+
+        return self::$substringSearchStrategy;
     }
 
     /** @return LineContentConverter */
