@@ -11,7 +11,7 @@
 
 namespace Sensio\Bundle\GeneratorBundle\Manipulator;
 
-use Gnugat\Redaktilo\DependencyInjection\StaticContainer;
+use Gnugat\Redaktilo\EditorFactory;
 use Gnugat\Redaktilo\FactoryMethod\Filesystem;
 use Gnugat\Redaktilo\FactoryMethod\Line;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -43,7 +43,7 @@ class RoutingManipulator extends \PHPUnit_Framework_TestCase
 
     public function testItAddsAnnotatedRoute()
     {
-        $editor = StaticContainer::makeEditor();
+        $editor = EditorFactory::createEditor();
 
         $file = $editor->open($this->configPath, Filesystem::forceCreation());
 

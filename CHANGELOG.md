@@ -1,5 +1,7 @@
 # Changes between versions
 
+* removed `StaticContainer` in favor of `EditorBuilder` and `EditorFactory`
+
 ## 0.7.2: Fixed routing test
 
 * fixed the routing test by removing the dependency on sf2's DI component

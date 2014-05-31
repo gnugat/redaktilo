@@ -26,22 +26,22 @@ your projects:
 
     composer require "gnugat/redaktilo:~0.7@dev"
 
-Create the only stateless service you're going to use with the help of
-`StaticContainer`:
+To use Redaktilo, you have to create an editor. The most simple way to do this
+is by using the `EditorFactory`:
 
 ```php
 <?php
 require_once __DIR__.'/vendor/autoload.php';
 
-use Gnugat\Redaktilo\DependencyInjection\StaticContainer;
+use Gnugat\Redaktilo\EditorFactory;
 
-$editor = StaticContainer::makeEditor();
+$editor = EditorFactory::createEditor();
 ```
 
-We'll describe here the
+I'll describe the
 [SensioGeneratorBundle](https://github.com/sensiolabs/SensioGeneratorBundle)
-use case: its [KernelManipulator](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
-edits a class to insert a line.
+use case in this README. Its [`KernelManipulator`](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
+edits the AppKernel to insert a line.
 
 Here's what the code would look like if it was using Redaktilo:
 
