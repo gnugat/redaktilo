@@ -39,7 +39,7 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
         $this->expectedPath = $expectationFilename;
     }
 
-    public function testItRegistersBundleInSymfonyApplication()
+    public function testItRemovesCommandDollarSigns()
     {
         $editor = StaticContainer::makeEditor();
         $file = $editor->open($this->originalPath);
