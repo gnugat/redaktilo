@@ -16,22 +16,14 @@ use PhpSpec\ObjectBehavior;
 
 class TokenSpec extends ObjectBehavior
 {
-    const NUMBER = T_STRING;
-    const VALUE = 'registerBundles';
-
-    function let()
+    function it_has_a_number_and_a_value()
     {
-        $this->beConstructedWith(self::NUMBER, self::VALUE);
-    }
+        $number = T_STRING;
+        $value = 'registerBundles';
+        $this->beConstructedWith($number, $value);
 
-    function it_has_a_number()
-    {
-        $this->getNumber()->shouldBe(self::NUMBER);
-    }
-
-    function it_has_a_value()
-    {
-        $this->getValue()->shouldBe(self::VALUE);
+        $this->getNumber()->shouldBe($number);
+        $this->getValue()->shouldBe($value);
     }
 
     function it_makes_functions()
