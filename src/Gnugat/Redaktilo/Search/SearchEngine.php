@@ -9,8 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Engine;
+namespace Gnugat\Redaktilo\Search;
 
+use Gnugat\Redaktilo\Engine\NotSupportedException;
 use Gnugat\Redaktilo\Search\SearchStrategy;
 
 /**
@@ -21,11 +22,11 @@ use Gnugat\Redaktilo\Search\SearchStrategy;
  */
 class SearchEngine
 {
-    /** @var array of SearchStrategy */
+    /** @var SearchStrategy[] */
     private $searchStrategies = array();
 
     /**
-     * @param SearchStrategy $searchEngine
+     * @param SearchStrategy $searchStrategy
      *
      * @api
      */

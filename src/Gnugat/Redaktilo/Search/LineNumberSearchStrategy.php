@@ -24,7 +24,7 @@ class LineNumberSearchStrategy implements SearchStrategy
     /** @var LineContentConverter */
     private $converter;
 
-    /** @param LineContentConverter */
+    /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
         $this->converter = $converter;
@@ -56,6 +56,8 @@ class LineNumberSearchStrategy implements SearchStrategy
      *
      * @return integer
      *
+     * @throws PatternNotFoundException If the pattern is not found after the cursor
+     *
      * @api
      */
     public function findNext(File $file, $pattern)
@@ -78,6 +80,8 @@ class LineNumberSearchStrategy implements SearchStrategy
      * @param integer $pattern
      *
      * @return integer
+     *
+     * @throws PatternNotFoundException If the pattern is not found before the cursor
      *
      * @api
      */

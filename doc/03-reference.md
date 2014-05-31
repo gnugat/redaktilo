@@ -388,9 +388,9 @@ can call `getEditor()` to get the `Editor` instance:
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Engine\SearchEngine;
+use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
-use Gnugat\Redaktilo\Engine\ReplaceEngine;
+use Gnugat\Redaktilo\Replace\ReplaceEngine;
 use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 use Gnugat\Redaktilo\Converter\ContentConverter;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
