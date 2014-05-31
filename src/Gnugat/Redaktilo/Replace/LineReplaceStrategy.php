@@ -24,7 +24,7 @@ class LineReplaceStrategy implements ReplaceStrategy
     /** @var LineContentConverter */
     private $converter;
 
-    /** @param LineContentConverter */
+    /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
         $this->converter = $converter;

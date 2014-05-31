@@ -21,7 +21,10 @@ use Gnugat\Redaktilo\File;
  */
 class PatternNotFoundException extends \Exception
 {
-    /** @param mixed $pattern */
+    /**
+     * @param File  $file
+     * @param mixed $pattern
+     */
     public function __construct(File $file, $pattern)
     {
         $filename = $file->getFilename();
