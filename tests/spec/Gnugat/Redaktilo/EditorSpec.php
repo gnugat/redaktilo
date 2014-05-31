@@ -11,11 +11,10 @@
 
 namespace spec\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Replace\ReplaceEngine;
-use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Filesystem;
-use Gnugat\Redaktilo\Replace\ReplaceStrategy;
+use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
 use PhpSpec\ObjectBehavior;
 
@@ -26,13 +25,13 @@ class EditorSpec extends ObjectBehavior
     function let(
         Filesystem $filesystem,
         SearchEngine $searchEngine,
-        ReplaceEngine $replaceEngine
+        CommandInvoker $commandInvoker
     )
     {
         $this->beConstructedWith(
             $filesystem,
             $searchEngine,
-            $replaceEngine
+            $commandInvoker
         );
     }
 
@@ -114,53 +113,60 @@ class EditorSpec extends ObjectBehavior
     }
 
     function it_inserts_lines_before_current_one(
-        ReplaceEngine $replaceEngine,
-        ReplaceStrategy $replaceStrategy,
+        CommandInvoker $commandInvoker,
         File $file
     )
     {
         $currentLineNumber = 42;
-        $location = $currentLineNumber;
         $addition = 'We are the knights who say Ni!';
+        $input = array(
+            'file' => $file,
+            'location' =>$currentLineNumber,
+            'addition' => $addition,
+        );
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-        $replaceEngine->resolve($location)->willReturn($replaceStrategy);
-        $replaceStrategy->insertAt($file, $location, $addition)->shouldBeCalled();
+        $commandInvoker->run('insert', $input)->shouldBeCalled();
 
         $this->addBefore($file, $addition);
     }
 
     function it_inserts_lines_after_current_one(
-        ReplaceEngine $replaceEngine,
-        ReplaceStrategy $replaceStrategy,
+        CommandInvoker $commandInvoker,
         File $file
     )
     {
         $currentLineNumber = 42;
-        $location = $currentLineNumber + 1;
         $addition = 'We are the knights who say Ni!';
+        $input = array(
+            'file' => $file,
+            'location' => $currentLineNumber + 1,
+            'addition' => $addition,
+        );
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-        $file->setCurrentLineNumber($location)->shouldBeCalled();
-        $replaceEngine->resolve($location)->willReturn($replaceStrategy);
-        $replaceStrategy->insertAt($file, $location, $addition)->shouldBeCalled();
+        $commandInvoker->run('insert', $input)->shouldBeCalled();
+
+        $file->setCurrentLineNumber($input['location'])->shouldBeCalled();
 
         $this->addAfter($file, $addition);
     }
 
     function it_changes_the_current_line(
-        ReplaceEngine $replaceEngine,
-        ReplaceStrategy $replaceStrategy,
+        CommandInvoker $commandInvoker,
         File $file
     )
     {
         $currentLineNumber = 42;
-        $location = $currentLineNumber;
         $replacement = 'We are knights who say Ni!';
+        $input = array(
+            'file' => $file,
+            'location' => $currentLineNumber,
+            'replacement' => $replacement,
+        );
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-        $replaceEngine->resolve($location)->willReturn($replaceStrategy);
-        $replaceStrategy->replaceWith($file, $location, $replacement)->shouldBeCalled();
+        $commandInvoker->run('replace', $input)->shouldBeCalled();
 
         $this->changeTo($file, $replacement);
     }
@@ -179,17 +185,18 @@ class EditorSpec extends ObjectBehavior
     }
 
     function it_removes_the_current_line(
-        ReplaceEngine $replaceEngine,
-        ReplaceStrategy $replaceStrategy,
+        CommandInvoker $commandInvoker,
         File $file
     )
     {
         $currentLineNumber = 42;
-        $location = $currentLineNumber;
+        $input = array(
+            'file' => $file,
+            'location' => $currentLineNumber,
+        );
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-        $replaceEngine->resolve($location)->willReturn($replaceStrategy);
-        $replaceStrategy->removeAt($file, $location)->shouldBeCalled();
+        $commandInvoker->run('remove', $input)->shouldBeCalled();
 
         $this->remove($file);
     }
