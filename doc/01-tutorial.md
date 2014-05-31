@@ -59,12 +59,12 @@ In order to manipulate a file, you need to create an instance of `Editor`:
 <?php
 require_once __DIR__.'/vendor/autoload.php';
 
-use Gnugat\Redaktilo\DependencyInjection\StaticContainer;
+use Gnugat\Redaktilo\EditorFactory;
 
-$editor = StaticContainer::makeEditor();
+$editor = EditorFactory::createEditor();
 ```
 
-This is the only class you need to manipulate, and its stateless: you can use
+This is the only class you need to manipulate and its stateless: you can use
 the same instance in your whole application.
 
 Let's consider the following file:
@@ -73,7 +73,7 @@ Let's consider the following file:
     Egg
     Sausage
 
-First things first, let's open it:
+First things first: you need to open the file:
 
 ```php
 $filename = '/tmp/monty-menu.txt';

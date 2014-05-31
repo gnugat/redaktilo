@@ -18,6 +18,7 @@
     },
     "require-dev": {
         "phpspec/phpspec": "~2.0",
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.0",
+        "bossa/phpspec2-expect": "~1.0"
     }
 }

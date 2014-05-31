@@ -11,10 +11,11 @@
 
 namespace example\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\DependencyInjection\StaticContainer;
+use Gnugat\Redaktilo\EditorFactory;
 use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\FactoryMethod\LineNumber;
+use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +42,7 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
 
     public function testItRegistersBundleInSymfonyApplication()
     {
-        $editor = StaticContainer::makeEditor();
+        $editor = EditorFactory::createEditor();
         $file = $editor->open($this->originalPath);
 
         try {
@@ -59,7 +60,7 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
 
     protected function removeDollars(Editor $editor, File $file)
     {
-        $converter = StaticContainer::makeLineContentConverter();
+        $converter = new LineContentConverter();
 
         $editor->jumpDownTo($file, '.. code-block:: bash');
         $lines = $converter->from($file);

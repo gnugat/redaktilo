@@ -140,36 +140,6 @@ array of lines stripped from the line break character.
 
 It is also able to merge back those lines with the appropriate line break.
 
-## DependencyInjection
-
-The `StaticContainer` allows you to lazily create the services.
-
-Yep, "lazily", because you call the same method a second time it will return the
-same instance. It is possible because the services are stateless: calling them
-many times in different orders doesn' affect their behavior.
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\DependencyInjection;
-
-class StaticContainer
-{
-    public static function makeEditor();
-
-    public static function makeFilesystem();
-
-    public static function makeReplaceEngine();
-    public static function makeLineReplaceStrategy();
-
-    public static function makeSearchEngine();
-    public static function makeLineSearchStrategy();
-    public static function makeLineNumberSearchStrategy();
-
-    public static function makeLineContentConverter();
-}
-```
-
 ## FactoryMethod
 
 Factory methods don't have any real behavior, their purpose is to make the code
@@ -386,6 +356,57 @@ class ReplaceEngine
 {
     public function registerStrategy(ReplaceStrategy $replaceStrategy);
     public function resolve($location); // Throws NotSupportedException If the location isn't supported by any registered strategy
+}
+```
+
+## EditorFactory
+
+`EditorFactory` is the access point of Redaktilo. You should use it to create a
+new Editor instance. You can also create an `EditorBuilder` instance to tweak
+the instantiation of the editor.
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+class EditorFactory
+{
+    public static function createEditor();
+    public static function createBuilder();
+}
+```
+
+## EditorBuilder
+
+Allows you to tweak the instantiation of the `Editor` class. It also has
+defaults, in case you didn't specify anything. After configuring the build, you
+can call `getEditor()` to get the `Editor` instance:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+use Gnugat\Redaktilo\Engine\SearchEngine;
+use Gnugat\Redaktilo\Search\SearchStrategy;
+use Gnugat\Redaktilo\Engine\ReplaceEngine;
+use Gnugat\Redaktilo\Replace\ReplaceStrategy;
+use Gnugat\Redaktilo\Converter\ContentConverter;
+use Gnugat\Redaktilo\Converter\LineContentConverter;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+
+class EditorBuilder
+{
+    public function getEditor();
+
+    public function setSearchEngine(SearchEngine $searchEngine);
+    public function addSearchStrategy(SearchStrategy $searchStrategy);
+
+    public function addReplaceStrategy(ReplaceStrategy $replaceStrategy);
+    public function setReplaceEngine(ReplaceEngine $replaceEngine);
+
+    public function setFilesystem(Filesystem $filesystem);
 }
 ```
 

@@ -22,7 +22,7 @@ use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 class ReplaceEngine
 {
     /** @var array of ReplaceStrategy */
-    private $repalceStrategies = array();
+    private $replaceStrategies = array();
 
     /**
      * @param ReplaceStrategy $searchEngine
@@ -31,7 +31,7 @@ class ReplaceEngine
      */
     public function registerStrategy(ReplaceStrategy $replaceStrategy)
     {
-        $this->repalceStrategies[] = $replaceStrategy;
+        $this->replaceStrategies[] = $replaceStrategy;
     }
 
     /**
@@ -45,7 +45,7 @@ class ReplaceEngine
      */
     public function resolve($location)
     {
-        foreach ($this->repalceStrategies as $replaceStrategy) {
+        foreach ($this->replaceStrategies as $replaceStrategy) {
             if ($replaceStrategy->supports($location)) {
                 return $replaceStrategy;
             }

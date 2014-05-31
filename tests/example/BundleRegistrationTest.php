@@ -11,7 +11,7 @@
 
 namespace example\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\DependencyInjection\StaticContainer;
+use Gnugat\Redaktilo\EditorFactory;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
@@ -38,7 +38,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
 
     public function testItRegistersBundleInSymfonyApplication()
     {
-        $editor = StaticContainer::makeEditor();
+        $editor = EditorFactory::createEditor();
         $file = $editor->open($this->appKernelPath);
 
         $editor->jumpDownTo($file, '    public function registerBundles()');
@@ -56,7 +56,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
 
     public function testItDetectsBundlePresence()
     {
-        $editor = StaticContainer::makeEditor();
+        $editor = EditorFactory::createEditor();
         $file = $editor->open($this->expectedAppKernelPath);
 
         $isBundlePresent = $editor->has($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
@@ -66,7 +66,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
 
     public function testItDetectsBundleAbsence()
     {
-        $editor = StaticContainer::makeEditor();
+        $editor = EditorFactory::createEditor();
         $file = $editor->open($this->appKernelPath);
 
         $isBundlePresent = $editor->has($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
