@@ -13,6 +13,8 @@ namespace Gnugat\Redaktilo\Search\Php;
 
 class Token
 {
+    const NO_VALUE = null;
+
     /** @var integer */
     private $number;
 
@@ -23,7 +25,7 @@ class Token
      * @param integer $number
      * @param string  $value
      */
-    public function __construct($number, $value)
+    public function __construct($number, $value = self::NO_VALUE)
     {
         $this->number = $number;
         $this->value = $value;
@@ -50,7 +52,7 @@ class Token
     /** @return Token */
     public static function makeMethod()
     {
-        return new self(T_FUNCTION, 'function');
+        return self::makeFunction();
     }
 
     /** @return Token */
