@@ -1,5 +1,7 @@
 # Changes between versions
 
+* moved `SearchEngine` from the `Engine` namespace to the `Search` namespace
+* moved `ReplaceEngine` from the `Engine` namespace to the `Replace` namespace
 * removed `StaticContainer` in favor of `EditorBuilder` and `EditorFactory`
 
 ## 0.7.2: Fixed routing test
