@@ -11,6 +11,8 @@
 
 namespace Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\Converter\LineContentConverter;
+
 /**
  * Representation of a file:
  *
@@ -75,6 +77,8 @@ class File
      *
      * @param string $newContent
      *
+     * @return string
+     *
      * @api
      */
     public function write($newContent)
@@ -100,7 +104,7 @@ class File
      */
     public function changeLineTo($line, $lineNumber)
     {
-        $converter = new \Gnugat\Redaktilo\Converter\LineContentConverter();
+        $converter = new LineContentConverter();
         $lines = $converter->from($this);
 
         $lines[$lineNumber] = $line;
