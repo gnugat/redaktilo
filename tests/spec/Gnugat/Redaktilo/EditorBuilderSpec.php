@@ -13,9 +13,9 @@ namespace spec\Gnugat\Redaktilo;
 
 use PhpSpec\ObjectBehavior;
 use Gnugat\Redaktilo\Filesystem;
-use Gnugat\Redaktilo\Engine\SearchEngine;
+use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
-use Gnugat\Redaktilo\Engine\ReplaceEngine;
+use Gnugat\Redaktilo\Replace\ReplaceEngine;
 use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 
 class EditorBuilderSpec extends ObjectBehavior
