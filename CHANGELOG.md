@@ -1,6 +1,11 @@
 # Changes between versions
 
+## 0.8.0: SearchStrategy and EditorFactory
+
 * removed `StaticContainer` in favor of `EditorBuilder` and `EditorFactory`
+* added `SubstringSearchStrategy`
+* fixed `tester.sh` exit status
+* added `LineRegexSearchStrategy`
 
 ## 0.7.2: Fixed routing test
 
