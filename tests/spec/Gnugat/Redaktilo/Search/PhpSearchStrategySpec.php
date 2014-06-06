@@ -39,12 +39,12 @@ class PhpSearchStrategySpec extends ObjectBehavior
 
         $this->beConstructedWith($converter);
     }
-/*
+
     function it_is_a_search_strategy()
     {
         $this->shouldImplement('Gnugat\Redaktilo\Search\SearchStrategy');
     }
-*/
+
     function it_supports_php_criterion()
     {
         $rawTokens = token_get_all('<?php echo 42;');

@@ -20,8 +20,7 @@ use Gnugat\Redaktilo\Search\Php\Token;
  *
  * @api
  */
-class PhpSearchStrategy
-// implements SearchStrategy
+class PhpSearchStrategy implements SearchStrategy
 {
     /** @var PhpContentConverter */
     private $converter;

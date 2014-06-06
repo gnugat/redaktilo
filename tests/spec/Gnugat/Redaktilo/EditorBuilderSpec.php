@@ -27,6 +27,7 @@ class EditorBuilderSpec extends ObjectBehavior
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
 
         $editor->shouldHaveSearchStrategies(array(
+            'Gnugat\Redaktilo\Search\PhpSearchStrategy',
             'Gnugat\Redaktilo\Search\LineRegexSearchStrategy',
             'Gnugat\Redaktilo\Search\SubstringSearchStrategy',
             'Gnugat\Redaktilo\Search\LineNumberSearchStrategy',
@@ -45,7 +46,7 @@ class EditorBuilderSpec extends ObjectBehavior
             ->getEditor();
 
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
-        $editor->shouldHaveSearchStrategiesCount(4);
+        $editor->shouldHaveSearchStrategiesCount(5);
         $editor->shouldHaveReplaceStrategiesCount(2);
     }
 

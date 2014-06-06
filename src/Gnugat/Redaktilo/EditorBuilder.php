@@ -12,11 +12,12 @@
 namespace Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Search\SearchEngine;
-use Gnugat\Redaktilo\Search\SearchStrategy;
 use Gnugat\Redaktilo\Replace\ReplaceEngine;
-use Gnugat\Redaktilo\Replace\ReplaceStrategy;
-use Gnugat\Redaktilo\Converter\ContentConverter;
+use Gnugat\Redaktilo\Converter\PhpContentConverter;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
+use Gnugat\Redaktilo\Replace\ReplaceStrategy;
+use Gnugat\Redaktilo\Search\SearchStrategy;
+use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
@@ -26,8 +27,11 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 class EditorBuilder
 {
-    /** @var ContentConverter */
-    private $converter;
+    /** @var LineContentConverter */
+    private $lineConverter;
+
+    /** @var PhpContentConverter */
+    private $phpConverter;
 
     /** @var SearchEngine|null */
     private $searchEngine;
@@ -44,14 +48,23 @@ class EditorBuilder
     /** @var Filesystem */
     private $filesystem;
 
-    /** @return ContentConverter */
-    protected function getConverter()
+    protected function getLineConverter()
     {
-        if ($this->converter) {
-            return $this->converter;
+        if ($this->lineConverter) {
+            return $this->lineConverter;
         }
 
-        return $this->converter = new LineContentConverter();
+        return $this->lineConverter = new LineContentConverter();
+    }
+
+    protected function getPhpConverter()
+    {
+        if ($this->phpConverter) {
+            return $this->phpConverter;
+        }
+        $tokenBuilder = new TokenBuilder();
+
+        return $this->phpConverter = new PhpContentConverter($tokenBuilder);
     }
 
     /** @return SearchEngine */
@@ -62,11 +75,13 @@ class EditorBuilder
         }
 
         $engine = new SearchEngine();
-        $converter = $this->getConverter();
+        $lineConverter = $this->getLineConverter();
+        $phpConverter = $this->getPhpConverter();
 
-        $engine->registerStrategy(new Search\LineRegexSearchStrategy($converter));
-        $engine->registerStrategy(new Search\SubstringSearchStrategy($converter));
-        $engine->registerStrategy(new Search\LineNumberSearchStrategy($converter));
+        $engine->registerStrategy(new Search\PhpSearchStrategy($phpConverter));
+        $engine->registerStrategy(new Search\LineRegexSearchStrategy($lineConverter));
+        $engine->registerStrategy(new Search\SubstringSearchStrategy($lineConverter));
+        $engine->registerStrategy(new Search\LineNumberSearchStrategy($lineConverter));
 
         foreach ($this->searchStrategies as $strategy) {
             $engine->registerStrategy($strategy);
@@ -83,7 +98,7 @@ class EditorBuilder
         }
 
         $engine = new ReplaceEngine();
-        $converter = $this->getConverter();
+        $converter = $this->getLineConverter();
 
         $engine->registerStrategy(new Replace\LineReplaceStrategy($converter));
 
