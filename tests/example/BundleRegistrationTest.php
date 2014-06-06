@@ -12,6 +12,7 @@
 namespace example\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\EditorFactory;
+use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
@@ -38,10 +39,13 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
 
     public function testItRegistersBundleInSymfonyApplication()
     {
+        $tokenBuilder = new TokenBuilder();
         $editor = EditorFactory::createEditor();
         $file = $editor->open($this->appKernelPath);
 
-        $editor->jumpDownTo($file, '    public function registerBundles()');
+        $registrationMethod = $tokenBuilder->buildMethod('registerBundles');
+
+        $editor->jumpDownTo($file, $registrationMethod);
         $editor->jumpDownTo($file, '        $bundles = array(');
         $editor->jumpDownTo($file, '        );');
         $editor->addBefore($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
