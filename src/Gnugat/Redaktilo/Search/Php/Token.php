@@ -13,22 +13,31 @@ namespace Gnugat\Redaktilo\Search\Php;
 
 class Token
 {
-    const NO_VALUE = null;
-
     /** @var integer */
     private $number;
 
     /** @var string */
     private $value;
 
+    /** @var integer */
+    private $lineNumber;
+
     /**
      * @param integer $number
      * @param string  $value
+     * @param integer $lineNumber
      */
-    public function __construct($number, $value = self::NO_VALUE)
+    public function __construct($number = null, $value = null, $lineNumber = null)
     {
         $this->number = $number;
         $this->value = $value;
+        $this->lineNumber = $lineNumber;
+    }
+
+    /** @return bool */
+    public function hasNumber()
+    {
+        return $this->number !== null;
     }
 
     /** @return integer */
@@ -37,49 +46,50 @@ class Token
         return $this->number;
     }
 
+    /** @return bool */
+    public function hasValue()
+    {
+        return $this->value !== null;
+    }
+
     /** @return string */
     public function getValue()
     {
         return $this->value;
     }
 
-    /** @return Token */
-    public static function makeFunction()
+    /** @return bool */
+    public function hasLineNumber()
     {
-        return new self(T_FUNCTION, 'function');
+        return $this->lineNumber !== null;
     }
 
-    /** @return Token */
-    public static function makeMethod()
+    /** @return integer */
+    public function getLineNumber()
     {
-        return self::makeFunction();
-    }
-
-    /** @return Token */
-    public static function makeClass()
-    {
-        return new self(T_CLASS, 'class');
+        return $this->lineNumber;
     }
 
     /**
+     * @param Token $token
      *
-     * @param string $whitespace
-     *
-     * @return Token
+     * @return bool
      */
-    public static function makeWhitespace($whitespace)
+    public function isSameAs(Token $token)
     {
-        return new self(T_WHITESPACE, $whitespace);
-    }
+        $hasNumberWildcard = ($this->hasNumber() && $token->hasNumber());
+        if ($hasNumberWildcard && $this->number !== $token->number) {
+            return false;
+        }
+        $hasValueWildcard = ($this->hasValue() && $token->hasValue());
+        if ($hasValueWildcard && $this->value !== $token->value) {
+            return false;
+        }
+        $hasLineNumberWildcard = ($this->hasLineNumber() && $token->hasLineNumber());
+        if ($hasLineNumberWildcard && $this->lineNumber !== $token->lineNumber) {
+            return false;
+        }
 
-    /**
-     *
-     * @param string $string
-     *
-     * @return Token
-     */
-    public static function makeString($string)
-    {
-        return new self(T_STRING, $string);
+        return true;
     }
 }

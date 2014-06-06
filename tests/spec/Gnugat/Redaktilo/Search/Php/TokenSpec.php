@@ -16,64 +16,60 @@ use PhpSpec\ObjectBehavior;
 
 class TokenSpec extends ObjectBehavior
 {
-    function it_has_a_number()
+    function it_can_have_a_number()
     {
         $number = T_STRING;
-        $this->beConstructedWith($number);
+        $withoutNumber = new Token();
+        $withNumber = new Token($number);
 
-        $this->getNumber()->shouldBe($number);
-        $this->getValue()->shouldBe(Token::NO_VALUE);
+        expect($withoutNumber->hasNumber())->toBe(false);
+        expect($withNumber->hasNumber())->toBe(true);
+        expect($withNumber->getNumber())->toBe($number);
     }
 
-    function it_has_an_optional_value()
+    function it_can_have_a_value()
     {
-        $number = T_STRING;
         $value = 'registerBundles';
-        $this->beConstructedWith($number, $value);
+        $withoutValue = new Token();
+        $withValue = new Token(null, $value);
 
-        $this->getNumber()->shouldBe($number);
-        $this->getValue()->shouldBe($value);
+        expect($withoutValue->hasValue())->toBe(false);
+        expect($withValue->hasValue())->toBe(true);
+        expect($withValue->getValue())->toBe($value);
     }
 
-    function it_makes_functions()
+    function it_can_have_a_line_number()
     {
-        $token = Token::makeFunction();
+        $lineNumber = 42;
+        $withoutLineNumber = new Token();
+        $withLineNumber = new Token(null, null, $lineNumber);
 
-        expect($token->getNumber())->toBe(T_FUNCTION);
-        expect($token->getValue())->toBe('function');
+        expect($withoutLineNumber->hasLineNumber())->toBe(false);
+        expect($withLineNumber->hasLineNumber())->toBe(true);
+        expect($withLineNumber->getLineNumber())->toBe($lineNumber);
     }
 
-    function it_makes_methods()
+    function it_can_be_compared()
     {
-        $token = Token::makeMethod();
+        $full = new Token(T_STRING, 'meh', 42);
+        $sameAsFull = new Token(T_STRING, 'meh', 42);
 
-        expect($token->getNumber())->toBe(T_FUNCTION);
-        expect($token->getValue())->toBe('function');
-    }
+        expect($full->isSameAs($sameAsFull))->toBe(true);
 
-    function it_makes_classes()
-    {
-        $token = Token::makeClass();
+        $differentNumber = new Token(T_WHITESPACE, 'meh', 42);
+        $differentValue = new Token(T_STRING, 'hem', 42);
+        $differentLineNumber = new Token(T_STRING, 'meh', 23);
 
-        expect($token->getNumber())->toBe(T_CLASS);
-        expect($token->getValue())->toBe('class');
-    }
+        expect($full->isSameAs($differentNumber))->toBe(false);
+        expect($full->isSameAs($differentValue))->toBe(false);
+        expect($full->isSameAs($differentLineNumber))->toBe(false);
 
-    function it_makes_whitespaces()
-    {
-        $whitespace = '  ';
-        $token = Token::makeWhitespace($whitespace);
+        $wildcardNumber = new Token(null, 'meh', 42);
+        $wildcardValue = new Token(T_STRING, null, 42);
+        $wildcardLineNumber = new Token(T_STRING, 'meh', null);
 
-        expect($token->getNumber())->toBe(T_WHITESPACE);
-        expect($token->getValue())->toBe($whitespace);
-    }
-
-    function it_makes_strings()
-    {
-        $string = 'meh';
-        $token = Token::makeString($string);
-
-        expect($token->getNumber())->toBe(T_STRING);
-        expect($token->getValue())->toBe($string);
+        expect($full->isSameAs($wildcardNumber))->toBe(true);
+        expect($full->isSameAs($wildcardValue))->toBe(true);
+        expect($full->isSameAs($wildcardLineNumber))->toBe(true);
     }
 }
