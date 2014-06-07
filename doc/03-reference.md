@@ -12,8 +12,11 @@ This chapter explains the responsibility of each classes:
     * [Line](#line)
     * [LineNumber](#linenumber)
 * [Search](#search)
-    * [LineSearchStrategy](#linesearchstrategy)
     * [LineNumberSearchStrategy](#linenumbersearchstrategy)
+    * [LineRegexSearchStrategy](#lineregexsearchstrategy)
+    * [LineSearchStrategy](#linesearchstrategy)
+    * [PhpSearchStrategy](#phpsearchstrategy)
+    * [SubstringSearchStrategy](#substringsearchstrategy)
 * [Replace](#replace)
     * [LineReplaceStrategy](#linereplacestrategy)
 * [Engine](#engine)
@@ -268,15 +271,6 @@ interface SearchStrategy
 }
 ```
 
-### LineSearchStrategy
-
-If you know exactly the value of the line you want to look for, use this one.
-
-The `has` method will look in the whole file and will return `true` if at least
-one line matches exactly the given one.
-
-The `find` methods will return the line number.
-
 ### LineNumberSearchStrategy
 
 If you want to go to a given line number, use this one.
@@ -286,6 +280,28 @@ The `findNext` method will jump `n` lines under the current one,  while
 
 The `has` method just checks that the given line number is within the boundary
 of the file.
+
+### LineRegexSearchStrategy
+
+You can look for a line which matches a regex.
+
+### LineSearchStrategy
+
+If you know exactly the value of the line you want to look for, use this one.
+
+The `has` method will look in the whole file and will return `true` if at least
+one line matches exactly the given one.
+
+The `find` methods will return the line number.
+
+### PhpSearchStrategy
+
+If you want to manipulate a PHP file and jump to a line containing a set of
+tokens, use this strategy.
+
+### SubstringSearchStrategy
+
+This strategy looks if the given string is contained in each lines.
 
 ## Replace
 
