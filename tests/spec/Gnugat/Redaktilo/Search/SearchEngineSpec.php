@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Gnugat\Redaktilo\Engine;
+namespace spec\Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Search\SearchStrategy;
