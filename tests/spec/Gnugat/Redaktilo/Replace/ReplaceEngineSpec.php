@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Gnugat\Redaktilo\Engine;
+namespace spec\Gnugat\Redaktilo\Replace;
 
 use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 use PhpSpec\ObjectBehavior;
