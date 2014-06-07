@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Engine;
+namespace Gnugat\Redaktilo\Replace;
 
-use Gnugat\Redaktilo\Replace\ReplaceStrategy;
+use Gnugat\Redaktilo\Engine\NotSupportedException;
 
 /**
  * Holds ReplaceStrategy, and provides the appropriate one according to the
@@ -21,11 +21,11 @@ use Gnugat\Redaktilo\Replace\ReplaceStrategy;
  */
 class ReplaceEngine
 {
-    /** @var array of ReplaceStrategy */
+    /** @var ReplaceStrategy[] */
     private $replaceStrategies = array();
 
     /**
-     * @param ReplaceStrategy $searchEngine
+     * @param ReplaceStrategy $replaceStrategy
      *
      * @api
      */

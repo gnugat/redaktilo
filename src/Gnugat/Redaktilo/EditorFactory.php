@@ -11,13 +11,28 @@
 
 namespace Gnugat\Redaktilo;
 
+/**
+ * @author Wouter J <wouter@wouterj.nl>
+ *
+ * @api
+ */
 class EditorFactory
 {
+    /**
+     * @return EditorBuilder
+     *
+     * @api
+     */
     public static function createBuilder()
     {
         return new EditorBuilder();
     }
 
+    /**
+     * @return Editor
+     *
+     * @api
+     */
     public static function createEditor()
     {
         return self::createBuilder()->getEditor();

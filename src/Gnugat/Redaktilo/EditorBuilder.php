@@ -11,14 +11,19 @@
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Engine\SearchEngine;
+use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
-use Gnugat\Redaktilo\Engine\ReplaceEngine;
+use Gnugat\Redaktilo\Replace\ReplaceEngine;
 use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 use Gnugat\Redaktilo\Converter\ContentConverter;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
+/**
+ * @author Wouter J <wouter@wouterj.nl>
+ *
+ * @api
+ */
 class EditorBuilder
 {
     /** @var ContentConverter */
@@ -39,6 +44,7 @@ class EditorBuilder
     /** @var Filesystem */
     private $filesystem;
 
+    /** @return ContentConverter */
     protected function getConverter()
     {
         if ($this->converter) {
@@ -48,6 +54,7 @@ class EditorBuilder
         return $this->converter = new LineContentConverter();
     }
 
+    /** @return SearchEngine */
     protected function getSearchEngine()
     {
         if ($this->searchEngine) {
@@ -68,6 +75,7 @@ class EditorBuilder
         return $engine;
     }
 
+    /** @return ReplaceEngine */
     protected function getReplaceEngine()
     {
         if ($this->replaceEngine) {
@@ -86,6 +94,7 @@ class EditorBuilder
         return $engine;
     }
 
+    /** @return Filesystem */
     protected function getFilesystem()
     {
         if ($this->filesystem) {
@@ -95,11 +104,23 @@ class EditorBuilder
         return new Filesystem(new SymfonyFilesystem());
     }
 
+    /**
+     * @return Editor
+     *
+     * @api
+     */
     public function getEditor()
     {
         return new Editor($this->getFilesystem(), $this->getSearchEngine(), $this->getReplaceEngine());
     }
 
+    /**
+     * @param SearchStrategy $searchStrategy
+     *
+     * @return $this
+     *
+     * @api
+     */
     public function addSearchStrategy(SearchStrategy $searchStrategy)
     {
         $this->searchStrategies[] = $searchStrategy;
@@ -107,6 +128,13 @@ class EditorBuilder
         return $this;
     }
 
+    /**
+     * @param ReplaceStrategy $replaceStrategy
+     *
+     * @return $this
+     *
+     * @api
+     */
     public function addReplaceStrategy(ReplaceStrategy $replaceStrategy)
     {
         $this->replaceStrategies[] = $replaceStrategy;
@@ -114,6 +142,13 @@ class EditorBuilder
         return $this;
     }
 
+    /**
+     * @param SearchEngine $searchEngine
+     *
+     * @return $this
+     *
+     * @api
+     */
     public function setSearchEngine(SearchEngine $searchEngine)
     {
         $this->searchEngine = $searchEngine;
@@ -121,6 +156,13 @@ class EditorBuilder
         return $this;
     }
 
+    /**
+     * @param ReplaceEngine $replaceEngine
+     *
+     * @return $this
+     *
+     * @api
+     */
     public function setReplaceEngine(ReplaceEngine $replaceEngine)
     {
         $this->replaceEngine = $replaceEngine;
@@ -128,6 +170,13 @@ class EditorBuilder
         return $this;
     }
 
+    /**
+     * @param Filesystem $filesystem
+     *
+     * @return $this
+     *
+     * @api
+     */
     public function setFilesystem(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;

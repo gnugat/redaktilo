@@ -1,5 +1,10 @@
 # Changes between versions
 
+## 0.9.0: PhpSearchStrategy
+
+* moved `SearchEngine` from the `Engine` namespace to the `Search` namespace
+* moved `ReplaceEngine` from the `Engine` namespace to the `Replace` namespace
+
 ## 0.8.0: SearchStrategy and EditorFactory
 
 * removed `StaticContainer` in favor of `EditorBuilder` and `EditorFactory`

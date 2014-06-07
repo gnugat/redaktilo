@@ -11,8 +11,8 @@
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Engine\ReplaceEngine;
-use Gnugat\Redaktilo\Engine\SearchEngine;
+use Gnugat\Redaktilo\Replace\ReplaceEngine;
+use Gnugat\Redaktilo\Search\SearchEngine;
 
 /**
  * Provides convenient methods for the following filesystem operations:
@@ -117,8 +117,8 @@ class Editor
      * @param File  $file
      * @param mixed $pattern
      *
-     * @throws Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
-     * @throws Gnugat\Redaktilo\Engine\NotSupportedException    If the given pattern isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
+     * @throws \Gnugat\Redaktilo\Engine\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -136,7 +136,7 @@ class Editor
      *
      * @return bool
      *
-     * @throws Gnugat\Redaktilo\Engine\NotSupportedException If the given pattern isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Engine\NotSupportedException If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -154,7 +154,7 @@ class Editor
      * @param File   $file
      * @param string $addition
      *
-     * @throws Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
      *
      * @api
      */
@@ -173,7 +173,7 @@ class Editor
      * @param File   $file
      * @param string $addition
      *
-     * @throws Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
      *
      * @api
      */
@@ -193,7 +193,7 @@ class Editor
      * @param File   $file
      * @param string $replacement
      *
-     * @throws Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
      *
      * @api
      */
@@ -210,7 +210,9 @@ class Editor
      *
      * @param File            $file
      * @param string          $regex
-     * @param string|callable $callback
+     * @param string|callable $replace
+     *
+     * @throws \InvalidArgumentException If $replace is not a valid callable or regex
      *
      * @api
      */
