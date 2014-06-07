@@ -12,7 +12,6 @@
 namespace Gnugat\Redaktilo\Replace;
 
 use Gnugat\Redaktilo\Engine\NotSupportedException;
-use Gnugat\Redaktilo\Replace\ReplaceStrategy;
 
 /**
  * Holds ReplaceStrategy, and provides the appropriate one according to the
