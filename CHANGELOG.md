@@ -2,6 +2,7 @@
 
 ## 0.9.0: PhpSearchStrategy
 
+* added `PhpSearchStrategy`
 * moved `SearchEngine` from the `Engine` namespace to the `Search` namespace
 * moved `ReplaceEngine` from the `Engine` namespace to the `Replace` namespace
 
