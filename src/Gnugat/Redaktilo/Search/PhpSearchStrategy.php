@@ -52,12 +52,8 @@ class PhpSearchStrategy implements SearchStrategy
                 break;
             }
         }
-        $found = $this->findInSubset($tokens, $index, $pattern);
-        if ($found === false) {
-            throw new PatternNotFoundException($file, $pattern);
-        }
 
-        return $found;
+        return $this->findInSubset($tokens, $index, $pattern);
     }
 
     /** {@inheritdoc} */
@@ -73,12 +69,8 @@ class PhpSearchStrategy implements SearchStrategy
                 break;
             }
         }
-        $found = $this->findInSubset($reversedTokens, $index, $pattern);
-        if ($found === false) {
-            throw new PatternNotFoundException($file, $pattern);
-        }
 
-        return $found;
+        return $this->findInSubset($reversedTokens, $index, $pattern);
     }
 
     /** {@inheritdoc} */

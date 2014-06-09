@@ -32,16 +32,7 @@ class SubstringSearchStrategy implements SearchStrategy
         $this->converter = $converter;
     }
 
-    /**
-     * Checks if the given substring is present at least once in the file.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function has(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -54,17 +45,7 @@ class SubstringSearchStrategy implements SearchStrategy
         return false;
     }
 
-    /**
-     * Returns the number of the given line if it is present after the current
-     * one.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the line hasn't be found after the current one
-     */
+    /** {@inheritdoc} */
     public function findNext(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -76,20 +57,10 @@ class SubstringSearchStrategy implements SearchStrategy
             }
         }
 
-        throw new PatternNotFoundException($file, $pattern);
+        return false;
     }
 
-    /**
-     * Returns the number of the given line if it is present before the current
-     * one.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the line hasn't be found before the current one
-     */
+    /** {@inheritdoc} */
     public function findPrevious(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -102,16 +73,10 @@ class SubstringSearchStrategy implements SearchStrategy
             }
         }
 
-        throw new PatternNotFoundException($file, $pattern);
+        return false;
     }
 
-    /**
-     * @param mixed $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function supports($pattern)
     {
         if (!is_string($pattern)) {

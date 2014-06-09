@@ -22,7 +22,7 @@ class LineNumberSearchStrategySpec extends ObjectBehavior
 
     function let(File $file, LineContentConverter $converter)
     {
-        $rootPath = __DIR__.'/../../../../../';
+        $rootPath = __DIR__.'/../../../../..';
 
         $filename = sprintf(self::FILENAME, $rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
@@ -66,9 +66,7 @@ class LineNumberSearchStrategySpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindNext($file, $nonExistingLine);
+        $this->findNext($file, $nonExistingLine)->shouldBe(false);
         $this->findNext($file, $existingLine)->shouldBe($nextLineNumber);
     }
 
@@ -81,9 +79,7 @@ class LineNumberSearchStrategySpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindPrevious($file, $nonExistingLine);
+        $this->findPrevious($file, $nonExistingLine)->shouldBe(false);
         $this->findPrevious($file, $existingLine)->shouldBe($nextLineNumber);
     }
 }

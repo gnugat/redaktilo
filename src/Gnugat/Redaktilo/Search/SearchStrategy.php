@@ -33,28 +33,26 @@ interface SearchStrategy
     public function has(File $file, $pattern);
 
     /**
-     * Starts the search from the File's cursor to the bottom.
+     * Starts the search from the File's cursor to the bottom and returns the
+     * found location. If the pattern doesn't match anything, returns false.
      *
      * @param File  $file
      * @param mixed $pattern
      *
      * @return mixed
-     *
-     * @throws PatternNotFoundException If the pattern hasn't be found
      *
      * @api
      */
     public function findNext(File $file, $pattern);
 
     /**
-     * Starts the search from the File's cursor to the top.
+     * Starts the search from the File's cursor to the top and returns the found
+     * location. If the pattern doesn't match anything, returns false.
      *
      * @param File  $file
      * @param mixed $pattern
      *
      * @return mixed
-     *
-     * @throws PatternNotFoundException If the pattern hasn't be found
      *
      * @api
      */

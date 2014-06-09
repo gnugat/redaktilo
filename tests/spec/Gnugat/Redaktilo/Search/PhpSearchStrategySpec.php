@@ -80,10 +80,8 @@ class PhpSearchStrategySpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindNext($file, $previousToken);
-        $this->shouldThrow($exception)->duringFindNext($file, $currentToken);
+        $this->findNext($file, $previousToken)->shouldBe(false);
+        $this->findNext($file, $currentToken)->shouldBe(false);
         $this->findNext($file, $nextToken)->shouldBe($nextLineNumber);
     }
 
@@ -97,10 +95,8 @@ class PhpSearchStrategySpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindPrevious($file, $nextToken);
-        $this->shouldThrow($exception)->duringFindPrevious($file, $currentToken);
+        $this->findPrevious($file, $nextToken)->shouldBe(false);
+        $this->findPrevious($file, $currentToken)->shouldBe(false);
         $this->findPrevious($file, $previousToken)->shouldBe($previousLineNumber);
     }
 }

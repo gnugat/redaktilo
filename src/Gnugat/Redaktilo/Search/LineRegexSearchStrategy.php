@@ -32,16 +32,7 @@ class LineRegexSearchStrategy implements SearchStrategy
         $this->converter = $converter;
     }
 
-    /**
-     * Checks if the given regex matches at least one line.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function has(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -50,17 +41,7 @@ class LineRegexSearchStrategy implements SearchStrategy
         return count($found) > 0;
     }
 
-    /**
-     * Returns the number of the given line if it is present after the current
-     * one.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the line hasn't be found after the current one
-     */
+    /** {@inheritdoc} */
     public function findNext(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -68,24 +49,14 @@ class LineRegexSearchStrategy implements SearchStrategy
         $nextLines = array_slice($lines, $currentLineNumber, null, true);
         $found = preg_grep($pattern, $nextLines);
         if (count($found) < 1) {
-            throw new PatternNotFoundException($file, $pattern);
+            return false;
         }
         reset($found);
 
         return key($found);
     }
 
-    /**
-     * Returns the number of the given line if it is present before the current
-     * one.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the line hasn't be found before the current one
-     */
+    /** {@inheritdoc} */
     public function findPrevious(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -93,20 +64,14 @@ class LineRegexSearchStrategy implements SearchStrategy
         $previousLines = array_slice($lines, 0, $currentLineNumber, true);
         $found = preg_grep($pattern, $previousLines);
         if (count($found) < 1) {
-            throw new PatternNotFoundException($file, $pattern);
+            return false;
         }
         end($found);
 
         return key($found);
     }
 
-    /**
-     * @param mixed $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function supports($pattern)
     {
         if (!is_string($pattern)) {

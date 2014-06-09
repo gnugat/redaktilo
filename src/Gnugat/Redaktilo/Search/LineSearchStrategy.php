@@ -32,16 +32,7 @@ class LineSearchStrategy implements SearchStrategy
         $this->converter = $converter;
     }
 
-    /**
-     * Checks if the given line is present at least once in the file.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function has(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -49,62 +40,28 @@ class LineSearchStrategy implements SearchStrategy
         return in_array($pattern, $lines, true);
     }
 
-    /**
-     * Returns the number of the given line if it is present after the current
-     * one.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the line hasn't be found after the current one
-     */
+    /** {@inheritdoc} */
     public function findNext(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
         $currentLineNumber = $file->getCurrentLineNumber() + 1;
         $nextLines = array_slice($lines, $currentLineNumber, null, true);
-        $foundLineNumber = array_search($pattern, $nextLines, true);
-        if (false === $foundLineNumber) {
-            throw new PatternNotFoundException($file, $pattern);
-        }
 
-        return $foundLineNumber;
+        return array_search($pattern, $nextLines, true);
     }
 
-    /**
-     * Returns the number of the given line if it is present before the current
-     * one.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the line hasn't be found before the current one
-     */
+    /** {@inheritdoc} */
     public function findPrevious(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
         $currentLineNumber = $file->getCurrentLineNumber() - 1;
         $previousLines = array_slice($lines, 0, $currentLineNumber, true);
         $reversedPreviousLines = array_reverse($previousLines, true);
-        $foundLineNumber = array_search($pattern, $reversedPreviousLines, true);
-        if (false === $foundLineNumber) {
-            throw new PatternNotFoundException($file, $pattern);
-        }
 
-        return $foundLineNumber;
+        return array_search($pattern, $reversedPreviousLines, true);
     }
 
-    /**
-     * @param mixed $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function supports($pattern)
     {
         if (!is_string($pattern)) {

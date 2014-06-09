@@ -21,7 +21,7 @@ class SubstringSearchStrategySpec extends ObjectBehavior
 
     function let(File $file, LineContentConverter $converter)
     {
-        $rootPath = __DIR__.'/../../../../../';
+        $rootPath = __DIR__.'/../../../../..';
 
         $filename = sprintf(self::FILENAME, $rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
@@ -66,10 +66,8 @@ class SubstringSearchStrategySpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindNext($file, $previousSubstring);
-        $this->shouldThrow($exception)->duringFindNext($file, $currentSubstring);
+        $this->findNext($file, $previousSubstring)->shouldBe(false);
+        $this->findNext($file, $currentSubstring)->shouldBe(false);
         $this->findNext($file, $nextSubstring)->shouldBe($nextLineNumber);
     }
 
@@ -83,10 +81,8 @@ class SubstringSearchStrategySpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindPrevious($file, $nextSubstring);
-        $this->shouldThrow($exception)->duringFindPrevious($file, $currentSubstring);
+        $this->findPrevious($file, $nextSubstring)->shouldBe(false);
+        $this->findPrevious($file, $currentSubstring)->shouldBe(false);
         $this->findPrevious($file, $previousSubstring)->shouldBe($previousLineNumber);
     }
 }

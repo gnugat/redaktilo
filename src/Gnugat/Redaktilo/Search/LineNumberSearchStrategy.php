@@ -30,16 +30,7 @@ class LineNumberSearchStrategy implements SearchStrategy
         $this->converter = $converter;
     }
 
-    /**
-     * Checks if the file has more lines than the given number.
-     *
-     * @param File    $file
-     * @param integer $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function has(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -48,18 +39,7 @@ class LineNumberSearchStrategy implements SearchStrategy
         return 0 <= $pattern && $pattern < $totalLines;
     }
 
-    /**
-     * Increments the current line number.
-     *
-     * @param File    $file
-     * @param integer $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the pattern is not found after the cursor
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function findNext(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -67,24 +47,13 @@ class LineNumberSearchStrategy implements SearchStrategy
         $currentLineNumber = $file->getCurrentLineNumber();
         $foundLineNumber = $currentLineNumber + $pattern;
         if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
-            throw new PatternNotFoundException($file, $pattern);
+            return false;
         }
 
         return $foundLineNumber;
     }
 
-    /**
-     * Decrements the current line number.
-     *
-     * @param File    $file
-     * @param integer $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the pattern is not found before the cursor
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function findPrevious(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
@@ -92,19 +61,13 @@ class LineNumberSearchStrategy implements SearchStrategy
         $currentLineNumber = $file->getCurrentLineNumber();
         $foundLineNumber = $currentLineNumber - $pattern;
         if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
-            throw new PatternNotFoundException($file, $pattern);
+            return false;
         }
 
         return $foundLineNumber;
     }
 
-    /**
-     * @param mixed $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function supports($pattern)
     {
         return (is_int($pattern) && $pattern >= 0);

@@ -21,7 +21,7 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
 
     function let(File $file, LineContentConverter $converter)
     {
-        $rootPath = __DIR__.'/../../../../../';
+        $rootPath = __DIR__.'/../../../../..';
 
         $filename = sprintf(self::FILENAME, $rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
@@ -68,10 +68,8 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindNext($file, $previousLineRegex);
-        $this->shouldThrow($exception)->duringFindNext($file, $currentLineRegex);
+        $this->findNext($file, $previousLineRegex)->shouldBe(false);
+        $this->findNext($file, $currentLineRegex)->shouldBe(false);
         $this->findNext($file, $nextLineRegex)->shouldBe($nextLineNumber);
     }
 
@@ -85,10 +83,8 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindPrevious($file, $nextLineRegex);
-        $this->shouldThrow($exception)->duringFindPrevious($file, $currentLineRegex);
+        $this->findPrevious($file, $nextLineRegex)->shouldBe(false);
+        $this->findPrevious($file, $currentLineRegex)->shouldBe(false);
         $this->findPrevious($file, $previousLineRegex)->shouldBe($previousLineNumber);
     }
 }
