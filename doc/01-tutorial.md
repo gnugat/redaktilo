@@ -18,7 +18,7 @@ Redaktilo has been designed to be used uniquely via the following class:
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Engine\NotSupportedException;
+use Gnugat\Redaktilo\Search\NotSupportedException;
 use Gnugat\Redaktilo\Search\PatternNotFoundException;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
