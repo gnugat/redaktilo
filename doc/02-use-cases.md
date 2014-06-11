@@ -50,10 +50,10 @@ Redaktilo!
 
 ## Next readings
 
-* [Reference](doc/03-reference.md)
+* [Reference](03-reference.md)
 * [Vocabulary](04-vocabulary.md)
 
 ## Previous readings
 
 * [README](../README.md)
-* [Tutorial](doc/01-tutorial.md)
+* [Tutorial](01-tutorial.md)

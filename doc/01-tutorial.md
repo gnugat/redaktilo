@@ -31,14 +31,14 @@ class Editor
     public function open($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
     public function save(File $file); // Throws IOException if the file cannot be written to
 
-    // Manipulating the current line.
-    public function addBefore(File $file, $addition);
-    public function addAfter(File $file, $addition);
-    public function changeTo(File $file, $replacement); // Will be renamed to `replace`
-    public function remove(File $file); // Removes the current line.
+    // Manipulating a line (by default the current one).
+    public function addBefore(File $file, $addition, $location=null);
+    public function addAfter(File $file, $addition, $location=null);
+    public function changeTo(File $file, $replacement, $location=null); // Will be renamed to `replace`
+    public function remove(File $file, $location=null); // Removes the current line.
 
     // Global manipulations.
-    public function replaceWith(File $file, $regex, $replacement); // Will be renamed to `replaceAll`
+    public function replaceWith(File $file, $regex, $replacement, $location=null); // Will be renamed to `replaceAll`
 
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
@@ -115,7 +115,16 @@ $editor->jumpDownTo($file, FileNumber::down(2)); // Current line: Egg
 $editor->jumpUpTo($file, FileNumber::up(2)); // Current line: Bacon
 ```
 
-## Current line manipulation
+## Line manipulation
+
+By default, all the manipulation methods work with the current line. If you would
+like to manipulate a given line, you can pass its number as the last parameter:
+
+```php
+$editor->addBefore($file, 'Spam', 23); // Line inserted before the line number 23.
+```
+
+**Note**: once an operation done, the cursor moves to the line updated.
 
 You can insert new lines:
 
@@ -125,8 +134,6 @@ $editor->addAfter($file, 'Spam'); // Line inserted after 'Bacon'. Current line: 
 
 The insertion is also directional: you can either insert a new line before the
 current one, or after it.
-
-**Note**: once the insertion done, the cursor moves to the new line.
 
 For now the modification is only done in memory, to actually apply your changes
 to the file you need to save it:
@@ -156,8 +163,8 @@ $editor->remove($file); // Current line: Egg
 
 ## Next readings
 
-* [Use cases](doc/02-use-cases.md)
-* [Reference](doc/03-reference.md)
+* [Use cases](02-use-cases.md)
+* [Reference](03-reference.md)
 * [Vocabulary](04-vocabulary.md)
 
 ## Previous readings

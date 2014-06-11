@@ -57,6 +57,6 @@ To be opposed to "binary file". Can contain:
 ## Previous readings
 
 * [README](../README.md)
-* [Tutorial](doc/01-tutorial.md)
-* [Use cases](doc/02-use-cases.md)
-* [Reference](doc/03-reference.md)
+* [Tutorial](01-tutorial.md)
+* [Use cases](02-use-cases.md)
+* [Reference](03-reference.md)
