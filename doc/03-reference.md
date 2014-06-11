@@ -6,6 +6,7 @@ This chapter explains the responsibility of each classes:
 * [Filesystem](#filesystem)
 * [Converter](#converter)
     * [LineContentConverter](#linecontentconverter)
+    * [PhpContentConverter](#phpcontentconverter)
 * [DependencyInjection](#dependencyinjection)
 * [FactoryMethod](#factorymethod)
     * [Filesystem2](#filesystem2)
@@ -143,6 +144,11 @@ This converter takes the content, detects its line break and splits it into an
 array of lines stripped from the line break character.
 
 It is also able to merge back those lines with the appropriate line break.
+
+### PhpContentConverter
+
+This converter transform the content of a PHP source file into an array of tokens
+via the `token_get_all()` function.
 
 ## FactoryMethod
 
@@ -455,14 +461,14 @@ class Editor
     public function open($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
     public function save(File $file); // Throws IOException if the file cannot be written to
 
-    // Manipulating the current line.
-    public function addBefore(File $file, $addition);
-    public function addAfter(File $file, $addition);
-    public function changeTo(File $file, $replacement); // Will be renamed to `replace`
-    public function remove(File $file); // Removes the current line.
+    // Manipulating a line (by default the current one).
+    public function addBefore(File $file, $addition, $location=null);
+    public function addAfter(File $file, $addition, $location=null);
+    public function changeTo(File $file, $replacement, $location=null); // Will be renamed to `replace`
+    public function remove(File $file, $location=null); // Removes the current line.
 
     // Global manipulations.
-    public function replaceWith(File $file, $regex, $replacement); // Will be renamed to `replaceAll`
+    public function replaceWith(File $file, $regex, $replacement, $location=null); // Will be renamed to `replaceAll`
 
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
@@ -501,10 +507,10 @@ $file = $this->open($filename);
 echo $file->getCurrentLineNumber(); // 0
 ```
 
-### Manipulating the current line
+### Manipulating a line
 
-You can insert additions above or under the current line. Just keep in mind that
-the cursor will be set to the added line:
+You can insert additions above or under a given line (by default the current one).
+Just keep in mind that the cursor will be set to the added line:
 
 ```php
 use Gnugat\Redaktilo\FactoryMethod\Line;
@@ -515,7 +521,7 @@ $editor->addAfter($file, Line::emptyOne());
 echo $file->getCurrentLineNumber(); // 6
 ```
 
-You can also replace the current line with a new value, or remove it.
+You can also replace a line with a new value, or remove it.
 
 ### Content navigation
 
@@ -550,5 +556,5 @@ $editor->has($file, $line);
 ## Previous readings
 
 * [README](../README.md)
-* [Tutorial](doc/01-tutorial.md)
-* [Use cases](doc/02-use-cases.md)
+* [Tutorial](01-tutorial.md)
+* [Use cases](02-use-cases.md)
