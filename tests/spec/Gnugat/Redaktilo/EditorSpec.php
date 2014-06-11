@@ -127,7 +127,7 @@ class EditorSpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
         $commandInvoker->run('insert', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($input['location'])->shouldBeCalled();
+        $file->setCurrentLineNumber($currentLineNumber)->shouldBeCalled();
 
         $this->addBefore($file, $addition);
     }
@@ -147,9 +147,9 @@ class EditorSpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->shouldNotBeCalled();
         $commandInvoker->run('insert', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($input['location'])->shouldBeCalled();
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
-        $this->addBefore($file, $addition, $input['location']);
+        $this->addBefore($file, $addition, $lineNumber);
     }
 
     function it_inserts_lines_after_current_one(
@@ -167,7 +167,7 @@ class EditorSpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
         $commandInvoker->run('insert', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($input['location'])->shouldBeCalled();
+        $file->setCurrentLineNumber($currentLineNumber + 1)->shouldBeCalled();
 
         $this->addAfter($file, $addition);
     }
@@ -187,9 +187,9 @@ class EditorSpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->shouldNotBeCalled();
         $commandInvoker->run('insert', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($input['location'])->shouldBeCalled();
+        $file->setCurrentLineNumber($lineNumber + 1)->shouldBeCalled();
 
-        $this->addAfter($file, $addition, $input['location']);
+        $this->addAfter($file, $addition, $lineNumber);
     }
 
     function it_changes_the_current_line(
@@ -207,7 +207,7 @@ class EditorSpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
         $commandInvoker->run('replace', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($input['location'])->shouldBeCalled();
+        $file->setCurrentLineNumber($currentLineNumber)->shouldBeCalled();
 
         $this->changeTo($file, $replacement);
     }
@@ -227,21 +227,21 @@ class EditorSpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->shouldNotBeCalled();
         $commandInvoker->run('replace', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($input['location'])->shouldBeCalled();
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
-        $this->changeTo($file, $replacement, $input['location']);
+        $this->changeTo($file, $replacement, $lineNumber);
     }
 
     function it_replaces_the_current_line(File $file)
     {
         $line = 'We are the knights who say Ni!';
         $newLine = 'We are the knights who say Peng!';
-        $lineNumber = 0;
+        $currentLineNumber = 0;
 
-        $file->getCurrentLineNumber()->willReturn($lineNumber);
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
         $file->read()->willReturn($line);
-        $file->changeLineTo($newLine, $lineNumber)->shouldBeCalled();
-        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+        $file->changeLineTo($newLine, $currentLineNumber)->shouldBeCalled();
+        $file->setCurrentLineNumber($currentLineNumber)->shouldBeCalled();
 
         $this->replaceWith($file, '/Ni/', 'Peng');
     }
@@ -273,7 +273,7 @@ class EditorSpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
         $commandInvoker->run('remove', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($input['location'])->shouldBeCalled();
+        $file->setCurrentLineNumber($currentLineNumber)->shouldBeCalled();
 
         $this->remove($file);
     }
@@ -291,9 +291,9 @@ class EditorSpec extends ObjectBehavior
 
         $file->getCurrentLineNumber()->shouldNotBeCalled();
         $commandInvoker->run('remove', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($input['location'])->shouldBeCalled();
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
-        $this->remove($file, $input['location']);
+        $this->remove($file, $lineNumber);
     }
 
     function it_saves_files(Filesystem $filesystem, File $file)

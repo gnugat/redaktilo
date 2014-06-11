@@ -190,8 +190,9 @@ class Editor
     public function addAfter(File $file, $addition, $location=null)
     {
         if ($location === null || !is_integer($location)) {
-            $location = $file->getCurrentLineNumber() + 1;
+            $location = $file->getCurrentLineNumber();
         }
+        $location++;
 
         $input = array(
             'file' => $file,
