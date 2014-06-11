@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Engine;
+namespace Gnugat\Redaktilo\Search;
 
 /**
  * If an element isn't supported by any of the registered strategy.
