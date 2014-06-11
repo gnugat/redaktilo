@@ -11,7 +11,7 @@
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Replace\ReplaceEngine;
+use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Search\SearchEngine;
 
 /**
@@ -32,26 +32,26 @@ class Editor
     /** @var Filesystem */
     private $filesystem;
 
-    /** @var ReplaceEngine */
-    private $replaceEngine;
-
     /** @var SearchEngine */
     private $searchEngine;
 
+    /** @var CommandInvoker */
+    private $commandInvoker;
+
     /**
-     * @param Filesystem    $filesystem
-     * @param SearchEngine  $searchEngine
-     * @param ReplaceEngine $replaceEngine
+     * @param Filesystem     $filesystem
+     * @param SearchEngine   $searchEngine
+     * @param CommandInvoker $commandInvoker
      */
     public function __construct(
         Filesystem $filesystem,
         SearchEngine $searchEngine,
-        ReplaceEngine $replaceEngine
+        CommandInvoker $commandInvoker
     )
     {
         $this->filesystem = $filesystem;
-        $this->replaceEngine = $replaceEngine;
         $this->searchEngine = $searchEngine;
+        $this->commandInvoker = $commandInvoker;
     }
 
     /**
@@ -161,9 +161,12 @@ class Editor
     public function addBefore(File $file, $addition)
     {
         $currentLineNumber = $file->getCurrentLineNumber();
-
-        $replaceStrategy = $this->replaceEngine->resolve($currentLineNumber);
-        $replaceStrategy->insertAt($file, $currentLineNumber, $addition);
+        $input = array(
+            'file' => $file,
+            'location' => $currentLineNumber,
+            'addition' => $addition,
+        );
+        $this->commandInvoker->run('insert', $input);
     }
 
     /**
@@ -182,8 +185,13 @@ class Editor
         $currentLineNumber = $file->getCurrentLineNumber();
         $currentLineNumber++;
 
-        $replaceStrategy = $this->replaceEngine->resolve($currentLineNumber);
-        $replaceStrategy->insertAt($file, $currentLineNumber, $addition);
+        $input = array(
+            'file' => $file,
+            'location' => $currentLineNumber,
+            'addition' => $addition,
+        );
+        $this->commandInvoker->run('insert', $input);
+
         $file->setCurrentLineNumber($currentLineNumber);
     }
 
@@ -201,8 +209,12 @@ class Editor
     {
         $currentLineNumber = $file->getCurrentLineNumber();
 
-        $replaceStrategy = $this->replaceEngine->resolve($currentLineNumber);
-        $replaceStrategy->replaceWith($file, $currentLineNumber, $replacement);
+        $input = array(
+            'file' => $file,
+            'location' => $currentLineNumber,
+            'replacement' => $replacement,
+        );
+        $this->commandInvoker->run('replace', $input);
     }
 
     /**
@@ -243,7 +255,10 @@ class Editor
     {
         $currentLineNumber = $file->getCurrentLineNumber();
 
-        $replaceStrategy = $this->replaceEngine->resolve($currentLineNumber);
-        $replaceStrategy->removeAt($file, $currentLineNumber);
+        $input = array(
+            'file' => $file,
+            'location' => $currentLineNumber,
+        );
+        $this->commandInvoker->run('remove', $input);
     }
 }

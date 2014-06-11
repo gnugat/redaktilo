@@ -11,8 +11,6 @@
 
 namespace Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\Engine\NotSupportedException;
-
 /**
  * Holds SearchStrategy, and provides the appropriate one according to the given
  * pattern.

@@ -11,13 +11,16 @@
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Search\SearchEngine;
-use Gnugat\Redaktilo\Replace\ReplaceEngine;
-use Gnugat\Redaktilo\Converter\PhpContentConverter;
+use Gnugat\Redaktilo\Command\Command;
+use Gnugat\Redaktilo\Command\CommandInvoker;
+use Gnugat\Redaktilo\Command\LineInsertCommand;
+use Gnugat\Redaktilo\Command\LineRemoveCommand;
+use Gnugat\Redaktilo\Command\LineReplaceCommand;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
-use Gnugat\Redaktilo\Replace\ReplaceStrategy;
-use Gnugat\Redaktilo\Search\SearchStrategy;
+use Gnugat\Redaktilo\Converter\PhpContentConverter;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Search\SearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
@@ -39,11 +42,11 @@ class EditorBuilder
     /** @var SearchStrategy[] */
     private $searchStrategies = array();
 
-    /** @var ReplaceEngine|null */
-    private $replaceEngine;
+    /** @var CommandInvoker|null */
+    private $commandInvoker;
 
-    /** @var ReplaceStrategy[] */
-    private $replaceStrategies = array();
+    /** @var Command[] */
+    private $commands = array();
 
     /** @var Filesystem */
     private $filesystem;
@@ -90,23 +93,24 @@ class EditorBuilder
         return $engine;
     }
 
-    /** @return ReplaceEngine */
-    protected function getReplaceEngine()
+    /** @return CommandInvoker */
+    protected function getCommandInvoker()
     {
-        if ($this->replaceEngine) {
-            return $this->replaceEngine;
+        if ($this->commandInvoker) {
+            return $this->commandInvoker;
         }
-
-        $engine = new ReplaceEngine();
+        $commandInvoker = new CommandInvoker();
         $converter = $this->getLineConverter();
 
-        $engine->registerStrategy(new Replace\LineReplaceStrategy($converter));
+        $commandInvoker->addCommand(new LineInsertCommand($converter));
+        $commandInvoker->addCommand(new LineReplaceCommand($converter));
+        $commandInvoker->addCommand(new LineRemoveCommand($converter));
 
-        foreach ($this->replaceStrategies as $strategy) {
-            $engine->registerStrategy($strategy);
+        foreach ($this->commands as $command) {
+            $commandInvoker->addCommand($command);
         }
 
-        return $engine;
+        return $commandInvoker;
     }
 
     /** @return Filesystem */
@@ -126,7 +130,7 @@ class EditorBuilder
      */
     public function getEditor()
     {
-        return new Editor($this->getFilesystem(), $this->getSearchEngine(), $this->getReplaceEngine());
+        return new Editor($this->getFilesystem(), $this->getSearchEngine(), $this->getCommandInvoker());
     }
 
     /**
@@ -139,20 +143,6 @@ class EditorBuilder
     public function addSearchStrategy(SearchStrategy $searchStrategy)
     {
         $this->searchStrategies[] = $searchStrategy;
-
-        return $this;
-    }
-
-    /**
-     * @param ReplaceStrategy $replaceStrategy
-     *
-     * @return $this
-     *
-     * @api
-     */
-    public function addReplaceStrategy(ReplaceStrategy $replaceStrategy)
-    {
-        $this->replaceStrategies[] = $replaceStrategy;
 
         return $this;
     }
@@ -172,15 +162,29 @@ class EditorBuilder
     }
 
     /**
-     * @param ReplaceEngine $replaceEngine
+     * @param Command $command
      *
      * @return $this
      *
      * @api
      */
-    public function setReplaceEngine(ReplaceEngine $replaceEngine)
+    public function addCommand(Command $command)
     {
-        $this->replaceEngine = $replaceEngine;
+        $this->commands[] = $command;
+
+        return $this;
+    }
+
+    /**
+     * @param CommandInvoker $commandInvoker
+     *
+     * @return $this
+     *
+     * @api
+     */
+    public function setCommandInvoker(CommandInvoker $commandInvoker)
+    {
+        $this->commandInvoker = $commandInvoker;
 
         return $this;
     }

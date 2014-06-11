@@ -13,7 +13,6 @@ namespace spec\Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\Converter\PhpContentConverter;
 use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\Search\Php\Criteria;
 use Gnugat\Redaktilo\Search\Php\Token;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use PhpSpec\ObjectBehavior;

@@ -12,7 +12,6 @@
 namespace spec\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\Filesystem;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 

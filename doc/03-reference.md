@@ -17,11 +17,12 @@ This chapter explains the responsibility of each classes:
     * [LineSearchStrategy](#linesearchstrategy)
     * [PhpSearchStrategy](#phpsearchstrategy)
     * [SubstringSearchStrategy](#substringsearchstrategy)
-* [Replace](#replace)
-    * [LineReplaceStrategy](#linereplacestrategy)
-* [Engine](#engine)
     * [SearchEngine](#searchengine)
-    * [ReplaceEngine](#replaceengine)
+* [Command](#command)
+    * [LineInsertCommand](#lineinsertcommand)
+    * [LineReplaceCommand](#linereplacecommand)
+    * [LineRemoveCommand](#lineremovecommand)
+    * [CommandInvoker](#commandinvoker)
 * [Editor](#editor)
     * [Filesystem operations](#filesystem-operations)
     * [Manipulating the current line](#manipulating-the-current-line)
@@ -303,53 +304,20 @@ tokens, use this strategy.
 
 This strategy looks if the given string is contained in each lines.
 
-## Replace
+### SearchEngine
 
-Allows you to the replacements in the File's content.
-
-This is actually an interface allowing you to extend Redaktilo. By default, one
-implementation is provided.
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\Replace;
-
-use Gnugat\Redaktilo\File;
-
-interface ReplaceStrategy
-{
-    public function replaceWith(File $file, $location, $replacement);
-    public function removeAt(File $file, $location);
-    public function insertAt(File $file, $location, $addition);
-
-    public function supports($location);
-}
-```
-
-### LineReplaceStrategy
-
-Allows you to manipulate a line, givne its number.
-
-## Engine
-
-The strategies seen above can be gathered in an engine. This is used in the
-`Editor` to allow extension without having to modify it.
+The strategies seen above can be gathered in an search engine. This is used in
+the `Editor` to allow extension without having to modify it.
 
 For example, its `jumpDownTo` method can accept both a string or an integer.
 It is passes its argument to the engine's `resolve` method: if the engine has
-a registered strategy which supports it, it returns it. `Editor` can then tell
+a registered `SearchStrategy` which supports it, it returns it. `Editor` can then tell
 the strategy to do the work.
-
-### SearchEngine
-
-Allows you to register many `SearchStrategy` and to return the one that supports
-the given pattern:
 
 ```php
 <?php
 
-namespace Gnugat\Redaktilo\Engine;
+namespace Gnugat\Redaktilo\Search;
 
 class SearchEngine
 {
@@ -358,20 +326,58 @@ class SearchEngine
 }
 ```
 
-### ReplaceEngine
+## Command
 
-Allows you to register many `ReplaceStrategy` and to return the one that
-supports the given location:
+Allows you to the manipulate the File's content.
+
+This is actually an interface allowing you to extend Redaktilo. By default, three
+implementations are provided.
 
 ```php
 <?php
 
-namespace Gnugat\Redaktilo\Engine;
+namespace Gnugat\Redaktilo\Command;
 
-class ReplaceEngine
+interface Command
 {
-    public function registerStrategy(ReplaceStrategy $replaceStrategy);
-    public function resolve($location); // Throws NotSupportedException If the location isn't supported by any registered strategy
+    public function getName();
+    public function execute(array $input);
+}
+```
+
+The input parameter is currently an array with at least an entry `file` with the
+file to manipulate.
+
+### LineInsertCommand
+
+Allows you to insert a line at the given location.
+
+### LineReplaceCommand
+
+Allows you to replace a line, given its number.
+
+### LineRemoveCommand
+
+Allows you to remove a line, given its number.
+
+### CommandInvoker
+
+The commands seen above can be gathered in a command invoker. This is used in
+the `Editor` to allow extension without having to modify it.
+
+The `run` method - called by manipulating methods of the `Editor` - accept in first
+argument the name to resolve the correct command to execute and in second
+argument the `$input` array to send to the command
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Command;
+
+class CommandInvoker
+{
+    public function addCommand(Command $command);
+    public function run($name, array $input); // Throws UnsupportedCommandException if the name doesn't correspond to any registered command
 }
 ```
 
@@ -404,12 +410,12 @@ can call `getEditor()` to get the `Editor` instance:
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Search\SearchEngine;
-use Gnugat\Redaktilo\Search\SearchStrategy;
-use Gnugat\Redaktilo\Replace\ReplaceEngine;
-use Gnugat\Redaktilo\Replace\ReplaceStrategy;
+use Gnugat\Redaktilo\Command\Command;
+use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Converter\ContentConverter;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
+use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Search\SearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class EditorBuilder
@@ -419,8 +425,8 @@ class EditorBuilder
     public function setSearchEngine(SearchEngine $searchEngine);
     public function addSearchStrategy(SearchStrategy $searchStrategy);
 
-    public function addReplaceStrategy(ReplaceStrategy $replaceStrategy);
-    public function setReplaceEngine(ReplaceEngine $replaceEngine);
+    public function setCommandInvoker(CommandInvoker $commandInvoker);
+    public function addCommand(Command $command);
 
     public function setFilesystem(Filesystem $filesystem);
 }

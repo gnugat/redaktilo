@@ -11,12 +11,12 @@
 
 namespace spec\Gnugat\Redaktilo;
 
-use PhpSpec\ObjectBehavior;
+use Gnugat\Redaktilo\Command\Command;
+use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
-use Gnugat\Redaktilo\Replace\ReplaceEngine;
-use Gnugat\Redaktilo\Replace\ReplaceStrategy;
+use PhpSpec\ObjectBehavior;
 
 class EditorBuilderSpec extends ObjectBehavior
 {
@@ -33,33 +33,51 @@ class EditorBuilderSpec extends ObjectBehavior
             'Gnugat\Redaktilo\Search\LineNumberSearchStrategy',
         ));
 
-        $editor->shouldHaveReplaceStrategies(array(
-            'Gnugat\Redaktilo\Replace\LineReplaceStrategy',
+        $editor->shouldHaveCommands(array(
+            'insert' => 'Gnugat\Redaktilo\Command\LineInsertCommand',
+            'replace' => 'Gnugat\Redaktilo\Command\LineReplaceCommand',
+            'remove' => 'Gnugat\Redaktilo\Command\LineRemoveCommand',
         ));
     }
 
-    function it_can_have_custom_strategies(SearchStrategy $searchStrategy, ReplaceStrategy $replaceStrategy)
+    function it_can_have_custom_search_strategies(SearchStrategy $searchStrategy)
     {
         $editor = $this
             ->addSearchStrategy($searchStrategy)
-            ->addReplaceStrategy($replaceStrategy)
             ->getEditor();
 
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
         $editor->shouldHaveSearchStrategiesCount(5);
-        $editor->shouldHaveReplaceStrategiesCount(2);
     }
 
-    function it_can_have_custom_engines(SearchEngine $searchEngine, ReplaceEngine $replaceEngine)
+    function it_can_have_a_custom_search_engine(SearchEngine $searchEngine)
     {
         $editor = $this
             ->setSearchEngine($searchEngine)
-            ->setReplaceEngine($replaceEngine)
             ->getEditor();
 
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
         expect(static::readProperty($editor->getWrappedObject(), 'searchEngine'))->toBe($searchEngine);
-        expect(static::readProperty($editor->getWrappedObject(), 'replaceEngine'))->toBe($replaceEngine);
+    }
+
+    function it_can_have_custom_commands(Command $command)
+    {
+        $editor = $this
+            ->addCommand($command)
+            ->getEditor();
+
+        $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
+        $editor->shouldHaveCommandCount(4);
+    }
+
+    function it_can_have_a_custom_command_invoker(CommandInvoker $commandInvoker)
+    {
+        $editor = $this
+            ->setCommandInvoker($commandInvoker)
+            ->getEditor();
+
+        $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
+        expect(static::readProperty($editor->getWrappedObject(), 'commandInvoker'))->toBe($commandInvoker);
     }
 
     function it_can_have_a_custom_filesystem(Filesystem $filesystem)
@@ -87,13 +105,13 @@ class EditorBuilderSpec extends ObjectBehavior
 
                 return $constraint->evaluate($strategies, '', true);
             },
-            'haveReplaceStrategies' => function ($subject, $expected) use ($readProperty) {
-                $engine = $readProperty($subject, 'replaceEngine');
-                $strategies = array_map('get_class', $readProperty($engine, 'replaceStrategies'));
+            'haveCommands' => function ($subject, $expected) use ($readProperty) {
+                $commandInvoker = $readProperty($subject, 'commandInvoker');
+                $commands = array_map('get_class', $readProperty($commandInvoker, 'commands'));
 
                 $constraint = new \PHPUnit_Framework_Constraint_IsEqual($expected);
 
-                return $constraint->evaluate($strategies, '', true);
+                return $constraint->evaluate($commands, '', true);
             },
             'haveSearchStrategiesCount' => function ($subject, $expected) use ($readProperty) {
                 $engine = $readProperty($subject, 'searchEngine');
@@ -101,11 +119,11 @@ class EditorBuilderSpec extends ObjectBehavior
 
                 return $expected == count($strategies);
             },
-            'haveReplaceStrategiesCount' => function ($subject, $expected) use ($readProperty) {
-                $engine = $readProperty($subject, 'replaceEngine');
-                $strategies = $readProperty($engine, 'replaceStrategies');
+            'haveCommandCount' => function ($subject, $expected) use ($readProperty) {
+                $commandInvoker = $readProperty($subject, 'commandInvoker');
+                $commands = $readProperty($commandInvoker, 'commands');
 
-                return $expected == count($strategies);
+                return $expected == count($commands);
             }
         );
     }

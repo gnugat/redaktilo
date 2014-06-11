@@ -12,7 +12,6 @@
 namespace spec\Gnugat\Redaktilo\Converter;
 
 use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\Search\Php\Token;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use PhpSpec\ObjectBehavior;
 

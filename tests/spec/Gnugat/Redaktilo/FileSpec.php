@@ -11,7 +11,6 @@
 
 namespace spec\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem as FileCopier;
 
