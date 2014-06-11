@@ -62,7 +62,7 @@ class Editor
      *
      * @return File
      *
-     * @throws Symfony\Component\Filesystem\Exception\FileNotFoundException If the file hasn't be found.
+     * @throws \Symfony\Component\Filesystem\Exception\FileNotFoundException If the file hasn't be found.
      *
      * @api
      */
@@ -81,7 +81,7 @@ class Editor
      *
      * @param File $file
      *
-     * @throws Symfony\Component\Filesystem\Exception\IOException If the file cannot be written to.
+     * @throws \Symfony\Component\Filesystem\Exception\IOException If the file cannot be written to.
      *
      * @api
      */
@@ -97,8 +97,8 @@ class Editor
      * @param File  $file
      * @param mixed $pattern
      *
-     * @throws Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
-     * @throws Gnugat\Redaktilo\Engine\NotSupportedException    If the given pattern isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -118,7 +118,7 @@ class Editor
      * @param mixed $pattern
      *
      * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
-     * @throws \Gnugat\Redaktilo\Engine\NotSupportedException    If the given pattern isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -136,7 +136,7 @@ class Editor
      *
      * @return bool
      *
-     * @throws \Gnugat\Redaktilo\Engine\NotSupportedException If the given pattern isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -151,70 +151,83 @@ class Editor
      * Inserts the given line before the current one.
      * Note: the current line is then set to the new one.
      *
-     * @param File   $file
-     * @param string $addition
+     * @param File     $file
+     * @param string   $addition
+     * @param int|null $location
      *
-     * @throws \Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the current line number isn't supported by any registered strategy
      *
      * @api
      */
-    public function addBefore(File $file, $addition)
+    public function addBefore(File $file, $addition, $location=null)
     {
-        $currentLineNumber = $file->getCurrentLineNumber();
+        if ($location === null || !is_integer($location)) {
+            $location = $file->getCurrentLineNumber();
+        }
+
         $input = array(
             'file' => $file,
-            'location' => $currentLineNumber,
+            'location' => $location,
             'addition' => $addition,
         );
         $this->commandInvoker->run('insert', $input);
+
+        $file->setCurrentLineNumber($location);
     }
 
     /**
      * Inserts the given line after the current one.
      * Note: the current line is then set to the new one.
      *
-     * @param File   $file
-     * @param string $addition
+     * @param File     $file
+     * @param string   $addition
+     * @param int|null $location
      *
-     * @throws \Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the current line number isn't supported by any registered strategy
      *
      * @api
      */
-    public function addAfter(File $file, $addition)
+    public function addAfter(File $file, $addition, $location=null)
     {
-        $currentLineNumber = $file->getCurrentLineNumber();
-        $currentLineNumber++;
+        if ($location === null || !is_integer($location)) {
+            $location = $file->getCurrentLineNumber() + 1;
+        }
 
         $input = array(
             'file' => $file,
-            'location' => $currentLineNumber,
+            'location' => $location,
             'addition' => $addition,
         );
         $this->commandInvoker->run('insert', $input);
 
-        $file->setCurrentLineNumber($currentLineNumber);
+        $file->setCurrentLineNumber($location);
     }
 
     /**
      * Changes the current line to the given line.
      *
-     * @param File   $file
-     * @param string $replacement
+     * @param File     $file
+     * @param string   $replacement
+     * @param int|null $location
      *
-     * @throws \Gnugat\Redaktilo\Engine\NotSupportedException If the current line number isn't supported by any registered strategy
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the current line number isn't supported by any registered strategy
      *
      * @api
      */
-    public function changeTo(File $file, $replacement)
+    public function changeTo(File $file, $replacement, $location=null)
     {
-        $currentLineNumber = $file->getCurrentLineNumber();
+        if ($location === null || !is_integer($location)) {
+            $location = $file->getCurrentLineNumber();
+        }
 
         $input = array(
             'file' => $file,
-            'location' => $currentLineNumber,
+            'location' => $location,
             'replacement' => $replacement,
         );
         $this->commandInvoker->run('replace', $input);
+
+        $file->setCurrentLineNumber($location);
     }
 
     /**
@@ -223,17 +236,21 @@ class Editor
      * @param File            $file
      * @param string          $regex
      * @param string|callable $replace
+     * @param int|null        $location
      *
      * @throws \InvalidArgumentException If $replace is not a valid callable or regex
      *
      * @api
      */
-    public function replaceWith(File $file, $regex, $replace)
+    public function replaceWith(File $file, $regex, $replace, $location=null)
     {
+        if ($location === null || !is_integer($location)) {
+            $location = $file->getCurrentLineNumber();
+        }
+
         $converter = new \Gnugat\Redaktilo\Converter\LineContentConverter();
-        $currentLineNumber = $file->getCurrentLineNumber();
         $lines = $converter->from($file);
-        $line = $lines[$currentLineNumber];
+        $line = $lines[$location];
 
         if (is_callable($replace)) {
             $line = preg_replace_callback($regex, $replace, $line);
@@ -242,23 +259,29 @@ class Editor
         } else {
             throw new \InvalidArgumentException(sprintf('Expected a callable or valid regex as third argument to Edit#replaceWith(), got "%s".', $replace));
         }
+        $file->changeLineTo($line, $location);
 
-        $file->changeLineTo($line, $currentLineNumber);
+        $file->setCurrentLineNumber($location);
     }
 
     /**
-     * @param File $file
+     * @param File     $file
+     * @param int|null $location
      *
      * @api
      */
-    public function remove(File $file)
+    public function remove(File $file, $location=null)
     {
-        $currentLineNumber = $file->getCurrentLineNumber();
+        if ($location === null || !is_integer($location)) {
+            $location = $file->getCurrentLineNumber();
+        }
 
         $input = array(
             'file' => $file,
-            'location' => $currentLineNumber,
+            'location' => $location,
         );
         $this->commandInvoker->run('remove', $input);
+
+        $file->setCurrentLineNumber($location);
     }
 }
