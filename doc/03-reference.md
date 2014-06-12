@@ -15,8 +15,8 @@ This chapter explains the responsibility of each classes:
 * [Search](#search)
     * [LineNumberSearchStrategy](#linenumbersearchstrategy)
     * [LineRegexSearchStrategy](#lineregexsearchstrategy)
-    * [LineSearchStrategy](#linesearchstrategy)
     * [PhpSearchStrategy](#phpsearchstrategy)
+    * [SameSearchStrategy](#samesearchstrategy)
     * [SubstringSearchStrategy](#substringsearchstrategy)
     * [SearchEngine](#searchengine)
 * [Command](#command)
@@ -292,7 +292,7 @@ of the file.
 
 You can look for a line which matches a regex.
 
-### LineSearchStrategy
+### SameSearchStrategy
 
 If you know exactly the value of the line you want to look for, use this one.
 

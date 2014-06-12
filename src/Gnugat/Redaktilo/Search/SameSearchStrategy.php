@@ -15,13 +15,11 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 /**
- * This strategy manipulates lines stripped of their line break character.
- *
- * The match is done on the whole line.
+ * Matches the lines which are exactly the same as the given pattern.
  *
  * @api
  */
-class LineSearchStrategy implements SearchStrategy
+class SameSearchStrategy implements SearchStrategy
 {
     /** @var LineContentConverter */
     private $converter;
