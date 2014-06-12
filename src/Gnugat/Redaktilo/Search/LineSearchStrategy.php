@@ -36,8 +36,9 @@ class LineSearchStrategy implements SearchStrategy
     public function has(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
+        $found = $this->findIn($lines, $pattern);
 
-        return in_array($pattern, $lines, true);
+        return (false !== $found);
     }
 
     /** {@inheritdoc} */
@@ -47,7 +48,7 @@ class LineSearchStrategy implements SearchStrategy
         $currentLineNumber = $file->getCurrentLineNumber() + 1;
         $nextLines = array_slice($lines, $currentLineNumber, null, true);
 
-        return array_search($pattern, $nextLines, true);
+        return $this->findIn($nextLines, $pattern);
     }
 
     /** {@inheritdoc} */
@@ -58,7 +59,12 @@ class LineSearchStrategy implements SearchStrategy
         $previousLines = array_slice($lines, 0, $currentLineNumber, true);
         $reversedPreviousLines = array_reverse($previousLines, true);
 
-        return array_search($pattern, $reversedPreviousLines, true);
+        return $this->findIn($reversedPreviousLines, $pattern);
+    }
+
+    private function findIn(array $collection, $pattern)
+    {
+        return array_search($pattern, $collection, true);
     }
 
     /** {@inheritdoc} */

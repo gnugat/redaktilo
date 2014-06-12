@@ -35,7 +35,7 @@ class PhpSearchStrategy implements SearchStrategy
     public function has(File $file, $pattern)
     {
         $tokens = $this->converter->from($file);
-        $found = $this->findInSubset($tokens, 0, $pattern);
+        $found = $this->findIn($tokens, 0, $pattern);
 
         return ($found !== false);
     }
@@ -53,7 +53,7 @@ class PhpSearchStrategy implements SearchStrategy
             }
         }
 
-        return $this->findInSubset($tokens, $index, $pattern);
+        return $this->findIn($tokens, $index, $pattern);
     }
 
     /** {@inheritdoc} */
@@ -70,7 +70,7 @@ class PhpSearchStrategy implements SearchStrategy
             }
         }
 
-        return $this->findInSubset($reversedTokens, $index, $pattern);
+        return $this->findIn($reversedTokens, $index, $pattern);
     }
 
     /** {@inheritdoc} */
@@ -95,7 +95,7 @@ class PhpSearchStrategy implements SearchStrategy
      *
      * @return mixed
      */
-    private function findInSubset(array $collection, $index, $pattern)
+    private function findIn(array $collection, $index, $pattern)
     {
         $total = count($collection);
         while ($index < $total) {

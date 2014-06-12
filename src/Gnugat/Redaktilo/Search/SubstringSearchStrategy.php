@@ -36,13 +36,9 @@ class SubstringSearchStrategy implements SearchStrategy
     public function has(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
-        foreach ($lines as $line) {
-            if (false !== strpos($line, $pattern)) {
-                return true;
-            }
-        }
+        $found = $this->findIn($lines, $pattern);
 
-        return false;
+        return (false !== $found);
     }
 
     /** {@inheritdoc} */
@@ -51,13 +47,8 @@ class SubstringSearchStrategy implements SearchStrategy
         $lines = $this->converter->from($file);
         $currentLineNumber = $file->getCurrentLineNumber() + 1;
         $nextLines = array_slice($lines, $currentLineNumber, null, true);
-        foreach ($nextLines as $lineNumber => $line) {
-            if (false !== strpos($line, $pattern)) {
-                return $lineNumber;
-            }
-        }
 
-        return false;
+        return $this->findIn($nextLines, $pattern);
     }
 
     /** {@inheritdoc} */
@@ -67,7 +58,13 @@ class SubstringSearchStrategy implements SearchStrategy
         $currentLineNumber = $file->getCurrentLineNumber() - 1;
         $previousLines = array_slice($lines, 0, $currentLineNumber, true);
         $reversedPreviousLines = array_reverse($previousLines, true);
-        foreach ($reversedPreviousLines as $lineNumber => $line) {
+
+        return $this->findIn($reversedPreviousLines, $pattern);
+    }
+
+    private function findIn(array $collection, $pattern)
+    {
+        foreach ($collection as $lineNumber => $line) {
             if (false !== strpos($line, $pattern)) {
                 return $lineNumber;
             }

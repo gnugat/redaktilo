@@ -36,9 +36,9 @@ class LineRegexSearchStrategy implements SearchStrategy
     public function has(File $file, $pattern)
     {
         $lines = $this->converter->from($file);
-        $found = preg_grep($pattern, $lines);
+        $found = $this->findIn($lines, $pattern);
 
-        return count($found) > 0;
+        return (false !== $found);
     }
 
     /** {@inheritdoc} */
@@ -47,13 +47,8 @@ class LineRegexSearchStrategy implements SearchStrategy
         $lines = $this->converter->from($file);
         $currentLineNumber = $file->getCurrentLineNumber() + 1;
         $nextLines = array_slice($lines, $currentLineNumber, null, true);
-        $found = preg_grep($pattern, $nextLines);
-        if (count($found) < 1) {
-            return false;
-        }
-        reset($found);
 
-        return key($found);
+        return $this->findIn($nextLines, $pattern);
     }
 
     /** {@inheritdoc} */
@@ -62,11 +57,17 @@ class LineRegexSearchStrategy implements SearchStrategy
         $lines = $this->converter->from($file);
         $currentLineNumber = $file->getCurrentLineNumber() - 1;
         $previousLines = array_slice($lines, 0, $currentLineNumber, true);
-        $found = preg_grep($pattern, $previousLines);
-        if (count($found) < 1) {
+        $reversedPreviousLines = array_reverse($previousLines, true);
+
+        return $this->findIn($reversedPreviousLines, $pattern);
+    }
+
+    private function findIn(array $collection, $pattern)
+    {
+        $found = preg_grep($pattern, $collection);
+        if (empty($found)) {
             return false;
         }
-        end($found);
 
         return key($found);
     }
