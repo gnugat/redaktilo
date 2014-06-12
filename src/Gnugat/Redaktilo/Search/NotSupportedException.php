@@ -13,8 +13,6 @@ namespace Gnugat\Redaktilo\Search;
 
 /**
  * If an element isn't supported by any of the registered strategy.
- *
- * @api
  */
 class NotSupportedException extends \Exception
 {

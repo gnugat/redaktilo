@@ -16,14 +16,9 @@ use Gnugat\Redaktilo\File;
 
 /**
  * Matches the lines which are exactly the same as the given pattern.
- *
- * @api
  */
-class SameSearchStrategy implements SearchStrategy
+class SameSearchStrategy extends LineSearchStrategy
 {
-    /** @var LineContentConverter */
-    private $converter;
-
     /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
@@ -31,38 +26,9 @@ class SameSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function has(File $file, $pattern)
+    protected function findIn(array $lines, $pattern)
     {
-        $lines = $this->converter->from($file);
-        $found = $this->findIn($lines, $pattern);
-
-        return (false !== $found);
-    }
-
-    /** {@inheritdoc} */
-    public function findNext(File $file, $pattern)
-    {
-        $lines = $this->converter->from($file);
-        $currentLineNumber = $file->getCurrentLineNumber() + 1;
-        $nextLines = array_slice($lines, $currentLineNumber, null, true);
-
-        return $this->findIn($nextLines, $pattern);
-    }
-
-    /** {@inheritdoc} */
-    public function findPrevious(File $file, $pattern)
-    {
-        $lines = $this->converter->from($file);
-        $currentLineNumber = $file->getCurrentLineNumber() - 1;
-        $previousLines = array_slice($lines, 0, $currentLineNumber, true);
-        $reversedPreviousLines = array_reverse($previousLines, true);
-
-        return $this->findIn($reversedPreviousLines, $pattern);
-    }
-
-    private function findIn(array $collection, $pattern)
-    {
-        return array_search($pattern, $collection, true);
+        return array_search($pattern, $lines, true);
     }
 
     /** {@inheritdoc} */

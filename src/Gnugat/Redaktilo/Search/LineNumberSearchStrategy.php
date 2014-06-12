@@ -15,15 +15,10 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 /**
- * This strategy manipulates directly line numbers.
- *
- * @api
+ * Moves x lines above or under the current one.
  */
 class LineNumberSearchStrategy implements SearchStrategy
 {
-    /** @var LineContentConverter */
-    private $converter;
-
     /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {

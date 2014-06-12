@@ -15,17 +15,10 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 /**
- * This strategy manipulates lines stripped of their line break character.
- *
- * The match is done using a regex on the whole line.
- *
- * @api
+ * Tries to match the given regex against each lines.
  */
-class LineRegexSearchStrategy implements SearchStrategy
+class LineRegexSearchStrategy extends LineSearchStrategy
 {
-    /** @var LineContentConverter */
-    private $converter;
-
     /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
@@ -33,38 +26,9 @@ class LineRegexSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function has(File $file, $pattern)
+    protected function findIn(array $lines, $pattern)
     {
-        $lines = $this->converter->from($file);
-        $found = $this->findIn($lines, $pattern);
-
-        return (false !== $found);
-    }
-
-    /** {@inheritdoc} */
-    public function findNext(File $file, $pattern)
-    {
-        $lines = $this->converter->from($file);
-        $currentLineNumber = $file->getCurrentLineNumber() + 1;
-        $nextLines = array_slice($lines, $currentLineNumber, null, true);
-
-        return $this->findIn($nextLines, $pattern);
-    }
-
-    /** {@inheritdoc} */
-    public function findPrevious(File $file, $pattern)
-    {
-        $lines = $this->converter->from($file);
-        $currentLineNumber = $file->getCurrentLineNumber() - 1;
-        $previousLines = array_slice($lines, 0, $currentLineNumber, true);
-        $reversedPreviousLines = array_reverse($previousLines, true);
-
-        return $this->findIn($reversedPreviousLines, $pattern);
-    }
-
-    private function findIn(array $collection, $pattern)
-    {
-        $found = preg_grep($pattern, $collection);
+        $found = preg_grep($pattern, $lines);
         if (empty($found)) {
             return false;
         }

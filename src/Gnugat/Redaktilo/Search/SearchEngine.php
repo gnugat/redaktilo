@@ -12,21 +12,14 @@
 namespace Gnugat\Redaktilo\Search;
 
 /**
- * Holds SearchStrategy, and provides the appropriate one according to the given
- * pattern.
- *
- * @api
+ * Provides the SearchStrategy which supports the given pattern.
  */
 class SearchEngine
 {
-    /** @var SearchStrategy[] */
+    /** @var array of SearchStrategy */
     private $searchStrategies = array();
 
-    /**
-     * @param SearchStrategy $searchStrategy
-     *
-     * @api
-     */
+    /** @param SearchStrategy $searchStrategy */
     public function registerStrategy(SearchStrategy $searchStrategy)
     {
         $this->searchStrategies[] = $searchStrategy;
@@ -38,8 +31,6 @@ class SearchEngine
      * @return SearchStrategy
      *
      * @throws NotSupportedException If the pattern isn't supported by any registered strategy
-     *
-     * @api
      */
     public function resolve($pattern)
     {

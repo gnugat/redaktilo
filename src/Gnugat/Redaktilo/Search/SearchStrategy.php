@@ -15,20 +15,16 @@ use Gnugat\Redaktilo\File;
 
 /**
  * A lookup strategy supporting a specific kind of pattern.
- *
- * @api
  */
 interface SearchStrategy
 {
     /**
-     * Checks the presence in the whole File's content.
+     * Checks the pattern's presence in the whole File's content.
      *
      * @param File  $file
      * @param mixed $pattern
      *
      * @return bool
-     *
-     * @api
      */
     public function has(File $file, $pattern);
 
@@ -40,8 +36,6 @@ interface SearchStrategy
      * @param mixed $pattern
      *
      * @return mixed
-     *
-     * @api
      */
     public function findNext(File $file, $pattern);
 
@@ -53,8 +47,6 @@ interface SearchStrategy
      * @param mixed $pattern
      *
      * @return mixed
-     *
-     * @api
      */
     public function findPrevious(File $file, $pattern);
 
@@ -62,8 +54,6 @@ interface SearchStrategy
      * @param mixed $pattern
      *
      * @return bool
-     *
-     * @api
      */
     public function supports($pattern);
 }

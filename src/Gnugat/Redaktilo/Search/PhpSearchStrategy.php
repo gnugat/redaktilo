@@ -17,8 +17,6 @@ use Gnugat\Redaktilo\Search\Php\Token;
 
 /**
  * Finds the given PHP token.
- *
- * @api
  */
 class PhpSearchStrategy implements SearchStrategy
 {
