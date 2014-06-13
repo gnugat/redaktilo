@@ -84,7 +84,7 @@ class EditorBuilder
 
         $engine->registerStrategy(new Search\PhpSearchStrategy($phpConverter));
         $engine->registerStrategy(new Search\LineRegexSearchStrategy($lineConverter));
-        $engine->registerStrategy(new Search\SubstringSearchStrategy($lineConverter));
+        $engine->registerStrategy(new Search\SameSearchStrategy($lineConverter));
         $engine->registerStrategy(new Search\LineNumberSearchStrategy($lineConverter));
 
         foreach ($this->searchStrategies as $strategy) {

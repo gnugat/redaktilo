@@ -29,7 +29,7 @@ class EditorBuilderSpec extends ObjectBehavior
         $editor->shouldHaveSearchStrategies(array(
             'Gnugat\Redaktilo\Search\PhpSearchStrategy',
             'Gnugat\Redaktilo\Search\LineRegexSearchStrategy',
-            'Gnugat\Redaktilo\Search\SubstringSearchStrategy',
+            'Gnugat\Redaktilo\Search\SameSearchStrategy',
             'Gnugat\Redaktilo\Search\LineNumberSearchStrategy',
         ));
 
