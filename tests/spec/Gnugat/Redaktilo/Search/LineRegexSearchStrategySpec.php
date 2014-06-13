@@ -49,15 +49,6 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_checks_line_presence(File $file)
-    {
-        $existingLineRegex = '#\.{3}Dickus#';
-        $nonExistingLineRegex = '/ThereIsNoSuchALine/';
-
-        $this->has($file, $existingLineRegex)->shouldBe(true);
-        $this->has($file, $nonExistingLineRegex)->shouldBe(false);
-    }
-
     function it_finds_previous_occurences(File $file)
     {
         $previousLineRegex = '/\[A \w+ sniggers\]/';

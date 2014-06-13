@@ -47,15 +47,6 @@ class LineNumberSearchStrategySpec extends ObjectBehavior
         $this->supports($rawLine)->shouldBe(false);
     }
 
-    function it_checks_line_presence(File $file)
-    {
-        $existingLine = 5;
-        $nonExistingLine = 1337;
-
-        $this->has($file, $existingLine)->shouldBe(true);
-        $this->has($file, $nonExistingLine)->shouldBe(false);
-    }
-
     function it_finds_previous_occurences(File $file)
     {
         $currentLineNumber = 5;

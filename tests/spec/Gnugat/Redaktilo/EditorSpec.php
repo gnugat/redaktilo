@@ -113,7 +113,7 @@ class EditorSpec extends ObjectBehavior
         $pattern = 'No one expects the spanish inquisition!';
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->has($file, $pattern)->willReturn(true);
+        $searchStrategy->findNext($file, $pattern, 0)->willReturn(42);
 
         $this->has($file, $pattern)->shouldBe(true);
     }

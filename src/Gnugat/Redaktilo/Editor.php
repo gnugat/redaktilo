@@ -150,8 +150,9 @@ class Editor
     public function has(File $file, $pattern)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
+        $found = $searchStrategy->findNext($file, $pattern, 0);
 
-        return $searchStrategy->has($file, $pattern);
+        return (false !== $found);
     }
 
     /**

@@ -13,15 +13,6 @@ abstract class LineSearchStrategy implements SearchStrategy
     protected $converter;
 
     /** {@inheritdoc} */
-    public function has(File $file, $pattern)
-    {
-        $lines = $this->converter->from($file);
-        $found = $this->findIn($lines, $pattern);
-
-        return (false !== $found);
-    }
-
-    /** {@inheritdoc} */
     public function findPrevious(File $file, $pattern, $before = null)
     {
         $before = ($before ?: $file->getCurrentLineNumber()) - 1;

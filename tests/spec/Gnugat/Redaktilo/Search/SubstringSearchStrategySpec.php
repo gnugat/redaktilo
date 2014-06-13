@@ -47,15 +47,6 @@ class SubstringSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_checks_line_presence(File $file)
-    {
-        $existingSubstring = '...Dickus?';
-        $nonExistingSubstring = 'Cornwall?';
-
-        $this->has($file, $existingSubstring)->shouldBe(true);
-        $this->has($file, $nonExistingSubstring)->shouldBe(false);
-    }
-
     function it_finds_previous_occurences(File $file)
     {
         $previousSubstring = 'sniggers';

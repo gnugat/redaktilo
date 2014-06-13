@@ -60,16 +60,6 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_checks_tokens_presence(File $file)
-    {
-        $presentTokens = $this->tokenBuilder->buildClass('AppKernel');
-        $rawTokens = token_get_all('<?php $i++;');
-        $absentTokens = $this->tokenBuilder->buildFromRaw($rawTokens);
-
-        $this->has($file, $presentTokens)->shouldBe(true);
-        $this->has($file, $absentTokens)->shouldBe(false);
-    }
-
     function it_finds_previous_occurences(File $file)
     {
         $previousLineNumber = 0;

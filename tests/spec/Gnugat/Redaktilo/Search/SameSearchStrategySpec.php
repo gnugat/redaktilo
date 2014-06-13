@@ -47,15 +47,6 @@ class SameSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_checks_line_presence(File $file)
-    {
-        $existingLine = '[Sniggering]';
-        $nonExistingLine = "Isn't there a Saint Aaaaarrrrrrggghhh's in Cornwall?";
-
-        $this->has($file, $existingLine)->shouldBe(true);
-        $this->has($file, $nonExistingLine)->shouldBe(false);
-    }
-
     function it_finds_previous_occurences(File $file)
     {
         $previousLine = '[A guard sniggers]';

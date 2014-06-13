@@ -19,36 +19,32 @@ use Gnugat\Redaktilo\File;
 interface SearchStrategy
 {
     /**
-     * Checks the pattern's presence in the whole File's content.
+     * Looks for the given pattern from the given line number ($before) to the
+     * top of the File.
+     * If no line number is given, the current line number of the file is used.
+     * If the pattern doesn't match anything, returns false.
      *
-     * @param File  $file
-     * @param mixed $pattern
-     *
-     * @return bool
-     */
-    public function has(File $file, $pattern);
-
-    /**
-     * Starts the search from the File's cursor to the bottom and returns the
-     * found location. If the pattern doesn't match anything, returns false.
-     *
-     * @param File  $file
-     * @param mixed $pattern
+     * @param File    $file
+     * @param mixed   $pattern
+     * @param integer $before
      *
      * @return mixed
      */
-    public function findNext(File $file, $pattern);
+    public function findPrevious(File $file, $pattern, $before = null);
 
     /**
-     * Starts the search from the File's cursor to the top and returns the found
-     * location. If the pattern doesn't match anything, returns false.
+     * Looks for the given pattern from the given line number ($after) to the
+     * bottom of the File.
+     * If no line number is given, the current line number of the file is used.
+     * If the pattern doesn't match anything, returns false.
      *
-     * @param File  $file
-     * @param mixed $pattern
+     * @param File    $file
+     * @param mixed   $pattern
+     * @param integer $after
      *
      * @return mixed
      */
-    public function findPrevious(File $file, $pattern);
+    public function findNext(File $file, $pattern, $after = null);
 
     /**
      * @param mixed $pattern

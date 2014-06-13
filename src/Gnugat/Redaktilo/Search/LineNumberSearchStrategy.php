@@ -26,15 +26,6 @@ class LineNumberSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function has(File $file, $pattern)
-    {
-        $lines = $this->converter->from($file);
-        $totalLines = count($lines);
-
-        return 0 <= $pattern && $pattern < $totalLines;
-    }
-
-    /** {@inheritdoc} */
     public function findPrevious(File $file, $pattern, $before = null)
     {
         $foundLineNumber = ($before ?: $file->getCurrentLineNumber()) - $pattern;

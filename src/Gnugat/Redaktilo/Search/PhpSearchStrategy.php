@@ -30,15 +30,6 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function has(File $file, $pattern)
-    {
-        $tokens = $this->converter->from($file);
-        $found = $this->findIn($tokens, 0, $pattern);
-
-        return ($found !== false);
-    }
-
-    /** {@inheritdoc} */
     public function findPrevious(File $file, $pattern, $before = null)
     {
         $before = $before ?: $file->getCurrentLineNumber();
