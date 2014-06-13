@@ -29,12 +29,12 @@ class CommandInvoker
      * @param string $name
      * @param array  $input
      *
-     * @throws UnsupportedCommandException
+     * @throws CommandNotFoundException
      */
     public function run($name, array $input)
     {
         if (!isset($this->commands[$name])) {
-            throw new UnsupportedCommandException($name);
+            throw new CommandNotFoundException($name);
         }
         $this->commands[$name]->execute($input);
     }
