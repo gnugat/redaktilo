@@ -16,7 +16,7 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 /**
  * Inserts the given addition in the given file at the given location.
  */
-class LineInsertCommand implements Command
+class LineInsertAboveCommand implements Command
 {
     /** @var LineContentConverter */
     private $converter;
@@ -31,17 +31,19 @@ class LineInsertCommand implements Command
     public function execute(array $input)
     {
         $file = $input['file'];
-        $location = isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber();
+        $location = (isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber());
         $addition = $input['addition'];
 
         $lines = $this->converter->from($file);
         array_splice($lines, $location, 0, $addition);
         $this->converter->back($file, $lines);
+
+        $file->setCurrentLineNumber($location);
     }
 
     /** {@inheritdoc} */
     public function getName()
     {
-        return 'insert';
+        return 'insert_above';
     }
 }

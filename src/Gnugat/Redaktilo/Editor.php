@@ -158,70 +158,54 @@ class Editor
     }
 
     /**
-     * Inserts the given line before the current one.
+     * Inserts the given line before the given line number
+     * (or before the current one if none provided).
      * Note: the current line is then set to the new one.
      *
-     * @param File     $file
-     * @param string   $addition
-     * @param int|null $location
-     *
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the current line number isn't supported by any registered strategy
+     * @param File    $file
+     * @param string  $addition
+     * @param integer $location
      *
      * @api
      */
     public function addBefore(File $file, $addition, $location = null)
     {
-        if ($location === null || !is_integer($location)) {
-            $location = $file->getCurrentLineNumber();
-        }
-
         $input = array(
             'file' => $file,
             'location' => $location,
             'addition' => $addition,
         );
-        $this->commandInvoker->run('insert', $input);
-
-        $file->setCurrentLineNumber($location);
+        $this->commandInvoker->run('insert_above', $input);
     }
 
     /**
-     * Inserts the given line after the current one.
+     * Inserts the given addition after the given line number
+     * (or after the current one if none provided).
      * Note: the current line is then set to the new one.
      *
-     * @param File     $file
-     * @param string   $addition
-     * @param int|null $location
-     *
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the current line number isn't supported by any registered strategy
+     * @param File    $file
+     * @param string  $addition
+     * @param integer $location
      *
      * @api
      */
     public function addAfter(File $file, $addition, $location = null)
     {
-        if ($location === null || !is_integer($location)) {
-            $location = $file->getCurrentLineNumber();
-        }
-        $location++;
-
         $input = array(
             'file' => $file,
             'location' => $location,
             'addition' => $addition,
         );
-        $this->commandInvoker->run('insert', $input);
-
-        $file->setCurrentLineNumber($location);
+        $this->commandInvoker->run('insert_under', $input);
     }
 
     /**
-     * Changes the current line to the given line.
+     * Replaces the line at the given line number
+     * (or at the current one if none provided) with the given replacement.
      *
-     * @param File     $file
-     * @param string   $replacement
-     * @param int|null $location
-     *
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the current line number isn't supported by any registered strategy
+     * @param File    $file
+     * @param string  $replacement
+     * @param integer $location
      *
      * @api
      */
@@ -276,23 +260,20 @@ class Editor
     }
 
     /**
-     * @param File     $file
-     * @param int|null $location
+     * Removes the line at the given location
+     * (or at the current one if none provided).
+     *
+     * @param File    $file
+     * @param integer $location
      *
      * @api
      */
     public function remove(File $file, $location = null)
     {
-        if ($location === null || !is_integer($location)) {
-            $location = $file->getCurrentLineNumber();
-        }
-
         $input = array(
             'file' => $file,
             'location' => $location,
         );
         $this->commandInvoker->run('remove', $input);
-
-        $file->setCurrentLineNumber($location);
     }
 }

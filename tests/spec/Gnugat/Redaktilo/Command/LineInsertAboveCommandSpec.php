@@ -15,7 +15,7 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 
-class LineInsertCommandSpec extends ObjectBehavior
+class LineInsertAboveCommandSpec extends ObjectBehavior
 {
     const ORIGINAL_FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
     const EXPECTED_FILENAME = '%s/tests/fixtures/expectations/life-of-brian-insert.txt';
@@ -54,6 +54,8 @@ class LineInsertCommandSpec extends ObjectBehavior
         );
 
         $this->converter->back($file, $expectedLines)->shouldBeCalled();
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+
         $this->execute($input);
 
         $input = array(
@@ -61,6 +63,7 @@ class LineInsertCommandSpec extends ObjectBehavior
             'addition' => "Pontius Pilate: '...Dickus?'"
         );
         $file->getCurrentLineNumber()->willReturn($lineNumber);
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->execute($input);
     }

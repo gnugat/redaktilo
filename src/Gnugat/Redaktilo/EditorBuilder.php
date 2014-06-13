@@ -13,7 +13,8 @@ namespace Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Command\Command;
 use Gnugat\Redaktilo\Command\CommandInvoker;
-use Gnugat\Redaktilo\Command\LineInsertCommand;
+use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
+use Gnugat\Redaktilo\Command\LineInsertUnderCommand;
 use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
@@ -102,7 +103,8 @@ class EditorBuilder
         $commandInvoker = new CommandInvoker();
         $converter = $this->getLineConverter();
 
-        $commandInvoker->addCommand(new LineInsertCommand($converter));
+        $commandInvoker->addCommand(new LineInsertAboveCommand($converter));
+        $commandInvoker->addCommand(new LineInsertUnderCommand($converter));
         $commandInvoker->addCommand(new LineReplaceCommand($converter));
         $commandInvoker->addCommand(new LineRemoveCommand($converter));
 

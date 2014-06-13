@@ -158,7 +158,7 @@ class EditorSpec extends ObjectBehavior
         $this->has($file, $pattern)->shouldBe(true);
     }
 
-    function it_inserts_lines_before_current_one(
+    function it_inserts_lines_above_the_current_one(
         CommandInvoker $commandInvoker,
         File $file
     )
@@ -167,18 +167,16 @@ class EditorSpec extends ObjectBehavior
         $addition = 'We are the knights who say Ni!';
         $input = array(
             'file' => $file,
-            'location' =>$currentLineNumber,
+            'location' => null,
             'addition' => $addition,
         );
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-        $commandInvoker->run('insert', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($currentLineNumber)->shouldBeCalled();
+        $commandInvoker->run('insert_above', $input)->shouldBeCalled();
 
         $this->addBefore($file, $addition);
     }
 
-    function it_inserts_lines_before_given_one(
+    function it_inserts_lines_above_the_given_one(
         CommandInvoker $commandInvoker,
         File $file
     )
@@ -191,14 +189,12 @@ class EditorSpec extends ObjectBehavior
             'addition' => $addition,
         );
 
-        $file->getCurrentLineNumber()->shouldNotBeCalled();
-        $commandInvoker->run('insert', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+        $commandInvoker->run('insert_above', $input)->shouldBeCalled();
 
         $this->addBefore($file, $addition, $lineNumber);
     }
 
-    function it_inserts_lines_after_current_one(
+    function it_inserts_lines_under_the_current_one(
         CommandInvoker $commandInvoker,
         File $file
     )
@@ -207,18 +203,16 @@ class EditorSpec extends ObjectBehavior
         $addition = 'We are the knights who say Ni!';
         $input = array(
             'file' => $file,
-            'location' => $currentLineNumber + 1,
+            'location' => null,
             'addition' => $addition,
         );
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-        $commandInvoker->run('insert', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($currentLineNumber + 1)->shouldBeCalled();
+        $commandInvoker->run('insert_under', $input)->shouldBeCalled();
 
         $this->addAfter($file, $addition);
     }
 
-    function it_inserts_lines_after_given_one(
+    function it_inserts_lines_under_the_given_one(
         CommandInvoker $commandInvoker,
         File $file
     )
@@ -227,18 +221,16 @@ class EditorSpec extends ObjectBehavior
         $addition = 'We are the knights who say Ni!';
         $input = array(
             'file' => $file,
-            'location' => $lineNumber + 1,
+            'location' => $lineNumber,
             'addition' => $addition,
         );
 
-        $file->getCurrentLineNumber()->shouldNotBeCalled();
-        $commandInvoker->run('insert', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($lineNumber + 1)->shouldBeCalled();
+        $commandInvoker->run('insert_under', $input)->shouldBeCalled();
 
         $this->addAfter($file, $addition, $lineNumber);
     }
 
-    function it_changes_the_current_line(
+    function it_replaces_the_current_line(
         CommandInvoker $commandInvoker,
         File $file
     )
@@ -258,7 +250,7 @@ class EditorSpec extends ObjectBehavior
         $this->changeTo($file, $replacement);
     }
 
-    function it_changes_the_given_line(
+    function it_replaces_the_given_line(
         CommandInvoker $commandInvoker,
         File $file
     )
@@ -278,7 +270,7 @@ class EditorSpec extends ObjectBehavior
         $this->changeTo($file, $replacement, $lineNumber);
     }
 
-    function it_replaces_the_current_line(File $file)
+    function it_replaces_all_occurences(File $file)
     {
         $line = 'We are the knights who say Ni!';
         $newLine = 'We are the knights who say Peng!';
@@ -292,20 +284,6 @@ class EditorSpec extends ObjectBehavior
         $this->replaceWith($file, '/Ni/', 'Peng');
     }
 
-    function it_replaces_the_given_line(File $file)
-    {
-        $line = 'We are the knights who say Ni!';
-        $newLine = 'We are the knights who say Peng!';
-        $lineNumber = 0;
-
-        $file->getCurrentLineNumber()->shouldNotBeCalled();
-        $file->read()->willReturn($line);
-        $file->changeLineTo($newLine, $lineNumber)->shouldBeCalled();
-        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
-
-        $this->replaceWith($file, '/Ni/', 'Peng', $lineNumber);
-    }
-
     function it_removes_the_current_line(
         CommandInvoker $commandInvoker,
         File $file
@@ -314,12 +292,10 @@ class EditorSpec extends ObjectBehavior
         $currentLineNumber = 42;
         $input = array(
             'file' => $file,
-            'location' => $currentLineNumber,
+            'location' => null,
         );
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
         $commandInvoker->run('remove', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($currentLineNumber)->shouldBeCalled();
 
         $this->remove($file);
     }
@@ -335,9 +311,7 @@ class EditorSpec extends ObjectBehavior
             'location' => $lineNumber,
         );
 
-        $file->getCurrentLineNumber()->shouldNotBeCalled();
         $commandInvoker->run('remove', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->remove($file, $lineNumber);
     }
