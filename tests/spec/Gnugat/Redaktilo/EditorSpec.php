@@ -270,20 +270,6 @@ class EditorSpec extends ObjectBehavior
         $this->changeTo($file, $replacement, $lineNumber);
     }
 
-    function it_replaces_all_occurences(File $file)
-    {
-        $line = 'We are the knights who say Ni!';
-        $newLine = 'We are the knights who say Peng!';
-        $currentLineNumber = 0;
-
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-        $file->read()->willReturn($line);
-        $file->changeLineTo($newLine, $currentLineNumber)->shouldBeCalled();
-        $file->setCurrentLineNumber($currentLineNumber)->shouldBeCalled();
-
-        $this->replaceWith($file, '/Ni/', 'Peng');
-    }
-
     function it_removes_the_current_line(
         CommandInvoker $commandInvoker,
         File $file

@@ -242,38 +242,4 @@ class Editor
         );
         $this->commandInvoker->run('remove', $input);
     }
-
-    /**
-     * Replaces the current line using a regex and replace string/callback.
-     *
-     * @param File            $file
-     * @param string          $regex
-     * @param string|callable $replace
-     * @param int|null        $location
-     *
-     * @throws \InvalidArgumentException If $replace is not a valid callable or regex
-     *
-     * @api
-     */
-    public function replaceWith(File $file, $regex, $replace, $location = null)
-    {
-        if ($location === null || !is_integer($location)) {
-            $location = $file->getCurrentLineNumber();
-        }
-
-        $converter = new \Gnugat\Redaktilo\Converter\LineContentConverter();
-        $lines = $converter->from($file);
-        $line = $lines[$location];
-
-        if (is_callable($replace)) {
-            $line = preg_replace_callback($regex, $replace, $line);
-        } elseif (is_string($replace)) {
-            $line = preg_replace($regex, $replace, $line);
-        } else {
-            throw new \InvalidArgumentException(sprintf('Expected a callable or valid regex as third argument to Edit#replaceWith(), got "%s".', $replace));
-        }
-        $file->changeLineTo($line, $location);
-
-        $file->setCurrentLineNumber($location);
-    }
 }
