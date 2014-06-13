@@ -2,6 +2,11 @@
 
 ## 1.0.0-alpha1: Commands, boolean finds and locations
 
+* removedadded `LineInsertAboveCommand`
+* added `LineInsertUnderCommand`
+* removed `LineInsertCommand`
+* moved line management from `Editor` to commands
+* renamed `UnsupportedCommandException` into `CommandNotFoundException`
 * added before/after to the `Editor` jumpTo methods
 * removed `FactoryMethod`
 * removed `SearchStrategy`'s `has` method
