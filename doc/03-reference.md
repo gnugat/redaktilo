@@ -377,6 +377,7 @@ class Editor
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
+    public function jumpTo(File $file, $pattern);
     public function jumpDownTo(File $file, $pattern);
     public function jumpUpTo(File $file, $pattern);
 
@@ -431,6 +432,10 @@ You should keep in mind that the search is done relatively to the current one:
 ```php
 $editor->jumpDownTo($file, $linePresentAbove); // Will throw an exception.
 ```
+
+The `jumpTo` method allows you to find the first occurence in the file (unlike
+the other jump methods it doesn't care about the current line).
+This is particularly usefull if you want to jump to an absolute line number.
 
 ### Content searching
 

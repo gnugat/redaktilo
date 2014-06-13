@@ -43,6 +43,7 @@ class Editor
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
+    public function jumpTo(File $file, $pattern);
     public function jumpDownTo(File $file, $pattern);
     public function jumpUpTo(File $file, $pattern);
 
@@ -121,10 +122,16 @@ $editor->jumpDownTo($file, 2); // Current line: 2 (which is 'Sausage')
 $editor->jumpUpTo($file, 2); // Current line: 0 (which is 'Bacon')
 ```
 
+If you need to go to a precise line, you can use:
+
+```php
+$editor->jumpTo($file, 1); // Current line: 1 (which is 'Egg')
+```
+
 The lookup can also be done using regex:
 
 ```php
-$editor->jumpDownTo($file, '/gg/'); // Current line: 1 (which is 'Egg')
+$editor->jumpUpTo($file, '/ac/'); // Current line: 1 (which is 'Egg')
 ```
 
 *Note*: If you're manipulating a PHP file, you can also jump to symbols like
