@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 1.0.0-alpha2: Quality
+
+* fixed Insight analysis 15
+
 ## 1.0.0-alpha1: Commands, boolean finds and locations
 
 * removed `SubstringSearchStrategy`
