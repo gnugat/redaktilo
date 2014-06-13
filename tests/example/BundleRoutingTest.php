@@ -12,8 +12,6 @@
 namespace Sensio\Bundle\GeneratorBundle\Manipulator;
 
 use Gnugat\Redaktilo\EditorFactory;
-use Gnugat\Redaktilo\FactoryMethod\Filesystem;
-use Gnugat\Redaktilo\FactoryMethod\Line;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -45,18 +43,19 @@ class RoutingManipulator extends \PHPUnit_Framework_TestCase
     {
         $editor = EditorFactory::createEditor();
 
-        $file = $editor->open($this->configPath, Filesystem::forceCreation());
+        $file = $editor->open($this->configPath, true);
 
         $definitionLine = 'acme_demo:';
-        $resourceLine = '    resource: "@AcmeDemoBundle/Controller/"';
-        $typeLine = '    type: annotation';
-        $prefixLine = '    prefix: /';
+        $resourceLine   = '    resource: "@AcmeDemoBundle/Controller/"';
+        $typeLine       = '    type: annotation';
+        $prefixLine     = '    prefix: /';
+        $emptyLine      = '';
 
         $editor->addBefore($file, $definitionLine);
         $editor->addAfter($file, $resourceLine);
         $editor->addAfter($file, $typeLine);
         $editor->addAfter($file, $prefixLine);
-        $editor->addAfter($file, Line::emptyOne());
+        $editor->addAfter($file, $emptyLine);
 
         $editor->save($file);
 

@@ -32,13 +32,13 @@ class Editor
     public function save(File $file); // Throws IOException if the file cannot be written to
 
     // Manipulating a line (by default the current one).
-    public function addBefore(File $file, $addition, $location=null);
-    public function addAfter(File $file, $addition, $location=null);
-    public function changeTo(File $file, $replacement, $location=null); // Will be renamed to `replace`
-    public function remove(File $file, $location=null); // Removes the current line.
+    public function addBefore(File $file, $addition, $location = null);
+    public function addAfter(File $file, $addition, $location = null);
+    public function changeTo(File $file, $replacement, $location = null); // Will be renamed to `replace`
+    public function remove(File $file, $location = null); // Removes the current line.
 
     // Global manipulations.
-    public function replaceWith(File $file, $regex, $replacement, $location=null); // Will be renamed to `replaceAll`
+    public function replaceWith(File $file, $regex, $replacement, $location = null); // Will be renamed to `replaceAll`
 
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
@@ -51,7 +51,7 @@ class Editor
 }
 ```
 
-## Initialisation
+## Initialization
 
 In order to manipulate a file, you need to create an instance of `Editor`:
 
@@ -77,7 +77,7 @@ First things first: you need to open the file:
 
 ```php
 $filename = '/tmp/monty-menu.txt';
-$file = $editor->open($filename); // Current line: 'Bacon'
+$file = $editor->open($filename); // Current line: 0 (which is 'Bacon')
 ```
 
 ## Content navigation
@@ -86,7 +86,7 @@ A cursor has been set to the first line. You can move this cursor to any
 existing lines:
 
 ```php
-$editor->jumpDownTo($file, 'Egg'); // Current line: 'Egg'
+$editor->jumpDownTo($file, 'Egg'); // Current line: 1 (which is 'Egg')
 ```
 
 As you can see, there's no need to add the line break character, `Editor` will
@@ -99,7 +99,13 @@ try {
     $editor->jumpDownTo($file, 'Bacon'); // Not found because 'Bacon' is above the current line
 } catch (PatternNotFoundException $e) {
 }
-$editor->jumpUpTo($file, 'Bacon'); // Current line: 'Bacon'
+$editor->jumpUpTo($file, 'Bacon'); // Current line: 0 (which is 'Bacon')
+```
+
+The match is done only if the line value is exactly the same as the given one:
+
+```php
+$editor->jumpDownTo($file, 'B'); // Throws an exception.
 ```
 
 To avoid handling exception if you just want to know if a line exists, use:
@@ -111,8 +117,26 @@ $editor->has($file, 'Beans'); // false
 You can also jump a wanted number of lines above or under the current one:
 
 ```php
-$editor->jumpDownTo($file, FileNumber::down(2)); // Current line: Egg
-$editor->jumpUpTo($file, FileNumber::up(2)); // Current line: Bacon
+$editor->jumpDownTo($file, 2); // Current line: 2 (which is 'Sausage')
+$editor->jumpUpTo($file, 2); // Current line: 0 (which is 'Bacon')
+```
+
+The lookup can also be done using regex:
+
+```php
+$editor->jumpDownTo($file, '/gg/'); // Current line: 1 (which is 'Egg')
+```
+
+*Note*: If you're manipulating a PHP file, you can also jump to symbols like
+class, methods and functions:
+
+```php
+use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+
+$registrationMethodName = 'registerBundles';
+$registrationMethod = $tokenBuilder->buildMethod($registrationMethodName);
+
+$editor->jumpDownTo($file, $registrationMethod);
 ```
 
 ## Line manipulation
@@ -160,6 +184,9 @@ Or you can remove it:
 ```php
 $editor->remove($file); // Current line: Egg
 ```
+
+Those two methods also accept a location argument if you don't want to use the
+current line number.
 
 ## Next readings
 

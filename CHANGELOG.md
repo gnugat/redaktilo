@@ -1,5 +1,20 @@
 # Changes between versions
 
+## 1.0.0-alpha1: Commands and boolean finds
+
+* removed `SearchStrategy`'s `has` method
+* added before/after to the `SearchStrategy` find methods
+* added abstract class `LineSearchStrategy`
+* renamed `LineSearchStrategy` to `SameSearchStrategy`
+* moved search excpetion throwing from `Search` to the `Editor`
+* added location for `Editor`'s manipulation methods
+* moved `NotSupportedException` from `Engine` to `Search`
+* replaced `ReplaceEngine` with `CommandInvoker`
+* removed `ReplaceStrategy`
+* added `InsertCommand`
+* added `RemoveCommand`
+* added `ReplaceCommand`
+
 ## 0.9.0: PhpSearchStrategy
 
 * added `PhpSearchStrategy`

@@ -12,6 +12,7 @@
 namespace Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Command\CommandInvoker;
+use Gnugat\Redaktilo\Search\PatternNotFoundException;
 use Gnugat\Redaktilo\Search\SearchEngine;
 
 /**
@@ -106,6 +107,9 @@ class Editor
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
         $foundLineNumber = $searchStrategy->findNext($file, $pattern);
+        if (false === $foundLineNumber) {
+            throw new PatternNotFoundException($file, $pattern);
+        }
 
         $file->setCurrentLineNumber($foundLineNumber);
     }
@@ -126,6 +130,9 @@ class Editor
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
         $foundLineNumber = $searchStrategy->findPrevious($file, $pattern);
+        if (false === $foundLineNumber) {
+            throw new PatternNotFoundException($file, $pattern);
+        }
 
         $file->setCurrentLineNumber($foundLineNumber);
     }
@@ -143,8 +150,9 @@ class Editor
     public function has(File $file, $pattern)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
+        $found = $searchStrategy->findNext($file, $pattern, 0);
 
-        return $searchStrategy->has($file, $pattern);
+        return (false !== $found);
     }
 
     /**

@@ -15,96 +15,43 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 /**
- * This strategy manipulates directly line numbers.
- *
- * @api
+ * Moves x lines above or under the current one.
  */
 class LineNumberSearchStrategy implements SearchStrategy
 {
-    /** @var LineContentConverter */
-    private $converter;
-
     /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
         $this->converter = $converter;
     }
 
-    /**
-     * Checks if the file has more lines than the given number.
-     *
-     * @param File    $file
-     * @param integer $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
-    public function has(File $file, $pattern)
+    /** {@inheritdoc} */
+    public function findPrevious(File $file, $pattern, $before = null)
     {
+        $foundLineNumber = ($before ?: $file->getCurrentLineNumber()) - $pattern;
         $lines = $this->converter->from($file);
         $totalLines = count($lines);
-
-        return 0 <= $pattern && $pattern < $totalLines;
-    }
-
-    /**
-     * Increments the current line number.
-     *
-     * @param File    $file
-     * @param integer $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the pattern is not found after the cursor
-     *
-     * @api
-     */
-    public function findNext(File $file, $pattern)
-    {
-        $lines = $this->converter->from($file);
-        $totalLines = count($lines);
-        $currentLineNumber = $file->getCurrentLineNumber();
-        $foundLineNumber = $currentLineNumber + $pattern;
         if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
-            throw new PatternNotFoundException($file, $pattern);
+            return false;
         }
 
         return $foundLineNumber;
     }
 
-    /**
-     * Decrements the current line number.
-     *
-     * @param File    $file
-     * @param integer $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the pattern is not found before the cursor
-     *
-     * @api
-     */
-    public function findPrevious(File $file, $pattern)
+    /** {@inheritdoc} */
+    public function findNext(File $file, $pattern, $after = null)
     {
+        $foundLineNumber = ($after ?: $file->getCurrentLineNumber()) + $pattern;
         $lines = $this->converter->from($file);
         $totalLines = count($lines);
-        $currentLineNumber = $file->getCurrentLineNumber();
-        $foundLineNumber = $currentLineNumber - $pattern;
         if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
-            throw new PatternNotFoundException($file, $pattern);
+            return false;
         }
 
         return $foundLineNumber;
     }
 
-    /**
-     * @param mixed $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function supports($pattern)
     {
         return (is_int($pattern) && $pattern >= 0);

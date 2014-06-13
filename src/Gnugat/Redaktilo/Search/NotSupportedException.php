@@ -13,28 +13,21 @@ namespace Gnugat\Redaktilo\Search;
 
 /**
  * If an element isn't supported by any of the registered strategy.
- *
- * @api
  */
 class NotSupportedException extends \Exception
 {
     /**
      * @param string $engine
-     * @param array  $rawUnsupported
+     * @param mixed  $rawUnsupported
      */
-    public function __construct($engine, array $rawUnsupported)
+    public function __construct($engine, $rawUnsupported)
     {
-        $formatAsString = function ($element) {
-            if (is_string($element) || is_int($element)) {
-                return strval($element);
-            }
+        $element = 'the given element';
+        if (is_string($rawUnsupported) || is_int($rawUnsupported)) {
+            $element = strval($rawUnsupported);
+        }
 
-            return 'the given element';
-        };
-
-        $message = "$engine hasn't any registered Strategy which support ";
-        $unsupported = array_map($formatAsString, $rawUnsupported);
-        $message .= implode(' ', $unsupported);
+        $message = "$engine hasn't any registered Strategy which support $element";
 
         parent::__construct($message);
     }

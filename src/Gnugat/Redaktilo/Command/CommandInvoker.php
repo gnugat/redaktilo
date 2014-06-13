@@ -26,7 +26,7 @@ class CommandInvoker
 
     /**
      * @param string $name
-     * @param array $input
+     * @param array  $input
      *
      * @throws \Gnugat\Redaktilo\Command\UnsupportedCommandException
      */
@@ -42,7 +42,7 @@ class CommandInvoker
 
     /**
      * @param string $name
-     * @param array $input
+     * @param array  $input
      *
      * @return Command|null
      *
@@ -52,6 +52,7 @@ class CommandInvoker
         if (isset($this->commands[$name])) {
             return $this->commands[$name];
         }
+
         return null;
     }
-} 
+}

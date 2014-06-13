@@ -16,8 +16,6 @@ use Gnugat\Redaktilo\File;
 /**
  * If the pattern given to SearchEngine isn't supported by any of its registered
  * SearchStrategy.
- *
- * @api
  */
 class PatternNotFoundException extends \Exception
 {

@@ -60,14 +60,23 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_checks_tokens_presence(File $file)
+    function it_finds_previous_occurences(File $file)
     {
-        $presentTokens = $this->tokenBuilder->buildClass('AppKernel');
-        $rawTokens = token_get_all('<?php $i++;');
-        $absentTokens = $this->tokenBuilder->buildFromRaw($rawTokens);
+        $previousLineNumber = 0;
+        $previousToken = array(new Token(T_OPEN_TAG, "<?php\n"));
+        $currentLineNumber = 10;
+        $currentToken = $this->tokenBuilder->buildClass('AppKernel');
+        $nextToken = $this->tokenBuilder->buildMethod('registerBundles');
 
-        $this->has($file, $presentTokens)->shouldBe(true);
-        $this->has($file, $absentTokens)->shouldBe(false);
+        $this->findPrevious($file, $nextToken, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $currentToken, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $previousToken, $currentLineNumber)->shouldBe($previousLineNumber);
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+
+        $this->findPrevious($file, $nextToken)->shouldBe(false);
+        $this->findPrevious($file, $currentToken)->shouldBe(false);
+        $this->findPrevious($file, $previousToken)->shouldBe($previousLineNumber);
     }
 
     function it_finds_next_occurences(File $file)
@@ -78,29 +87,14 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $nextLineNumber = 15;
         $nextToken = $this->tokenBuilder->buildMethod('registerBundles');
 
+        $this->findNext($file, $previousToken, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $currentToken, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $nextToken, $currentLineNumber)->shouldBe($nextLineNumber);
+
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindNext($file, $previousToken);
-        $this->shouldThrow($exception)->duringFindNext($file, $currentToken);
+        $this->findNext($file, $previousToken)->shouldBe(false);
+        $this->findNext($file, $currentToken)->shouldBe(false);
         $this->findNext($file, $nextToken)->shouldBe($nextLineNumber);
-    }
-
-    function it_finds_previous_occurences(File $file)
-    {
-        $previousLineNumber = 0;
-        $previousToken = array(new Token(T_OPEN_TAG, "<?php\n"));
-        $currentLineNumber = 10;
-        $currentToken = $this->tokenBuilder->buildClass('AppKernel');
-        $nextToken = $this->tokenBuilder->buildMethod('registerBundles');
-
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindPrevious($file, $nextToken);
-        $this->shouldThrow($exception)->duringFindPrevious($file, $currentToken);
-        $this->findPrevious($file, $previousToken)->shouldBe($previousLineNumber);
     }
 }

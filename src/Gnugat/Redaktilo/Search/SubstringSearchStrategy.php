@@ -15,103 +15,29 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 /**
- * This strategy manipulates lines stripped of their line break character.
- *
- * The match is done on the given substring.
- *
- * @api
+ * Checks against each lines if the given substring is contained in one of them.
  */
-class SubstringSearchStrategy implements SearchStrategy
+class SubstringSearchStrategy extends LineSearchStrategy
 {
-    /** @var LineContentConverter */
-    private $converter;
-
     /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
         $this->converter = $converter;
     }
 
-    /**
-     * Checks if the given substring is present at least once in the file.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
-    public function has(File $file, $pattern)
+    /** {@inheritdoc} */
+    protected function findIn(array $lines, $pattern)
     {
-        $lines = $this->converter->from($file);
-        foreach ($lines as $line) {
+        foreach ($lines as $lineNumber => $line) {
             if (false !== strpos($line, $pattern)) {
-                return true;
+                return $lineNumber;
             }
         }
 
         return false;
     }
 
-    /**
-     * Returns the number of the given line if it is present after the current
-     * one.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the line hasn't be found after the current one
-     */
-    public function findNext(File $file, $pattern)
-    {
-        $lines = $this->converter->from($file);
-        $currentLineNumber = $file->getCurrentLineNumber() + 1;
-        $nextLines = array_slice($lines, $currentLineNumber, null, true);
-        foreach ($nextLines as $lineNumber => $line) {
-            if (false !== strpos($line, $pattern)) {
-                return $lineNumber;
-            }
-        }
-
-        throw new PatternNotFoundException($file, $pattern);
-    }
-
-    /**
-     * Returns the number of the given line if it is present before the current
-     * one.
-     *
-     * @param File   $file
-     * @param string $pattern
-     *
-     * @return integer
-     *
-     * @throws PatternNotFoundException If the line hasn't be found before the current one
-     */
-    public function findPrevious(File $file, $pattern)
-    {
-        $lines = $this->converter->from($file);
-        $currentLineNumber = $file->getCurrentLineNumber() - 1;
-        $previousLines = array_slice($lines, 0, $currentLineNumber, true);
-        $reversedPreviousLines = array_reverse($previousLines, true);
-        foreach ($reversedPreviousLines as $lineNumber => $line) {
-            if (false !== strpos($line, $pattern)) {
-                return $lineNumber;
-            }
-        }
-
-        throw new PatternNotFoundException($file, $pattern);
-    }
-
-    /**
-     * @param mixed $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
+    /** {@inheritdoc} */
     public function supports($pattern)
     {
         if (!is_string($pattern)) {

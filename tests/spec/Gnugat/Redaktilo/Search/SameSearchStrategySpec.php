@@ -15,13 +15,13 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 
-class LineSearchStrategySpec extends ObjectBehavior
+class SameSearchStrategySpec extends ObjectBehavior
 {
     const FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
 
     function let(File $file, LineContentConverter $converter)
     {
-        $rootPath = __DIR__.'/../../../../../';
+        $rootPath = __DIR__.'/../../../../..';
 
         $filename = sprintf(self::FILENAME, $rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
@@ -47,13 +47,23 @@ class LineSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_checks_line_presence(File $file)
+    function it_finds_previous_occurences(File $file)
     {
-        $existingLine = '[Sniggering]';
-        $nonExistingLine = "Isn't there a Saint Aaaaarrrrrrggghhh's in Cornwall?";
+        $previousLine = '[A guard sniggers]';
+        $previousLineNumber = 1;
+        $currentLine = '[More sniggering]';
+        $currentLineNumber = 3;
+        $nextLine = '[Sniggering]';
 
-        $this->has($file, $existingLine)->shouldBe(true);
-        $this->has($file, $nonExistingLine)->shouldBe(false);
+        $this->findPrevious($file, $nextLine, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $currentLine, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $previousLine, $currentLineNumber)->shouldBe($previousLineNumber);
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+
+        $this->findPrevious($file, $nextLine)->shouldBe(false);
+        $this->findPrevious($file, $currentLine)->shouldBe(false);
+        $this->findPrevious($file, $previousLine)->shouldBe($previousLineNumber);
     }
 
     function it_finds_next_occurences(File $file)
@@ -64,29 +74,14 @@ class LineSearchStrategySpec extends ObjectBehavior
         $nextLine = '[Sniggering]';
         $nextLineNumber = 5;
 
+        $this->findNext($file, $previousLine, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $currentLine, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $nextLine, $currentLineNumber)->shouldBe($nextLineNumber);
+
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindNext($file, $previousLine);
-        $this->shouldThrow($exception)->duringFindNext($file, $currentLine);
+        $this->findNext($file, $previousLine)->shouldBe(false);
+        $this->findNext($file, $currentLine)->shouldBe(false);
         $this->findNext($file, $nextLine)->shouldBe($nextLineNumber);
-    }
-
-    function it_finds_previous_occurences(File $file)
-    {
-        $previousLine = '[A guard sniggers]';
-        $previousLineNumber = 1;
-        $currentLine = '[More sniggering]';
-        $currentLineNumber = 3;
-        $nextLine = '[Sniggering]';
-
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindPrevious($file, $nextLine);
-        $this->shouldThrow($exception)->duringFindPrevious($file, $currentLine);
-        $this->findPrevious($file, $previousLine)->shouldBe($previousLineNumber);
     }
 }

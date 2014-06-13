@@ -21,7 +21,7 @@ class SubstringSearchStrategySpec extends ObjectBehavior
 
     function let(File $file, LineContentConverter $converter)
     {
-        $rootPath = __DIR__.'/../../../../../';
+        $rootPath = __DIR__.'/../../../../..';
 
         $filename = sprintf(self::FILENAME, $rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
@@ -47,13 +47,23 @@ class SubstringSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_checks_line_presence(File $file)
+    function it_finds_previous_occurences(File $file)
     {
-        $existingSubstring = '...Dickus?';
-        $nonExistingSubstring = 'Cornwall?';
+        $previousSubstring = 'sniggers';
+        $previousLineNumber = 1;
+        $currentSubstring = 'More';
+        $currentLineNumber = 3;
+        $nextSubstring = 'Sniggering';
 
-        $this->has($file, $existingSubstring)->shouldBe(true);
-        $this->has($file, $nonExistingSubstring)->shouldBe(false);
+        $this->findPrevious($file, $nextSubstring, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $currentSubstring, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $previousSubstring, $currentLineNumber)->shouldBe($previousLineNumber);
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+
+        $this->findPrevious($file, $nextSubstring)->shouldBe(false);
+        $this->findPrevious($file, $currentSubstring)->shouldBe(false);
+        $this->findPrevious($file, $previousSubstring)->shouldBe($previousLineNumber);
     }
 
     function it_finds_next_occurences(File $file)
@@ -64,29 +74,14 @@ class SubstringSearchStrategySpec extends ObjectBehavior
         $nextSubstring = 'Sniggering';
         $nextLineNumber = 5;
 
+        $this->findNext($file, $previousSubstring, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $currentSubstring, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $nextSubstring, $currentLineNumber)->shouldBe($nextLineNumber);
+
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindNext($file, $previousSubstring);
-        $this->shouldThrow($exception)->duringFindNext($file, $currentSubstring);
+        $this->findNext($file, $previousSubstring)->shouldBe(false);
+        $this->findNext($file, $currentSubstring)->shouldBe(false);
         $this->findNext($file, $nextSubstring)->shouldBe($nextLineNumber);
-    }
-
-    function it_finds_previous_occurences(File $file)
-    {
-        $previousSubstring = 'sniggers';
-        $previousLineNumber = 1;
-        $currentSubstring = 'More';
-        $currentLineNumber = 3;
-        $nextSubstring = 'Sniggering';
-
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-
-        $this->shouldThrow($exception)->duringFindPrevious($file, $nextSubstring);
-        $this->shouldThrow($exception)->duringFindPrevious($file, $currentSubstring);
-        $this->findPrevious($file, $previousSubstring)->shouldBe($previousLineNumber);
     }
 }

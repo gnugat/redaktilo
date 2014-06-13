@@ -15,9 +15,9 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 /**
- * Tries to match the given regex against each lines.
+ * Matches the lines which are exactly the same as the given pattern.
  */
-class LineRegexSearchStrategy extends LineSearchStrategy
+class SameSearchStrategy extends LineSearchStrategy
 {
     /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
@@ -28,12 +28,7 @@ class LineRegexSearchStrategy extends LineSearchStrategy
     /** {@inheritdoc} */
     protected function findIn(array $lines, $pattern)
     {
-        $found = preg_grep($pattern, $lines);
-        if (empty($found)) {
-            return false;
-        }
-
-        return key($found);
+        return array_search($pattern, $lines, true);
     }
 
     /** {@inheritdoc} */
@@ -42,7 +37,8 @@ class LineRegexSearchStrategy extends LineSearchStrategy
         if (!is_string($pattern)) {
             return false;
         }
+        $hasNoLineBreak = (false === strpos($pattern, "\n"));
 
-        return !(false === @preg_match($pattern, ''));
+        return $hasNoLineBreak;
     }
 }

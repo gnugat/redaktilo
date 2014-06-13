@@ -17,8 +17,6 @@ use Gnugat\Redaktilo\Search\Php\Token;
 
 /**
  * Finds the given PHP token.
- *
- * @api
  */
 class PhpSearchStrategy implements SearchStrategy
 {
@@ -32,53 +30,36 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function has(File $file, $pattern)
+    public function findPrevious(File $file, $pattern, $before = null)
     {
-        $tokens = $this->converter->from($file);
-        $found = $this->findInSubset($tokens, 0, $pattern);
-
-        return ($found !== false);
-    }
-
-    /** {@inheritdoc} */
-    public function findNext(File $file, $pattern)
-    {
-        $tokens = $this->converter->from($file);
-        $currentLineNumber = $file->getCurrentLineNumber() + 1;
-        $total = count($tokens);
-        for ($index = 0; $index < $total; $index++) {
-            $token = $tokens[$index];
-            if ($token->getLineNumber() === $currentLineNumber) {
-                break;
-            }
-        }
-        $found = $this->findInSubset($tokens, $index, $pattern);
-        if ($found === false) {
-            throw new PatternNotFoundException($file, $pattern);
-        }
-
-        return $found;
-    }
-
-    /** {@inheritdoc} */
-    public function findPrevious(File $file, $pattern)
-    {
+        $before = $before ?: $file->getCurrentLineNumber();
         $tokens = $this->converter->from($file);
         $reversedTokens = array_reverse($tokens);
-        $currentLineNumber = $file->getCurrentLineNumber();
         $total = count($reversedTokens);
         for ($index = 0; $index < $total; $index++) {
             $token = $reversedTokens[$index];
-            if ($token->getLineNumber() === $currentLineNumber) {
+            if ($token->getLineNumber() === $before) {
                 break;
             }
         }
-        $found = $this->findInSubset($reversedTokens, $index, $pattern);
-        if ($found === false) {
-            throw new PatternNotFoundException($file, $pattern);
+
+        return $this->findIn($reversedTokens, $index, $pattern);
+    }
+
+    /** {@inheritdoc} */
+    public function findNext(File $file, $pattern, $after = null)
+    {
+        $after = ($after ?: $file->getCurrentLineNumber()) + 1;
+        $tokens = $this->converter->from($file);
+        $total = count($tokens);
+        for ($index = 0; $index < $total; $index++) {
+            $token = $tokens[$index];
+            if ($token->getLineNumber() === $after) {
+                break;
+            }
         }
 
-        return $found;
+        return $this->findIn($tokens, $index, $pattern);
     }
 
     /** {@inheritdoc} */
@@ -103,7 +84,7 @@ class PhpSearchStrategy implements SearchStrategy
      *
      * @return mixed
      */
-    private function findInSubset(array $collection, $index, $pattern)
+    private function findIn(array $collection, $index, $pattern)
     {
         $total = count($collection);
         while ($index < $total) {

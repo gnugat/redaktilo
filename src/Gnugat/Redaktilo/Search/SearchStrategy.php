@@ -15,57 +15,41 @@ use Gnugat\Redaktilo\File;
 
 /**
  * A lookup strategy supporting a specific kind of pattern.
- *
- * @api
  */
 interface SearchStrategy
 {
     /**
-     * Checks the presence in the whole File's content.
+     * Looks for the given pattern from the given line number ($before) to the
+     * top of the File.
+     * If no line number is given, the current line number of the file is used.
+     * If the pattern doesn't match anything, returns false.
      *
-     * @param File  $file
-     * @param mixed $pattern
-     *
-     * @return bool
-     *
-     * @api
-     */
-    public function has(File $file, $pattern);
-
-    /**
-     * Starts the search from the File's cursor to the bottom.
-     *
-     * @param File  $file
-     * @param mixed $pattern
+     * @param File    $file
+     * @param mixed   $pattern
+     * @param integer $before
      *
      * @return mixed
-     *
-     * @throws PatternNotFoundException If the pattern hasn't be found
-     *
-     * @api
      */
-    public function findNext(File $file, $pattern);
+    public function findPrevious(File $file, $pattern, $before = null);
 
     /**
-     * Starts the search from the File's cursor to the top.
+     * Looks for the given pattern from the given line number ($after) to the
+     * bottom of the File.
+     * If no line number is given, the current line number of the file is used.
+     * If the pattern doesn't match anything, returns false.
      *
-     * @param File  $file
-     * @param mixed $pattern
+     * @param File    $file
+     * @param mixed   $pattern
+     * @param integer $after
      *
      * @return mixed
-     *
-     * @throws PatternNotFoundException If the pattern hasn't be found
-     *
-     * @api
      */
-    public function findPrevious(File $file, $pattern);
+    public function findNext(File $file, $pattern, $after = null);
 
     /**
      * @param mixed $pattern
      *
      * @return bool
-     *
-     * @api
      */
     public function supports($pattern);
 }

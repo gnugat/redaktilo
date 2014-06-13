@@ -23,11 +23,14 @@ class EditorSpec extends ObjectBehavior
     const FILENAME = '/tmp/file-to-edit.txt';
 
     function let(
+        File $file,
         Filesystem $filesystem,
         SearchEngine $searchEngine,
         CommandInvoker $commandInvoker
     )
     {
+        $file->getFilename()->willReturn(self::FILENAME);
+
         $this->beConstructedWith(
             $filesystem,
             $searchEngine,
@@ -37,33 +40,28 @@ class EditorSpec extends ObjectBehavior
 
     function it_opens_existing_files(Filesystem $filesystem, File $file)
     {
-        $filename = '/monty.py';
+        $filesystem->exists(self::FILENAME)->willReturn(true);
+        $filesystem->open(self::FILENAME)->willReturn($file);
 
-        $filesystem->exists($filename)->willReturn(true);
-        $filesystem->open($filename)->willReturn($file);
-
-        $this->open($filename);
+        $this->open(self::FILENAME);
     }
 
     function it_cannot_open_new_files(Filesystem $filesystem, File $file)
     {
-        $filename = '/monty.py';
         $exception = 'Symfony\Component\Filesystem\Exception\FileNotFoundException';
 
-        $filesystem->exists($filename)->willReturn(false);
-        $filesystem->open($filename)->willThrow($exception);
+        $filesystem->exists(self::FILENAME)->willReturn(false);
+        $filesystem->open(self::FILENAME)->willThrow($exception);
 
-        $this->shouldThrow($exception)->duringOpen($filename);
+        $this->shouldThrow($exception)->duringOpen(self::FILENAME);
     }
 
     function it_creates_new_files(Filesystem $filesystem, File $file)
     {
-        $filename = '/monty.py';
+        $filesystem->exists(self::FILENAME)->willReturn(false);
+        $filesystem->create(self::FILENAME)->willReturn($file);
 
-        $filesystem->exists($filename)->willReturn(false);
-        $filesystem->create($filename)->willReturn($file);
-
-        $this->open($filename, true);
+        $this->open(self::FILENAME, true);
     }
 
     function it_moves_down_the_cursor(
@@ -80,6 +78,10 @@ class EditorSpec extends ObjectBehavior
         $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
         $this->jumpDownTo($file, $pattern);
+
+        $searchStrategy->findNext($file, $pattern)->willReturn(false);
+        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+        $this->shouldThrow($exception)->duringJumpDownTo($file, $pattern);
     }
 
     function it_moves_up_the_cursor(
@@ -96,6 +98,10 @@ class EditorSpec extends ObjectBehavior
         $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
         $this->jumpUpTo($file, $pattern);
+
+        $searchStrategy->findPrevious($file, $pattern)->willReturn(false);
+        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+        $this->shouldThrow($exception)->duringJumpUpTo($file, $pattern);
     }
 
     function it_checks_pattern_existence(
@@ -107,7 +113,7 @@ class EditorSpec extends ObjectBehavior
         $pattern = 'No one expects the spanish inquisition!';
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->has($file, $pattern)->willReturn(true);
+        $searchStrategy->findNext($file, $pattern, 0)->willReturn(42);
 
         $this->has($file, $pattern)->shouldBe(true);
     }
