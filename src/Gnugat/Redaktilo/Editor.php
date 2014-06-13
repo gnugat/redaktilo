@@ -92,43 +92,22 @@ class Editor
     }
 
     /**
-     * Searches for the first occurence of the given pattern in the File.
-     *
-     * @param File  $file
-     * @param mixed $pattern
-     *
-     * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
-     *
-     * @api
-     */
-    public function jumpTo(File $file, $pattern)
-    {
-        $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findNext($file, $pattern, 0);
-        if (false === $foundLineNumber) {
-            throw new PatternNotFoundException($file, $pattern);
-        }
-
-        $file->setCurrentLineNumber($foundLineNumber);
-    }
-
-    /**
      * Searches the given pattern in the File after the current line.
      * If the pattern is found, the current line is set to it.
      *
-     * @param File  $file
-     * @param mixed $pattern
+     * @param File    $file
+     * @param mixed   $pattern
+     * @param integer $after
      *
      * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
      * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
-    public function jumpDownTo(File $file, $pattern)
+    public function jumpDownTo(File $file, $pattern, $after = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findNext($file, $pattern);
+        $foundLineNumber = $searchStrategy->findNext($file, $pattern, $after);
         if (false === $foundLineNumber) {
             throw new PatternNotFoundException($file, $pattern);
         }
@@ -140,18 +119,19 @@ class Editor
      * Searches the given pattern in the File before the current line.
      * If the pattern is found, the current line is set to it.
      *
-     * @param File  $file
-     * @param mixed $pattern
+     * @param File    $file
+     * @param mixed   $pattern
+     * @param integer $before
      *
      * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
      * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
-    public function jumpUpTo(File $file, $pattern)
+    public function jumpUpTo(File $file, $pattern, $before = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findPrevious($file, $pattern);
+        $foundLineNumber = $searchStrategy->findPrevious($file, $pattern, $before);
         if (false === $foundLineNumber) {
             throw new PatternNotFoundException($file, $pattern);
         }
