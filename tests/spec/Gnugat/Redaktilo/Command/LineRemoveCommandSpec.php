@@ -55,5 +55,12 @@ class LineRemoveCommandSpec extends ObjectBehavior
 
         $this->converter->back($file, $expectedLines)->shouldBeCalled();
         $this->execute($input);
+
+        $input = array(
+            'file' => $file,
+        );
+        $file->getCurrentLineNumber()->willReturn($lineNumber);
+
+        $this->execute($input);
     }
-} 
+}

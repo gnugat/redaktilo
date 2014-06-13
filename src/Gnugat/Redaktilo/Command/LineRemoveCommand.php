@@ -30,7 +30,7 @@ class LineRemoveCommand implements Command
     public function execute(array $input)
     {
         $file = $input['file'];
-        $location = $input['location'];
+        $location = isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber();
 
         $lines = $this->converter->from($file);
         unset($lines[$location]);

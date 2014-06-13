@@ -45,13 +45,23 @@ class LineInsertCommandSpec extends ObjectBehavior
         $expectedFilename = sprintf(self::EXPECTED_FILENAME, $this->rootPath);
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
 
+        $lineNumber = 6;
+
         $input = array(
             'file' => $file,
-            'location' => 6,
+            'location' => $lineNumber,
             'addition' => "Pontius Pilate: '...Dickus?'"
         );
 
         $this->converter->back($file, $expectedLines)->shouldBeCalled();
         $this->execute($input);
+
+        $input = array(
+            'file' => $file,
+            'addition' => "Pontius Pilate: '...Dickus?'"
+        );
+        $file->getCurrentLineNumber()->willReturn($lineNumber);
+
+        $this->execute($input);
     }
-} 
+}

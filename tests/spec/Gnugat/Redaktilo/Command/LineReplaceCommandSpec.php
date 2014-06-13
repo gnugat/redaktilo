@@ -45,13 +45,23 @@ class LineReplaceCommandSpec extends ObjectBehavior
         $expectedFilename = sprintf(self::EXPECTED_FILENAME, $this->rootPath);
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
 
+        $lineNumber = 5;
+
         $input = array(
             'file' => $file,
-            'location' => 5,
+            'location' => $lineNumber,
             'replacement' => '[Even more sniggering]'
         );
 
         $this->converter->back($file, $expectedLines)->shouldBeCalled();
         $this->execute($input);
+
+        $input = array(
+            'file' => $file,
+            'replacement' => '[Even more sniggering]'
+        );
+        $file->getCurrentLineNumber()->willReturn($lineNumber);
+
+        $this->execute($input);
     }
-} 
+}
