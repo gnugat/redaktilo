@@ -2,7 +2,9 @@
 
 ## 1.0.0-alpha1: Commands, boolean finds and locations
 
-* removedadded `LineInsertAboveCommand`
+* removed `SubstringSearchStrategy`
+* removed `replaceWith` from `Editor`
+* added `LineInsertAboveCommand`
 * added `LineInsertUnderCommand`
 * removed `LineInsertCommand`
 * moved line management from `Editor` to commands

@@ -14,7 +14,7 @@ namespace Gnugat\Redaktilo\Command;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 
 /**
- * Inserts the given addition in the given file at the given location.
+ * Inserts the given addition in the given file under the given location.
  */
 class LineInsertUnderCommand implements Command
 {

@@ -37,15 +37,11 @@ class Editor
     public function changeTo(File $file, $replacement, $location = null); // Will be renamed to `replace`
     public function remove(File $file, $location = null); // Removes the current line.
 
-    // Global manipulations.
-    public function replaceWith(File $file, $regex, $replacement, $location = null); // Will be renamed to `replaceAll`
-
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpTo(File $file, $pattern);
-    public function jumpDownTo(File $file, $pattern);
-    public function jumpUpTo(File $file, $pattern);
+    public function jumpDownTo(File $file, $pattern, $after = null);
+    public function jumpUpTo(File $file, $pattern, $before = null);
 
     // Content searching.
     public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
@@ -133,7 +129,7 @@ $editor->jumpDownTo($file, 1, 0); // Current line: 1 (which is 'Egg')
 The lookup can also be done using regex:
 
 ```php
-$editor->jumpUpTo($file, '/ac/'); // Current line: 1 (which is 'Egg')
+$editor->jumpUpTo($file, '/ac/'); // Current line: 0 (which is 'Bacon')
 ```
 
 *Note*: If you're manipulating a PHP file, you can also jump to symbols like
