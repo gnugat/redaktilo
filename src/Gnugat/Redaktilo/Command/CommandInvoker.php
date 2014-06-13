@@ -33,27 +33,9 @@ class CommandInvoker
      */
     public function run($name, array $input)
     {
-        $command = $this->resolve($name, $input);
-        if (null === $command) {
+        if (!isset($this->commands[$name])) {
             throw new UnsupportedCommandException($name);
         }
-
-        $command->execute($input);
-    }
-
-    /**
-     * @param string $name
-     * @param array  $input
-     *
-     * @return Command|null
-     *
-     */
-    protected function resolve($name, array $input)
-    {
-        if (isset($this->commands[$name])) {
-            return $this->commands[$name];
-        }
-
-        return null;
+        $this->commands[$name]->execute($input);
     }
 }
