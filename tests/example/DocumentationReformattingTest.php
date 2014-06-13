@@ -14,7 +14,6 @@ namespace example\Gnugat\Redaktilo;
 use Gnugat\Redaktilo\EditorFactory;
 use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\FactoryMethod\LineNumber;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -64,14 +63,14 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
 
         $editor->jumpDownTo($file, '.. code-block:: bash');
         $lines = $converter->from($file);
-        $editor->jumpDownTo($file, LineNumber::down(1));
+        $editor->jumpDownTo($file, 1);
 
         while ((bool) preg_match('/^   / ', $line = $lines[$file->getCurrentLineNumber()]) || '' === $line) {
             if ('' !== $line) {
                 $editor->replaceWith($file, '/\$ /', '');
             }
 
-            $editor->jumpDownTo($file, LineNumber::down(1));
+            $editor->jumpDownTo($file, 1);
         }
 
         $this->removeDollars($editor, $file);
