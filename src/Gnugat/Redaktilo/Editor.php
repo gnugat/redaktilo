@@ -92,6 +92,28 @@ class Editor
     }
 
     /**
+     * Searches for the first occurence of the given pattern in the File.
+     *
+     * @param File  $file
+     * @param mixed $pattern
+     *
+     * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
+     *
+     * @api
+     */
+    public function jumpTo(File $file, $pattern)
+    {
+        $searchStrategy = $this->searchEngine->resolve($pattern);
+        $foundLineNumber = $searchStrategy->findNext($file, $pattern, 0);
+        if (false === $foundLineNumber) {
+            throw new PatternNotFoundException($file, $pattern);
+        }
+
+        $file->setCurrentLineNumber($foundLineNumber);
+    }
+
+    /**
      * Searches the given pattern in the File after the current line.
      * If the pattern is found, the current line is set to it.
      *
