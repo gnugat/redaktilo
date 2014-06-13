@@ -29,12 +29,13 @@ class EditorBuilderSpec extends ObjectBehavior
         $editor->shouldHaveSearchStrategies(array(
             'Gnugat\Redaktilo\Search\PhpSearchStrategy',
             'Gnugat\Redaktilo\Search\LineRegexSearchStrategy',
-            'Gnugat\Redaktilo\Search\SubstringSearchStrategy',
+            'Gnugat\Redaktilo\Search\SameSearchStrategy',
             'Gnugat\Redaktilo\Search\LineNumberSearchStrategy',
         ));
 
         $editor->shouldHaveCommands(array(
-            'insert' => 'Gnugat\Redaktilo\Command\LineInsertCommand',
+            'insert_above' => 'Gnugat\Redaktilo\Command\LineInsertAboveCommand',
+            'insert_under' => 'Gnugat\Redaktilo\Command\LineInsertUnderCommand',
             'replace' => 'Gnugat\Redaktilo\Command\LineReplaceCommand',
             'remove' => 'Gnugat\Redaktilo\Command\LineRemoveCommand',
         ));
@@ -67,7 +68,7 @@ class EditorBuilderSpec extends ObjectBehavior
             ->getEditor();
 
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
-        $editor->shouldHaveCommandCount(4);
+        $editor->shouldHaveCommandCount(5);
     }
 
     function it_can_have_a_custom_command_invoker(CommandInvoker $commandInvoker)

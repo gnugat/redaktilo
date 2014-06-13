@@ -12,18 +12,14 @@
 namespace Gnugat\Redaktilo\Command;
 
 /**
- * Thrown if the name given to CommandInvoker isn't supported by any of its command.
- *
- * @api
+ * Thrown if the name given to CommandInvoker isn't in its collection.
  */
-class UnsupportedCommandException extends \Exception
+class CommandNotFoundException extends \Exception
 {
-    /**
-     * @param string $name
-     */
+    /** @param string $name */
     public function __construct($name)
     {
-        $message = sprintf('No command was found with name "%s"', $name);
+        $message = sprintf('The command "%s" was not found in CommandInvoker', $name);
 
         parent::__construct($message);
     }

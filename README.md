@@ -14,7 +14,7 @@ editor metaphor:
   * remove it
 * finally it can save the changes on the filesystem
 
-**Caution**: still under heavy development (but BC breaks might not be frequent).
+**Caution**: Project currently in version alpha, expect massive BC breaks.
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/mini.png)](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08)
 [![Travis CI](https://travis-ci.org/gnugat/redaktilo.png)](https://travis-ci.org/gnugat/redaktilo)

@@ -13,15 +13,15 @@ namespace Gnugat\Redaktilo\Command;
 
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 
-class LineInsertCommand implements Command
+/**
+ * Inserts the given addition in the given file above the given location.
+ */
+class LineInsertAboveCommand implements Command
 {
-
     /** @var LineContentConverter */
-    protected $converter;
+    private $converter;
 
-    /**
-     * @param LineContentConverter $converter
-     */
+    /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
         $this->converter = $converter;
@@ -31,17 +31,19 @@ class LineInsertCommand implements Command
     public function execute(array $input)
     {
         $file = $input['file'];
-        $location = $input['location'];
+        $location = (isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber());
         $addition = $input['addition'];
 
         $lines = $this->converter->from($file);
         array_splice($lines, $location, 0, $addition);
         $this->converter->back($file, $lines);
+
+        $file->setCurrentLineNumber($location);
     }
 
     /** {@inheritdoc} */
     public function getName()
     {
-        return 'insert';
+        return 'insert_above';
     }
 }

@@ -14,16 +14,14 @@ namespace Gnugat\Redaktilo\Command;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 
 /**
- * Replaces the given location in the given file with the given replacement.
+ * Inserts the given addition in the given file under the given location.
  */
-class LineReplaceCommand implements Command
+class LineInsertUnderCommand implements Command
 {
     /** @var LineContentConverter */
     private $converter;
 
-    /**
-     * @param LineContentConverter $converter
-     */
+    /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
         $this->converter = $converter;
@@ -33,17 +31,19 @@ class LineReplaceCommand implements Command
     public function execute(array $input)
     {
         $file = $input['file'];
-        $location = isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber();
-        $replacement = $input['replacement'];
+        $location = 1 + (isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber());
+        $addition = $input['addition'];
 
         $lines = $this->converter->from($file);
-        $lines[$location] = $replacement;
+        array_splice($lines, $location, 0, $addition);
         $this->converter->back($file, $lines);
+
+        $file->setCurrentLineNumber($location);
     }
 
     /** {@inheritdoc} */
     public function getName()
     {
-        return 'replace';
+        return 'insert_under';
     }
 }

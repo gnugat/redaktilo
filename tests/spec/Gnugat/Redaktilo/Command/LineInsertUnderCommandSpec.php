@@ -15,10 +15,10 @@ use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 
-class LineReplaceCommandSpec extends ObjectBehavior
+class LineInsertUnderCommandSpec extends ObjectBehavior
 {
     const ORIGINAL_FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
-    const EXPECTED_FILENAME = '%s/tests/fixtures/expectations/life-of-brian-replace.txt';
+    const EXPECTED_FILENAME = '%s/tests/fixtures/expectations/life-of-brian-insert.txt';
 
     private $rootPath;
     private $converter;
@@ -40,27 +40,30 @@ class LineReplaceCommandSpec extends ObjectBehavior
         $this->shouldImplement('Gnugat\Redaktilo\Command\Command');
     }
 
-    function it_replaces_line(File $file)
+    function it_inserts_new_lines(File $file)
     {
         $expectedFilename = sprintf(self::EXPECTED_FILENAME, $this->rootPath);
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
 
-        $lineNumber = 5;
+        $lineNumber = 6;
 
         $input = array(
             'file' => $file,
-            'location' => $lineNumber,
-            'replacement' => '[Even more sniggering]'
+            'location' => $lineNumber - 1,
+            'addition' => "Pontius Pilate: '...Dickus?'"
         );
 
         $this->converter->back($file, $expectedLines)->shouldBeCalled();
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+
         $this->execute($input);
 
         $input = array(
             'file' => $file,
-            'replacement' => '[Even more sniggering]'
+            'addition' => "Pontius Pilate: '...Dickus?'"
         );
-        $file->getCurrentLineNumber()->willReturn($lineNumber);
+        $file->getCurrentLineNumber()->willReturn($lineNumber - 1);
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->execute($input);
     }

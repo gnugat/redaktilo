@@ -61,15 +61,15 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
     {
         $converter = new LineContentConverter();
 
-        $editor->jumpDownTo($file, '.. code-block:: bash');
+        $editor->jumpDownTo($file, '/.. code-block:: bash/');
         $lines = $converter->from($file);
         $editor->jumpDownTo($file, 1);
 
         while ((bool) preg_match('/^   / ', $line = $lines[$file->getCurrentLineNumber()]) || '' === $line) {
             if ('' !== $line) {
-                $editor->replaceWith($file, '/\$ /', '');
+                $replacement = preg_replace('/\$ /', '', $line);
+                $editor->changeTo($file, $replacement);
             }
-
             $editor->jumpDownTo($file, 1);
         }
 

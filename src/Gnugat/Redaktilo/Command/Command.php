@@ -12,23 +12,13 @@
 namespace Gnugat\Redaktilo\Command;
 
 /**
- * A command is responsible to execute a specific task on a File's content.
- *
- * @api
+ * Executes a task with the given input.
  */
 interface Command
 {
-    /**
-     * @return string
-     *
-     * @api
-     */
+    /** @return string */
     public function getName();
 
-    /**
-     * @param array $input
-     *
-     * @api
-     */
+    /** @param array $input */
     public function execute(array $input);
 }

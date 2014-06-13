@@ -14,7 +14,6 @@ This chapter explains the responsibility of each classes:
     * [LineSearchStrategy](#linesearchstrategy)
     * [PhpSearchStrategy](#phpsearchstrategy)
     * [SameSearchStrategy](#samesearchstrategy)
-    * [SubstringSearchStrategy](#substringsearchstrategy)
     * [SearchEngine](#searchengine)
 * [Command](#command)
     * [LineInsertCommand](#lineinsertcommand)
@@ -45,32 +44,13 @@ class File
     public function read();
     public function write($newContent);
 
-    // ...
+    public function getCurrentLineNumber();
+    public function setCurrentLineNumber($lineNumber);
 }
 ```
 
 Every single other classes in this project are stateless services allowing you
 to manipulate it.
-
-Currently the file also have some other methods:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo;
-
-class File
-{
-    // ...
-
-    public function getCurrentLineNumber();
-    public function setCurrentLineNumber($lineNumber);
-
-    public function changeLineTo($line, $lineNumber);
-}
-```
-
-I wouldn't rely on them too much as they might be moved outside.
 
 One last thing: creating a `File` sets its cursor to the first line:
 
@@ -164,8 +144,6 @@ use Gnugat\Redaktilo\File;
 
 interface SearchStrategy
 {
-    public function has(File $file, $pattern);
-
     // Throw PatternNotFoundException if the pattern hasn't be found
     public function findNext(File $file, $pattern);
     public function findPrevious(File $file, $pattern);
@@ -180,9 +158,6 @@ If you want to go to a given line number, use this one.
 
 The `findNext` method will jump `n` lines under the current one,  while
 `findPrevious` will jump above.
-
-The `has` method just checks that the given line number is within the boundary
-of the file.
 
 ### LineRegexSearchStrategy
 
@@ -200,19 +175,12 @@ Its `find` methods create a proper subset which can then be manipulated in
 
 If you know exactly the value of the line you want to look for, use this one.
 
-The `has` method will look in the whole file and will return `true` if at least
-one line matches exactly the given one.
-
 The `find` methods will return the line number.
 
 ### PhpSearchStrategy
 
 If you want to manipulate a PHP file and jump to a line containing a set of
 tokens, use this strategy.
-
-### SubstringSearchStrategy
-
-This strategy looks if the given string is contained in each lines.
 
 ### SearchEngine
 
@@ -258,9 +226,13 @@ interface Command
 The input parameter is currently an array with at least an entry `file` with the
 file to manipulate.
 
-### LineInsertCommand
+### LineInsertAboveCommand
 
-Allows you to insert a line at the given location.
+Inserts the given addition in the given file above the given location.
+
+### LineInsertUnderCommand
+
+Inserts the given addition in the given file under the given location.
 
 ### LineReplaceCommand
 
@@ -322,11 +294,8 @@ namespace Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Command\Command;
 use Gnugat\Redaktilo\Command\CommandInvoker;
-use Gnugat\Redaktilo\Converter\ContentConverter;
-use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class EditorBuilder
 {
@@ -370,9 +339,6 @@ class Editor
     public function addAfter(File $file, $addition, $location = null);
     public function changeTo(File $file, $replacement, $location = null); // Will be renamed to `replace`
     public function remove(File $file, $location = null); // Removes the current line.
-
-    // Global manipulations.
-    public function replaceWith(File $file, $regex, $replacement, $location = null); // Will be renamed to `replaceAll`
 
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
