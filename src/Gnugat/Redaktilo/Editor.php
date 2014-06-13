@@ -226,6 +226,24 @@ class Editor
     }
 
     /**
+     * Removes the line at the given location
+     * (or at the current one if none provided).
+     *
+     * @param File    $file
+     * @param integer $location
+     *
+     * @api
+     */
+    public function remove(File $file, $location = null)
+    {
+        $input = array(
+            'file' => $file,
+            'location' => $location,
+        );
+        $this->commandInvoker->run('remove', $input);
+    }
+
+    /**
      * Replaces the current line using a regex and replace string/callback.
      *
      * @param File            $file
@@ -257,23 +275,5 @@ class Editor
         $file->changeLineTo($line, $location);
 
         $file->setCurrentLineNumber($location);
-    }
-
-    /**
-     * Removes the line at the given location
-     * (or at the current one if none provided).
-     *
-     * @param File    $file
-     * @param integer $location
-     *
-     * @api
-     */
-    public function remove(File $file, $location = null)
-    {
-        $input = array(
-            'file' => $file,
-            'location' => $location,
-        );
-        $this->commandInvoker->run('remove', $input);
     }
 }
