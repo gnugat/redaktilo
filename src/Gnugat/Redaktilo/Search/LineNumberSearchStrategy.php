@@ -35,12 +35,11 @@ class LineNumberSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findNext(File $file, $pattern)
+    public function findPrevious(File $file, $pattern, $before = null)
     {
+        $foundLineNumber = ($before ?: $file->getCurrentLineNumber()) - $pattern;
         $lines = $this->converter->from($file);
         $totalLines = count($lines);
-        $currentLineNumber = $file->getCurrentLineNumber();
-        $foundLineNumber = $currentLineNumber + $pattern;
         if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
             return false;
         }
@@ -49,12 +48,11 @@ class LineNumberSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findPrevious(File $file, $pattern)
+    public function findNext(File $file, $pattern, $after = null)
     {
+        $foundLineNumber = ($after ?: $file->getCurrentLineNumber()) + $pattern;
         $lines = $this->converter->from($file);
         $totalLines = count($lines);
-        $currentLineNumber = $file->getCurrentLineNumber();
-        $foundLineNumber = $currentLineNumber - $pattern;
         if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
             return false;
         }

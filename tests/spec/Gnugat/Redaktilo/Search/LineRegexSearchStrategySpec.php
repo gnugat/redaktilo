@@ -58,21 +58,6 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
         $this->has($file, $nonExistingLineRegex)->shouldBe(false);
     }
 
-    function it_finds_next_occurences(File $file)
-    {
-        $previousLineRegex = '/\[A \w+ sniggers\]/';
-        $currentLineRegex = '/More sniggering/';
-        $currentLineNumber = 3;
-        $nextLineRegex = '/\[Sniggering\]/';
-        $nextLineNumber = 5;
-
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-
-        $this->findNext($file, $previousLineRegex)->shouldBe(false);
-        $this->findNext($file, $currentLineRegex)->shouldBe(false);
-        $this->findNext($file, $nextLineRegex)->shouldBe($nextLineNumber);
-    }
-
     function it_finds_previous_occurences(File $file)
     {
         $previousLineRegex = '/\[A \w+ sniggers\]/';
@@ -81,10 +66,33 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
         $currentLineNumber = 3;
         $nextLineRegex = '/\[Sniggering\]/';
 
+        $this->findPrevious($file, $nextLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $currentLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $previousLineRegex, $currentLineNumber)->shouldBe($previousLineNumber);
+
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
         $this->findPrevious($file, $nextLineRegex)->shouldBe(false);
         $this->findPrevious($file, $currentLineRegex)->shouldBe(false);
         $this->findPrevious($file, $previousLineRegex)->shouldBe($previousLineNumber);
+    }
+
+    function it_finds_next_occurences(File $file)
+    {
+        $previousLineRegex = '/\[A \w+ sniggers\]/';
+        $currentLineRegex = '/More sniggering/';
+        $currentLineNumber = 3;
+        $nextLineRegex = '/\[Sniggering\]/';
+        $nextLineNumber = 5;
+
+        $this->findNext($file, $previousLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $currentLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $nextLineRegex, $currentLineNumber)->shouldBe($nextLineNumber);
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+
+        $this->findNext($file, $previousLineRegex)->shouldBe(false);
+        $this->findNext($file, $currentLineRegex)->shouldBe(false);
+        $this->findNext($file, $nextLineRegex)->shouldBe($nextLineNumber);
     }
 }

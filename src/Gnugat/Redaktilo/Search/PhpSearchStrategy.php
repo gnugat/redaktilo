@@ -39,36 +39,36 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findNext(File $file, $pattern)
+    public function findPrevious(File $file, $pattern, $before = null)
     {
-        $tokens = $this->converter->from($file);
-        $currentLineNumber = $file->getCurrentLineNumber() + 1;
-        $total = count($tokens);
-        for ($index = 0; $index < $total; $index++) {
-            $token = $tokens[$index];
-            if ($token->getLineNumber() === $currentLineNumber) {
-                break;
-            }
-        }
-
-        return $this->findIn($tokens, $index, $pattern);
-    }
-
-    /** {@inheritdoc} */
-    public function findPrevious(File $file, $pattern)
-    {
+        $before = $before ?: $file->getCurrentLineNumber();
         $tokens = $this->converter->from($file);
         $reversedTokens = array_reverse($tokens);
-        $currentLineNumber = $file->getCurrentLineNumber();
         $total = count($reversedTokens);
         for ($index = 0; $index < $total; $index++) {
             $token = $reversedTokens[$index];
-            if ($token->getLineNumber() === $currentLineNumber) {
+            if ($token->getLineNumber() === $before) {
                 break;
             }
         }
 
         return $this->findIn($reversedTokens, $index, $pattern);
+    }
+
+    /** {@inheritdoc} */
+    public function findNext(File $file, $pattern, $after = null)
+    {
+        $after = ($after ?: $file->getCurrentLineNumber()) + 1;
+        $tokens = $this->converter->from($file);
+        $total = count($tokens);
+        for ($index = 0; $index < $total; $index++) {
+            $token = $tokens[$index];
+            if ($token->getLineNumber() === $after) {
+                break;
+            }
+        }
+
+        return $this->findIn($tokens, $index, $pattern);
     }
 
     /** {@inheritdoc} */

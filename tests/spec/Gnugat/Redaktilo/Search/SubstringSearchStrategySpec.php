@@ -56,21 +56,6 @@ class SubstringSearchStrategySpec extends ObjectBehavior
         $this->has($file, $nonExistingSubstring)->shouldBe(false);
     }
 
-    function it_finds_next_occurences(File $file)
-    {
-        $previousSubstring = 'sniggers';
-        $currentSubstring = 'More';
-        $currentLineNumber = 3;
-        $nextSubstring = 'Sniggering';
-        $nextLineNumber = 5;
-
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-
-        $this->findNext($file, $previousSubstring)->shouldBe(false);
-        $this->findNext($file, $currentSubstring)->shouldBe(false);
-        $this->findNext($file, $nextSubstring)->shouldBe($nextLineNumber);
-    }
-
     function it_finds_previous_occurences(File $file)
     {
         $previousSubstring = 'sniggers';
@@ -79,10 +64,33 @@ class SubstringSearchStrategySpec extends ObjectBehavior
         $currentLineNumber = 3;
         $nextSubstring = 'Sniggering';
 
+        $this->findPrevious($file, $nextSubstring, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $currentSubstring, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $previousSubstring, $currentLineNumber)->shouldBe($previousLineNumber);
+
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
         $this->findPrevious($file, $nextSubstring)->shouldBe(false);
         $this->findPrevious($file, $currentSubstring)->shouldBe(false);
         $this->findPrevious($file, $previousSubstring)->shouldBe($previousLineNumber);
+    }
+
+    function it_finds_next_occurences(File $file)
+    {
+        $previousSubstring = 'sniggers';
+        $currentSubstring = 'More';
+        $currentLineNumber = 3;
+        $nextSubstring = 'Sniggering';
+        $nextLineNumber = 5;
+
+        $this->findNext($file, $previousSubstring, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $currentSubstring, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $nextSubstring, $currentLineNumber)->shouldBe($nextLineNumber);
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+
+        $this->findNext($file, $previousSubstring)->shouldBe(false);
+        $this->findNext($file, $currentSubstring)->shouldBe(false);
+        $this->findNext($file, $nextSubstring)->shouldBe($nextLineNumber);
     }
 }

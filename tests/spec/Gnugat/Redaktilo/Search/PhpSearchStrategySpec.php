@@ -70,21 +70,6 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $this->has($file, $absentTokens)->shouldBe(false);
     }
 
-    function it_finds_next_occurences(File $file)
-    {
-        $previousToken = array(new Token(T_OPEN_TAG, "<?php\n"));
-        $currentLineNumber = 10;
-        $currentToken = $this->tokenBuilder->buildClass('AppKernel');
-        $nextLineNumber = 15;
-        $nextToken = $this->tokenBuilder->buildMethod('registerBundles');
-
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
-
-        $this->findNext($file, $previousToken)->shouldBe(false);
-        $this->findNext($file, $currentToken)->shouldBe(false);
-        $this->findNext($file, $nextToken)->shouldBe($nextLineNumber);
-    }
-
     function it_finds_previous_occurences(File $file)
     {
         $previousLineNumber = 0;
@@ -93,10 +78,33 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $currentToken = $this->tokenBuilder->buildClass('AppKernel');
         $nextToken = $this->tokenBuilder->buildMethod('registerBundles');
 
+        $this->findPrevious($file, $nextToken, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $currentToken, $currentLineNumber)->shouldBe(false);
+        $this->findPrevious($file, $previousToken, $currentLineNumber)->shouldBe($previousLineNumber);
+
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
         $this->findPrevious($file, $nextToken)->shouldBe(false);
         $this->findPrevious($file, $currentToken)->shouldBe(false);
         $this->findPrevious($file, $previousToken)->shouldBe($previousLineNumber);
+    }
+
+    function it_finds_next_occurences(File $file)
+    {
+        $previousToken = array(new Token(T_OPEN_TAG, "<?php\n"));
+        $currentLineNumber = 10;
+        $currentToken = $this->tokenBuilder->buildClass('AppKernel');
+        $nextLineNumber = 15;
+        $nextToken = $this->tokenBuilder->buildMethod('registerBundles');
+
+        $this->findNext($file, $previousToken, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $currentToken, $currentLineNumber)->shouldBe(false);
+        $this->findNext($file, $nextToken, $currentLineNumber)->shouldBe($nextLineNumber);
+
+        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+
+        $this->findNext($file, $previousToken)->shouldBe(false);
+        $this->findNext($file, $currentToken)->shouldBe(false);
+        $this->findNext($file, $nextToken)->shouldBe($nextLineNumber);
     }
 }

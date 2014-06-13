@@ -22,24 +22,24 @@ abstract class LineSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findNext(File $file, $pattern)
+    public function findPrevious(File $file, $pattern, $before = null)
     {
+        $before = ($before ?: $file->getCurrentLineNumber()) - 1;
         $lines = $this->converter->from($file);
-        $currentLineNumber = $file->getCurrentLineNumber() + 1;
-        $nextLines = array_slice($lines, $currentLineNumber, null, true);
-
-        return $this->findIn($nextLines, $pattern);
-    }
-
-    /** {@inheritdoc} */
-    public function findPrevious(File $file, $pattern)
-    {
-        $lines = $this->converter->from($file);
-        $currentLineNumber = $file->getCurrentLineNumber() - 1;
-        $previousLines = array_slice($lines, 0, $currentLineNumber, true);
+        $previousLines = array_slice($lines, 0, $before, true);
         $reversedPreviousLines = array_reverse($previousLines, true);
 
         return $this->findIn($reversedPreviousLines, $pattern);
+    }
+
+    /** {@inheritdoc} */
+    public function findNext(File $file, $pattern, $after = null)
+    {
+        $after = ($after ?: $file->getCurrentLineNumber()) + 1;
+        $lines = $this->converter->from($file);
+        $nextLines = array_slice($lines, $after, null, true);
+
+        return $this->findIn($nextLines, $pattern);
     }
 
     /**
