@@ -12,7 +12,6 @@
 namespace Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\Converter\LineContentConverter;
-use Gnugat\Redaktilo\File;
 
 /**
  * Tries to match the given regex against each lines.

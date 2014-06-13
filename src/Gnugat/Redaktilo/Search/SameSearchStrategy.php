@@ -12,7 +12,6 @@
 namespace Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\Converter\LineContentConverter;
-use Gnugat\Redaktilo\File;
 
 /**
  * Matches the lines which are exactly the same as the given pattern.
