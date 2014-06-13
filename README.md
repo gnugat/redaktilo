@@ -16,7 +16,7 @@ editor metaphor:
 
 **Caution**: still under heavy development (but BC breaks might not be frequent).
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/big.png)](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/mini.png)](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08)
 [![Travis CI](https://travis-ci.org/gnugat/redaktilo.png)](https://travis-ci.org/gnugat/redaktilo)
 
 ## Getting started
@@ -24,7 +24,7 @@ editor metaphor:
 Use [Composer](http://getcomposer.org/) to download and install Redaktilo in
 your projects:
 
-    composer require "gnugat/redaktilo:~0.9@dev"
+    composer require "gnugat/redaktilo:~1.0.0@alpha"
 
 To use Redaktilo, you have to create an editor. The most simple way to do this
 is by using the `EditorFactory`:
@@ -40,8 +40,8 @@ $editor = EditorFactory::createEditor();
 
 I'll describe the
 [SensioGeneratorBundle](https://github.com/sensiolabs/SensioGeneratorBundle)
-use case in this README. Its [`KernelManipulator`](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
-edits the AppKernel to insert a line.
+use case in this README. This bundle has a [`KernelManipulator`](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
+class which edits an `AppKernel` file to insert a line.
 
 Here's what the code would look like if it was using Redaktilo:
 

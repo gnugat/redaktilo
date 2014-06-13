@@ -8,13 +8,10 @@ This chapter explains the responsibility of each classes:
     * [LineContentConverter](#linecontentconverter)
     * [PhpContentConverter](#phpcontentconverter)
 * [DependencyInjection](#dependencyinjection)
-* [FactoryMethod](#factorymethod)
-    * [Filesystem2](#filesystem2)
-    * [Line](#line)
-    * [LineNumber](#linenumber)
 * [Search](#search)
     * [LineNumberSearchStrategy](#linenumbersearchstrategy)
     * [LineRegexSearchStrategy](#lineregexsearchstrategy)
+    * [LineSearchStrategy](#linesearchstrategy)
     * [PhpSearchStrategy](#phpsearchstrategy)
     * [SameSearchStrategy](#samesearchstrategy)
     * [SubstringSearchStrategy](#substringsearchstrategy)
@@ -150,107 +147,6 @@ It is also able to merge back those lines with the appropriate line break.
 This converter transform the content of a PHP source file into an array of tokens
 via the `token_get_all()` function.
 
-## FactoryMethod
-
-Factory methods don't have any real behavior, their purpose is to make the code
-easier to read by making things more literal.
-
-### Filesystem2
-
-`Editor` can open existing files. You can force it to open new files by passing
-`true` as a second argument:
-
-```php
-$editor->open($filename, true);
-```
-
-This factory method allows you to make this argument more explicit:
-
-```php
-$editor->open($filename, Filesystem::forceCreation());
-```
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\FactoryMethod;
-
-class Filesystem
-{
-    public static function forceCreation();
-}
-```
-
-### Line
-
-Sometimes you'll need to insert empty lines:
-
-```php
-$editor->addAfter($file, '');
-```
-
-This factory method allows you to make this more explicit:
-
-```php
-$editor->addAfter($file, Line::emptyOne());
-```
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\FactoryMethod;
-
-class Line
-{
-    public static function emptyOne();
-}
-```
-
-### LineNumber
-
-You might want to jump a number of line above or under the current one:
-
-```php
-$editor->jumpUpTo($file, 3);
-$editor->jumpDownTo($file, 5);
-```
-
-This factory method allows you to make this more explicit:
-
-```php
-$editor->jumpUpTo($file, LineNumber::up(3));
-$editor->jumpDownTo($file, LineNumber::down(5));
-```
-
-You might also want to set the current line to a given line number:
-
-```php
-$file->setCurrentLineNumber(42);
-```
-
-Again, you can make it more explicit:
-
-```php
-$file->setCurrentLineNumber(LineNumber::absolute(42));
-```
-
-`LineNumber` also normalizes the given parameter to make sure it is a positive
-integer.
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\FactoryMethod;
-
-class LineNumber
-{
-    public static function up($lines);
-    public static function down($lines);
-
-    public static function absolute($lineNumber);
-}
-```
-
 ## Search
 
 Another stateless service, which allows you to search patterns in the File's
@@ -291,6 +187,14 @@ of the file.
 ### LineRegexSearchStrategy
 
 You can look for a line which matches a regex.
+
+### LineSearchStrategy
+
+This abstract class allows you to create search strategies which manipulate
+array of lines.
+
+Its `find` methods create a proper subset which can then be manipulated in
+`findIn` implemntations.
 
 ### SameSearchStrategy
 
@@ -334,7 +238,7 @@ class SearchEngine
 
 ## Command
 
-Allows you to the manipulate the File's content.
+Allows you to manipulate the File's content.
 
 This is actually an interface allowing you to extend Redaktilo. By default, three
 implementations are provided.
@@ -491,15 +395,6 @@ $editor->open($filename); // Throws an exception if the file doesn't exist
 $editor->open($filename, true); // Creates a new file if it doesn't exist
 ```
 
-If you want to make the second argument more explicit, use the following factory
-method:
-
-```php
-use Gnugat\Redaktilo\FactoryMethod\Filesystem;
-
-$editor->open($filename, Filesystem::forceCreation());
-```
-
 One last thing: opening or creating a file sets its cursor to the first line:
 
 ```php
@@ -513,11 +408,10 @@ You can insert additions above or under a given line (by default the current one
 Just keep in mind that the cursor will be set to the added line:
 
 ```php
-use Gnugat\Redaktilo\FactoryMethod\Line;
+$emptyLine = '';
 
-{
 echo $file->getCurrentLineNumber(); // 5
-$editor->addAfter($file, Line::emptyOne());
+$editor->addAfter($file, $emptyLine);
 echo $file->getCurrentLineNumber(); // 6
 ```
 
@@ -528,10 +422,8 @@ You can also replace a line with a new value, or remove it.
 You can jump down or up to a line which correspond to the given pattern:
 
 ```php
-use Gnugat\Redaktilo\FactoryMethod\LineNumber
-
 $editor->jumpdDownTo($file, 'The exact value of the line');
-$editor->jumpdDownTo($file, LineNumber::down(2)); // Jumps two lines under the current one.
+$editor->jumpdDownTo($file, 2); // Jumps two lines under the current one.
 ```
 
 You should keep in mind that the search is done relatively to the current one:
