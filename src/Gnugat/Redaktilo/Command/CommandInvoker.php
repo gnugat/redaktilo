@@ -11,14 +11,15 @@
 
 namespace Gnugat\Redaktilo\Command;
 
+/**
+ * Executes a command with the given input.
+ */
 class CommandInvoker
 {
-    /** @var array */
-    protected $commands = array();
+    /** @var array of Command */
+    private $commands = array();
 
-    /**
-     * @param Command $command
-     */
+    /** @param Command $command */
     public function addCommand(Command $command)
     {
         $this->commands[$command->getName()] = $command;
@@ -28,7 +29,7 @@ class CommandInvoker
      * @param string $name
      * @param array  $input
      *
-     * @throws \Gnugat\Redaktilo\Command\UnsupportedCommandException
+     * @throws UnsupportedCommandException
      */
     public function run($name, array $input)
     {

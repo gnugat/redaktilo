@@ -169,7 +169,7 @@ class Editor
      *
      * @api
      */
-    public function addBefore(File $file, $addition, $location=null)
+    public function addBefore(File $file, $addition, $location = null)
     {
         if ($location === null || !is_integer($location)) {
             $location = $file->getCurrentLineNumber();
@@ -197,7 +197,7 @@ class Editor
      *
      * @api
      */
-    public function addAfter(File $file, $addition, $location=null)
+    public function addAfter(File $file, $addition, $location = null)
     {
         if ($location === null || !is_integer($location)) {
             $location = $file->getCurrentLineNumber();
@@ -225,7 +225,7 @@ class Editor
      *
      * @api
      */
-    public function changeTo(File $file, $replacement, $location=null)
+    public function changeTo(File $file, $replacement, $location = null)
     {
         if ($location === null || !is_integer($location)) {
             $location = $file->getCurrentLineNumber();
@@ -253,7 +253,7 @@ class Editor
      *
      * @api
      */
-    public function replaceWith(File $file, $regex, $replace, $location=null)
+    public function replaceWith(File $file, $regex, $replace, $location = null)
     {
         if ($location === null || !is_integer($location)) {
             $location = $file->getCurrentLineNumber();
@@ -281,7 +281,7 @@ class Editor
      *
      * @api
      */
-    public function remove(File $file, $location=null)
+    public function remove(File $file, $location = null)
     {
         if ($location === null || !is_integer($location)) {
             $location = $file->getCurrentLineNumber();

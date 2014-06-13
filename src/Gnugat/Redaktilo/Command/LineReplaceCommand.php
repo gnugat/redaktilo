@@ -13,11 +13,13 @@ namespace Gnugat\Redaktilo\Command;
 
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 
+/**
+ * Replaces the given location in the given file with the given replacement.
+ */
 class LineReplaceCommand implements Command
 {
-
     /** @var LineContentConverter */
-    protected $converter;
+    private $converter;
 
     /**
      * @param LineContentConverter $converter

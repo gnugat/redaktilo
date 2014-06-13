@@ -13,15 +13,15 @@ namespace Gnugat\Redaktilo\Command;
 
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 
+/**
+ * Inserts the given addition in the given file at the given location.
+ */
 class LineInsertCommand implements Command
 {
-
     /** @var LineContentConverter */
-    protected $converter;
+    private $converter;
 
-    /**
-     * @param LineContentConverter $converter
-     */
+    /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
         $this->converter = $converter;

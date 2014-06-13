@@ -13,14 +13,15 @@ namespace Gnugat\Redaktilo\Command;
 
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 
+/**
+ * Removes the given location in the given file.
+ */
 class LineRemoveCommand implements Command
 {
     /** @var LineContentConverter */
-    protected $converter;
+    private $converter;
 
-    /**
-     * @param LineContentConverter $converter
-     */
+    /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
         $this->converter = $converter;
