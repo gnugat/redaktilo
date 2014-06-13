@@ -2,6 +2,8 @@
 
 ## 1.0.0-alpha1: Commands and boolean finds
 
+* added before/after to the `Editor` jumpTo methods
+* removed `FactoryMethod`
 * removed `SearchStrategy`'s `has` method
 * added before/after to the `SearchStrategy` find methods
 * added abstract class `LineSearchStrategy`

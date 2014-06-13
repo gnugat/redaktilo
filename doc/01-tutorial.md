@@ -122,10 +122,12 @@ $editor->jumpDownTo($file, 2); // Current line: 2 (which is 'Sausage')
 $editor->jumpUpTo($file, 2); // Current line: 0 (which is 'Bacon')
 ```
 
-If you need to go to a precise line, you can use:
+If you need to go the first occurence in the whole file (regardless of the
+current line), you can use:
 
 ```php
-$editor->jumpTo($file, 1); // Current line: 1 (which is 'Egg')
+// Searches for the line number 1, starting the lookup from the first line (instead of the current one)
+$editor->jumpDownTo($file, 1, 0); // Current line: 1 (which is 'Egg')
 ```
 
 The lookup can also be done using regex:

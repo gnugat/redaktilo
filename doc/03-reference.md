@@ -366,20 +366,19 @@ class Editor
     public function save(File $file); // Throws IOException if the file cannot be written to
 
     // Manipulating a line (by default the current one).
-    public function addBefore(File $file, $addition, $location=null);
-    public function addAfter(File $file, $addition, $location=null);
-    public function changeTo(File $file, $replacement, $location=null); // Will be renamed to `replace`
-    public function remove(File $file, $location=null); // Removes the current line.
+    public function addBefore(File $file, $addition, $location = null);
+    public function addAfter(File $file, $addition, $location = null);
+    public function changeTo(File $file, $replacement, $location = null); // Will be renamed to `replace`
+    public function remove(File $file, $location = null); // Removes the current line.
 
     // Global manipulations.
-    public function replaceWith(File $file, $regex, $replacement, $location=null); // Will be renamed to `replaceAll`
+    public function replaceWith(File $file, $regex, $replacement, $location = null); // Will be renamed to `replaceAll`
 
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpTo(File $file, $pattern);
-    public function jumpDownTo(File $file, $pattern);
-    public function jumpUpTo(File $file, $pattern);
+    public function jumpDownTo(File $file, $pattern, $after = null);
+    public function jumpUpTo(File $file, $pattern, $before = null);
 
     // Content searching.
     public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
@@ -433,9 +432,13 @@ You should keep in mind that the search is done relatively to the current one:
 $editor->jumpDownTo($file, $linePresentAbove); // Will throw an exception.
 ```
 
-The `jumpTo` method allows you to find the first occurence in the file (unlike
-the other jump methods it doesn't care about the current line).
-This is particularly usefull if you want to jump to an absolute line number.
+IF you don't want to start the search from the current line, you can indicate
+the one you want:
+
+```php
+$editor->jumpDownTo($file, $pattern, 0); // Starts from the top of the file
+$editor->jumpUpTo($file, $pattern, 42); // Starts from the 42th line
+```
 
 ### Content searching
 
