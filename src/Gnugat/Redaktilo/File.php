@@ -11,8 +11,6 @@
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
-
 /**
  * Representation of a file:
  *
@@ -96,19 +94,5 @@ class File
     public function setCurrentLineNumber($lineNumber)
     {
         $this->currentLineNumber = $lineNumber;
-    }
-
-    /**
-     * @param string $line
-     * @param int    $lineNumber
-     */
-    public function changeLineTo($line, $lineNumber)
-    {
-        $converter = new LineContentConverter();
-        $lines = $converter->from($this);
-
-        $lines[$lineNumber] = $line;
-
-        $converter->back($this, $lines);
     }
 }
