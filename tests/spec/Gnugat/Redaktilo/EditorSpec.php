@@ -64,6 +64,25 @@ class EditorSpec extends ObjectBehavior
         $this->open(self::FILENAME, true);
     }
 
+    function it_moves_the_cursor_to_the_first_occurence(
+        SearchEngine $searchEngine,
+        SearchStrategy $searchStrategy,
+        File $file
+    )
+    {
+        $absoluteLine = 42;
+
+        $searchEngine->resolve($absoluteLine)->willReturn($searchStrategy);
+        $searchStrategy->findNext($file, $absoluteLine, 0)->willReturn($absoluteLine);
+        $file->setCurrentLineNumber($absoluteLine)->shouldBeCalled();
+
+        $this->jumpTo($file, $absoluteLine);
+
+        $searchStrategy->findNext($file, $absoluteLine, 0)->willReturn(false);
+        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+        $this->shouldThrow($exception)->duringJumpTo($file, $absoluteLine);
+    }
+
     function it_moves_down_the_cursor(
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
