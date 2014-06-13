@@ -40,6 +40,6 @@ class SearchEngine
             }
         }
 
-        throw new NotSupportedException('SearchEngine', array($pattern));
+        throw new NotSupportedException('SearchEngine', $pattern);
     }
 }
