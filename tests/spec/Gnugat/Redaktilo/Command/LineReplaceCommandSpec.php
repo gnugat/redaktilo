@@ -54,6 +54,8 @@ class LineReplaceCommandSpec extends ObjectBehavior
         );
 
         $this->converter->back($file, $expectedLines)->shouldBeCalled();
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+
         $this->execute($input);
 
         $input = array(
@@ -61,6 +63,7 @@ class LineReplaceCommandSpec extends ObjectBehavior
             'replacement' => '[Even more sniggering]'
         );
         $file->getCurrentLineNumber()->willReturn($lineNumber);
+        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->execute($input);
     }

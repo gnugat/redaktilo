@@ -31,7 +31,7 @@ class LineInsertAboveCommand implements Command
     public function execute(array $input)
     {
         $file = $input['file'];
-        $location = (isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber());
+        $location = isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber();
         $addition = $input['addition'];
 
         $lines = $this->converter->from($file);

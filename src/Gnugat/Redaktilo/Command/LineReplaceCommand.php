@@ -21,9 +21,7 @@ class LineReplaceCommand implements Command
     /** @var LineContentConverter */
     private $converter;
 
-    /**
-     * @param LineContentConverter $converter
-     */
+    /** @param LineContentConverter $converter */
     public function __construct(LineContentConverter $converter)
     {
         $this->converter = $converter;
@@ -39,6 +37,8 @@ class LineReplaceCommand implements Command
         $lines = $this->converter->from($file);
         $lines[$location] = $replacement;
         $this->converter->back($file, $lines);
+
+        $file->setCurrentLineNumber($location);
     }
 
     /** {@inheritdoc} */

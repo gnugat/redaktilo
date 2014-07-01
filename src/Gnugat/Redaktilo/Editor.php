@@ -211,18 +211,12 @@ class Editor
      */
     public function changeTo(File $file, $replacement, $location = null)
     {
-        if ($location === null || !is_integer($location)) {
-            $location = $file->getCurrentLineNumber();
-        }
-
         $input = array(
             'file' => $file,
             'location' => $location,
             'replacement' => $replacement,
         );
         $this->commandInvoker->run('replace', $input);
-
-        $file->setCurrentLineNumber($location);
     }
 
     /**

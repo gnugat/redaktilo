@@ -163,7 +163,6 @@ class EditorSpec extends ObjectBehavior
         File $file
     )
     {
-        $currentLineNumber = 42;
         $addition = 'We are the knights who say Ni!';
         $input = array(
             'file' => $file,
@@ -199,7 +198,6 @@ class EditorSpec extends ObjectBehavior
         File $file
     )
     {
-        $currentLineNumber = 42;
         $addition = 'We are the knights who say Ni!';
         $input = array(
             'file' => $file,
@@ -235,17 +233,14 @@ class EditorSpec extends ObjectBehavior
         File $file
     )
     {
-        $currentLineNumber = 42;
         $replacement = 'We are knights who say Ni!';
         $input = array(
             'file' => $file,
-            'location' => $currentLineNumber,
+            'location' => null,
             'replacement' => $replacement,
         );
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
         $commandInvoker->run('replace', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($currentLineNumber)->shouldBeCalled();
 
         $this->changeTo($file, $replacement);
     }
@@ -263,9 +258,7 @@ class EditorSpec extends ObjectBehavior
             'replacement' => $replacement,
         );
 
-        $file->getCurrentLineNumber()->shouldNotBeCalled();
         $commandInvoker->run('replace', $input)->shouldBeCalled();
-        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->changeTo($file, $replacement, $lineNumber);
     }
@@ -275,7 +268,6 @@ class EditorSpec extends ObjectBehavior
         File $file
     )
     {
-        $currentLineNumber = 42;
         $input = array(
             'file' => $file,
             'location' => null,
