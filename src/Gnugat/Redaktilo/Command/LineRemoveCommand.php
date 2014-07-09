@@ -36,6 +36,9 @@ class LineRemoveCommand implements Command
         $lines = $this->converter->from($file);
         unset($lines[$location]);
         $this->converter->back($file, $lines);
+
+        $lineNumber = $location == count($lines) ? $location-1 : $location;
+        $file->setCurrentLineNumber($lineNumber);
     }
 
     /** {@inheritdoc} */
