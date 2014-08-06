@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 1.0.0-alpha4: Fix current line
+
+* fixed current line update's responsability in commands
+
 ## 1.0.0-alpha3: Deprecations
 
 * removed `changeTo` from `File`
