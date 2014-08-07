@@ -74,12 +74,12 @@ class EditorSpec extends ObjectBehavior
         $foundLineNumber = 42;
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findNext($file, $pattern, null)->willReturn($foundLineNumber);
+        $searchStrategy->findUnder($file, $pattern, null)->willReturn($foundLineNumber);
         $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
         $this->jumpDownTo($file, $pattern);
 
-        $searchStrategy->findNext($file, $pattern, null)->willReturn(false);
+        $searchStrategy->findUnder($file, $pattern, null)->willReturn(false);
         $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
         $this->shouldThrow($exception)->duringJumpDownTo($file, $pattern);
     }
@@ -94,12 +94,12 @@ class EditorSpec extends ObjectBehavior
         $foundLineNumber = 42;
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findNext($file, $pattern, 0)->willReturn($foundLineNumber);
+        $searchStrategy->findUnder($file, $pattern, 0)->willReturn($foundLineNumber);
         $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
         $this->jumpDownTo($file, $pattern, 0);
 
-        $searchStrategy->findNext($file, $pattern, 0)->willReturn(false);
+        $searchStrategy->findUnder($file, $pattern, 0)->willReturn(false);
         $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
         $this->shouldThrow($exception)->duringJumpDownTo($file, $pattern, 0);
     }
@@ -114,12 +114,12 @@ class EditorSpec extends ObjectBehavior
         $foundLineNumber = 4423;
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findPrevious($file, $pattern, null)->willReturn($foundLineNumber);
+        $searchStrategy->findAbove($file, $pattern, null)->willReturn($foundLineNumber);
         $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
         $this->jumpUpTo($file, $pattern);
 
-        $searchStrategy->findPrevious($file, $pattern, null)->willReturn(false);
+        $searchStrategy->findAbove($file, $pattern, null)->willReturn(false);
         $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
         $this->shouldThrow($exception)->duringJumpUpTo($file, $pattern);
     }
@@ -134,12 +134,12 @@ class EditorSpec extends ObjectBehavior
         $foundLineNumber = 4423;
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findPrevious($file, $pattern, 0)->willReturn($foundLineNumber);
+        $searchStrategy->findAbove($file, $pattern, 0)->willReturn($foundLineNumber);
         $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
         $this->jumpUpTo($file, $pattern, 0);
 
-        $searchStrategy->findPrevious($file, $pattern, 0)->willReturn(false);
+        $searchStrategy->findAbove($file, $pattern, 0)->willReturn(false);
         $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
         $this->shouldThrow($exception)->duringJumpUpTo($file, $pattern, 0);
     }
@@ -153,7 +153,7 @@ class EditorSpec extends ObjectBehavior
         $pattern = 'No one expects the spanish inquisition!';
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findNext($file, $pattern, 0)->willReturn(42);
+        $searchStrategy->findUnder($file, $pattern, 0)->willReturn(42);
 
         $this->has($file, $pattern)->shouldBe(true);
     }

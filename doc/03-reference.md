@@ -145,8 +145,8 @@ use Gnugat\Redaktilo\File;
 interface SearchStrategy
 {
     // Throw PatternNotFoundException if the pattern hasn't be found
-    public function findNext(File $file, $pattern);
-    public function findPrevious(File $file, $pattern);
+    public function findAbove(File $file, $pattern);
+    public function findUnder(File $file, $pattern);
 
     public function supports($pattern);
 }
@@ -156,8 +156,8 @@ interface SearchStrategy
 
 If you want to go to a given line number, use this one.
 
-The `findNext` method will jump `n` lines under the current one,  while
-`findPrevious` will jump above.
+The `findUnder` method will jump `n` lines under the current one,  while
+`findAbove` will jump above.
 
 ### LineRegexSearchStrategy
 

@@ -47,41 +47,41 @@ class SameSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_finds_previous_occurences(File $file)
+    function it_finds_above_occurences(File $file)
     {
-        $previousLine = '[A guard sniggers]';
-        $previousLineNumber = 1;
+        $aboveLine = '[A guard sniggers]';
+        $aboveLineNumber = 1;
         $currentLine = '[More sniggering]';
         $currentLineNumber = 3;
-        $nextLine = '[Sniggering]';
+        $underLine = '[Sniggering]';
 
-        $this->findPrevious($file, $nextLine, $currentLineNumber)->shouldBe(false);
-        $this->findPrevious($file, $currentLine, $currentLineNumber)->shouldBe(false);
-        $this->findPrevious($file, $previousLine, $currentLineNumber)->shouldBe($previousLineNumber);
+        $this->findAbove($file, $underLine, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($file, $currentLine, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($file, $aboveLine, $currentLineNumber)->shouldBe($aboveLineNumber);
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findPrevious($file, $nextLine)->shouldBe(false);
-        $this->findPrevious($file, $currentLine)->shouldBe(false);
-        $this->findPrevious($file, $previousLine)->shouldBe($previousLineNumber);
+        $this->findAbove($file, $underLine)->shouldBe(false);
+        $this->findAbove($file, $currentLine)->shouldBe(false);
+        $this->findAbove($file, $aboveLine)->shouldBe($aboveLineNumber);
     }
 
-    function it_finds_next_occurences(File $file)
+    function it_finds_under_occurences(File $file)
     {
-        $previousLine = '[A guard sniggers]';
+        $aboveLine = '[A guard sniggers]';
         $currentLine = '[More sniggering]';
         $currentLineNumber = 3;
-        $nextLine = '[Sniggering]';
-        $nextLineNumber = 5;
+        $underLine = '[Sniggering]';
+        $underLineNumber = 5;
 
-        $this->findNext($file, $previousLine, $currentLineNumber)->shouldBe(false);
-        $this->findNext($file, $currentLine, $currentLineNumber)->shouldBe(false);
-        $this->findNext($file, $nextLine, $currentLineNumber)->shouldBe($nextLineNumber);
+        $this->findUnder($file, $aboveLine, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($file, $currentLine, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($file, $underLine, $currentLineNumber)->shouldBe($underLineNumber);
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findNext($file, $previousLine)->shouldBe(false);
-        $this->findNext($file, $currentLine)->shouldBe(false);
-        $this->findNext($file, $nextLine)->shouldBe($nextLineNumber);
+        $this->findUnder($file, $aboveLine)->shouldBe(false);
+        $this->findUnder($file, $currentLine)->shouldBe(false);
+        $this->findUnder($file, $underLine)->shouldBe($underLineNumber);
     }
 }

@@ -49,41 +49,41 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_finds_previous_occurences(File $file)
+    function it_finds_above_occurences(File $file)
     {
-        $previousLineRegex = '/\[A \w+ sniggers\]/';
-        $previousLineNumber = 1;
+        $aboveLineRegex = '/\[A \w+ sniggers\]/';
+        $aboveLineNumber = 1;
         $currentLineRegex = '/More sniggering/';
         $currentLineNumber = 3;
-        $nextLineRegex = '/\[Sniggering\]/';
+        $underLineRegex = '/\[Sniggering\]/';
 
-        $this->findPrevious($file, $nextLineRegex, $currentLineNumber)->shouldBe(false);
-        $this->findPrevious($file, $currentLineRegex, $currentLineNumber)->shouldBe(false);
-        $this->findPrevious($file, $previousLineRegex, $currentLineNumber)->shouldBe($previousLineNumber);
+        $this->findAbove($file, $underLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($file, $currentLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($file, $aboveLineRegex, $currentLineNumber)->shouldBe($aboveLineNumber);
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findPrevious($file, $nextLineRegex)->shouldBe(false);
-        $this->findPrevious($file, $currentLineRegex)->shouldBe(false);
-        $this->findPrevious($file, $previousLineRegex)->shouldBe($previousLineNumber);
+        $this->findAbove($file, $underLineRegex)->shouldBe(false);
+        $this->findAbove($file, $currentLineRegex)->shouldBe(false);
+        $this->findAbove($file, $aboveLineRegex)->shouldBe($aboveLineNumber);
     }
 
-    function it_finds_next_occurences(File $file)
+    function it_finds_under_occurences(File $file)
     {
-        $previousLineRegex = '/\[A \w+ sniggers\]/';
+        $aboveLineRegex = '/\[A \w+ sniggers\]/';
         $currentLineRegex = '/More sniggering/';
         $currentLineNumber = 3;
-        $nextLineRegex = '/\[Sniggering\]/';
-        $nextLineNumber = 5;
+        $underLineRegex = '/\[Sniggering\]/';
+        $underLineNumber = 5;
 
-        $this->findNext($file, $previousLineRegex, $currentLineNumber)->shouldBe(false);
-        $this->findNext($file, $currentLineRegex, $currentLineNumber)->shouldBe(false);
-        $this->findNext($file, $nextLineRegex, $currentLineNumber)->shouldBe($nextLineNumber);
+        $this->findUnder($file, $aboveLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($file, $currentLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($file, $underLineRegex, $currentLineNumber)->shouldBe($underLineNumber);
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findNext($file, $previousLineRegex)->shouldBe(false);
-        $this->findNext($file, $currentLineRegex)->shouldBe(false);
-        $this->findNext($file, $nextLineRegex)->shouldBe($nextLineNumber);
+        $this->findUnder($file, $aboveLineRegex)->shouldBe(false);
+        $this->findUnder($file, $currentLineRegex)->shouldBe(false);
+        $this->findUnder($file, $underLineRegex)->shouldBe($underLineNumber);
     }
 }

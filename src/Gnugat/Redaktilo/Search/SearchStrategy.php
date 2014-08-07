@@ -30,7 +30,7 @@ interface SearchStrategy
      *
      * @return mixed
      */
-    public function findPrevious(File $file, $pattern, $before = null);
+    public function findAbove(File $file, $pattern, $before = null);
 
     /**
      * Looks for the given pattern from the given line number ($after) to the
@@ -44,7 +44,7 @@ interface SearchStrategy
      *
      * @return mixed
      */
-    public function findNext(File $file, $pattern, $after = null);
+    public function findUnder(File $file, $pattern, $after = null);
 
     /**
      * @param mixed $pattern

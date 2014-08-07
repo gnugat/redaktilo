@@ -30,7 +30,7 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findPrevious(File $file, $pattern, $before = null)
+    public function findAbove(File $file, $pattern, $before = null)
     {
         $before = $before ?: $file->getCurrentLineNumber();
         $tokens = $this->converter->from($file);
@@ -47,7 +47,7 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findNext(File $file, $pattern, $after = null)
+    public function findUnder(File $file, $pattern, $after = null)
     {
         $after = ($after ?: $file->getCurrentLineNumber()) + 1;
         $tokens = $this->converter->from($file);

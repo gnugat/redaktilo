@@ -26,7 +26,7 @@ class LineNumberSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findPrevious(File $file, $pattern, $before = null)
+    public function findAbove(File $file, $pattern, $before = null)
     {
         $foundLineNumber = ($before ?: $file->getCurrentLineNumber()) - $pattern;
         $lines = $this->converter->from($file);
@@ -39,7 +39,7 @@ class LineNumberSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findNext(File $file, $pattern, $after = null)
+    public function findUnder(File $file, $pattern, $after = null)
     {
         $foundLineNumber = ($after ?: $file->getCurrentLineNumber()) + $pattern;
         $lines = $this->converter->from($file);

@@ -107,7 +107,7 @@ class Editor
     public function jumpDownTo(File $file, $pattern, $after = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findNext($file, $pattern, $after);
+        $foundLineNumber = $searchStrategy->findUnder($file, $pattern, $after);
         if (false === $foundLineNumber) {
             throw new PatternNotFoundException($file, $pattern);
         }
@@ -131,7 +131,7 @@ class Editor
     public function jumpUpTo(File $file, $pattern, $before = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findPrevious($file, $pattern, $before);
+        $foundLineNumber = $searchStrategy->findAbove($file, $pattern, $before);
         if (false === $foundLineNumber) {
             throw new PatternNotFoundException($file, $pattern);
         }
@@ -152,7 +152,7 @@ class Editor
     public function has(File $file, $pattern)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $found = $searchStrategy->findNext($file, $pattern, 0);
+        $found = $searchStrategy->findUnder($file, $pattern, 0);
 
         return (false !== $found);
     }
