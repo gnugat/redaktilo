@@ -61,16 +61,16 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
     {
         $converter = new LineContentConverter();
 
-        $editor->jumpDownTo($file, '/.. code-block:: bash/');
+        $editor->jumpUnder($file, '/.. code-block:: bash/');
         $lines = $converter->from($file);
-        $editor->jumpDownTo($file, 1);
+        $editor->jumpUnder($file, 1);
 
         while ((bool) preg_match('/^   / ', $line = $lines[$file->getCurrentLineNumber()]) || '' === $line) {
             if ('' !== $line) {
                 $replacement = preg_replace('/\$ /', '', $line);
                 $editor->replace($file, $replacement);
             }
-            $editor->jumpDownTo($file, 1);
+            $editor->jumpUnder($file, 1);
         }
 
         $this->removeDollars($editor, $file);

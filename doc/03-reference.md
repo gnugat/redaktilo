@@ -187,7 +187,7 @@ tokens, use this strategy.
 The strategies seen above can be gathered in an search engine. This is used in
 the `Editor` to allow extension without having to modify it.
 
-For example, its `jumpDownTo` method can accept both a string or an integer.
+For example, its `jumpUnder` method can accept both a string or an integer.
 It is passes its argument to the engine's `resolve` method: if the engine has
 a registered `SearchStrategy` which supports it, it returns it. `Editor` can then tell
 the strategy to do the work.
@@ -343,8 +343,8 @@ class Editor
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpDownTo(File $file, $pattern, $after = null);
-    public function jumpUpTo(File $file, $pattern, $before = null);
+    public function jumpUnder(File $file, $pattern, $after = null);
+    public function jumpAbove(File $file, $pattern, $before = null);
 
     // Content searching.
     public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
@@ -388,22 +388,22 @@ You can also replace a line with a new value, or remove it.
 You can jump down or up to a line which correspond to the given pattern:
 
 ```php
-$editor->jumpdDownTo($file, 'The exact value of the line');
-$editor->jumpdDownTo($file, 2); // Jumps two lines under the current one.
+$editor->jumpdUnder($file, 'The exact value of the line');
+$editor->jumpdUnder($file, 2); // Jumps two lines under the current one.
 ```
 
 You should keep in mind that the search is done relatively to the current one:
 
 ```php
-$editor->jumpDownTo($file, $linePresentAbove); // Will throw an exception.
+$editor->jumpUnder($file, $linePresentAbove); // Will throw an exception.
 ```
 
-IF you don't want to start the search from the current line, you can indicate
+If you don't want to start the search from the current line, you can indicate
 the one you want:
 
 ```php
-$editor->jumpDownTo($file, $pattern, 0); // Starts from the top of the file
-$editor->jumpUpTo($file, $pattern, 42); // Starts from the 42th line
+$editor->jumpAbove($file, $pattern, 42); // Starts from the 42th line
+$editor->jumpUnder($file, $pattern, 0); // Starts from the top of the file
 ```
 
 ### Content searching

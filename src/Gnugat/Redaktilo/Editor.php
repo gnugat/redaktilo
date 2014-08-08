@@ -92,31 +92,7 @@ class Editor
     }
 
     /**
-     * Searches the given pattern in the File after the current line.
-     * If the pattern is found, the current line is set to it.
-     *
-     * @param File    $file
-     * @param mixed   $pattern
-     * @param integer $after
-     *
-     * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
-     *
-     * @api
-     */
-    public function jumpDownTo(File $file, $pattern, $after = null)
-    {
-        $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findUnder($file, $pattern, $after);
-        if (false === $foundLineNumber) {
-            throw new PatternNotFoundException($file, $pattern);
-        }
-
-        $file->setCurrentLineNumber($foundLineNumber);
-    }
-
-    /**
-     * Searches the given pattern in the File before the current line.
+     * Searches the given pattern in the File above the current line.
      * If the pattern is found, the current line is set to it.
      *
      * @param File    $file
@@ -128,10 +104,34 @@ class Editor
      *
      * @api
      */
-    public function jumpUpTo(File $file, $pattern, $before = null)
+    public function jumpAbove(File $file, $pattern, $before = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
         $foundLineNumber = $searchStrategy->findAbove($file, $pattern, $before);
+        if (false === $foundLineNumber) {
+            throw new PatternNotFoundException($file, $pattern);
+        }
+
+        $file->setCurrentLineNumber($foundLineNumber);
+    }
+
+    /**
+     * Searches the given pattern in the File under the current line.
+     * If the pattern is found, the current line is set to it.
+     *
+     * @param File    $file
+     * @param mixed   $pattern
+     * @param integer $after
+     *
+     * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
+     *
+     * @api
+     */
+    public function jumpUnder(File $file, $pattern, $after = null)
+    {
+        $searchStrategy = $this->searchEngine->resolve($pattern);
+        $foundLineNumber = $searchStrategy->findUnder($file, $pattern, $after);
         if (false === $foundLineNumber) {
             throw new PatternNotFoundException($file, $pattern);
         }

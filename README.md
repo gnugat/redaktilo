@@ -78,7 +78,7 @@ class KernelManipulator extends Manipulator
 
         $lineToFind = '        );';
 
-        $this->editor->jumpDownTo($file, $lineToFind);
+        $this->editor->jumpUnder($file, $lineToFind);
         $this->editor->insertAbove($file, $newLine);
 
         $this->editor->save($file);

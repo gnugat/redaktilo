@@ -40,8 +40,8 @@ class Editor
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpDownTo(File $file, $pattern, $after = null);
-    public function jumpUpTo(File $file, $pattern, $before = null);
+    public function jumpAbove(File $file, $pattern, $before = null);
+    public function jumpUnder(File $file, $pattern, $after = null);
 
     // Content searching.
     public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
@@ -83,7 +83,7 @@ A cursor has been set to the first line. You can move this cursor to any
 existing lines:
 
 ```php
-$editor->jumpDownTo($file, 'Egg'); // Current line: 1 (which is 'Egg')
+$editor->jumpUnder($file, 'Egg'); // Current line: 1 (which is 'Egg')
 ```
 
 As you can see, there's no need to add the line break character, `Editor` will
@@ -93,16 +93,16 @@ You should note that the lookup is directional:
 
 ```php
 try {
-    $editor->jumpDownTo($file, 'Bacon'); // Not found because 'Bacon' is above the current line
+    $editor->jumpUnder($file, 'Bacon'); // Not found because 'Bacon' is above the current line
 } catch (PatternNotFoundException $e) {
 }
-$editor->jumpUpTo($file, 'Bacon'); // Current line: 0 (which is 'Bacon')
+$editor->jumpAbove($file, 'Bacon'); // Current line: 0 (which is 'Bacon')
 ```
 
 The match is done only if the line value is exactly the same as the given one:
 
 ```php
-$editor->jumpDownTo($file, 'B'); // Throws an exception.
+$editor->jumpUnder($file, 'B'); // Throws an exception.
 ```
 
 To avoid handling exception if you just want to know if a line exists, use:
@@ -114,8 +114,8 @@ $editor->has($file, 'Beans'); // false
 You can also jump a wanted number of lines above or under the current one:
 
 ```php
-$editor->jumpDownTo($file, 2); // Current line: 2 (which is 'Sausage')
-$editor->jumpUpTo($file, 2); // Current line: 0 (which is 'Bacon')
+$editor->jumpUnder($file, 2); // Current line: 2 (which is 'Sausage')
+$editor->jumpAbove($file, 2); // Current line: 0 (which is 'Bacon')
 ```
 
 If you need to go the first occurence in the whole file (regardless of the
@@ -123,13 +123,13 @@ current line), you can use:
 
 ```php
 // Searches for the line number 1, starting the lookup from the first line (instead of the current one)
-$editor->jumpDownTo($file, 1, 0); // Current line: 1 (which is 'Egg')
+$editor->jumpUnder($file, 1, 0); // Current line: 1 (which is 'Egg')
 ```
 
 The lookup can also be done using regex:
 
 ```php
-$editor->jumpUpTo($file, '/ac/'); // Current line: 0 (which is 'Bacon')
+$editor->jumpAbove($file, '/ac/'); // Current line: 0 (which is 'Bacon')
 ```
 
 *Note*: If you're manipulating a PHP file, you can also jump to symbols like
@@ -141,7 +141,7 @@ use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 $registrationMethodName = 'registerBundles';
 $registrationMethod = $tokenBuilder->buildMethod($registrationMethodName);
 
-$editor->jumpDownTo($file, $registrationMethod);
+$editor->jumpUnder($file, $registrationMethod);
 ```
 
 ## Line manipulation
