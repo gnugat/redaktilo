@@ -24,7 +24,7 @@ use Gnugat\Redaktilo\Search\SearchEngine;
  * Provides convenient methods for the following file operations:
  *
  * + looking for given lines and setting the current one to it
- * + inserting given lines before/after the current one
+ * + inserting given lines above/under the current one or the given one
  *
  * @api
  */
@@ -158,8 +158,8 @@ class Editor
     }
 
     /**
-     * Inserts the given line before the given line number
-     * (or before the current one if none provided).
+     * Inserts the given line above the given line number
+     * (or above the current one if none provided).
      * Note: the current line is then set to the new one.
      *
      * @param File    $file
@@ -168,7 +168,7 @@ class Editor
      *
      * @api
      */
-    public function addBefore(File $file, $addition, $location = null)
+    public function insertAbove(File $file, $addition, $location = null)
     {
         $input = array(
             'file' => $file,
@@ -179,8 +179,8 @@ class Editor
     }
 
     /**
-     * Inserts the given addition after the given line number
-     * (or after the current one if none provided).
+     * Inserts the given addition under the given line number
+     * (or under the current one if none provided).
      * Note: the current line is then set to the new one.
      *
      * @param File    $file
@@ -189,7 +189,7 @@ class Editor
      *
      * @api
      */
-    public function addAfter(File $file, $addition, $location = null)
+    public function insertUnder(File $file, $addition, $location = null)
     {
         $input = array(
             'file' => $file,

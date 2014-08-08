@@ -335,8 +335,8 @@ class Editor
     public function save(File $file); // Throws IOException if the file cannot be written to
 
     // Manipulating a line (by default the current one).
-    public function addBefore(File $file, $addition, $location = null);
-    public function addAfter(File $file, $addition, $location = null);
+    public function insertAbove(File $file, $addition, $location = null);
+    public function insertUnder(File $file, $addition, $location = null);
     public function changeTo(File $file, $replacement, $location = null); // Will be renamed to `replace`
     public function remove(File $file, $location = null); // Removes the current line.
 
@@ -377,7 +377,7 @@ Just keep in mind that the cursor will be set to the added line:
 $emptyLine = '';
 
 echo $file->getCurrentLineNumber(); // 5
-$editor->addAfter($file, $emptyLine);
+$editor->insertUnder($file, $emptyLine);
 echo $file->getCurrentLineNumber(); // 6
 ```
 

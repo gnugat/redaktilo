@@ -172,7 +172,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('insert_above', $input)->shouldBeCalled();
 
-        $this->addBefore($file, $addition);
+        $this->insertAbove($file, $addition);
     }
 
     function it_inserts_lines_above_the_given_one(
@@ -190,7 +190,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('insert_above', $input)->shouldBeCalled();
 
-        $this->addBefore($file, $addition, $lineNumber);
+        $this->insertAbove($file, $addition, $lineNumber);
     }
 
     function it_inserts_lines_under_the_current_one(
@@ -207,7 +207,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('insert_under', $input)->shouldBeCalled();
 
-        $this->addAfter($file, $addition);
+        $this->insertUnder($file, $addition);
     }
 
     function it_inserts_lines_under_the_given_one(
@@ -225,7 +225,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('insert_under', $input)->shouldBeCalled();
 
-        $this->addAfter($file, $addition, $lineNumber);
+        $this->insertUnder($file, $addition, $lineNumber);
     }
 
     function it_replaces_the_current_line(

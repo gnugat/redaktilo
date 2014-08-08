@@ -51,11 +51,11 @@ class RoutingManipulator extends \PHPUnit_Framework_TestCase
         $prefixLine     = '    prefix: /';
         $emptyLine      = '';
 
-        $editor->addBefore($file, $definitionLine);
-        $editor->addAfter($file, $resourceLine);
-        $editor->addAfter($file, $typeLine);
-        $editor->addAfter($file, $prefixLine);
-        $editor->addAfter($file, $emptyLine);
+        $editor->insertAbove($file, $definitionLine);
+        $editor->insertUnder($file, $resourceLine);
+        $editor->insertUnder($file, $typeLine);
+        $editor->insertUnder($file, $prefixLine);
+        $editor->insertUnder($file, $emptyLine);
 
         $editor->save($file);
 

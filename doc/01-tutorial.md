@@ -32,8 +32,8 @@ class Editor
     public function save(File $file); // Throws IOException if the file cannot be written to
 
     // Manipulating a line (by default the current one).
-    public function addBefore(File $file, $addition, $location = null);
-    public function addAfter(File $file, $addition, $location = null);
+    public function insertAbove(File $file, $addition, $location = null);
+    public function insertUnder(File $file, $addition, $location = null);
     public function changeTo(File $file, $replacement, $location = null); // Will be renamed to `replace`
     public function remove(File $file, $location = null); // Removes the current line.
 
@@ -150,7 +150,7 @@ By default, all the manipulation methods work with the current line. If you woul
 like to manipulate a given line, you can pass its number as the last parameter:
 
 ```php
-$editor->addBefore($file, 'Spam', 23); // Line inserted before the line number 23.
+$editor->insertAbove($file, 'Spam', 23); // Line inserted before the line number 23.
 ```
 
 **Note**: once an operation done, the cursor moves to the line updated.
@@ -158,7 +158,7 @@ $editor->addBefore($file, 'Spam', 23); // Line inserted before the line number 2
 You can insert new lines:
 
 ```php
-$editor->addAfter($file, 'Spam'); // Line inserted after 'Bacon'. Current line: 'Spam'.
+$editor->insertUnder($file, 'Spam'); // Line inserted after 'Bacon'. Current line: 'Spam'.
 ```
 
 The insertion is also directional: you can either insert a new line before the
