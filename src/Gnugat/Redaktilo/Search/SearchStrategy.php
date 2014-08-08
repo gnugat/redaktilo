@@ -19,32 +19,32 @@ use Gnugat\Redaktilo\File;
 interface SearchStrategy
 {
     /**
-     * Looks for the given pattern from the given line number ($before) to the
+     * Looks for the given pattern from the given line number ($location) to the
      * top of the File.
      * If no line number is given, the current line number of the file is used.
      * If the pattern doesn't match anything, returns false.
      *
      * @param File    $file
      * @param mixed   $pattern
-     * @param integer $before
+     * @param integer $location
      *
      * @return mixed
      */
-    public function findAbove(File $file, $pattern, $before = null);
+    public function findAbove(File $file, $pattern, $location = null);
 
     /**
-     * Looks for the given pattern from the given line number ($after) to the
+     * Looks for the given pattern from the given line number ($location) to the
      * bottom of the File.
      * If no line number is given, the current line number of the file is used.
      * If the pattern doesn't match anything, returns false.
      *
      * @param File    $file
      * @param mixed   $pattern
-     * @param integer $after
+     * @param integer $location
      *
      * @return mixed
      */
-    public function findUnder(File $file, $pattern, $after = null);
+    public function findUnder(File $file, $pattern, $location = null);
 
     /**
      * @param mixed $pattern

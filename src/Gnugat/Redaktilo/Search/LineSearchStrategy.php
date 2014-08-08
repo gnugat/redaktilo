@@ -13,22 +13,22 @@ abstract class LineSearchStrategy implements SearchStrategy
     protected $converter;
 
     /** {@inheritdoc} */
-    public function findAbove(File $file, $pattern, $before = null)
+    public function findAbove(File $file, $pattern, $location = null)
     {
-        $before = ($before ?: $file->getCurrentLineNumber()) - 1;
+        $location = ($location ?: $file->getCurrentLineNumber()) - 1;
         $lines = $this->converter->from($file);
-        $aboveLines = array_slice($lines, 0, $before, true);
+        $aboveLines = array_slice($lines, 0, $location, true);
         $reversedAboveLines = array_reverse($aboveLines, true);
 
         return $this->findIn($reversedAboveLines, $pattern);
     }
 
     /** {@inheritdoc} */
-    public function findUnder(File $file, $pattern, $after = null)
+    public function findUnder(File $file, $pattern, $location = null)
     {
-        $after = ($after ?: $file->getCurrentLineNumber()) + 1;
+        $location = ($location ?: $file->getCurrentLineNumber()) + 1;
         $lines = $this->converter->from($file);
-        $underLines = array_slice($lines, $after, null, true);
+        $underLines = array_slice($lines, $location, null, true);
 
         return $this->findIn($underLines, $pattern);
     }

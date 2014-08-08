@@ -97,17 +97,17 @@ class Editor
      *
      * @param File    $file
      * @param mixed   $pattern
-     * @param integer $before
+     * @param integer $location
      *
      * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
      * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
-    public function jumpAbove(File $file, $pattern, $before = null)
+    public function jumpAbove(File $file, $pattern, $location = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findAbove($file, $pattern, $before);
+        $foundLineNumber = $searchStrategy->findAbove($file, $pattern, $location);
         if (false === $foundLineNumber) {
             throw new PatternNotFoundException($file, $pattern);
         }
@@ -121,17 +121,17 @@ class Editor
      *
      * @param File    $file
      * @param mixed   $pattern
-     * @param integer $after
+     * @param integer $location
      *
      * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
      * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
-    public function jumpUnder(File $file, $pattern, $after = null)
+    public function jumpUnder(File $file, $pattern, $location = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findUnder($file, $pattern, $after);
+        $foundLineNumber = $searchStrategy->findUnder($file, $pattern, $location);
         if (false === $foundLineNumber) {
             throw new PatternNotFoundException($file, $pattern);
         }

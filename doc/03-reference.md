@@ -343,8 +343,8 @@ class Editor
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpUnder(File $file, $pattern, $after = null);
-    public function jumpAbove(File $file, $pattern, $before = null);
+    public function jumpUnder(File $file, $pattern, $location = null);
+    public function jumpAbove(File $file, $pattern, $location = null);
 
     // Content searching.
     public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy

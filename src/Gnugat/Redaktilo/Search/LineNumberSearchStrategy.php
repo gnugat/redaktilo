@@ -26,9 +26,9 @@ class LineNumberSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findAbove(File $file, $pattern, $before = null)
+    public function findAbove(File $file, $pattern, $location = null)
     {
-        $foundLineNumber = ($before ?: $file->getCurrentLineNumber()) - $pattern;
+        $foundLineNumber = ($location ?: $file->getCurrentLineNumber()) - $pattern;
         $lines = $this->converter->from($file);
         $totalLines = count($lines);
         if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
@@ -39,9 +39,9 @@ class LineNumberSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findUnder(File $file, $pattern, $after = null)
+    public function findUnder(File $file, $pattern, $location = null)
     {
-        $foundLineNumber = ($after ?: $file->getCurrentLineNumber()) + $pattern;
+        $foundLineNumber = ($location ?: $file->getCurrentLineNumber()) + $pattern;
         $lines = $this->converter->from($file);
         $totalLines = count($lines);
         if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {

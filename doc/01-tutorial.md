@@ -40,8 +40,8 @@ class Editor
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpAbove(File $file, $pattern, $before = null);
-    public function jumpUnder(File $file, $pattern, $after = null);
+    public function jumpAbove(File $file, $pattern, $location = null);
+    public function jumpUnder(File $file, $pattern, $location = null);
 
     // Content searching.
     public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
@@ -150,7 +150,7 @@ By default, all the manipulation methods work with the current line. If you woul
 like to manipulate a given line, you can pass its number as the last parameter:
 
 ```php
-$editor->insertAbove($file, 'Spam', 23); // Line inserted before the line number 23.
+$editor->insertAbove($file, 'Spam', 23); // Line inserted above the line number 23.
 ```
 
 **Note**: once an operation done, the cursor moves to the line updated.
@@ -158,11 +158,11 @@ $editor->insertAbove($file, 'Spam', 23); // Line inserted before the line number
 You can insert new lines:
 
 ```php
-$editor->insertUnder($file, 'Spam'); // Line inserted after 'Bacon'. Current line: 'Spam'.
+$editor->insertUnder($file, 'Spam'); // Line inserted under 'Bacon'. Current line: 'Spam'.
 ```
 
-The insertion is also directional: you can either insert a new line before the
-current one, or after it.
+The insertion is also directional: you can either insert a new line above the
+current one, or under it.
 
 For now the modification is only done in memory, to actually apply your changes
 to the file you need to save it:
