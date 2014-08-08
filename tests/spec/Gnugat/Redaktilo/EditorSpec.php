@@ -242,7 +242,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('replace', $input)->shouldBeCalled();
 
-        $this->changeTo($file, $replacement);
+        $this->replace($file, $replacement);
     }
 
     function it_replaces_the_given_line(
@@ -260,7 +260,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('replace', $input)->shouldBeCalled();
 
-        $this->changeTo($file, $replacement, $lineNumber);
+        $this->replace($file, $replacement, $lineNumber);
     }
 
     function it_removes_the_current_line(

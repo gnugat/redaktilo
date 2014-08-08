@@ -337,7 +337,7 @@ class Editor
     // Manipulating a line (by default the current one).
     public function insertAbove(File $file, $addition, $location = null);
     public function insertUnder(File $file, $addition, $location = null);
-    public function changeTo(File $file, $replacement, $location = null); // Will be renamed to `replace`
+    public function replace(File $file, $replacement, $location = null); // Will be renamed to `replace`
     public function remove(File $file, $location = null); // Removes the current line.
 
     // Content navigation.

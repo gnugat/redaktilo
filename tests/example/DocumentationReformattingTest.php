@@ -68,7 +68,7 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
         while ((bool) preg_match('/^   / ', $line = $lines[$file->getCurrentLineNumber()]) || '' === $line) {
             if ('' !== $line) {
                 $replacement = preg_replace('/\$ /', '', $line);
-                $editor->changeTo($file, $replacement);
+                $editor->replace($file, $replacement);
             }
             $editor->jumpDownTo($file, 1);
         }

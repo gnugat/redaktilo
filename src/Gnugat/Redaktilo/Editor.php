@@ -209,7 +209,7 @@ class Editor
      *
      * @api
      */
-    public function changeTo(File $file, $replacement, $location = null)
+    public function replace(File $file, $replacement, $location = null)
     {
         $input = array(
             'file' => $file,
