@@ -12,12 +12,12 @@
 namespace spec\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Command\CommandInvoker;
+use Gnugat\Redaktilo\Factory\TextFactory;
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
 use Gnugat\Redaktilo\Text;
-use Gnugat\Redaktilo\TextFactory;
 use PhpSpec\ObjectBehavior;
 
 class EditorSpec extends ObjectBehavior

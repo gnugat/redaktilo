@@ -12,6 +12,7 @@
 namespace Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Command\CommandInvoker;
+use Gnugat\Redaktilo\Factory\TextFactory;
 use Gnugat\Redaktilo\Search\PatternNotFoundException;
 use Gnugat\Redaktilo\Search\SearchEngine;
 

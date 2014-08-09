@@ -4,7 +4,8 @@ This chapter explains the responsibility of each classes:
 
 * [Text](#text)
 * [File](#file)
-* [TextFactory](#textfactory)
+* [Factory](#factory)
+    * [TextFactory](#textfactory)
 * [Filesystem](#filesystem)
 * [Converter](#converter)
     * [LineContentConverter](#linecontentconverter)
@@ -58,43 +59,39 @@ Every single other classes in this project are stateless services allowing you
 to manipulate it.
 
 Basically it is a collection of lines: each line is stripped from their
-line break (this character is centralized in a property).
+line break (`Text` stores this character in a property).
 
-A current line number is set to `0` when the Text is created and can then be
-changed.
+A current line number is set to `0` when the `Text` is created:
+
+```php
+$text = new Text($lines, $lineBreak);
+echo $text->getCurrentLineNumber(); // 0
+```
 
 ## File
 
-**Redaktilo** is based on this domain object:
+**Redaktilo** is also based on this entity:
 
 ```php
 <?php
 
 namespace Gnugat\Redaktilo;
 
-class File
+class File extends Text
 {
     public function getFilename();
+    public function setFilename($filename);
 
     public function read();
     public function write($newContent);
-
-    public function getCurrentLineNumber();
-    public function setCurrentLineNumber($lineNumber);
 }
 ```
 
-Every single other classes in this project are stateless services allowing you
-to manipulate it.
+## Factory
 
-One last thing: creating a `File` sets its cursor to the first line:
+While these classes aren't extension points, they might be worth knowing.
 
-```php
-$file = new File($filename, $content);
-echo $file->getCurrentLineNumber(); // 0
-```
-
-## TextFactory
+### TextFactory
 
 A stateless service which creates an instance of `Text` from the given string:
 

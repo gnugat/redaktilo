@@ -9,21 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo;
+namespace Gnugat\Redaktilo\Factory;
 
 use Gnugat\Redaktilo\Converter\LineContentConverter;
+use Gnugat\Redaktilo\Text;
 
 /**
  * Stateless service which creates a Text from the given string.
- *
- * @api
  */
 class TextFactory
 {
     /** @var LineContentConverter */
     private $lineContentConverter;
 
-    /** @var LineContentConverter */
+    /** @param LineContentConverter $lineContentConverter */
     public function __construct(LineContentConverter $lineContentConverter)
     {
         $this->lineContentConverter = $lineContentConverter;
@@ -33,8 +32,6 @@ class TextFactory
      * @param string $string
      *
      * @return Text
-     *
-     * @api
      */
     public function make($string)
     {

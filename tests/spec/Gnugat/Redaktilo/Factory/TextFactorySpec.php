@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Gnugat\Redaktilo;
+namespace spec\Gnugat\Redaktilo\Factory;
 
 use PhpSpec\ObjectBehavior;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
@@ -27,7 +27,7 @@ class TextFactorySpec extends ObjectBehavior
 
     function it_creates_a_text_from_string()
     {
-        $filename = __DIR__.'/../../../../tests/fixtures/sources/life-of-brian.txt';
+        $filename = __DIR__.'/../../../../../tests/fixtures/sources/life-of-brian.txt';
         $content = file_get_contents($filename);
 
         $lineBreak = $this->lineContentConverter->detectLineBreak($content);

@@ -19,6 +19,7 @@ use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\Converter\PhpContentConverter;
+use Gnugat\Redaktilo\Factory\TextFactory;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;

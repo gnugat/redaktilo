@@ -35,7 +35,7 @@ class File extends Text
         $this->content = $content;
 
         $lineContentConverter = new Converter\LineContentConverter();
-        $textFactory = new TextFactory($lineContentConverter);
+        $textFactory = new Factory\TextFactory($lineContentConverter);
         $text = $textFactory->make($content);
         $lines = $text->getLines();
         $lineBreak = $text->getLineBreak();
