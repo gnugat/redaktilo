@@ -24,7 +24,7 @@ use Gnugat\Redaktilo\Search\SearchEngine;
  * Provides convenient methods for the following file operations:
  *
  * + looking for given lines and setting the current one to it
- * + inserting given lines before/after the current one
+ * + inserting given lines above/under the current one or the given one
  *
  * @api
  */
@@ -92,22 +92,22 @@ class Editor
     }
 
     /**
-     * Searches the given pattern in the File after the current line.
+     * Searches the given pattern in the File above the current line.
      * If the pattern is found, the current line is set to it.
      *
      * @param File    $file
      * @param mixed   $pattern
-     * @param integer $after
+     * @param integer $location
      *
      * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
      * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
-    public function jumpDownTo(File $file, $pattern, $after = null)
+    public function jumpAbove(File $file, $pattern, $location = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findNext($file, $pattern, $after);
+        $foundLineNumber = $searchStrategy->findAbove($file, $pattern, $location);
         if (false === $foundLineNumber) {
             throw new PatternNotFoundException($file, $pattern);
         }
@@ -116,22 +116,22 @@ class Editor
     }
 
     /**
-     * Searches the given pattern in the File before the current line.
+     * Searches the given pattern in the File under the current line.
      * If the pattern is found, the current line is set to it.
      *
      * @param File    $file
      * @param mixed   $pattern
-     * @param integer $before
+     * @param integer $location
      *
      * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
      * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
-    public function jumpUpTo(File $file, $pattern, $before = null)
+    public function jumpUnder(File $file, $pattern, $location = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findPrevious($file, $pattern, $before);
+        $foundLineNumber = $searchStrategy->findUnder($file, $pattern, $location);
         if (false === $foundLineNumber) {
             throw new PatternNotFoundException($file, $pattern);
         }
@@ -152,14 +152,14 @@ class Editor
     public function has(File $file, $pattern)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $found = $searchStrategy->findNext($file, $pattern, 0);
+        $found = $searchStrategy->findUnder($file, $pattern, 0);
 
         return (false !== $found);
     }
 
     /**
-     * Inserts the given line before the given line number
-     * (or before the current one if none provided).
+     * Inserts the given line above the given line number
+     * (or above the current one if none provided).
      * Note: the current line is then set to the new one.
      *
      * @param File    $file
@@ -168,7 +168,7 @@ class Editor
      *
      * @api
      */
-    public function addBefore(File $file, $addition, $location = null)
+    public function insertAbove(File $file, $addition, $location = null)
     {
         $input = array(
             'file' => $file,
@@ -179,8 +179,8 @@ class Editor
     }
 
     /**
-     * Inserts the given addition after the given line number
-     * (or after the current one if none provided).
+     * Inserts the given addition under the given line number
+     * (or under the current one if none provided).
      * Note: the current line is then set to the new one.
      *
      * @param File    $file
@@ -189,7 +189,7 @@ class Editor
      *
      * @api
      */
-    public function addAfter(File $file, $addition, $location = null)
+    public function insertUnder(File $file, $addition, $location = null)
     {
         $input = array(
             'file' => $file,
@@ -209,7 +209,7 @@ class Editor
      *
      * @api
      */
-    public function changeTo(File $file, $replacement, $location = null)
+    public function replace(File $file, $replacement, $location = null)
     {
         $input = array(
             'file' => $file,

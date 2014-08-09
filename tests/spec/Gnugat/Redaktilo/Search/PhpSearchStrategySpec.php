@@ -60,41 +60,41 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_finds_previous_occurences(File $file)
+    function it_finds_above_occurences(File $file)
     {
-        $previousLineNumber = 0;
-        $previousToken = array(new Token(T_OPEN_TAG, "<?php\n"));
+        $aboveLineNumber = 0;
+        $aboveToken = array(new Token(T_OPEN_TAG, "<?php\n"));
         $currentLineNumber = 10;
         $currentToken = $this->tokenBuilder->buildClass('AppKernel');
-        $nextToken = $this->tokenBuilder->buildMethod('registerBundles');
+        $underToken = $this->tokenBuilder->buildMethod('registerBundles');
 
-        $this->findPrevious($file, $nextToken, $currentLineNumber)->shouldBe(false);
-        $this->findPrevious($file, $currentToken, $currentLineNumber)->shouldBe(false);
-        $this->findPrevious($file, $previousToken, $currentLineNumber)->shouldBe($previousLineNumber);
+        $this->findAbove($file, $underToken, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($file, $currentToken, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($file, $aboveToken, $currentLineNumber)->shouldBe($aboveLineNumber);
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findPrevious($file, $nextToken)->shouldBe(false);
-        $this->findPrevious($file, $currentToken)->shouldBe(false);
-        $this->findPrevious($file, $previousToken)->shouldBe($previousLineNumber);
+        $this->findAbove($file, $underToken)->shouldBe(false);
+        $this->findAbove($file, $currentToken)->shouldBe(false);
+        $this->findAbove($file, $aboveToken)->shouldBe($aboveLineNumber);
     }
 
-    function it_finds_next_occurences(File $file)
+    function it_finds_under_occurences(File $file)
     {
-        $previousToken = array(new Token(T_OPEN_TAG, "<?php\n"));
+        $aboveToken = array(new Token(T_OPEN_TAG, "<?php\n"));
         $currentLineNumber = 10;
         $currentToken = $this->tokenBuilder->buildClass('AppKernel');
-        $nextLineNumber = 15;
-        $nextToken = $this->tokenBuilder->buildMethod('registerBundles');
+        $underLineNumber = 15;
+        $underToken = $this->tokenBuilder->buildMethod('registerBundles');
 
-        $this->findNext($file, $previousToken, $currentLineNumber)->shouldBe(false);
-        $this->findNext($file, $currentToken, $currentLineNumber)->shouldBe(false);
-        $this->findNext($file, $nextToken, $currentLineNumber)->shouldBe($nextLineNumber);
+        $this->findUnder($file, $aboveToken, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($file, $currentToken, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($file, $underToken, $currentLineNumber)->shouldBe($underLineNumber);
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findNext($file, $previousToken)->shouldBe(false);
-        $this->findNext($file, $currentToken)->shouldBe(false);
-        $this->findNext($file, $nextToken)->shouldBe($nextLineNumber);
+        $this->findUnder($file, $aboveToken)->shouldBe(false);
+        $this->findUnder($file, $currentToken)->shouldBe(false);
+        $this->findUnder($file, $underToken)->shouldBe($underLineNumber);
     }
 }

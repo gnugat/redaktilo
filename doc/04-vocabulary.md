@@ -1,10 +1,34 @@
 # Vocabulary
 
+* [Actions](#actions)
+    * [insert](#insert)
+    * [remove](#remove)
+    * [replace](#replace)
 * [Cursor](#cursor)
+* [Directions](#directions)
+    * [above](#above)
+    * [under](#under)
 * [Line](#line)
+* [Location](#location)
 * [Redaktilo](#redaktilo)
 * [Text editor](#text-editor)
 * [Text file](#text-file)
+
+## Actions
+
+Here's the vocabulary for the possible actions on a line.
+
+### insert
+
+Should be prefered over the word `add`.
+
+### remove
+
+Should be prefered over the word `delete`.
+
+### replace
+
+Should be prefered over the word `change`.
 
 ## Cursor
 
@@ -21,6 +45,22 @@ editor to select the wanted one.
 
 The cursor also enables to manipulate the selected element.
 
+## Directions
+
+Here's the vocabulary to locate something relatively in a collection of lines.
+
+### above
+
+Used when doing something.
+
+Should be prefered over the words `before`, `previous` or `up`.
+
+### under
+
+Used when doing something.
+
+Should be prefered over the words `after`, `down` or `next`.
+
 ## Line
 
 The unit with which **Redaktilo** works. It's a simple string which ends at the
@@ -31,6 +71,10 @@ line break:
 
 To make it easier for the developers, **Redaktilo** takes care of the line
 break, so you should only provide it with a string stripped of it.
+
+## Location
+
+The given line number, to which you can relatively search or do something.
 
 ## Redaktilo
 

@@ -145,8 +145,8 @@ use Gnugat\Redaktilo\File;
 interface SearchStrategy
 {
     // Throw PatternNotFoundException if the pattern hasn't be found
-    public function findNext(File $file, $pattern);
-    public function findPrevious(File $file, $pattern);
+    public function findAbove(File $file, $pattern);
+    public function findUnder(File $file, $pattern);
 
     public function supports($pattern);
 }
@@ -156,8 +156,8 @@ interface SearchStrategy
 
 If you want to go to a given line number, use this one.
 
-The `findNext` method will jump `n` lines under the current one,  while
-`findPrevious` will jump above.
+The `findUnder` method will jump `n` lines under the current one,  while
+`findAbove` will jump above.
 
 ### LineRegexSearchStrategy
 
@@ -187,7 +187,7 @@ tokens, use this strategy.
 The strategies seen above can be gathered in an search engine. This is used in
 the `Editor` to allow extension without having to modify it.
 
-For example, its `jumpDownTo` method can accept both a string or an integer.
+For example, its `jumpUnder` method can accept both a string or an integer.
 It is passes its argument to the engine's `resolve` method: if the engine has
 a registered `SearchStrategy` which supports it, it returns it. `Editor` can then tell
 the strategy to do the work.
@@ -335,16 +335,16 @@ class Editor
     public function save(File $file); // Throws IOException if the file cannot be written to
 
     // Manipulating a line (by default the current one).
-    public function addBefore(File $file, $addition, $location = null);
-    public function addAfter(File $file, $addition, $location = null);
-    public function changeTo(File $file, $replacement, $location = null); // Will be renamed to `replace`
+    public function insertAbove(File $file, $addition, $location = null);
+    public function insertUnder(File $file, $addition, $location = null);
+    public function replace(File $file, $replacement, $location = null);
     public function remove(File $file, $location = null); // Removes the current line.
 
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpDownTo(File $file, $pattern, $after = null);
-    public function jumpUpTo(File $file, $pattern, $before = null);
+    public function jumpUnder(File $file, $pattern, $location = null);
+    public function jumpAbove(File $file, $pattern, $location = null);
 
     // Content searching.
     public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
@@ -377,7 +377,7 @@ Just keep in mind that the cursor will be set to the added line:
 $emptyLine = '';
 
 echo $file->getCurrentLineNumber(); // 5
-$editor->addAfter($file, $emptyLine);
+$editor->insertUnder($file, $emptyLine);
 echo $file->getCurrentLineNumber(); // 6
 ```
 
@@ -388,22 +388,22 @@ You can also replace a line with a new value, or remove it.
 You can jump down or up to a line which correspond to the given pattern:
 
 ```php
-$editor->jumpdDownTo($file, 'The exact value of the line');
-$editor->jumpdDownTo($file, 2); // Jumps two lines under the current one.
+$editor->jumpdUnder($file, 'The exact value of the line');
+$editor->jumpdUnder($file, 2); // Jumps two lines under the current one.
 ```
 
 You should keep in mind that the search is done relatively to the current one:
 
 ```php
-$editor->jumpDownTo($file, $linePresentAbove); // Will throw an exception.
+$editor->jumpUnder($file, $linePresentAbove); // Will throw an exception.
 ```
 
-IF you don't want to start the search from the current line, you can indicate
+If you don't want to start the search from the current line, you can indicate
 the one you want:
 
 ```php
-$editor->jumpDownTo($file, $pattern, 0); // Starts from the top of the file
-$editor->jumpUpTo($file, $pattern, 42); // Starts from the 42th line
+$editor->jumpAbove($file, $pattern, 42); // Starts from the 42th line
+$editor->jumpUnder($file, $pattern, 0); // Starts from the top of the file
 ```
 
 ### Content searching

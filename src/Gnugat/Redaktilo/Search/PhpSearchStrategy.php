@@ -30,15 +30,15 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findPrevious(File $file, $pattern, $before = null)
+    public function findAbove(File $file, $pattern, $location = null)
     {
-        $before = $before ?: $file->getCurrentLineNumber();
+        $location = $location ?: $file->getCurrentLineNumber();
         $tokens = $this->converter->from($file);
         $reversedTokens = array_reverse($tokens);
         $total = count($reversedTokens);
         for ($index = 0; $index < $total; $index++) {
             $token = $reversedTokens[$index];
-            if ($token->getLineNumber() === $before) {
+            if ($token->getLineNumber() === $location) {
                 break;
             }
         }
@@ -47,14 +47,14 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findNext(File $file, $pattern, $after = null)
+    public function findUnder(File $file, $pattern, $location = null)
     {
-        $after = ($after ?: $file->getCurrentLineNumber()) + 1;
+        $location = ($location ?: $file->getCurrentLineNumber()) + 1;
         $tokens = $this->converter->from($file);
         $total = count($tokens);
         for ($index = 0; $index < $total; $index++) {
             $token = $tokens[$index];
-            if ($token->getLineNumber() === $after) {
+            if ($token->getLineNumber() === $location) {
                 break;
             }
         }

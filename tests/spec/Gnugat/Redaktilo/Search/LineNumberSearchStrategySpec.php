@@ -47,35 +47,35 @@ class LineNumberSearchStrategySpec extends ObjectBehavior
         $this->supports($rawLine)->shouldBe(false);
     }
 
-    function it_finds_previous_occurences(File $file)
+    function it_finds_above_occurences(File $file)
     {
         $currentLineNumber = 5;
         $existingLine = 4;
-        $nextLineNumber = 1;
+        $underLineNumber = 1;
         $nonExistingLine = 23;
 
-        $this->findPrevious($file, $nonExistingLine, $currentLineNumber)->shouldBe(false);
-        $this->findPrevious($file, $existingLine, $currentLineNumber)->shouldBe($nextLineNumber);
+        $this->findAbove($file, $nonExistingLine, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($file, $existingLine, $currentLineNumber)->shouldBe($underLineNumber);
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findPrevious($file, $nonExistingLine)->shouldBe(false);
-        $this->findPrevious($file, $existingLine)->shouldBe($nextLineNumber);
+        $this->findAbove($file, $nonExistingLine)->shouldBe(false);
+        $this->findAbove($file, $existingLine)->shouldBe($underLineNumber);
     }
 
-    function it_finds_next_occurences(File $file)
+    function it_finds_under_occurences(File $file)
     {
         $currentLineNumber = 5;
         $existingLine = 2;
-        $nextLineNumber = 7;
+        $underLineNumber = 7;
         $nonExistingLine = 23;
 
-        $this->findNext($file, $nonExistingLine, $currentLineNumber)->shouldBe(false);
-        $this->findNext($file, $existingLine, $currentLineNumber)->shouldBe($nextLineNumber);
+        $this->findUnder($file, $nonExistingLine, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($file, $existingLine, $currentLineNumber)->shouldBe($underLineNumber);
 
         $file->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findNext($file, $nonExistingLine)->shouldBe(false);
-        $this->findNext($file, $existingLine)->shouldBe($nextLineNumber);
+        $this->findUnder($file, $nonExistingLine)->shouldBe(false);
+        $this->findUnder($file, $existingLine)->shouldBe($underLineNumber);
     }
 }

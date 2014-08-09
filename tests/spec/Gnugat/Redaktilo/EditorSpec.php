@@ -64,46 +64,6 @@ class EditorSpec extends ObjectBehavior
         $this->open(self::FILENAME, true);
     }
 
-    function it_moves_the_cursor_under_the_current_line(
-        SearchEngine $searchEngine,
-        SearchStrategy $searchStrategy,
-        File $file
-    )
-    {
-        $pattern = 'No one expects the Spanish inquisition!';
-        $foundLineNumber = 42;
-
-        $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findNext($file, $pattern, null)->willReturn($foundLineNumber);
-        $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
-
-        $this->jumpDownTo($file, $pattern);
-
-        $searchStrategy->findNext($file, $pattern, null)->willReturn(false);
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-        $this->shouldThrow($exception)->duringJumpDownTo($file, $pattern);
-    }
-
-    function it_moves_the_cursor_under_the_given_line(
-        SearchEngine $searchEngine,
-        SearchStrategy $searchStrategy,
-        File $file
-    )
-    {
-        $pattern = 'No one expects the Spanish inquisition!';
-        $foundLineNumber = 42;
-
-        $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findNext($file, $pattern, 0)->willReturn($foundLineNumber);
-        $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
-
-        $this->jumpDownTo($file, $pattern, 0);
-
-        $searchStrategy->findNext($file, $pattern, 0)->willReturn(false);
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-        $this->shouldThrow($exception)->duringJumpDownTo($file, $pattern, 0);
-    }
-
     function it_moves_the_cursor_above_the_current_line(
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
@@ -114,14 +74,14 @@ class EditorSpec extends ObjectBehavior
         $foundLineNumber = 4423;
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findPrevious($file, $pattern, null)->willReturn($foundLineNumber);
+        $searchStrategy->findAbove($file, $pattern, null)->willReturn($foundLineNumber);
         $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
-        $this->jumpUpTo($file, $pattern);
+        $this->jumpAbove($file, $pattern);
 
-        $searchStrategy->findPrevious($file, $pattern, null)->willReturn(false);
+        $searchStrategy->findAbove($file, $pattern, null)->willReturn(false);
         $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-        $this->shouldThrow($exception)->duringJumpUpTo($file, $pattern);
+        $this->shouldThrow($exception)->duringJumpAbove($file, $pattern);
     }
 
     function it_moves_the_cursor_above_the_given_line(
@@ -134,14 +94,54 @@ class EditorSpec extends ObjectBehavior
         $foundLineNumber = 4423;
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findPrevious($file, $pattern, 0)->willReturn($foundLineNumber);
+        $searchStrategy->findAbove($file, $pattern, 0)->willReturn($foundLineNumber);
         $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
-        $this->jumpUpTo($file, $pattern, 0);
+        $this->jumpAbove($file, $pattern, 0);
 
-        $searchStrategy->findPrevious($file, $pattern, 0)->willReturn(false);
+        $searchStrategy->findAbove($file, $pattern, 0)->willReturn(false);
         $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-        $this->shouldThrow($exception)->duringJumpUpTo($file, $pattern, 0);
+        $this->shouldThrow($exception)->duringJumpAbove($file, $pattern, 0);
+    }
+
+    function it_moves_the_cursor_under_the_current_line(
+        SearchEngine $searchEngine,
+        SearchStrategy $searchStrategy,
+        File $file
+    )
+    {
+        $pattern = 'No one expects the Spanish inquisition!';
+        $foundLineNumber = 42;
+
+        $searchEngine->resolve($pattern)->willReturn($searchStrategy);
+        $searchStrategy->findUnder($file, $pattern, null)->willReturn($foundLineNumber);
+        $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
+
+        $this->jumpUnder($file, $pattern);
+
+        $searchStrategy->findUnder($file, $pattern, null)->willReturn(false);
+        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+        $this->shouldThrow($exception)->duringJumpUnder($file, $pattern);
+    }
+
+    function it_moves_the_cursor_under_the_given_line(
+        SearchEngine $searchEngine,
+        SearchStrategy $searchStrategy,
+        File $file
+    )
+    {
+        $pattern = 'No one expects the Spanish inquisition!';
+        $foundLineNumber = 42;
+
+        $searchEngine->resolve($pattern)->willReturn($searchStrategy);
+        $searchStrategy->findUnder($file, $pattern, 0)->willReturn($foundLineNumber);
+        $file->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
+
+        $this->jumpUnder($file, $pattern, 0);
+
+        $searchStrategy->findUnder($file, $pattern, 0)->willReturn(false);
+        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+        $this->shouldThrow($exception)->duringJumpUnder($file, $pattern, 0);
     }
 
     function it_checks_pattern_existence(
@@ -153,7 +153,7 @@ class EditorSpec extends ObjectBehavior
         $pattern = 'No one expects the spanish inquisition!';
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findNext($file, $pattern, 0)->willReturn(42);
+        $searchStrategy->findUnder($file, $pattern, 0)->willReturn(42);
 
         $this->has($file, $pattern)->shouldBe(true);
     }
@@ -172,7 +172,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('insert_above', $input)->shouldBeCalled();
 
-        $this->addBefore($file, $addition);
+        $this->insertAbove($file, $addition);
     }
 
     function it_inserts_lines_above_the_given_one(
@@ -190,7 +190,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('insert_above', $input)->shouldBeCalled();
 
-        $this->addBefore($file, $addition, $lineNumber);
+        $this->insertAbove($file, $addition, $lineNumber);
     }
 
     function it_inserts_lines_under_the_current_one(
@@ -207,7 +207,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('insert_under', $input)->shouldBeCalled();
 
-        $this->addAfter($file, $addition);
+        $this->insertUnder($file, $addition);
     }
 
     function it_inserts_lines_under_the_given_one(
@@ -225,7 +225,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('insert_under', $input)->shouldBeCalled();
 
-        $this->addAfter($file, $addition, $lineNumber);
+        $this->insertUnder($file, $addition, $lineNumber);
     }
 
     function it_replaces_the_current_line(
@@ -242,7 +242,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('replace', $input)->shouldBeCalled();
 
-        $this->changeTo($file, $replacement);
+        $this->replace($file, $replacement);
     }
 
     function it_replaces_the_given_line(
@@ -260,7 +260,7 @@ class EditorSpec extends ObjectBehavior
 
         $commandInvoker->run('replace', $input)->shouldBeCalled();
 
-        $this->changeTo($file, $replacement, $lineNumber);
+        $this->replace($file, $replacement, $lineNumber);
     }
 
     function it_removes_the_current_line(
