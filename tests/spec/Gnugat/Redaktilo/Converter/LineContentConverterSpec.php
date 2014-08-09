@@ -17,40 +17,6 @@ use PhpSpec\ObjectBehavior;
 
 class LineContentConverterSpec extends ObjectBehavior
 {
-    function it_is_a_content_converter()
-    {
-        $this->shouldImplement('Gnugat\Redaktilo\Converter\ContentConverter');
-    }
-
-    function it_converts_file_content_into_lines(File $file)
-    {
-        $lines = array(
-            'Egg',
-            'Bacon',
-            'Sausage',
-            'And spam',
-        );
-        $content = implode("\n", $lines);
-
-        $file->read()->willReturn($content);
-        $this->from($file)->shouldBe($lines);
-    }
-
-    function it_converts_back_lines_into_file_content(File $file)
-    {
-        $lines = array(
-            'Spam',
-            'Bacon',
-            'Sausage',
-            'And spam',
-        );
-        $content = implode("\n", $lines);
-
-        $file->read()->willReturn($content);
-        $file->write($content)->shouldBeCalled();
-        $this->back($file, $lines);
-    }
-
     function it_detects_file_line_break()
     {
         $lines = array(

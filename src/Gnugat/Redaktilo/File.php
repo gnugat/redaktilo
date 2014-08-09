@@ -22,19 +22,14 @@ class File extends Text
     /** @var string */
     private $filename;
 
-    /** @var string */
-    private $content;
-
     /**
      * @param string $filename
-     * @param mixed  $content
+     * @param array  $lines
      * @param string $lineBreak
      */
-    public function __construct($filename, array $content, $lineBreak = PHP_EOL)
+    public function __construct($filename, array $lines, $lineBreak = PHP_EOL)
     {
         $this->filename = $filename;
-        $this->content = implode($lineBreak, $content);
-        $lines = $content;
 
         parent::__construct($lines, $lineBreak);
     }
@@ -57,33 +52,5 @@ class File extends Text
     public function setFilename($filename)
     {
         $this->filename = $filename;
-    }
-
-    /**
-     * Returns the full content loaded in memory (doesn't actually read the
-     * file).
-     *
-     * @return string
-     *
-     * @api
-     */
-    public function read()
-    {
-        return $this->content;
-    }
-
-    /**
-     * Replaces the full content loaded in memory (doesn't actually write in the
-     * file).
-     *
-     * @param string $newContent
-     *
-     * @return string
-     *
-     * @api
-     */
-    public function write($newContent)
-    {
-        return $this->content = $newContent;
     }
 }

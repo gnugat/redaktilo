@@ -11,22 +11,11 @@
 
 namespace Gnugat\Redaktilo\Command;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
-
 /**
  * Replaces the given location in the given file with the given replacement.
  */
 class LineReplaceCommand implements Command
 {
-    /** @var LineContentConverter */
-    private $converter;
-
-    /** @param LineContentConverter $converter */
-    public function __construct(LineContentConverter $converter)
-    {
-        $this->converter = $converter;
-    }
-
     /** {@inheritdoc} */
     public function execute(array $input)
     {
@@ -34,9 +23,9 @@ class LineReplaceCommand implements Command
         $location = isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber();
         $replacement = $input['replacement'];
 
-        $lines = $this->converter->from($file);
+        $lines = $file->getLines();
         $lines[$location] = $replacement;
-        $this->converter->back($file, $lines);
+        $file->setLines($lines);
 
         $file->setCurrentLineNumber($location);
     }

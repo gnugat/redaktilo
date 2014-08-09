@@ -11,19 +11,11 @@
 
 namespace Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
-
 /**
  * Matches the lines which are exactly the same as the given pattern.
  */
 class SameSearchStrategy extends LineSearchStrategy
 {
-    /** @param LineContentConverter $converter */
-    public function __construct(LineContentConverter $converter)
-    {
-        $this->converter = $converter;
-    }
-
     /** {@inheritdoc} */
     protected function findIn(array $lines, $pattern)
     {

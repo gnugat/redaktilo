@@ -11,7 +11,6 @@
 
 namespace spec\Gnugat\Redaktilo\Command;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 
@@ -21,18 +20,16 @@ class LineInsertAboveCommandSpec extends ObjectBehavior
     const EXPECTED_FILENAME = '%s/tests/fixtures/expectations/life-of-brian-insert.txt';
 
     private $rootPath;
-    private $converter;
 
-    function let(File $file, LineContentConverter $converter)
+    function let(File $file)
     {
         $this->rootPath = __DIR__.'/../../../../../';
-        $this->converter = $converter;
 
         $filename = sprintf(self::ORIGINAL_FILENAME, $this->rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
-        $this->converter->from($file)->willReturn($lines);
-        $this->beConstructedWith($this->converter);
+        $file->getLines()->willReturn($lines);
+        $this->beConstructedWith();
     }
 
     function it_is_a_command()
@@ -53,7 +50,7 @@ class LineInsertAboveCommandSpec extends ObjectBehavior
             'addition' => "Pontius Pilate: '...Dickus?'"
         );
 
-        $this->converter->back($file, $expectedLines)->shouldBeCalled();
+        $file->setLines($expectedLines)->shouldBeCalled();
         $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->execute($input);

@@ -115,7 +115,9 @@ class Filesystem
     public function write(File $file)
     {
         $filename = $file->getFilename();
-        $content = $file->read();
+        $lines = $file->getLines();
+        $lineBreak = $file->getLineBreak();
+        $content = implode($lineBreak, $lines);
 
         $this->symfonyFilesystem->dumpFile($filename, $content, null);
     }

@@ -87,13 +87,12 @@ class EditorBuilder
         }
 
         $engine = new SearchEngine();
-        $lineConverter = $this->getLineConverter();
         $phpConverter = $this->getPhpConverter();
 
         $engine->registerStrategy(new Search\PhpSearchStrategy($phpConverter));
-        $engine->registerStrategy(new Search\LineRegexSearchStrategy($lineConverter));
-        $engine->registerStrategy(new Search\SameSearchStrategy($lineConverter));
-        $engine->registerStrategy(new Search\LineNumberSearchStrategy($lineConverter));
+        $engine->registerStrategy(new Search\LineRegexSearchStrategy());
+        $engine->registerStrategy(new Search\SameSearchStrategy());
+        $engine->registerStrategy(new Search\LineNumberSearchStrategy());
 
         foreach ($this->searchStrategies as $strategy) {
             $engine->registerStrategy($strategy);
@@ -109,12 +108,11 @@ class EditorBuilder
             return $this->commandInvoker;
         }
         $commandInvoker = new CommandInvoker();
-        $converter = $this->getLineConverter();
 
-        $commandInvoker->addCommand(new LineInsertAboveCommand($converter));
-        $commandInvoker->addCommand(new LineInsertUnderCommand($converter));
-        $commandInvoker->addCommand(new LineReplaceCommand($converter));
-        $commandInvoker->addCommand(new LineRemoveCommand($converter));
+        $commandInvoker->addCommand(new LineInsertAboveCommand());
+        $commandInvoker->addCommand(new LineInsertUnderCommand());
+        $commandInvoker->addCommand(new LineReplaceCommand());
+        $commandInvoker->addCommand(new LineRemoveCommand());
 
         foreach ($this->commands as $command) {
             $commandInvoker->addCommand($command);

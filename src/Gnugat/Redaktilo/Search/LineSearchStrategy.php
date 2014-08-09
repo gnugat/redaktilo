@@ -9,14 +9,11 @@ use Gnugat\Redaktilo\File;
  */
 abstract class LineSearchStrategy implements SearchStrategy
 {
-    /** @var \Gnugat\Redaktilo\Converter\ContentConverter */
-    protected $converter;
-
     /** {@inheritdoc} */
     public function findAbove(File $file, $pattern, $location = null)
     {
         $location = ($location ?: $file->getCurrentLineNumber()) - 1;
-        $lines = $this->converter->from($file);
+        $lines = $file->getLines();
         $aboveLines = array_slice($lines, 0, $location, true);
         $reversedAboveLines = array_reverse($aboveLines, true);
 
@@ -27,7 +24,7 @@ abstract class LineSearchStrategy implements SearchStrategy
     public function findUnder(File $file, $pattern, $location = null)
     {
         $location = ($location ?: $file->getCurrentLineNumber()) + 1;
-        $lines = $this->converter->from($file);
+        $lines = $file->getLines();
         $underLines = array_slice($lines, $location, null, true);
 
         return $this->findIn($underLines, $pattern);

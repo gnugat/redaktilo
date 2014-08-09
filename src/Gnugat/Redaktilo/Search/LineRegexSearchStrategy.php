@@ -11,19 +11,11 @@
 
 namespace Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
-
 /**
  * Tries to match the given regex against each lines.
  */
 class LineRegexSearchStrategy extends LineSearchStrategy
 {
-    /** @param LineContentConverter $converter */
-    public function __construct(LineContentConverter $converter)
-    {
-        $this->converter = $converter;
-    }
-
     /** {@inheritdoc} */
     protected function findIn(array $lines, $pattern)
     {

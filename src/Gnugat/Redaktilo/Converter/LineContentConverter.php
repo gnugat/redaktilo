@@ -19,27 +19,10 @@ use Gnugat\Redaktilo\File;
  *
  * @api
  */
-class LineContentConverter implements ContentConverter
+class LineContentConverter
 {
     const LINE_BREAK_OTHER = "\n";
     const LINE_BREAK_WINDOWS = "\r\n";
-
-    /** {@inheritdoc} */
-    public function from(File $file)
-    {
-        $content = $file->read();
-        $lineBreak = $this->detectLineBreak($content);
-
-        return explode($lineBreak, $content);
-    }
-
-    /** {@inheritdoc} */
-    public function back(File $file, $convertedContent)
-    {
-        $content = $file->read();
-        $lineBreak = $this->detectLineBreak($content);
-        $file->write(implode($lineBreak, $convertedContent));
-    }
 
     /**
      * PHP_EOL cannot be used to guess the line break of any files: a windows

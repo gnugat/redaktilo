@@ -11,7 +11,6 @@
 
 namespace spec\Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 
@@ -19,7 +18,7 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
 {
     const FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
 
-    function let(File $file, LineContentConverter $converter)
+    function let(File $file)
     {
         $rootPath = __DIR__.'/../../../../..';
 
@@ -27,8 +26,8 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
         $file->getFilename()->willReturn($filename);
-        $converter->from($file)->willReturn($lines);
-        $this->beConstructedWith($converter);
+        $file->getLines()->willReturn($lines);
+        $this->beConstructedWith();
     }
 
     function it_is_a_search_strategy()

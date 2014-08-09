@@ -30,7 +30,9 @@ class PhpContentConverter implements ContentConverter
     /** {@inheritdoc} */
     public function from(File $file)
     {
-        $content = $file->read();
+        $lines = $file->getLines();
+        $lineBreak = $file->getLineBreak();
+        $content = implode($lineBreak, $lines);
         $rawTokens = token_get_all($content);
 
         return $this->tokenBuilder->buildFromRaw($rawTokens);

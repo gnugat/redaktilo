@@ -11,6 +11,7 @@
 
 namespace spec\Gnugat\Redaktilo\Search;
 
+use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\Converter\PhpContentConverter;
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Search\Php\Token;
@@ -30,8 +31,12 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $rootPath = __DIR__.'/../../../../..';
         $filename = sprintf(self::FILENAME, $rootPath);
         $content = file_get_contents($filename);
+        $lineContentConverter = new LineContentConverter();
+        $lineBreak = $lineContentConverter->detectLineBreak($content);
+        $lines = explode($lineBreak, $content);
         $file->getFilename()->willReturn($filename);
-        $file->read()->willReturn($content);
+        $file->getLineBreak()->willReturn($lineBreak);
+        $file->getLines()->willReturn($lines);
 
         $this->tokenBuilder = new TokenBuilder();
         $converter = new PhpContentConverter($this->tokenBuilder);

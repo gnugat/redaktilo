@@ -11,7 +11,6 @@
 
 namespace Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
 
 /**
@@ -19,17 +18,11 @@ use Gnugat\Redaktilo\File;
  */
 class LineNumberSearchStrategy implements SearchStrategy
 {
-    /** @param LineContentConverter $converter */
-    public function __construct(LineContentConverter $converter)
-    {
-        $this->converter = $converter;
-    }
-
     /** {@inheritdoc} */
     public function findAbove(File $file, $pattern, $location = null)
     {
         $foundLineNumber = ($location ?: $file->getCurrentLineNumber()) - $pattern;
-        $lines = $this->converter->from($file);
+        $lines = $file->getLines();
         $totalLines = count($lines);
         if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
             return false;
@@ -42,7 +35,7 @@ class LineNumberSearchStrategy implements SearchStrategy
     public function findUnder(File $file, $pattern, $location = null)
     {
         $foundLineNumber = ($location ?: $file->getCurrentLineNumber()) + $pattern;
-        $lines = $this->converter->from($file);
+        $lines = $file->getLines();
         $totalLines = count($lines);
         if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
             return false;

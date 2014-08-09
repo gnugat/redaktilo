@@ -81,9 +81,6 @@ class File extends Text
 {
     public function getFilename();
     public function setFilename($filename);
-
-    public function read();
-    public function write($newContent);
 }
 ```
 
