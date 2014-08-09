@@ -1,5 +1,13 @@
 # Changes between versions
 
+## 1.0.0-alpha5: BC break renaming
+
+* renamed `SearchStrategy` `previous`/`next` to `above`/`under`
+* renamed `Editor` `addBefore`/`addAfter` to `insertAbove`/`insertUnder`
+* renamed `Editor` `changeTo` to `rename`
+* renamed `Editor` `jumpUpTo`/`jumpDownTo` to `jumpAbove`/`jumpUnder`
+* improved the vocabulary with `Actions`, `Directions` and `Location`
+
 ## 1.0.0-alpha4: Fix current line
 
 * fixed current line update's responsability in commands
