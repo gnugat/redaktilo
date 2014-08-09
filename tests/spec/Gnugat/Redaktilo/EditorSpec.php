@@ -16,6 +16,8 @@ use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
+use Gnugat\Redaktilo\Text;
+use Gnugat\Redaktilo\TextFactory;
 use PhpSpec\ObjectBehavior;
 
 class EditorSpec extends ObjectBehavior
@@ -24,6 +26,7 @@ class EditorSpec extends ObjectBehavior
 
     function let(
         File $file,
+        TextFactory $textFactory,
         Filesystem $filesystem,
         SearchEngine $searchEngine,
         CommandInvoker $commandInvoker
@@ -32,10 +35,20 @@ class EditorSpec extends ObjectBehavior
         $file->getFilename()->willReturn(self::FILENAME);
 
         $this->beConstructedWith(
+            $textFactory,
             $filesystem,
             $searchEngine,
             $commandInvoker
         );
+    }
+
+    function it_opens_text(TextFactory $textFactory, Text $text)
+    {
+        $string = "Waitress: Well, there's spam egg sausage and spam, that's not got much spam in it.";
+
+        $textFactory->make($string)->willReturn($text);
+
+        $this->openText($string);
     }
 
     function it_opens_existing_files(Filesystem $filesystem, File $file)

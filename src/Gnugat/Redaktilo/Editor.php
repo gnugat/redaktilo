@@ -30,6 +30,9 @@ use Gnugat\Redaktilo\Search\SearchEngine;
  */
 class Editor
 {
+    /** @var TextFactory */
+    private $textFactory;
+
     /** @var Filesystem */
     private $filesystem;
 
@@ -40,19 +43,36 @@ class Editor
     private $commandInvoker;
 
     /**
+     * @param TextFactory    $textFactory
      * @param Filesystem     $filesystem
      * @param SearchEngine   $searchEngine
      * @param CommandInvoker $commandInvoker
      */
     public function __construct(
+        TextFactory $textFactory,
         Filesystem $filesystem,
         SearchEngine $searchEngine,
         CommandInvoker $commandInvoker
     )
     {
+        $this->textFactory = $textFactory;
         $this->filesystem = $filesystem;
         $this->searchEngine = $searchEngine;
         $this->commandInvoker = $commandInvoker;
+    }
+
+    /**
+     * Creates an instance of Text from the given string.
+     *
+     * @param string $string
+     *
+     * @return Text
+     *
+     * @api
+     */
+    public function openText($string)
+    {
+        return $this->textFactory->make($string);
     }
 
     /**

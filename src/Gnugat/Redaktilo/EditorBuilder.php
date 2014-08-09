@@ -49,6 +49,9 @@ class EditorBuilder
     /** @var Command[] */
     private $commands = array();
 
+    /** @var TextFactory */
+    private $textFactory;
+
     /** @var Filesystem */
     private $filesystem;
 
@@ -125,6 +128,16 @@ class EditorBuilder
         return new Filesystem(new SymfonyFilesystem());
     }
 
+    /** @return TextFactory */
+    protected function getTextFactory()
+    {
+        if ($this->textFactory) {
+            return $this->textFactory;
+        }
+
+        return new TextFactory($this->getLineConverter());
+    }
+
     /**
      * @return Editor
      *
@@ -132,7 +145,12 @@ class EditorBuilder
      */
     public function getEditor()
     {
-        return new Editor($this->getFilesystem(), $this->getSearchEngine(), $this->getCommandInvoker());
+        return new Editor(
+            $this->getTextFactory(),
+            $this->getFilesystem(),
+            $this->getSearchEngine(),
+            $this->getCommandInvoker()
+        );
     }
 
     /**
