@@ -4,6 +4,7 @@ This chapter explains the responsibility of each classes:
 
 * [Text](#text)
 * [File](#file)
+* [TextFactory](#textfactory)
 * [Filesystem](#filesystem)
 * [Converter](#converter)
     * [LineContentConverter](#linecontentconverter)
@@ -92,6 +93,28 @@ One last thing: creating a `File` sets its cursor to the first line:
 $file = new File($filename, $content);
 echo $file->getCurrentLineNumber(); // 0
 ```
+
+## TextFactory
+
+A stateless service which creates an instance of `Text` from the given string:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+use Gnugat\Redaktilo\Converter\LineContentConverter;
+
+class TextFactory
+{
+    public function __construct(LineContentConverter $lineContentConverter);
+
+    public function make($string);
+}
+```
+
+Such a factory is usefull as it takes care of detecting the line break for you
+(used to split the string into an array of lines).
 
 ## Filesystem
 
