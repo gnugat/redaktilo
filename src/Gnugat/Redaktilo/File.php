@@ -30,21 +30,11 @@ class File extends Text
      * @param mixed  $content
      * @param string $lineBreak
      */
-    public function __construct($filename, $content, $lineBreak = PHP_EOL)
+    public function __construct($filename, array $content, $lineBreak = PHP_EOL)
     {
         $this->filename = $filename;
-
-        if (is_string($content)) {
-            $this->content = $content;
-            $lineContentConverter = new Converter\LineContentConverter();
-            $textFactory = new Factory\TextFactory($lineContentConverter);
-            $text = $textFactory->make($content);
-            $lines = $text->getLines();
-            $lineBreak = $text->getLineBreak();
-        } else {
-            $this->content = implode($lineBreak, $content);
-            $lines = $content;
-        }
+        $this->content = implode($lineBreak, $content);
+        $lines = $content;
 
         parent::__construct($lines, $lineBreak);
     }

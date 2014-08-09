@@ -23,6 +23,7 @@ class FilesystemSpec extends ObjectBehavior
     private $copyFilename;
 
     private $fileCopier;
+    private $fileFactory;
 
     function let(SymfonyFilesystem $symfonyFilesystem)
     {
@@ -32,8 +33,8 @@ class FilesystemSpec extends ObjectBehavior
         $this->fileCopier = new SymfonyFilesystem();
 
         $lineContentConverter = new LineContentConverter();
-        $fileFactory = new FileFactory($lineContentConverter);
-        $this->beConstructedWith($fileFactory, $symfonyFilesystem);
+        $this->fileFactory = new FileFactory($lineContentConverter);
+        $this->beConstructedWith($this->fileFactory, $symfonyFilesystem);
     }
 
     function it_opens_existing_files()
@@ -85,7 +86,7 @@ class FilesystemSpec extends ObjectBehavior
     {
         $this->fileCopier->copy($this->sourceFilename, $this->copyFilename, true);
         $content = file_get_contents($this->copyFilename);
-        $file = new File($this->copyFilename, $content);
+        $file = $this->fileFactory->make($this->copyFilename, $content);
 
         $symfonyFilesystem->dumpFile($this->copyFilename, $content, null)->shouldBeCalled();
 

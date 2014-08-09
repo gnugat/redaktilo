@@ -21,13 +21,10 @@ class FileSpec extends ObjectBehavior
     function let()
     {
         $this->filename = '/tmp/egg.txt';
-        $content = '';
-        //$lines = array();
-        //$lineBreak = "\n";
-        //
-        //$this->beConstructedWith($this->filename, $lines, $lineBreak);
+        $lines = array();
+        $lineBreak = "\n";
 
-        $this->beConstructedWith($this->filename, $content);
+        $this->beConstructedWith($this->filename, $lines, $lineBreak);
     }
 
     function it_is_a_text()
