@@ -87,7 +87,7 @@ class Editor
      *
      * @api
      */
-    public function open($filename, $force = false)
+    public function openFile($filename, $force = false)
     {
         if (!$this->filesystem->exists($filename) && $force) {
             return $this->filesystem->create($filename);
@@ -106,7 +106,7 @@ class Editor
      *
      * @api
      */
-    public function save(File $file)
+    public function saveFile(File $file)
     {
         $this->filesystem->write($file);
     }

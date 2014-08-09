@@ -25,11 +25,12 @@ use Symfony\Component\Filesystem\Exception\IOException;
 
 class Editor
 {
-    public function __construct(Filesystem $filesystem);
-
     // Filesystem operations.
-    public function open($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
-    public function save(File $file); // Throws IOException if the file cannot be written to
+    public function openFile($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
+    public function saveFile(File $file); // Throws IOException if the file cannot be written to
+
+    // In case you need to manipulate a string and not a file.
+    public function openText($string);
 
     // Manipulating a line (by default the current one).
     public function insertAbove(File $file, $addition, $location = null);
@@ -74,7 +75,7 @@ First things first: you need to open the file:
 
 ```php
 $filename = '/tmp/monty-menu.txt';
-$file = $editor->open($filename); // Current line: 0 (which is 'Bacon')
+$file = $editor->openFile($filename); // Current line: 0 (which is 'Bacon')
 ```
 
 ## Content navigation
@@ -168,7 +169,7 @@ For now the modification is only done in memory, to actually apply your changes
 to the file you need to save it:
 
 ```php
-$editor->save($file);
+$editor->saveFile($file);
 ```
 
 The resulting file will be:
