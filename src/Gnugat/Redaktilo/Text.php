@@ -25,17 +25,17 @@ class Text
     /**
      * @var array
      */
-    private $lines;
+    protected $lines;
 
     /**
      * @var string
      */
-    private $lineBreak;
+    protected $lineBreak;
 
     /**
      * @var ineger
      */
-    private $currentLineNumber = 0;
+    protected $currentLineNumber = 0;
 
     /**
      * @param array  $lines

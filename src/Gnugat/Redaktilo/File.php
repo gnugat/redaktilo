@@ -12,27 +12,18 @@
 namespace Gnugat\Redaktilo;
 
 /**
- * Representation of a file:
- *
- * + it has a filename
- * + it has a content which can be read and writen
- * + it has a pointer to a current line
- *
- * Also provides a line representation of the content with some basic
- * manipulations.
+ * Redaktilo's base entity representing a file: it is a Text which has a
+ * filename (which is the absolute path with the file name).
  *
  * @api
  */
-class File
+class File extends Text
 {
     /** @var string */
     private $filename;
 
     /** @var string */
     private $content;
-
-    /** @var int */
-    private $currentLineNumber = 0;
 
     /**
      * @param string $filename
@@ -42,11 +33,17 @@ class File
     {
         $this->filename = $filename;
         $this->content = $content;
+
+        $lineContentConverter = new Converter\LineContentConverter();
+        $textFactory = new TextFactory($lineContentConverter);
+        $text = $textFactory->make($content);
+        $lines = $text->getLines();
+        $lineBreak = $text->getLineBreak();
+
+        parent::__construct($lines, $lineBreak);
     }
 
     /**
-     * Returns the absolute path with the file name.
-     *
      * @return string
      *
      * @api
@@ -54,6 +51,16 @@ class File
     public function getFilename()
     {
         return $this->filename;
+    }
+
+    /**
+     * @param string $filename
+     *
+     * @api
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
     }
 
     /**
@@ -82,17 +89,5 @@ class File
     public function write($newContent)
     {
         return $this->content = $newContent;
-    }
-
-    /** @return int */
-    public function getCurrentLineNumber()
-    {
-        return $this->currentLineNumber;
-    }
-
-    /** @param int $lineNumber */
-    public function setCurrentLineNumber($lineNumber)
-    {
-        $this->currentLineNumber = $lineNumber;
     }
 }
