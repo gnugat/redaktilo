@@ -20,6 +20,7 @@ use Gnugat\Redaktilo\Command\LineReplaceCommand;
 use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\Converter\PhpContentConverter;
 use Gnugat\Redaktilo\Factory\TextFactory;
+use Gnugat\Redaktilo\Factory\FileFactory;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
@@ -52,6 +53,9 @@ class EditorBuilder
 
     /** @var TextFactory */
     private $textFactory;
+
+    /** @var FileFactory */
+    private $fileFactory;
 
     /** @var Filesystem */
     private $filesystem;
@@ -119,16 +123,6 @@ class EditorBuilder
         return $commandInvoker;
     }
 
-    /** @return Filesystem */
-    protected function getFilesystem()
-    {
-        if ($this->filesystem) {
-            return $this->filesystem;
-        }
-
-        return new Filesystem(new SymfonyFilesystem());
-    }
-
     /** @return TextFactory */
     protected function getTextFactory()
     {
@@ -137,6 +131,26 @@ class EditorBuilder
         }
 
         return new TextFactory($this->getLineConverter());
+    }
+
+    /** @return FileFactory */
+    protected function getFileFactory()
+    {
+        if ($this->fileFactory) {
+            return $this->fileFactory;
+        }
+
+        return new FileFactory($this->getLineConverter());
+    }
+
+    /** @return Filesystem */
+    protected function getFilesystem()
+    {
+        if ($this->filesystem) {
+            return $this->filesystem;
+        }
+
+        return new Filesystem($this->getFileFactory(), new SymfonyFilesystem());
     }
 
     /**

@@ -11,6 +11,7 @@
 
 namespace Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\Factory\FileFactory;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -22,12 +23,19 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 class Filesystem
 {
+    /** @var FileFactory */
+    private $FileFactory;
+
     /** @var SymfonyFilesystem */
     private $symfonyFilesystem;
 
-    /** @param SymfonyFilesystem $symfonyFilesystem */
-    public function __construct(SymfonyFilesystem $symfonyFilesystem)
+    /**
+     * @param FileFactory       $fileFactory
+     * @param SymfonyFilesystem $symfonyFilesystem
+     */
+    public function __construct(FileFactory $fileFactory, SymfonyFilesystem $symfonyFilesystem)
     {
+        $this->fileFactory = $fileFactory;
         $this->symfonyFilesystem = $symfonyFilesystem;
     }
 
@@ -52,7 +60,7 @@ class Filesystem
             throw new FileNotFoundException($message, 0, null, $filename);
         }
 
-        return new File($filename, $content);
+        return $this->fileFactory->make($filename, $content);
     }
 
     /**
@@ -76,7 +84,7 @@ class Filesystem
             throw new IOException($message, 0, null, $filename);
         }
 
-        return new File($filename, '');
+        return $this->fileFactory->make($filename, '');
     }
 
     /**

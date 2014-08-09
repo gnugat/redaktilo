@@ -11,6 +11,8 @@
 
 namespace spec\Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\Converter\LineContentConverter;
+use Gnugat\Redaktilo\Factory\FileFactory;
 use Gnugat\Redaktilo\File;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -29,7 +31,9 @@ class FilesystemSpec extends ObjectBehavior
 
         $this->fileCopier = new SymfonyFilesystem();
 
-        $this->beConstructedWith($symfonyFilesystem);
+        $lineContentConverter = new LineContentConverter();
+        $fileFactory = new FileFactory($lineContentConverter);
+        $this->beConstructedWith($fileFactory, $symfonyFilesystem);
     }
 
     function it_opens_existing_files()
