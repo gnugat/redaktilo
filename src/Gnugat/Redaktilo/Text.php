@@ -40,8 +40,6 @@ class Text
     /**
      * @param array  $lines
      * @param string $lineBreak
-     *
-     * @api
      */
     public function __construct(array $lines, $lineBreak = PHP_EOL)
     {
