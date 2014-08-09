@@ -2,6 +2,7 @@
 
 This chapter explains the responsibility of each classes:
 
+* [Text](#text)
 * [File](#file)
 * [Filesystem](#filesystem)
 * [Converter](#converter)
@@ -27,6 +28,39 @@ This chapter explains the responsibility of each classes:
     * [Content searching](#content-searching)
 * [Next readings](#next-readings)
 * [Previous readings](#previous-readings)
+
+## Text
+
+**Redaktilo** is based on this entity:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+class Text
+{
+    public function __construct(array $lines, $lineBreak = PHP_EOL);
+
+    public function getLines();
+    public function setLines(array $lines);
+
+    public function getLineBreak();
+    public function setLineBreak($lineBreak);
+
+    public function getCurrentLineNumber();
+    public function setCurrentLineNumber($lineNumber);
+}
+```
+
+Every single other classes in this project are stateless services allowing you
+to manipulate it.
+
+Basically it is a collection of lines: each line is stripped from their
+line break (this character is centralized in a property).
+
+A current line number is set to `0` when the Text is created and can then be
+changed.
 
 ## File
 
