@@ -27,18 +27,24 @@ class File extends Text
 
     /**
      * @param string $filename
-     * @param string $content
+     * @param mixed  $content
+     * @param string $lineBreak
      */
-    public function __construct($filename, $content)
+    public function __construct($filename, $content, $lineBreak = PHP_EOL)
     {
         $this->filename = $filename;
-        $this->content = $content;
 
-        $lineContentConverter = new Converter\LineContentConverter();
-        $textFactory = new Factory\TextFactory($lineContentConverter);
-        $text = $textFactory->make($content);
-        $lines = $text->getLines();
-        $lineBreak = $text->getLineBreak();
+        if (is_string($content)) {
+            $this->content = $content;
+            $lineContentConverter = new Converter\LineContentConverter();
+            $textFactory = new Factory\TextFactory($lineContentConverter);
+            $text = $textFactory->make($content);
+            $lines = $text->getLines();
+            $lineBreak = $text->getLineBreak();
+        } else {
+            $this->content = implode($lineBreak, $content);
+            $lines = $content;
+        }
 
         parent::__construct($lines, $lineBreak);
     }

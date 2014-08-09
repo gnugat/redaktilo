@@ -113,6 +113,28 @@ class TextFactory
 Such a factory is usefull as it takes care of detecting the line break for you
 (used to split the string into an array of lines).
 
+### FileFactory
+
+A stateless service which creates an instance of `File` from the given filename
+and content:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+use Gnugat\Redaktilo\Converter\LineContentConverter;
+
+class TextFactory
+{
+    public function __construct(LineContentConverter $lineContentConverter);
+
+    public function make($filename, $content);
+}
+```
+
+Such a factory is usefull as it takes care of detecting the line break for you.
+
 ## Filesystem
 
 A service which does the actual read and write operations:
