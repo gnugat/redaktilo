@@ -11,7 +11,7 @@
 
 namespace spec\Gnugat\Redaktilo\Command;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
 class LineRemoveCommandSpec extends ObjectBehavior
@@ -20,14 +20,14 @@ class LineRemoveCommandSpec extends ObjectBehavior
 
     private $rootPath;
 
-    function let(File $file)
+    function let(Text $text)
     {
         $this->rootPath = __DIR__.'/../../../../../';
 
         $filename = sprintf(self::ORIGINAL_FILENAME, $this->rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
-        $file->getLines()->willReturn($lines);
+        $text->getLines()->willReturn($lines);
         $this->beConstructedWith();
     }
 
@@ -36,7 +36,7 @@ class LineRemoveCommandSpec extends ObjectBehavior
         $this->shouldImplement('Gnugat\Redaktilo\Command\Command');
     }
 
-    function it_removes_lines(File $file)
+    function it_removes_lines(Text $text)
     {
         $expectedFilename = sprintf(self::ORIGINAL_FILENAME, $this->rootPath);
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
@@ -46,20 +46,20 @@ class LineRemoveCommandSpec extends ObjectBehavior
         unset($expectedLines[$lineNumber]);
 
         $input = array(
-            'file' => $file,
+            'text' => $text,
             'location' => $lineNumber
         );
 
-        $file->setLines($expectedLines)->shouldBeCalled();
-        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+        $text->setLines($expectedLines)->shouldBeCalled();
+        $text->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->execute($input);
 
         $input = array(
-            'file' => $file,
+            'text' => $text,
         );
-        $file->getCurrentLineNumber()->willReturn($lineNumber);
-        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+        $text->getCurrentLineNumber()->willReturn($lineNumber);
+        $text->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->execute($input);
     }

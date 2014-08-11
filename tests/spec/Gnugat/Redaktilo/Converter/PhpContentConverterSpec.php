@@ -12,7 +12,7 @@
 namespace spec\Gnugat\Redaktilo\Converter;
 
 use Gnugat\Redaktilo\Converter\LineContentConverter;
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use PhpSpec\ObjectBehavior;
 
@@ -30,7 +30,7 @@ class PhpContentConverterSpec extends ObjectBehavior
         $this->shouldImplement('Gnugat\Redaktilo\Converter\ContentConverter');
     }
 
-    function it_converts_file_content_into_php_tokens(TokenBuilder $tokenBuilder, File $file)
+    function it_converts_file_content_into_php_tokens(TokenBuilder $tokenBuilder, Text $text)
     {
         $rootPath = __DIR__.'/../../../../../';
         $filename = sprintf(self::FILENAME, $rootPath);
@@ -39,10 +39,10 @@ class PhpContentConverterSpec extends ObjectBehavior
         $lineBreak = $lineContentConverter->detectLineBreak($content);
         $lines = explode($lineBreak, $content);
         $rawTokens = token_get_all($content);
-        $file->getLineBreak()->willReturn($lineBreak);
-        $file->getLines()->willReturn($lines);
+        $text->getLineBreak()->willReturn($lineBreak);
+        $text->getLines()->willReturn($lines);
 
         $tokenBuilder->buildFromRaw($rawTokens)->willReturn(array());
-        $this->from($file);
+        $this->from($text);
     }
 }

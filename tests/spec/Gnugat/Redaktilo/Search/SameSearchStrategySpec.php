@@ -11,22 +11,21 @@
 
 namespace spec\Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
 class SameSearchStrategySpec extends ObjectBehavior
 {
     const FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
 
-    function let(File $file)
+    function let(Text $text)
     {
         $rootPath = __DIR__.'/../../../../..';
 
         $filename = sprintf(self::FILENAME, $rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
-        $file->getFilename()->willReturn($filename);
-        $file->getLines()->willReturn($lines);
+        $text->getLines()->willReturn($lines);
         $this->beConstructedWith();
     }
 
@@ -46,7 +45,7 @@ class SameSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_finds_above_occurences(File $file)
+    function it_finds_above_occurences(Text $text)
     {
         $aboveLine = '[A guard sniggers]';
         $aboveLineNumber = 1;
@@ -54,18 +53,18 @@ class SameSearchStrategySpec extends ObjectBehavior
         $currentLineNumber = 3;
         $underLine = '[Sniggering]';
 
-        $this->findAbove($file, $underLine, $currentLineNumber)->shouldBe(false);
-        $this->findAbove($file, $currentLine, $currentLineNumber)->shouldBe(false);
-        $this->findAbove($file, $aboveLine, $currentLineNumber)->shouldBe($aboveLineNumber);
+        $this->findAbove($text, $underLine, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $currentLine, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $aboveLine, $currentLineNumber)->shouldBe($aboveLineNumber);
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findAbove($file, $underLine)->shouldBe(false);
-        $this->findAbove($file, $currentLine)->shouldBe(false);
-        $this->findAbove($file, $aboveLine)->shouldBe($aboveLineNumber);
+        $this->findAbove($text, $underLine)->shouldBe(false);
+        $this->findAbove($text, $currentLine)->shouldBe(false);
+        $this->findAbove($text, $aboveLine)->shouldBe($aboveLineNumber);
     }
 
-    function it_finds_under_occurences(File $file)
+    function it_finds_under_occurences(Text $text)
     {
         $aboveLine = '[A guard sniggers]';
         $currentLine = '[More sniggering]';
@@ -73,14 +72,14 @@ class SameSearchStrategySpec extends ObjectBehavior
         $underLine = '[Sniggering]';
         $underLineNumber = 5;
 
-        $this->findUnder($file, $aboveLine, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($file, $currentLine, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($file, $underLine, $currentLineNumber)->shouldBe($underLineNumber);
+        $this->findUnder($text, $aboveLine, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($text, $currentLine, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($text, $underLine, $currentLineNumber)->shouldBe($underLineNumber);
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findUnder($file, $aboveLine)->shouldBe(false);
-        $this->findUnder($file, $currentLine)->shouldBe(false);
-        $this->findUnder($file, $underLine)->shouldBe($underLineNumber);
+        $this->findUnder($text, $aboveLine)->shouldBe(false);
+        $this->findUnder($text, $currentLine)->shouldBe(false);
+        $this->findUnder($text, $underLine)->shouldBe($underLineNumber);
     }
 }

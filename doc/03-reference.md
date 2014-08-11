@@ -84,6 +84,12 @@ class File extends Text
 }
 ```
 
+As you can see, it extends the `Text` entity and adds a `filename` property:
+
+```php
+$file = new File($filename, $lines, $lineBreak);
+```
+
 ## Factory
 
 While these classes aren't extension points, they might be worth knowing.
@@ -143,9 +149,12 @@ namespace Gnugat\Redaktilo;
 
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class Filesystem
 {
+    public function __construct(SymfonyFilesystem $symfonyFilesystem);
+
     public function open($filename); // Throws FileNotFoundException if the file doesn't exist
     public function create($filename); // Throws IOException if the path isn't accessible
 
@@ -164,19 +173,19 @@ will create an instance of `File`.
 ## Converter
 
 This interface allows you to extend **Redaktilo** in order to manipulate
-different representations of the `File`'s content:
+different representations of the `Text`'s lines:
 
 ```php
 <?php
 
 namespace Gnugat\Redaktilo\Converter;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 
 interface ContentConverter
 {
-    public function from(File $file);
-    public function back(File $file, $convertedContent);
+    public function from(Text $text);
+    public function back(Text $text, $convertedContent);
 }
 ```
 
@@ -187,7 +196,7 @@ Possible representations might be:
 
 ### LineContentConverter
 
-**Redaktilo** relies heavily on this representation: a `File` should be composed
+**Redaktilo** relies heavily on this representation: a `Text` should be composed
 of lines.
 
 This converter takes the content, detects its line break and splits it into an
@@ -202,7 +211,7 @@ via the `token_get_all()` function.
 
 ## Search
 
-Another stateless service, which allows you to search patterns in the File's
+Another stateless service, which allows you to search patterns in the Text's
 content.
 
 This is actually an interface allowing you to extend Redaktilo. By default, two
@@ -213,13 +222,13 @@ implementations are provided.
 
 namespace Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 
 interface SearchStrategy
 {
     // Throw PatternNotFoundException if the pattern hasn't be found
-    public function findAbove(File $file, $pattern);
-    public function findUnder(File $file, $pattern);
+    public function findAbove(Text $text, $pattern);
+    public function findUnder(Text $text, $pattern);
 
     public function supports($pattern);
 }
@@ -262,8 +271,8 @@ the `Editor` to allow extension without having to modify it.
 
 For example, its `jumpUnder` method can accept both a string or an integer.
 It is passes its argument to the engine's `resolve` method: if the engine has
-a registered `SearchStrategy` which supports it, it returns it. `Editor` can then tell
-the strategy to do the work.
+a registered `SearchStrategy` which supports it, it returns it. `Editor` can
+then tell the strategy to do the work.
 
 ```php
 <?php
@@ -279,7 +288,7 @@ class SearchEngine
 
 ## Command
 
-Allows you to manipulate the File's content.
+Allows you to manipulate the Text's content.
 
 This is actually an interface allowing you to extend Redaktilo. By default, three
 implementations are provided.
@@ -296,16 +305,16 @@ interface Command
 }
 ```
 
-The input parameter is currently an array with at least an entry `file` with the
-file to manipulate.
+The input parameter is currently an array with at least an entry `text` with the
+text to manipulate.
 
 ### LineInsertAboveCommand
 
-Inserts the given addition in the given file above the given location.
+Inserts the given addition in the given text above the given location.
 
 ### LineInsertUnderCommand
 
-Inserts the given addition in the given file under the given location.
+Inserts the given addition in the given text under the given location.
 
 ### LineReplaceCommand
 
@@ -409,19 +418,19 @@ class Editor
     public function openText($string);
 
     // Manipulating a line (by default the current one).
-    public function insertAbove(File $file, $addition, $location = null);
-    public function insertUnder(File $file, $addition, $location = null);
-    public function replace(File $file, $replacement, $location = null);
-    public function remove(File $file, $location = null); // Removes the current line.
+    public function insertAbove(Text $text, $addition, $location = null);
+    public function insertUnder(Text $text, $addition, $location = null);
+    public function replace(Text $text, $replacement, $location = null);
+    public function remove(Text $text, $location = null); // Removes the current line.
 
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpUnder(File $file, $pattern, $location = null);
-    public function jumpAbove(File $file, $pattern, $location = null);
+    public function jumpUnder(Text $text, $pattern, $location = null);
+    public function jumpAbove(Text $text, $pattern, $location = null);
 
     // Content searching.
-    public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
+    public function has(Text $text, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
 }
 ```
 
@@ -451,9 +460,9 @@ Just keep in mind that the cursor will be set to the added line:
 ```php
 $emptyLine = '';
 
-echo $file->getCurrentLineNumber(); // 5
-$editor->insertUnder($file, $emptyLine);
-echo $file->getCurrentLineNumber(); // 6
+echo $text->getCurrentLineNumber(); // 5
+$editor->insertUnder($text, $emptyLine);
+echo $text->getCurrentLineNumber(); // 6
 ```
 
 You can also replace a line with a new value, or remove it.
@@ -463,31 +472,31 @@ You can also replace a line with a new value, or remove it.
 You can jump down or up to a line which correspond to the given pattern:
 
 ```php
-$editor->jumpdUnder($file, 'The exact value of the line');
-$editor->jumpdUnder($file, 2); // Jumps two lines under the current one.
+$editor->jumpdUnder($text, 'The exact value of the line');
+$editor->jumpdUnder($text, 2); // Jumps two lines under the current one.
 ```
 
 You should keep in mind that the search is done relatively to the current one:
 
 ```php
-$editor->jumpUnder($file, $linePresentAbove); // Will throw an exception.
+$editor->jumpUnder($text, $linePresentAbove); // Will throw an exception.
 ```
 
 If you don't want to start the search from the current line, you can indicate
 the one you want:
 
 ```php
-$editor->jumpAbove($file, $pattern, 42); // Starts from the 42th line
-$editor->jumpUnder($file, $pattern, 0); // Starts from the top of the file
+$editor->jumpAbove($text, $pattern, 42); // Starts from the 42th line
+$editor->jumpUnder($text, $pattern, 0); // Starts from the top of the text
 ```
 
 ### Content searching
 
 If you don't want to handle exceptions just to make sure that a line is present
-in the file, use the following:
+in the text, use the following:
 
 ```php
-$editor->has($file, $line);
+$editor->has($text, $line);
 ```
 
 ## Next readings

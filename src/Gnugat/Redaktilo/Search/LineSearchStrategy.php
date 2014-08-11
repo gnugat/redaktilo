@@ -2,7 +2,7 @@
 
 namespace Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 
 /**
  * Prepares a subset of lines for the lookup.
@@ -10,10 +10,10 @@ use Gnugat\Redaktilo\File;
 abstract class LineSearchStrategy implements SearchStrategy
 {
     /** {@inheritdoc} */
-    public function findAbove(File $file, $pattern, $location = null)
+    public function findAbove(Text $text, $pattern, $location = null)
     {
-        $location = ($location ?: $file->getCurrentLineNumber()) - 1;
-        $lines = $file->getLines();
+        $location = ($location ?: $text->getCurrentLineNumber()) - 1;
+        $lines = $text->getLines();
         $aboveLines = array_slice($lines, 0, $location, true);
         $reversedAboveLines = array_reverse($aboveLines, true);
 
@@ -21,10 +21,10 @@ abstract class LineSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findUnder(File $file, $pattern, $location = null)
+    public function findUnder(Text $text, $pattern, $location = null)
     {
-        $location = ($location ?: $file->getCurrentLineNumber()) + 1;
-        $lines = $file->getLines();
+        $location = ($location ?: $text->getCurrentLineNumber()) + 1;
+        $lines = $text->getLines();
         $underLines = array_slice($lines, $location, null, true);
 
         return $this->findIn($underLines, $pattern);

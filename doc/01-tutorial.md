@@ -33,19 +33,19 @@ class Editor
     public function openText($string);
 
     // Manipulating a line (by default the current one).
-    public function insertAbove(File $file, $addition, $location = null);
-    public function insertUnder(File $file, $addition, $location = null);
-    public function replace(File $file, $replacement, $location = null);
-    public function remove(File $file, $location = null); // Removes the current line.
+    public function insertAbove(Text $text, $addition, $location = null);
+    public function insertUnder(Text $text, $addition, $location = null);
+    public function replace(Text $text, $replacement, $location = null);
+    public function remove(Text $text, $location = null); // Removes the current line.
 
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpAbove(File $file, $pattern, $location = null);
-    public function jumpUnder(File $file, $pattern, $location = null);
+    public function jumpAbove(Text $text, $pattern, $location = null);
+    public function jumpUnder(Text $text, $pattern, $location = null);
 
     // Content searching.
-    public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
+    public function has(Text $text, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
 }
 ```
 

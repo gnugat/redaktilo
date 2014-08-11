@@ -11,7 +11,7 @@
 
 namespace spec\Gnugat\Redaktilo\Command;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
 class LineReplaceCommandSpec extends ObjectBehavior
@@ -21,14 +21,14 @@ class LineReplaceCommandSpec extends ObjectBehavior
 
     private $rootPath;
 
-    function let(File $file)
+    function let(Text $text)
     {
         $this->rootPath = __DIR__.'/../../../../../';
 
         $filename = sprintf(self::ORIGINAL_FILENAME, $this->rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
-        $file->getLines()->willReturn($lines);
+        $text->getLines()->willReturn($lines);
         $this->beConstructedWith();
     }
 
@@ -37,7 +37,7 @@ class LineReplaceCommandSpec extends ObjectBehavior
         $this->shouldImplement('Gnugat\Redaktilo\Command\Command');
     }
 
-    function it_replaces_line(File $file)
+    function it_replaces_line(Text $text)
     {
         $expectedFilename = sprintf(self::EXPECTED_FILENAME, $this->rootPath);
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
@@ -45,22 +45,22 @@ class LineReplaceCommandSpec extends ObjectBehavior
         $lineNumber = 5;
 
         $input = array(
-            'file' => $file,
+            'text' => $text,
             'location' => $lineNumber,
             'replacement' => '[Even more sniggering]'
         );
 
-        $file->setLines($expectedLines)->shouldBeCalled();
-        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+        $text->setLines($expectedLines)->shouldBeCalled();
+        $text->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->execute($input);
 
         $input = array(
-            'file' => $file,
+            'text' => $text,
             'replacement' => '[Even more sniggering]'
         );
-        $file->getCurrentLineNumber()->willReturn($lineNumber);
-        $file->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+        $text->getCurrentLineNumber()->willReturn($lineNumber);
+        $text->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->execute($input);
     }

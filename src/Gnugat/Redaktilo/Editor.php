@@ -20,12 +20,15 @@ use Gnugat\Redaktilo\Search\SearchEngine;
  * Provides convenient methods for the following filesystem operations:
  *
  * + opening/creating files
+ * + createing text
  * + saving files
  *
- * Provides convenient methods for the following file operations:
+ * Provides convenient methods for the following text operations:
  *
  * + looking for given lines and setting the current one to it
  * + inserting given lines above/under the current one or the given one
+ * + replacing the current line or the given one
+ * + removing the current line or the given one
  *
  * @api
  */
@@ -113,10 +116,10 @@ class Editor
     }
 
     /**
-     * Searches the given pattern in the File above the current line.
+     * Searches the given pattern in the Text above the current line.
      * If the pattern is found, the current line is set to it.
      *
-     * @param File    $file
+     * @param Text    $text
      * @param mixed   $pattern
      * @param integer $location
      *
@@ -125,22 +128,22 @@ class Editor
      *
      * @api
      */
-    public function jumpAbove(File $file, $pattern, $location = null)
+    public function jumpAbove(Text $text, $pattern, $location = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findAbove($file, $pattern, $location);
+        $foundLineNumber = $searchStrategy->findAbove($text, $pattern, $location);
         if (false === $foundLineNumber) {
-            throw new PatternNotFoundException($file, $pattern);
+            throw new PatternNotFoundException($text, $pattern);
         }
 
-        $file->setCurrentLineNumber($foundLineNumber);
+        $text->setCurrentLineNumber($foundLineNumber);
     }
 
     /**
-     * Searches the given pattern in the File under the current line.
+     * Searches the given pattern in the Text under the current line.
      * If the pattern is found, the current line is set to it.
      *
-     * @param File    $file
+     * @param Text    $text
      * @param mixed   $pattern
      * @param integer $location
      *
@@ -149,19 +152,19 @@ class Editor
      *
      * @api
      */
-    public function jumpUnder(File $file, $pattern, $location = null)
+    public function jumpUnder(Text $text, $pattern, $location = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findUnder($file, $pattern, $location);
+        $foundLineNumber = $searchStrategy->findUnder($text, $pattern, $location);
         if (false === $foundLineNumber) {
-            throw new PatternNotFoundException($file, $pattern);
+            throw new PatternNotFoundException($text, $pattern);
         }
 
-        $file->setCurrentLineNumber($foundLineNumber);
+        $text->setCurrentLineNumber($foundLineNumber);
     }
 
     /**
-     * @param File  $file
+     * @param Text  $text
      * @param mixed $pattern
      *
      * @return bool
@@ -170,10 +173,10 @@ class Editor
      *
      * @api
      */
-    public function has(File $file, $pattern)
+    public function has(Text $text, $pattern)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $found = $searchStrategy->findUnder($file, $pattern, 0);
+        $found = $searchStrategy->findUnder($text, $pattern, 0);
 
         return (false !== $found);
     }
@@ -183,16 +186,16 @@ class Editor
      * (or above the current one if none provided).
      * Note: the current line is then set to the new one.
      *
-     * @param File    $file
+     * @param Text    $text
      * @param string  $addition
      * @param integer $location
      *
      * @api
      */
-    public function insertAbove(File $file, $addition, $location = null)
+    public function insertAbove(Text $text, $addition, $location = null)
     {
         $input = array(
-            'file' => $file,
+            'text' => $text,
             'location' => $location,
             'addition' => $addition,
         );
@@ -204,16 +207,16 @@ class Editor
      * (or under the current one if none provided).
      * Note: the current line is then set to the new one.
      *
-     * @param File    $file
+     * @param Text    $text
      * @param string  $addition
      * @param integer $location
      *
      * @api
      */
-    public function insertUnder(File $file, $addition, $location = null)
+    public function insertUnder(Text $text, $addition, $location = null)
     {
         $input = array(
-            'file' => $file,
+            'text' => $text,
             'location' => $location,
             'addition' => $addition,
         );
@@ -224,16 +227,16 @@ class Editor
      * Replaces the line at the given line number
      * (or at the current one if none provided) with the given replacement.
      *
-     * @param File    $file
+     * @param Text    $text
      * @param string  $replacement
      * @param integer $location
      *
      * @api
      */
-    public function replace(File $file, $replacement, $location = null)
+    public function replace(Text $text, $replacement, $location = null)
     {
         $input = array(
-            'file' => $file,
+            'text' => $text,
             'location' => $location,
             'replacement' => $replacement,
         );
@@ -244,15 +247,15 @@ class Editor
      * Removes the line at the given location
      * (or at the current one if none provided).
      *
-     * @param File    $file
+     * @param Text    $text
      * @param integer $location
      *
      * @api
      */
-    public function remove(File $file, $location = null)
+    public function remove(Text $text, $location = null)
     {
         $input = array(
-            'file' => $file,
+            'text' => $text,
             'location' => $location,
         );
         $this->commandInvoker->run('remove', $input);

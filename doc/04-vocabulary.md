@@ -8,11 +8,12 @@
 * [Directions](#directions)
     * [above](#above)
     * [under](#under)
+* [Editor](#editor)
+* [File](#file)
 * [Line](#line)
 * [Location](#location)
 * [Redaktilo](#redaktilo)
-* [Text editor](#text-editor)
-* [Text file](#text-file)
+* [Text](#text)
 
 ## Actions
 
@@ -34,13 +35,13 @@ Should be prefered over the word `change`.
 
 Also used to mean the current line.
 
-An indicator used to know the position in the file. Currently a line number is
+An indicator used to know the position in the text. Currently a line number is
 used, but it could change to:
 
 * a line and a column
 * a token's place in an array
 
-This is useful when a pattern occurs many times in the file: it enables the
+This is useful when a pattern occurs many times in the text: it enables the
 editor to select the wanted one.
 
 The cursor also enables to manipulate the selected element.
@@ -61,13 +62,26 @@ Used when doing something.
 
 Should be prefered over the words `after`, `down` or `next`.
 
+## Editor
+
+Also called "text editor".
+
+A piece of software which is able to change the content of a text.
+In the case of Redaktilo, the editor is an object provided by a library.
+
+## File
+
+Also called "text file", to be opposed to "binary file".
+
+See [Text](#text).
+
 ## Line
 
 The unit with which **Redaktilo** works. It's a simple string which ends at the
 line break:
 
-* `\r\n` for files created on Windows
-* `\n` for files created on the other operating systems
+* `\r\n` for texts created on Windows
+* `\n` for texts created on the other operating systems
 
 To make it easier for the developers, **Redaktilo** takes care of the line
 break, so you should only provide it with a string stripped of it.
@@ -81,16 +95,9 @@ The given line number, to which you can relatively search or do something.
 This means `editor` in esperanto. Technically `Tekstoredaktilo` should have been
 used (`text editor`), but it was a bit too long for a project name.
 
-## Text editor
+## Text
 
-Also called editor.
-
-A piece of software which is able to change the content of a file.
-In the case of Redaktilo, the editor is an object provided by a library.
-
-## Text file
-
-To be opposed to "binary file". Can contain:
+Can contain:
 
 * plain text
 * JSON

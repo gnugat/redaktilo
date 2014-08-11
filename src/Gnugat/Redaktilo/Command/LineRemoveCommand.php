@@ -12,22 +12,22 @@
 namespace Gnugat\Redaktilo\Command;
 
 /**
- * Removes the given location in the given file.
+ * Removes the given location in the given text.
  */
 class LineRemoveCommand implements Command
 {
     /** {@inheritdoc} */
     public function execute(array $input)
     {
-        $file = $input['file'];
-        $location = isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber();
+        $text = $input['text'];
+        $location = isset($input['location']) ? $input['location'] : $text->getCurrentLineNumber();
 
-        $lines = $file->getLines();
+        $lines = $text->getLines();
         unset($lines[$location]);
-        $file->setLines($lines);
+        $text->setLines($lines);
 
         $lineNumber = $location == count($lines) ? $location-1 : $location;
-        $file->setCurrentLineNumber($lineNumber);
+        $text->setCurrentLineNumber($lineNumber);
     }
 
     /** {@inheritdoc} */

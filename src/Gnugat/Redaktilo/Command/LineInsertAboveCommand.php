@@ -12,22 +12,22 @@
 namespace Gnugat\Redaktilo\Command;
 
 /**
- * Inserts the given addition in the given file above the given location.
+ * Inserts the given addition in the given text above the given location.
  */
 class LineInsertAboveCommand implements Command
 {
     /** {@inheritdoc} */
     public function execute(array $input)
     {
-        $file = $input['file'];
-        $location = isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber();
+        $text = $input['text'];
+        $location = isset($input['location']) ? $input['location'] : $text->getCurrentLineNumber();
         $addition = $input['addition'];
 
-        $lines = $file->getLines();
+        $lines = $text->getLines();
         array_splice($lines, $location, 0, $addition);
-        $file->setLines($lines);
+        $text->setLines($lines);
 
-        $file->setCurrentLineNumber($location);
+        $text->setCurrentLineNumber($location);
     }
 
     /** {@inheritdoc} */
