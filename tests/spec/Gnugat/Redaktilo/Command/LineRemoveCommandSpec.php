@@ -28,7 +28,6 @@ class LineRemoveCommandSpec extends ObjectBehavior
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
         $text->getLines()->willReturn($lines);
-        $this->beConstructedWith();
     }
 
     function it_is_a_command()
