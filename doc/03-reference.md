@@ -6,6 +6,7 @@ This chapter explains the responsibility of each classes:
 * [File](#file)
 * [Factory](#factory)
     * [TextFactory](#textfactory)
+    * [FileFactory](#filefactory)
 * [Filesystem](#filesystem)
 * [Converter](#converter)
     * [LineContentConverter](#linecontentconverter)
