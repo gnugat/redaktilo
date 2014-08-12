@@ -11,8 +11,8 @@
 
 namespace spec\Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\Service\LineBreak;
 use PhpSpec\ObjectBehavior;
-use Gnugat\Redaktilo\Converter\LineContentConverter;
 
 class TextSpec extends ObjectBehavior
 {
@@ -25,8 +25,8 @@ class TextSpec extends ObjectBehavior
         $filename = '%s/tests/fixtures/sources/life-of-brian.txt';
         $content = file_get_contents(sprintf($filename, $rootPath));
 
-        $lineContentConverter = new LineContentConverter();
-        $this->lineBreak = $lineContentConverter->detectLineBreak($content);
+        $lineBreak = new LineBreak();
+        $this->lineBreak = $lineBreak->detect($content);
         $this->lines = explode($this->lineBreak, $content);
 
         $this->beConstructedWith($this->lines, $this->lineBreak);

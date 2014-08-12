@@ -17,13 +17,13 @@ use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
 use Gnugat\Redaktilo\Command\LineInsertUnderCommand;
 use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
-use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\Converter\PhpContentConverter;
 use Gnugat\Redaktilo\Factory\TextFactory;
 use Gnugat\Redaktilo\Factory\FileFactory;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
+use Gnugat\Redaktilo\Service\LineBreak;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
@@ -33,8 +33,8 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 class EditorBuilder
 {
-    /** @var LineContentConverter */
-    private $lineConverter;
+    /** @var LineBreak */
+    private $lineBreak;
 
     /** @var PhpContentConverter */
     private $phpConverter;
@@ -60,13 +60,13 @@ class EditorBuilder
     /** @var Filesystem */
     private $filesystem;
 
-    protected function getLineConverter()
+    protected function getLineBreak()
     {
-        if ($this->lineConverter) {
-            return $this->lineConverter;
+        if ($this->lineBreak) {
+            return $this->lineBreak;
         }
 
-        return $this->lineConverter = new LineContentConverter();
+        return $this->lineBreak = new LineBreak();
     }
 
     protected function getPhpConverter()
@@ -128,7 +128,7 @@ class EditorBuilder
             return $this->textFactory;
         }
 
-        return new TextFactory($this->getLineConverter());
+        return new TextFactory($this->getLineBreak());
     }
 
     /** @return FileFactory */
@@ -138,7 +138,7 @@ class EditorBuilder
             return $this->fileFactory;
         }
 
-        return new FileFactory($this->getLineConverter());
+        return new FileFactory($this->getLineBreak());
     }
 
     /** @return Filesystem */

@@ -11,21 +11,21 @@
 
 namespace Gnugat\Redaktilo\Factory;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Service\LineBreak;
 
 /**
  * Stateless service which creates a File from the given filename.
  */
 class FileFactory
 {
-    /** @var LineContentConverter */
-    private $lineContentConverter;
+    /** @var LineBreak */
+    private $lineBreak;
 
-    /** @param LineContentConverter $lineContentConverter */
-    public function __construct(LineContentConverter $lineContentConverter)
+    /** @param LineBreak $lineBreak */
+    public function __construct(LineBreak $lineBreak)
     {
-        $this->lineContentConverter = $lineContentConverter;
+        $this->lineBreak = $lineBreak;
     }
 
     /**
@@ -35,7 +35,7 @@ class FileFactory
      */
     public function make($filename, $content)
     {
-        $lineBreak = $this->lineContentConverter->detectLineBreak($content);
+        $lineBreak = $this->lineBreak->detect($content);
         $lines = explode($lineBreak, $content);
 
         return new File($filename, $lines, $lineBreak);

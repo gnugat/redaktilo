@@ -11,9 +11,9 @@
 
 namespace spec\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Gnugat\Redaktilo\Factory\FileFactory;
 use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Service\LineBreak;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -32,8 +32,8 @@ class FilesystemSpec extends ObjectBehavior
 
         $this->fileCopier = new SymfonyFilesystem();
 
-        $lineContentConverter = new LineContentConverter();
-        $this->fileFactory = new FileFactory($lineContentConverter);
+        $LineBreak = new LineBreak();
+        $this->fileFactory = new FileFactory($LineBreak);
         $this->beConstructedWith($this->fileFactory, $symfonyFilesystem);
     }
 

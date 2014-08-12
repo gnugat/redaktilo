@@ -12,8 +12,8 @@
 namespace Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\Converter\PhpContentConverter;
-use Gnugat\Redaktilo\Text;
 use Gnugat\Redaktilo\Search\Php\Token;
+use Gnugat\Redaktilo\Text;
 
 /**
  * Finds the given PHP token.

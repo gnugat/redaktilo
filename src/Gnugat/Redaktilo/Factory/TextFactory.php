@@ -11,7 +11,7 @@
 
 namespace Gnugat\Redaktilo\Factory;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
+use Gnugat\Redaktilo\Service\LineBreak;
 use Gnugat\Redaktilo\Text;
 
 /**
@@ -19,13 +19,13 @@ use Gnugat\Redaktilo\Text;
  */
 class TextFactory
 {
-    /** @var LineContentConverter */
-    private $lineContentConverter;
+    /** @var LineBreak */
+    private $lineBreak;
 
-    /** @param LineContentConverter $lineContentConverter */
-    public function __construct(LineContentConverter $lineContentConverter)
+    /** @param LineBreak $lineBreak */
+    public function __construct(LineBreak $lineBreak)
     {
-        $this->lineContentConverter = $lineContentConverter;
+        $this->lineBreak = $lineBreak;
     }
 
     /**
@@ -35,7 +35,7 @@ class TextFactory
      */
     public function make($string)
     {
-        $lineBreak = $this->lineContentConverter->detectLineBreak($string);
+        $lineBreak = $this->lineBreak->detect($string);
         $lines = explode($lineBreak, $string);
 
         return new Text($lines, $lineBreak);

@@ -12,17 +12,17 @@
 namespace spec\Gnugat\Redaktilo\Factory;
 
 use PhpSpec\ObjectBehavior;
-use Gnugat\Redaktilo\Converter\LineContentConverter;
+use Gnugat\Redaktilo\Service\LineBreak;
 
 class TextFactorySpec extends ObjectBehavior
 {
-    private $lineContentConverter;
+    private $lineBreak;
 
     function let()
     {
-        $this->lineContentConverter = new LineContentConverter();
+        $this->lineBreak = new LineBreak();
 
-        $this->beConstructedWith($this->lineContentConverter);
+        $this->beConstructedWith($this->lineBreak);
     }
 
     function it_creates_a_text_from_string()
@@ -30,7 +30,7 @@ class TextFactorySpec extends ObjectBehavior
         $filename = __DIR__.'/../../../../../tests/fixtures/sources/life-of-brian.txt';
         $content = file_get_contents($filename);
 
-        $lineBreak = $this->lineContentConverter->detectLineBreak($content);
+        $lineBreak = $this->lineBreak->detect($content);
         $lines = explode($lineBreak, $content);
 
         $text = $this->make($content);

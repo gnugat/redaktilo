@@ -7,9 +7,10 @@ This chapter explains the responsibility of each classes:
 * [Factory](#factory)
     * [TextFactory](#textfactory)
     * [FileFactory](#filefactory)
+* [Service](#service)
+    * [LineBreak](#linebreak)
 * [Filesystem](#filesystem)
 * [Converter](#converter)
-    * [LineContentConverter](#linecontentconverter)
     * [PhpContentConverter](#phpcontentconverter)
 * [DependencyInjection](#dependencyinjection)
 * [Search](#search)
@@ -104,11 +105,11 @@ A stateless service which creates an instance of `Text` from the given string:
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
+use Gnugat\Redaktilo\Service\LineBreak;
 
 class TextFactory
 {
-    public function __construct(LineContentConverter $lineContentConverter);
+    public function __construct(LineBreak $lineBreak);
 
     public function make($string);
 }
@@ -127,17 +128,46 @@ and content:
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
+use Gnugat\Redaktilo\Service\LineBreak;
 
-class TextFactory
+class FileFactory
 {
-    public function __construct(LineContentConverter $lineContentConverter);
+    public function __construct(LineBreak $lineBreak);
 
     public function make($filename, $content);
 }
 ```
 
 Such a factory is usefull as it takes care of detecting the line break for you.
+
+## Service
+
+Here lies the stateless services which are not meant to be extended.
+
+### LineBreak
+
+**Redaktilo** relies heavily on this service: a `Text` should be composed
+of lines, but what line break character is used?
+
+If the `Text` has been created on a Windows system, it should be `\r\n`. If it
+has been  created elsewhere, it should be `\n`.
+
+`LineBreak` helps you by returning the used line break character from the given
+string:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Service;
+
+class LineBreak
+{
+    public function detect($string);
+}
+```
+
+If the string doesn't contain any line break character, the current system's one
+will be used (`PHP_EOL`).
 
 ## Filesystem
 
@@ -194,16 +224,6 @@ Possible representations might be:
 
 * PHP tokens
 * JSON parameters
-
-### LineContentConverter
-
-**Redaktilo** relies heavily on this representation: a `Text` should be composed
-of lines.
-
-This converter takes the content, detects its line break and splits it into an
-array of lines stripped from the line break character.
-
-It is also able to merge back those lines with the appropriate line break.
 
 ### PhpContentConverter
 

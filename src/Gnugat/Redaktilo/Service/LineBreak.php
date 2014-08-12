@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Converter;
+namespace Gnugat\Redaktilo\Service;
 
 /**
  * Detects the line break of the given string.
@@ -21,7 +21,7 @@ namespace Gnugat\Redaktilo\Converter;
  *
  * @api
  */
-class LineContentConverter
+class LineBreak
 {
     const LINE_BREAK_OTHER = "\n";
     const LINE_BREAK_WINDOWS = "\r\n";
@@ -33,7 +33,7 @@ class LineContentConverter
      *
      * @api
      */
-    public function detectLineBreak($string)
+    public function detect($string)
     {
         if (false === strpos($string, self::LINE_BREAK_OTHER)) {
             return PHP_EOL;
