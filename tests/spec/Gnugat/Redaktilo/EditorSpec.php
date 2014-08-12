@@ -120,21 +120,21 @@ class EditorSpec extends ObjectBehavior
     function it_moves_the_cursor_under_the_current_line(
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
-        Text $texttext
+        Text $text
     )
     {
         $pattern = 'No one expects the Spanish inquisition!';
         $foundLineNumber = 42;
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findUnder($texttext, $pattern, null)->willReturn($foundLineNumber);
-        $texttext->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
+        $searchStrategy->findUnder($text, $pattern, null)->willReturn($foundLineNumber);
+        $text->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
-        $this->jumpUnder($texttext, $pattern);
+        $this->jumpUnder($text, $pattern);
 
-        $searchStrategy->findUnder($texttext, $pattern, null)->willReturn(false);
+        $searchStrategy->findUnder($text, $pattern, null)->willReturn(false);
         $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-        $this->shouldThrow($exception)->duringJumpUnder($texttext, $pattern);
+        $this->shouldThrow($exception)->duringJumpUnder($text, $pattern);
     }
 
     function it_moves_the_cursor_under_the_given_line(
