@@ -19,7 +19,7 @@ use Gnugat\Redaktilo\Search\Php\TokenBuilder;
  *
  * @api
  */
-class PhpContentConverter implements ContentConverter
+class PhpContentConverter
 {
     /** @param TokenBuilder $tokenBuilder */
     public function __construct(TokenBuilder $tokenBuilder)
@@ -27,7 +27,11 @@ class PhpContentConverter implements ContentConverter
         $this->tokenBuilder = $tokenBuilder;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * @param Text $text
+     *
+     * @return array
+     */
     public function from(Text $text)
     {
         $lines = $text->getLines();
@@ -36,11 +40,5 @@ class PhpContentConverter implements ContentConverter
         $rawTokens = token_get_all($content);
 
         return $this->tokenBuilder->buildFromRaw($rawTokens);
-    }
-
-    /** {@inheritdoc} */
-    public function back(Text $text, $convertedContent)
-    {
-        throw new \Exception("Conversion from PHP tokens to text content isn't implemented");
     }
 }

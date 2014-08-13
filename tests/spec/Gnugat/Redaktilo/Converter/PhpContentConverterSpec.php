@@ -25,11 +25,6 @@ class PhpContentConverterSpec extends ObjectBehavior
         $this->beConstructedWith($tokenBuilder);
     }
 
-    function it_is_a_content_converter()
-    {
-        $this->shouldImplement('Gnugat\Redaktilo\Converter\ContentConverter');
-    }
-
     function it_converts_file_content_into_php_tokens(TokenBuilder $tokenBuilder, Text $text)
     {
         $rootPath = __DIR__.'/../../../../../';
