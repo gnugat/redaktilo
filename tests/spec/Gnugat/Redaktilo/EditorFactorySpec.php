@@ -22,6 +22,6 @@ class EditorFactorySpec extends ObjectBehavior
 
     function it_creates_builders()
     {
-        $this->createBuilder()->shouldReturnAnInstanceOf('Gnugat\Redaktilo\EditorBuilder');
+        $this->createBuilder()->shouldReturnAnInstanceOf('Gnugat\Redaktilo\Service\EditorBuilder');
     }
 }

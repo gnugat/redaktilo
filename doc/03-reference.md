@@ -9,6 +9,7 @@ This chapter explains the responsibility of each classes:
     * [FileFactory](#filefactory)
     * [LineBreak](#linebreak)
     * [TextFactory](#textfactory)
+    * [EditorBuilder](#editorbuilder)
     * [TextToPhpConverter](#texttophpconverter)
 * [Search](#search)
     * [LineNumberSearchStrategy](#linenumbersearchstrategy)
@@ -194,6 +195,36 @@ class TextFactory
 Such a factory is usefull as it takes care of detecting the line break for you
 (used to split the string into an array of lines).
 
+### EditorBuilder
+
+Allows you to tweak the instantiation of the `Editor` class. It also has
+defaults, in case you didn't specify anything. After configuring the build, you
+can call `getEditor()` to get the `Editor` instance:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Service;
+
+use Gnugat\Redaktilo\Command\Command;
+use Gnugat\Redaktilo\Command\CommandInvoker;
+use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Search\SearchStrategy;
+
+class EditorBuilder
+{
+    public function getEditor();
+
+    public function setSearchEngine(SearchEngine $searchEngine);
+    public function addSearchStrategy(SearchStrategy $searchStrategy);
+
+    public function setCommandInvoker(CommandInvoker $commandInvoker);
+    public function addCommand(Command $command);
+
+    public function setFilesystem(Filesystem $filesystem);
+}
+```
+
 ### TextToPhpConverter
 
 Takes a `Text` and makes an array of PHP tokens out of it:
@@ -368,36 +399,6 @@ class EditorFactory
 {
     public static function createEditor();
     public static function createBuilder();
-}
-```
-
-## EditorBuilder
-
-Allows you to tweak the instantiation of the `Editor` class. It also has
-defaults, in case you didn't specify anything. After configuring the build, you
-can call `getEditor()` to get the `Editor` instance:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo;
-
-use Gnugat\Redaktilo\Command\Command;
-use Gnugat\Redaktilo\Command\CommandInvoker;
-use Gnugat\Redaktilo\Search\SearchEngine;
-use Gnugat\Redaktilo\Search\SearchStrategy;
-
-class EditorBuilder
-{
-    public function getEditor();
-
-    public function setSearchEngine(SearchEngine $searchEngine);
-    public function addSearchStrategy(SearchStrategy $searchStrategy);
-
-    public function setCommandInvoker(CommandInvoker $commandInvoker);
-    public function addCommand(Command $command);
-
-    public function setFilesystem(Filesystem $filesystem);
 }
 ```
 
