@@ -100,10 +100,15 @@ class Text
     /**
      * @param int $lineNumber
      *
+     * @throws \InvalidArgumentException
+     *
      * @api
      */
     public function setCurrentLineNumber($lineNumber)
     {
+        if (!is_int($lineNumber) || $lineNumber < 0 || $lineNumber >= count($this->lines)) {
+            throw new \InvalidArgumentException('Invalid line number');
+        }
         $this->currentLineNumber = $lineNumber;
     }
 }
