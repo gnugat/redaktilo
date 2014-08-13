@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Gnugat\Redaktilo;
+namespace spec\Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Service\FileFactory;
@@ -27,8 +27,8 @@ class FilesystemSpec extends ObjectBehavior
 
     function let(SymfonyFilesystem $symfonyFilesystem)
     {
-        $this->sourceFilename = __DIR__.'/../../../fixtures/sources/copy-me.txt';
-        $this->copyFilename = __DIR__.'/../../../fixtures/copies/edit-me.txt';
+        $this->sourceFilename = __DIR__.'/../../../../fixtures/sources/copy-me.txt';
+        $this->copyFilename = __DIR__.'/../../../../fixtures/copies/edit-me.txt';
 
         $this->fileCopier = new SymfonyFilesystem();
 

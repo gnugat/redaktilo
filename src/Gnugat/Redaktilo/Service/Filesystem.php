@@ -9,17 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo;
+namespace Gnugat\Redaktilo\Service;
 
-use Gnugat\Redaktilo\Service\FileFactory;
+use Gnugat\Redaktilo\File;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
  * Manages actual operations on the filesystem using File as a data source.
- *
- * @api
  */
 class Filesystem
 {
@@ -47,8 +45,6 @@ class Filesystem
      * @return File
      *
      * @throws FileNotFoundException
-     *
-     * @api
      */
     public function open($filename)
     {
@@ -73,8 +69,6 @@ class Filesystem
      * @return File
      *
      * @throws IOException If the path isn't accessible.
-     *
-     * @api
      */
     public function create($filename)
     {
@@ -95,8 +89,6 @@ class Filesystem
      * @param string $filename
      *
      * @return bool
-     *
-     * @api
      */
     public function exists($filename)
     {
@@ -109,8 +101,6 @@ class Filesystem
      * @param File $file
      *
      * @throws IOException If the file cannot be written to.
-     *
-     * @api
      */
     public function write(File $file)
     {

@@ -21,6 +21,7 @@ use Gnugat\Redaktilo\Service\TextFactory;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
+use Gnugat\Redaktilo\Service\Filesystem;
 use Gnugat\Redaktilo\Service\FileFactory;
 use Gnugat\Redaktilo\Service\LineBreak;
 use Gnugat\Redaktilo\Service\TextToPhpConverter;

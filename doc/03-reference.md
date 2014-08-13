@@ -5,12 +5,11 @@ This chapter explains the responsibility of each classes:
 * [Text](#text)
 * [File](#file)
 * [Service](#service)
+    * [Filesystem](#filesystem)
     * [FileFactory](#filefactory)
     * [LineBreak](#linebreak)
     * [TextFactory](#textfactory)
     * [TextToPhpConverter](#texttophpconverter)
-* [Filesystem](#filesystem)
-* [DependencyInjection](#dependencyinjection)
 * [Search](#search)
     * [LineNumberSearchStrategy](#linenumbersearchstrategy)
     * [LineRegexSearchStrategy](#lineregexsearchstrategy)
@@ -93,6 +92,39 @@ $file = new File($filename, $lines, $lineBreak);
 ## Service
 
 Here lies the stateless services which are not meant to be extended.
+
+### Filesystem
+
+A service which does the actual read and write operations:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Service;
+
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+
+class Filesystem
+{
+    public function __construct(SymfonyFilesystem $symfonyFilesystem);
+
+    public function open($filename); // Throws FileNotFoundException if the file doesn't exist
+    public function create($filename); // Throws IOException if the path isn't accessible
+
+    public function exists($filename);
+
+    public function write(File $file); // Throws IOException If the file cannot be written to
+}
+```
+
+You can only open existing files and create new files. The first two methods
+will create an instance of `File`.
+
+**Note**: `Filesystem` depends on the
+[Symfony2 Filesystem component](http://symfony.com/doc/current/components/filesystem.html).
+
 
 ### FileFactory
 
@@ -184,38 +216,6 @@ class TextToPhpConverter
 
 This converter transform the content of a PHP source file into an array of tokens
 via the `token_get_all()` function.
-
-## Filesystem
-
-A service which does the actual read and write operations:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo;
-
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
-
-class Filesystem
-{
-    public function __construct(SymfonyFilesystem $symfonyFilesystem);
-
-    public function open($filename); // Throws FileNotFoundException if the file doesn't exist
-    public function create($filename); // Throws IOException if the path isn't accessible
-
-    public function exists($filename);
-
-    public function write(File $file); // Throws IOException If the file cannot be written to
-}
-```
-
-You can only open existing files and create new files. The first two methods
-will create an instance of `File`.
-
-**Note**: `Filesystem` depends on the
-[Symfony2 Filesystem component](http://symfony.com/doc/current/components/filesystem.html).
 
 ## Search
 
