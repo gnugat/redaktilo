@@ -13,19 +13,19 @@ namespace Gnugat\Redaktilo\Search\Php;
 
 class Token
 {
-    /** @var integer */
+    /** @var int */
     private $number;
 
     /** @var string */
     private $value;
 
-    /** @var integer */
+    /** @var int */
     private $lineNumber;
 
     /**
-     * @param integer $number
-     * @param string  $value
-     * @param integer $lineNumber
+     * @param int    $number
+     * @param string $value
+     * @param int    $lineNumber
      */
     public function __construct($number = null, $value = null, $lineNumber = null)
     {
@@ -40,7 +40,7 @@ class Token
         return $this->number !== null;
     }
 
-    /** @return integer */
+    /** @return int */
     public function getNumber()
     {
         return $this->number;
@@ -64,7 +64,7 @@ class Token
         return $this->lineNumber !== null;
     }
 
-    /** @return integer */
+    /** @return int */
     public function getLineNumber()
     {
         return $this->lineNumber;

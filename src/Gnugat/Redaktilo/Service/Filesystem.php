@@ -22,7 +22,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 class Filesystem
 {
     /** @var FileFactory */
-    private $FileFactory;
+    private $fileFactory;
 
     /** @var SymfonyFilesystem */
     private $symfonyFilesystem;

@@ -24,9 +24,9 @@ interface SearchStrategy
      * If no line number is given, the current line number of the text is used.
      * If the pattern doesn't match anything, returns false.
      *
-     * @param Text    $text
-     * @param mixed   $pattern
-     * @param integer $location
+     * @param Text  $text
+     * @param mixed $pattern
+     * @param int   $location
      *
      * @return mixed
      */
@@ -38,9 +38,9 @@ interface SearchStrategy
      * If no line number is given, the current line number of the text is used.
      * If the pattern doesn't match anything, returns false.
      *
-     * @param Text    $text
-     * @param mixed   $pattern
-     * @param integer $location
+     * @param Text  $text
+     * @param mixed $pattern
+     * @param int   $location
      *
      * @return mixed
      */

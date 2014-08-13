@@ -16,7 +16,7 @@ namespace Gnugat\Redaktilo\Command;
  */
 class CommandInvoker
 {
-    /** @var array of Command */
+    /** @var Command[] */
     private $commands = array();
 
     /** @param Command $command */

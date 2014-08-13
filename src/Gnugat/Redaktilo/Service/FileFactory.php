@@ -28,9 +28,10 @@ class FileFactory
     }
 
     /**
+     * @param string $filename
      * @param string $content
      *
-     * @return Text
+     * @return File
      */
     public function make($filename, $content)
     {

@@ -59,6 +59,7 @@ class EditorBuilder
     /** @var Filesystem */
     private $filesystem;
 
+    /** @return LineBreak */
     protected function getLineBreak()
     {
         if ($this->lineBreak) {
@@ -68,6 +69,7 @@ class EditorBuilder
         return $this->lineBreak = new LineBreak();
     }
 
+    /** @return TextToPhpConverter */
     protected function getPhpConverter()
     {
         if ($this->phpConverter) {
