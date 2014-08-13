@@ -11,7 +11,7 @@
 
 namespace spec\Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\Converter\PhpContentConverter;
+use Gnugat\Redaktilo\Converter\TextToPhpConverter;
 use Gnugat\Redaktilo\Search\Php\Token;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Service\LineBreak;
@@ -38,7 +38,7 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $text->getLines()->willReturn($lines);
 
         $this->tokenBuilder = new TokenBuilder();
-        $converter = new PhpContentConverter($this->tokenBuilder);
+        $converter = new TextToPhpConverter($this->tokenBuilder);
 
         $this->beConstructedWith($converter);
     }

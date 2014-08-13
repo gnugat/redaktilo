@@ -16,7 +16,7 @@ use Gnugat\Redaktilo\Service\LineBreak;
 use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
-class PhpContentConverterSpec extends ObjectBehavior
+class TextToPhpConverterSpec extends ObjectBehavior
 {
     const FILENAME = '%s/tests/fixtures/sources/php-sample.php';
 

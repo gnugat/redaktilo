@@ -11,7 +11,7 @@
 
 namespace Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\Converter\PhpContentConverter;
+use Gnugat\Redaktilo\Converter\TextToPhpConverter;
 use Gnugat\Redaktilo\Search\Php\Token;
 use Gnugat\Redaktilo\Text;
 
@@ -20,11 +20,11 @@ use Gnugat\Redaktilo\Text;
  */
 class PhpSearchStrategy implements SearchStrategy
 {
-    /** @var PhpContentConverter */
+    /** @var TextToPhpConverter */
     private $converter;
 
-    /** @param PhpContentConverter */
-    public function __construct(PhpContentConverter $converter)
+    /** @param TextToPhpConverter */
+    public function __construct(TextToPhpConverter $converter)
     {
         $this->converter = $converter;
     }

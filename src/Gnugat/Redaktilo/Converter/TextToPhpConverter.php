@@ -19,7 +19,7 @@ use Gnugat\Redaktilo\Search\Php\TokenBuilder;
  *
  * @api
  */
-class PhpContentConverter
+class TextToPhpConverter
 {
     /** @param TokenBuilder $tokenBuilder */
     public function __construct(TokenBuilder $tokenBuilder)
