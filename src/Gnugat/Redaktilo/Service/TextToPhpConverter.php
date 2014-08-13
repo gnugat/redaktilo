@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Converter;
+namespace Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\Text;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;

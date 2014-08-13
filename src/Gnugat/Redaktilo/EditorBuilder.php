@@ -17,13 +17,13 @@ use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
 use Gnugat\Redaktilo\Command\LineInsertUnderCommand;
 use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
-use Gnugat\Redaktilo\Converter\TextToPhpConverter;
 use Gnugat\Redaktilo\Factory\TextFactory;
 use Gnugat\Redaktilo\Factory\FileFactory;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
 use Gnugat\Redaktilo\Service\LineBreak;
+use Gnugat\Redaktilo\Service\TextToPhpConverter;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**

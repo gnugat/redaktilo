@@ -175,7 +175,7 @@ Takes a `Text` and makes an array of PHP tokens out of it:
 ```php
 <?php
 
-namespace Gnugat\Redaktilo\Converter;
+namespace Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\Text;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
