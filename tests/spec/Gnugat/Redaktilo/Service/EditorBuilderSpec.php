@@ -81,16 +81,6 @@ class EditorBuilderSpec extends ObjectBehavior
         expect(static::readProperty($editor->getWrappedObject(), 'commandInvoker'))->toBe($commandInvoker);
     }
 
-    function it_can_have_a_custom_filesystem(Filesystem $filesystem)
-    {
-        $editor = $this
-            ->setFilesystem($filesystem)
-            ->getEditor();
-
-        $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
-        expect(static::readProperty($editor->getWrappedObject(), 'filesystem'))->toBe($filesystem);
-    }
-
     function getMatchers()
     {
         $readProperty = function ($object, $propertyName) {

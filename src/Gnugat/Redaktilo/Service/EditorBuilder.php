@@ -150,9 +150,7 @@ class EditorBuilder
         return new Filesystem($this->getFileFactory(), new SymfonyFilesystem());
     }
 
-    /**
-     * @return Editor
-     */
+    /** @return Editor */
     public function getEditor()
     {
         return new Editor(
@@ -207,18 +205,6 @@ class EditorBuilder
     public function setCommandInvoker(CommandInvoker $commandInvoker)
     {
         $this->commandInvoker = $commandInvoker;
-
-        return $this;
-    }
-
-    /**
-     * @param Filesystem $filesystem
-     *
-     * @return $this
-     */
-    public function setFilesystem(Filesystem $filesystem)
-    {
-        $this->filesystem = $filesystem;
 
         return $this;
     }
