@@ -17,7 +17,7 @@ use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
 use Gnugat\Redaktilo\Command\LineInsertUnderCommand;
 use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
-use Gnugat\Redaktilo\Converter\PhpContentConverter;
+use Gnugat\Redaktilo\Converter\TextToPhpConverter;
 use Gnugat\Redaktilo\Factory\TextFactory;
 use Gnugat\Redaktilo\Factory\FileFactory;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
@@ -36,7 +36,7 @@ class EditorBuilder
     /** @var LineBreak */
     private $lineBreak;
 
-    /** @var PhpContentConverter */
+    /** @var TextToPhpConverter */
     private $phpConverter;
 
     /** @var SearchEngine|null */
@@ -76,7 +76,7 @@ class EditorBuilder
         }
         $tokenBuilder = new TokenBuilder();
 
-        return $this->phpConverter = new PhpContentConverter($tokenBuilder);
+        return $this->phpConverter = new TextToPhpConverter($tokenBuilder);
     }
 
     /** @return SearchEngine */

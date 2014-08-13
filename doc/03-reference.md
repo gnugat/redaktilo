@@ -9,9 +9,8 @@ This chapter explains the responsibility of each classes:
     * [FileFactory](#filefactory)
 * [Service](#service)
     * [LineBreak](#linebreak)
+    * [TextToPhpConverter](#texttophpconverter)
 * [Filesystem](#filesystem)
-* [Converter](#converter)
-    * [PhpContentConverter](#phpcontentconverter)
 * [DependencyInjection](#dependencyinjection)
 * [Search](#search)
     * [LineNumberSearchStrategy](#linenumbersearchstrategy)
@@ -169,6 +168,29 @@ class LineBreak
 If the string doesn't contain any line break character, the current system's one
 will be used (`PHP_EOL`).
 
+### TextToPhpConverter
+
+Takes a `Text` and makes an array of PHP tokens out of it:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Converter;
+
+use Gnugat\Redaktilo\Text;
+use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+
+class TextToPhpConverter
+{
+    public function __construct(TokenBuilder $tokenBuilder);
+
+    public function from(Text $text);
+}
+```
+
+This converter transform the content of a PHP source file into an array of tokens
+via the `token_get_all()` function.
+
 ## Filesystem
 
 A service which does the actual read and write operations:
@@ -200,35 +222,6 @@ will create an instance of `File`.
 
 **Note**: `Filesystem` depends on the
 [Symfony2 Filesystem component](http://symfony.com/doc/current/components/filesystem.html).
-
-## Converter
-
-This interface allows you to extend **Redaktilo** in order to manipulate
-different representations of the `Text`'s lines:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\Converter;
-
-use Gnugat\Redaktilo\Text;
-
-interface ContentConverter
-{
-    public function from(Text $text);
-    public function back(Text $text, $convertedContent);
-}
-```
-
-Possible representations might be:
-
-* PHP tokens
-* JSON parameters
-
-### PhpContentConverter
-
-This converter transform the content of a PHP source file into an array of tokens
-via the `token_get_all()` function.
 
 ## Search
 
