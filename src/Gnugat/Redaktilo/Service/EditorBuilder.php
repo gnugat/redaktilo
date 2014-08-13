@@ -9,28 +9,26 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo;
+namespace Gnugat\Redaktilo\Service;
 
+use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\Command\Command;
 use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
 use Gnugat\Redaktilo\Command\LineInsertUnderCommand;
 use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
-use Gnugat\Redaktilo\Service\TextFactory;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
-use Gnugat\Redaktilo\Service\Filesystem;
-use Gnugat\Redaktilo\Service\FileFactory;
-use Gnugat\Redaktilo\Service\LineBreak;
-use Gnugat\Redaktilo\Service\TextToPhpConverter;
+use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
+use Gnugat\Redaktilo\Search\LineRegexSearchStrategy;
+use Gnugat\Redaktilo\Search\PhpSearchStrategy;
+use Gnugat\Redaktilo\Search\SameSearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
  * @author Wouter J <wouter@wouterj.nl>
- *
- * @api
  */
 class EditorBuilder
 {
@@ -90,10 +88,10 @@ class EditorBuilder
         $engine = new SearchEngine();
         $phpConverter = $this->getPhpConverter();
 
-        $engine->registerStrategy(new Search\PhpSearchStrategy($phpConverter));
-        $engine->registerStrategy(new Search\LineRegexSearchStrategy());
-        $engine->registerStrategy(new Search\SameSearchStrategy());
-        $engine->registerStrategy(new Search\LineNumberSearchStrategy());
+        $engine->registerStrategy(new PhpSearchStrategy($phpConverter));
+        $engine->registerStrategy(new LineRegexSearchStrategy());
+        $engine->registerStrategy(new SameSearchStrategy());
+        $engine->registerStrategy(new LineNumberSearchStrategy());
 
         foreach ($this->searchStrategies as $strategy) {
             $engine->registerStrategy($strategy);
@@ -154,8 +152,6 @@ class EditorBuilder
 
     /**
      * @return Editor
-     *
-     * @api
      */
     public function getEditor()
     {
@@ -171,8 +167,6 @@ class EditorBuilder
      * @param SearchStrategy $searchStrategy
      *
      * @return $this
-     *
-     * @api
      */
     public function addSearchStrategy(SearchStrategy $searchStrategy)
     {
@@ -185,8 +179,6 @@ class EditorBuilder
      * @param SearchEngine $searchEngine
      *
      * @return $this
-     *
-     * @api
      */
     public function setSearchEngine(SearchEngine $searchEngine)
     {
@@ -199,8 +191,6 @@ class EditorBuilder
      * @param Command $command
      *
      * @return $this
-     *
-     * @api
      */
     public function addCommand(Command $command)
     {
@@ -213,8 +203,6 @@ class EditorBuilder
      * @param CommandInvoker $commandInvoker
      *
      * @return $this
-     *
-     * @api
      */
     public function setCommandInvoker(CommandInvoker $commandInvoker)
     {
@@ -227,8 +215,6 @@ class EditorBuilder
      * @param Filesystem $filesystem
      *
      * @return $this
-     *
-     * @api
      */
     public function setFilesystem(Filesystem $filesystem)
     {
