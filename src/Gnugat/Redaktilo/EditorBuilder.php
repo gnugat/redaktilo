@@ -17,7 +17,7 @@ use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
 use Gnugat\Redaktilo\Command\LineInsertUnderCommand;
 use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
-use Gnugat\Redaktilo\Factory\TextFactory;
+use Gnugat\Redaktilo\Service\TextFactory;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;

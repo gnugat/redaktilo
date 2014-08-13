@@ -9,9 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Factory;
+namespace Gnugat\Redaktilo\Service;
 
-use Gnugat\Redaktilo\Service\LineBreak;
 use Gnugat\Redaktilo\Text;
 
 /**

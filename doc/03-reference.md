@@ -4,11 +4,10 @@ This chapter explains the responsibility of each classes:
 
 * [Text](#text)
 * [File](#file)
-* [Factory](#factory)
-    * [TextFactory](#textfactory)
 * [Service](#service)
     * [FileFactory](#filefactory)
     * [LineBreak](#linebreak)
+    * [TextFactory](#textfactory)
     * [TextToPhpConverter](#texttophpconverter)
 * [Filesystem](#filesystem)
 * [DependencyInjection](#dependencyinjection)
@@ -91,32 +90,6 @@ As you can see, it extends the `Text` entity and adds a `filename` property:
 $file = new File($filename, $lines, $lineBreak);
 ```
 
-## Factory
-
-While these classes aren't extension points, they might be worth knowing.
-
-### TextFactory
-
-A stateless service which creates an instance of `Text` from the given string:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo;
-
-use Gnugat\Redaktilo\Service\LineBreak;
-
-class TextFactory
-{
-    public function __construct(LineBreak $lineBreak);
-
-    public function make($string);
-}
-```
-
-Such a factory is usefull as it takes care of detecting the line break for you
-(used to split the string into an array of lines).
-
 ## Service
 
 Here lies the stateless services which are not meant to be extended.
@@ -166,6 +139,28 @@ class LineBreak
 
 If the string doesn't contain any line break character, the current system's one
 will be used (`PHP_EOL`).
+
+### TextFactory
+
+Creates an instance of `Text` from the given string:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+use Gnugat\Redaktilo\Service\LineBreak;
+
+class TextFactory
+{
+    public function __construct(LineBreak $lineBreak);
+
+    public function make($string);
+}
+```
+
+Such a factory is usefull as it takes care of detecting the line break for you
+(used to split the string into an array of lines).
 
 ### TextToPhpConverter
 
