@@ -11,8 +11,8 @@
 
 namespace Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\Converter\TextToPhpConverter;
 use Gnugat\Redaktilo\Search\Php\Token;
+use Gnugat\Redaktilo\Service\TextToPhpConverter;
 use Gnugat\Redaktilo\Text;
 
 /**
