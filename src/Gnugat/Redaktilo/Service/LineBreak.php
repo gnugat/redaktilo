@@ -18,8 +18,6 @@ namespace Gnugat\Redaktilo\Service;
  * user (`\r\n`) can receive a text created on another OS (`\n`).
  *
  * If the given string hasn't any lines, use PHP_EOL.
- *
- * @api
  */
 class LineBreak
 {
@@ -30,8 +28,6 @@ class LineBreak
      * @param string $string
      *
      * @return string
-     *
-     * @api
      */
     public function detect($string)
     {

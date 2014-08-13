@@ -16,8 +16,6 @@ use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 
 /**
  * Converts the given text's content into PHP tokens.
- *
- * @api
  */
 class TextToPhpConverter
 {
