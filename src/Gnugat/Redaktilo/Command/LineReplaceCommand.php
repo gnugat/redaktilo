@@ -20,7 +20,7 @@ class LineReplaceCommand implements Command
     public function execute(array $input)
     {
         $text = $input['text'];
-        $location = isset($input['location']) ? $input['location'] : $text->getCurrentLineNumber();
+        $location = isset($input['location']) ? intval($input['location']) : $text->getCurrentLineNumber();
         $replacement = $input['replacement'];
 
         $lines = $text->getLines();

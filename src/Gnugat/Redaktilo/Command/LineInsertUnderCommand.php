@@ -20,7 +20,7 @@ class LineInsertUnderCommand implements Command
     public function execute(array $input)
     {
         $text = $input['text'];
-        $location = 1 + (isset($input['location']) ? $input['location'] : $text->getCurrentLineNumber());
+        $location = 1 + (isset($input['location']) ? intval($input['location']) : $text->getCurrentLineNumber());
         $addition = $input['addition'];
 
         $lines = $text->getLines();
