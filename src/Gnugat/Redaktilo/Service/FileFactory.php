@@ -9,10 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Factory;
+namespace Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\Service\LineBreak;
 
 /**
  * Stateless service which creates a File from the given filename.

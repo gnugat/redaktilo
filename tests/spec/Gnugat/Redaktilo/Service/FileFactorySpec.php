@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Gnugat\Redaktilo\Factory;
+namespace spec\Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\Service\LineBreak;
 use PhpSpec\ObjectBehavior;

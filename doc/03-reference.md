@@ -6,8 +6,8 @@ This chapter explains the responsibility of each classes:
 * [File](#file)
 * [Factory](#factory)
     * [TextFactory](#textfactory)
-    * [FileFactory](#filefactory)
 * [Service](#service)
+    * [FileFactory](#filefactory)
     * [LineBreak](#linebreak)
     * [TextToPhpConverter](#texttophpconverter)
 * [Filesystem](#filesystem)
@@ -117,10 +117,13 @@ class TextFactory
 Such a factory is usefull as it takes care of detecting the line break for you
 (used to split the string into an array of lines).
 
+## Service
+
+Here lies the stateless services which are not meant to be extended.
+
 ### FileFactory
 
-A stateless service which creates an instance of `File` from the given filename
-and content:
+Creates an instance of `File` from the given filename and content:
 
 ```php
 <?php
@@ -138,10 +141,6 @@ class FileFactory
 ```
 
 Such a factory is usefull as it takes care of detecting the line break for you.
-
-## Service
-
-Here lies the stateless services which are not meant to be extended.
 
 ### LineBreak
 
