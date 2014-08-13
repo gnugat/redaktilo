@@ -11,7 +11,7 @@
 
 namespace Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Factory\FileFactory;
+use Gnugat\Redaktilo\Service\FileFactory;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
