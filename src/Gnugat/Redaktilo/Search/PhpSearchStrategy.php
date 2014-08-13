@@ -23,7 +23,7 @@ class PhpSearchStrategy implements SearchStrategy
     /** @var TextToPhpConverter */
     private $converter;
 
-    /** @param TextToPhpConverter */
+    /** @param TextToPhpConverter $converter */
     public function __construct(TextToPhpConverter $converter)
     {
         $this->converter = $converter;
@@ -78,9 +78,9 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /**
-     * @param array   $collection
-     * @param integer $index
-     * @param mixed   $pattern
+     * @param array $collection
+     * @param int   $index
+     * @param mixed $pattern
      *
      * @return mixed
      */
@@ -102,7 +102,7 @@ class PhpSearchStrategy implements SearchStrategy
     /**
      * @param array $wantedTokens
      * @param array $tokens
-     * @param array $index
+     * @param int   $index
      *
      * @return mixed
      */

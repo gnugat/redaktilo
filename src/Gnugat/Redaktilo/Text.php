@@ -33,7 +33,7 @@ class Text
     protected $lineBreak;
 
     /**
-     * @var ineger
+     * @var int
      */
     protected $currentLineNumber = 0;
 
@@ -88,7 +88,7 @@ class Text
     }
 
     /**
-     * @return integer
+     * @return int
      *
      * @api
      */
@@ -98,7 +98,7 @@ class Text
     }
 
     /**
-     * @param integer $lineNumber
+     * @param int $lineNumber
      *
      * @api
      */

@@ -16,7 +16,7 @@ namespace Gnugat\Redaktilo\Search;
  */
 class SearchEngine
 {
-    /** @var array of SearchStrategy */
+    /** @var SearchStrategy[] */
     private $searchStrategies = array();
 
     /** @param SearchStrategy $searchStrategy */

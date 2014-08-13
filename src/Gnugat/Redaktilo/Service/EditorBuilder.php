@@ -50,6 +50,7 @@ class EditorBuilder
     /** @var Filesystem */
     private $filesystem;
 
+    /** @return TextToPhpConverter */
     protected function getPhpConverter()
     {
         if ($this->phpConverter) {

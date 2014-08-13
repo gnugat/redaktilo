@@ -14,8 +14,8 @@ namespace Gnugat\Redaktilo\Search\Php;
 class TokenBuilder
 {
     /**
-     * @param mixed   $rawToken
-     * @param integer $lineNumber
+     * @param mixed $rawToken
+     * @param int   $lineNumber
      *
      * @return Token
      */
@@ -70,7 +70,7 @@ class TokenBuilder
     /**
      * @param array $rawTokens
      *
-     * @return array of Token
+     * @return Token[]
      */
     public function buildFromRaw(array $rawTokens)
     {
@@ -90,7 +90,7 @@ class TokenBuilder
     /**
      * @param string $className
      *
-     * @return array of Token
+     * @return Token[]
      */
     public function buildClass($className)
     {
@@ -104,7 +104,7 @@ class TokenBuilder
     /**
      * @param string $functionName
      *
-     * @return array of Token
+     * @return Token[]
      */
     public function buildFunction($functionName)
     {
@@ -118,7 +118,7 @@ class TokenBuilder
     /**
      * @param string $methodName
      *
-     * @return array of Token
+     * @return Token[]
      */
     public function buildMethod($methodName)
     {
