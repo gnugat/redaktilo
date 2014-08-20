@@ -1,5 +1,10 @@
 # Changes between versions
 
+## 1.0.0-beta1: Stable API
+
+* moved FileFactory into Filesystem
+* removed newText from Editor
+
 ## 1.0.0-alpha7: New src layout
 
 * Updated EditorBuilder with extensible only services
