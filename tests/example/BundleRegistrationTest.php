@@ -45,9 +45,9 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
 
         $registrationMethod = $tokenBuilder->buildMethod('registerBundles');
 
-        $editor->jumpUnder($file, $registrationMethod);
-        $editor->jumpUnder($file, '        $bundles = array(');
-        $editor->jumpUnder($file, '        );');
+        $editor->jumpBelow($file, $registrationMethod);
+        $editor->jumpBelow($file, '        $bundles = array(');
+        $editor->jumpBelow($file, '        );');
         $editor->insertAbove($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
 
         $editor->save($file);

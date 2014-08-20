@@ -48,31 +48,31 @@ class LineNumberSearchStrategySpec extends ObjectBehavior
     {
         $currentLineNumber = 5;
         $existingLine = 4;
-        $underLineNumber = 1;
+        $belowLineNumber = 1;
         $nonExistingLine = 23;
 
         $this->findAbove($text, $nonExistingLine, $currentLineNumber)->shouldBe(false);
-        $this->findAbove($text, $existingLine, $currentLineNumber)->shouldBe($underLineNumber);
+        $this->findAbove($text, $existingLine, $currentLineNumber)->shouldBe($belowLineNumber);
 
         $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
         $this->findAbove($text, $nonExistingLine)->shouldBe(false);
-        $this->findAbove($text, $existingLine)->shouldBe($underLineNumber);
+        $this->findAbove($text, $existingLine)->shouldBe($belowLineNumber);
     }
 
-    function it_finds_under_occurences(Text $text)
+    function it_finds_below_occurences(Text $text)
     {
         $currentLineNumber = 5;
         $existingLine = 2;
-        $underLineNumber = 7;
+        $belowLineNumber = 7;
         $nonExistingLine = 23;
 
-        $this->findUnder($text, $nonExistingLine, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($text, $existingLine, $currentLineNumber)->shouldBe($underLineNumber);
+        $this->findBelow($text, $nonExistingLine, $currentLineNumber)->shouldBe(false);
+        $this->findBelow($text, $existingLine, $currentLineNumber)->shouldBe($belowLineNumber);
 
         $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findUnder($text, $nonExistingLine)->shouldBe(false);
-        $this->findUnder($text, $existingLine)->shouldBe($underLineNumber);
+        $this->findBelow($text, $nonExistingLine)->shouldBe(false);
+        $this->findBelow($text, $existingLine)->shouldBe($belowLineNumber);
     }
 }

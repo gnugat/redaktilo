@@ -7,7 +7,7 @@
 * [Cursor](#cursor)
 * [Directions](#directions)
     * [above](#above)
-    * [under](#under)
+    * [below](#below)
 * [Editor](#editor)
 * [File](#file)
 * [Line](#line)
@@ -54,13 +54,13 @@ Here's the vocabulary to locate something relatively in a collection of lines.
 
 Used when doing something.
 
-Should be prefered over the words `before`, `previous` or `up`.
+Should be prefered over the words `over`, `before`, `previous` or `up`.
 
-### under
+### below
 
 Used when doing something.
 
-Should be prefered over the words `after`, `down` or `next`.
+Should be prefered over the words `under`, `after`, `next` or `down`.
 
 ## Editor
 

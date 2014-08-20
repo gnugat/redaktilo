@@ -31,7 +31,7 @@ class Editor
 
     // Manipulating a line (by default the current one).
     public function insertAbove(Text $text, $addition, $location = null);
-    public function insertUnder(Text $text, $addition, $location = null);
+    public function insertBelow(Text $text, $addition, $location = null);
     public function replace(Text $text, $replacement, $location = null);
     public function remove(Text $text, $location = null); // Removes the current line.
 
@@ -39,7 +39,7 @@ class Editor
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
     public function jumpAbove(Text $text, $pattern, $location = null);
-    public function jumpUnder(Text $text, $pattern, $location = null);
+    public function jumpBelow(Text $text, $pattern, $location = null);
 
     // Content searching.
     public function has(Text $text, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
@@ -81,7 +81,7 @@ A cursor has been set to the first line. You can move this cursor to any
 existing lines:
 
 ```php
-$editor->jumpUnder($file, 'Egg'); // Current line: 1 (which is 'Egg')
+$editor->jumpBelow($file, 'Egg'); // Current line: 1 (which is 'Egg')
 ```
 
 As you can see, there's no need to add the line break character, `Editor` will
@@ -91,7 +91,7 @@ You should note that the lookup is directional:
 
 ```php
 try {
-    $editor->jumpUnder($file, 'Bacon'); // Not found because 'Bacon' is above the current line
+    $editor->jumpBelow($file, 'Bacon'); // Not found because 'Bacon' is above the current line
 } catch (PatternNotFoundException $e) {
 }
 $editor->jumpAbove($file, 'Bacon'); // Current line: 0 (which is 'Bacon')
@@ -100,7 +100,7 @@ $editor->jumpAbove($file, 'Bacon'); // Current line: 0 (which is 'Bacon')
 The match is done only if the line value is exactly the same as the given one:
 
 ```php
-$editor->jumpUnder($file, 'B'); // Throws an exception.
+$editor->jumpBelow($file, 'B'); // Throws an exception.
 ```
 
 To avoid handling exception if you just want to know if a line exists, use:
@@ -109,10 +109,10 @@ To avoid handling exception if you just want to know if a line exists, use:
 $editor->has($file, 'Beans'); // false
 ```
 
-You can also jump a wanted number of lines above or under the current one:
+You can also jump a wanted number of lines above or below the current one:
 
 ```php
-$editor->jumpUnder($file, 2); // Current line: 2 (which is 'Sausage')
+$editor->jumpBelow($file, 2); // Current line: 2 (which is 'Sausage')
 $editor->jumpAbove($file, 2); // Current line: 0 (which is 'Bacon')
 ```
 
@@ -121,7 +121,7 @@ current line), you can use:
 
 ```php
 // Searches for the line number 1, starting the lookup from the first line (instead of the current one)
-$editor->jumpUnder($file, 1, 0); // Current line: 1 (which is 'Egg')
+$editor->jumpBelow($file, 1, 0); // Current line: 1 (which is 'Egg')
 ```
 
 The lookup can also be done using regex:
@@ -139,7 +139,7 @@ use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 $registrationMethodName = 'registerBundles';
 $registrationMethod = $tokenBuilder->buildMethod($registrationMethodName);
 
-$editor->jumpUnder($file, $registrationMethod);
+$editor->jumpBelow($file, $registrationMethod);
 ```
 
 ## Line manipulation
@@ -156,11 +156,11 @@ $editor->insertAbove($file, 'Spam', 23); // Line inserted above the line number 
 You can insert new lines:
 
 ```php
-$editor->insertUnder($file, 'Spam'); // Line inserted under 'Bacon'. Current line: 'Spam'.
+$editor->insertBelow($file, 'Spam'); // Line inserted below 'Bacon'. Current line: 'Spam'.
 ```
 
 The insertion is also directional: you can either insert a new line above the
-current one, or under it.
+current one, or below it.
 
 For now the modification is only done in memory, to actually apply your changes
 to the file you need to save it:

@@ -9,7 +9,7 @@ editor metaphor:
 * it can then check the presence of a line in it
 * it also can navigate in the file to select a line
 * next, it can manipulate the current line:
-  * insert a new one above/under it
+  * insert a new one above/below it
   * replace it
   * remove it
 * finally it can save the changes on the filesystem
@@ -78,7 +78,7 @@ class KernelManipulator extends Manipulator
 
         $lineToFind = '        );';
 
-        $this->editor->jumpUnder($file, $lineToFind);
+        $this->editor->jumpBelow($file, $lineToFind);
         $this->editor->insertAbove($file, $newLine);
 
         $this->editor->save($file);

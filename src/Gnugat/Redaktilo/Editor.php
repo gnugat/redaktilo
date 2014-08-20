@@ -26,7 +26,7 @@ use Gnugat\Redaktilo\Service\Filesystem;
  * Provides convenient methods for the following text operations:
  *
  * + looking for given lines and setting the current one to it
- * + inserting given lines above/under the current one or the given one
+ * + inserting given lines above/below the current one or the given one
  * + replacing the current line or the given one
  * + removing the current line or the given one
  *
@@ -120,7 +120,7 @@ class Editor
     }
 
     /**
-     * Searches the given pattern in the Text under the current line.
+     * Searches the given pattern in the Text below the current line.
      * If the pattern is found, the current line is set to it.
      *
      * @param Text    $text
@@ -132,10 +132,10 @@ class Editor
      *
      * @api
      */
-    public function jumpUnder(Text $text, $pattern, $location = null)
+    public function jumpBelow(Text $text, $pattern, $location = null)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $foundLineNumber = $searchStrategy->findUnder($text, $pattern, $location);
+        $foundLineNumber = $searchStrategy->findBelow($text, $pattern, $location);
         if (false === $foundLineNumber) {
             throw new PatternNotFoundException($text, $pattern);
         }
@@ -156,7 +156,7 @@ class Editor
     public function has(Text $text, $pattern)
     {
         $searchStrategy = $this->searchEngine->resolve($pattern);
-        $found = $searchStrategy->findUnder($text, $pattern, 0);
+        $found = $searchStrategy->findBelow($text, $pattern, 0);
 
         return (false !== $found);
     }
@@ -183,8 +183,8 @@ class Editor
     }
 
     /**
-     * Inserts the given addition under the given line number
-     * (or under the current one if none provided).
+     * Inserts the given addition below the given line number
+     * (or below the current one if none provided).
      * Note: the current line is then set to the new one.
      *
      * @param Text    $text
@@ -193,14 +193,14 @@ class Editor
      *
      * @api
      */
-    public function insertUnder(Text $text, $addition, $location = null)
+    public function insertBelow(Text $text, $addition, $location = null)
     {
         $input = array(
             'text' => $text,
             'location' => $location,
             'addition' => $addition,
         );
-        $this->commandInvoker->run('insert_under', $input);
+        $this->commandInvoker->run('insert_below', $input);
     }
 
     /**

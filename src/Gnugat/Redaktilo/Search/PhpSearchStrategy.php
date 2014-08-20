@@ -47,7 +47,7 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findUnder(Text $text, $pattern, $location = null)
+    public function findBelow(Text $text, $pattern, $location = null)
     {
         $location = ($location ?: $text->getCurrentLineNumber()) + 1;
         $tokens = $this->converter->from($text);

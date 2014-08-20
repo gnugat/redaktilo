@@ -58,16 +58,16 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
 
     protected function removeDollars(Editor $editor, File $file)
     {
-        $editor->jumpUnder($file, '/.. code-block:: bash/');
+        $editor->jumpBelow($file, '/.. code-block:: bash/');
         $lines = $file->getLines();
-        $editor->jumpUnder($file, 1);
+        $editor->jumpBelow($file, 1);
 
         while ((bool) preg_match('/^   / ', $line = $lines[$file->getCurrentLineNumber()]) || '' === $line) {
             if ('' !== $line) {
                 $replacement = preg_replace('/\$ /', '', $line);
                 $editor->replace($file, $replacement);
             }
-            $editor->jumpUnder($file, 1);
+            $editor->jumpBelow($file, 1);
         }
 
         $this->removeDollars($editor, $file);

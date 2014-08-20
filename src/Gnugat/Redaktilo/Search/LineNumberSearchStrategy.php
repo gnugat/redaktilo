@@ -14,7 +14,7 @@ namespace Gnugat\Redaktilo\Search;
 use Gnugat\Redaktilo\Text;
 
 /**
- * Moves x lines above or under the current one.
+ * Moves x lines above or below the current one.
  */
 class LineNumberSearchStrategy implements SearchStrategy
 {
@@ -32,7 +32,7 @@ class LineNumberSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findUnder(Text $text, $pattern, $location = null)
+    public function findBelow(Text $text, $pattern, $location = null)
     {
         $foundLineNumber = ($location ?: $text->getCurrentLineNumber()) + $pattern;
         $lines = $text->getLines();

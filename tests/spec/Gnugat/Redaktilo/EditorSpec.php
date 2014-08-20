@@ -105,7 +105,7 @@ class EditorSpec extends ObjectBehavior
         $this->shouldThrow($exception)->duringJumpAbove($text, $pattern, 0);
     }
 
-    function it_moves_the_cursor_under_the_current_line(
+    function it_moves_the_cursor_below_the_current_line(
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
@@ -115,17 +115,17 @@ class EditorSpec extends ObjectBehavior
         $foundLineNumber = 42;
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findUnder($text, $pattern, null)->willReturn($foundLineNumber);
+        $searchStrategy->findBelow($text, $pattern, null)->willReturn($foundLineNumber);
         $text->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
-        $this->jumpUnder($text, $pattern);
+        $this->jumpBelow($text, $pattern);
 
-        $searchStrategy->findUnder($text, $pattern, null)->willReturn(false);
+        $searchStrategy->findBelow($text, $pattern, null)->willReturn(false);
         $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-        $this->shouldThrow($exception)->duringJumpUnder($text, $pattern);
+        $this->shouldThrow($exception)->duringJumpBelow($text, $pattern);
     }
 
-    function it_moves_the_cursor_under_the_given_line(
+    function it_moves_the_cursor_below_the_given_line(
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
@@ -135,14 +135,14 @@ class EditorSpec extends ObjectBehavior
         $foundLineNumber = 42;
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findUnder($text, $pattern, 0)->willReturn($foundLineNumber);
+        $searchStrategy->findBelow($text, $pattern, 0)->willReturn($foundLineNumber);
         $text->setCurrentLineNumber($foundLineNumber)->shouldBeCalled();
 
-        $this->jumpUnder($text, $pattern, 0);
+        $this->jumpBelow($text, $pattern, 0);
 
-        $searchStrategy->findUnder($text, $pattern, 0)->willReturn(false);
+        $searchStrategy->findBelow($text, $pattern, 0)->willReturn(false);
         $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
-        $this->shouldThrow($exception)->duringJumpUnder($text, $pattern, 0);
+        $this->shouldThrow($exception)->duringJumpBelow($text, $pattern, 0);
     }
 
     function it_checks_pattern_existence(
@@ -154,7 +154,7 @@ class EditorSpec extends ObjectBehavior
         $pattern = 'No one expects the spanish inquisition!';
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findUnder($text, $pattern, 0)->willReturn(42);
+        $searchStrategy->findBelow($text, $pattern, 0)->willReturn(42);
 
         $this->has($text, $pattern)->shouldBe(true);
     }
@@ -194,7 +194,7 @@ class EditorSpec extends ObjectBehavior
         $this->insertAbove($text, $addition, $lineNumber);
     }
 
-    function it_inserts_lines_under_the_current_one(
+    function it_inserts_lines_below_the_current_one(
         CommandInvoker $commandInvoker,
         Text $text
     )
@@ -206,12 +206,12 @@ class EditorSpec extends ObjectBehavior
             'addition' => $addition,
         );
 
-        $commandInvoker->run('insert_under', $input)->shouldBeCalled();
+        $commandInvoker->run('insert_below', $input)->shouldBeCalled();
 
-        $this->insertUnder($text, $addition);
+        $this->insertBelow($text, $addition);
     }
 
-    function it_inserts_lines_under_the_given_one(
+    function it_inserts_lines_below_the_given_one(
         CommandInvoker $commandInvoker,
         Text $text
     )
@@ -224,9 +224,9 @@ class EditorSpec extends ObjectBehavior
             'addition' => $addition,
         );
 
-        $commandInvoker->run('insert_under', $input)->shouldBeCalled();
+        $commandInvoker->run('insert_below', $input)->shouldBeCalled();
 
-        $this->insertUnder($text, $addition, $lineNumber);
+        $this->insertBelow($text, $addition, $lineNumber);
     }
 
     function it_replaces_the_current_line(

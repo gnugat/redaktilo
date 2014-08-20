@@ -12,9 +12,9 @@
 namespace Gnugat\Redaktilo\Command;
 
 /**
- * Inserts the given addition in the given text under the given location.
+ * Inserts the given addition in the given text below the given location.
  */
-class LineInsertUnderCommand implements Command
+class LineInsertBelowCommand implements Command
 {
     /** {@inheritdoc} */
     public function execute(array $input)
@@ -33,6 +33,6 @@ class LineInsertUnderCommand implements Command
     /** {@inheritdoc} */
     public function getName()
     {
-        return 'insert_under';
+        return 'insert_below';
     }
 }

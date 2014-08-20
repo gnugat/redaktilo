@@ -15,7 +15,7 @@ use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\Command\Command;
 use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
-use Gnugat\Redaktilo\Command\LineInsertUnderCommand;
+use Gnugat\Redaktilo\Command\LineInsertBelowCommand;
 use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
@@ -91,7 +91,7 @@ class EditorBuilder
         $commandInvoker = new CommandInvoker();
 
         $commandInvoker->addCommand(new LineInsertAboveCommand());
-        $commandInvoker->addCommand(new LineInsertUnderCommand());
+        $commandInvoker->addCommand(new LineInsertBelowCommand());
         $commandInvoker->addCommand(new LineReplaceCommand());
         $commandInvoker->addCommand(new LineRemoveCommand());
 

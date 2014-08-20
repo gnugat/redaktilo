@@ -52,10 +52,10 @@ class RoutingManipulator extends \PHPUnit_Framework_TestCase
         $emptyLine      = '';
 
         $editor->insertAbove($file, $definitionLine);
-        $editor->insertUnder($file, $resourceLine);
-        $editor->insertUnder($file, $typeLine);
-        $editor->insertUnder($file, $prefixLine);
-        $editor->insertUnder($file, $emptyLine);
+        $editor->insertBelow($file, $resourceLine);
+        $editor->insertBelow($file, $typeLine);
+        $editor->insertBelow($file, $prefixLine);
+        $editor->insertBelow($file, $emptyLine);
 
         $editor->save($file);
 

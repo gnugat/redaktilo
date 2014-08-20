@@ -21,13 +21,13 @@ abstract class LineSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findUnder(Text $text, $pattern, $location = null)
+    public function findBelow(Text $text, $pattern, $location = null)
     {
         $location = ($location ?: $text->getCurrentLineNumber()) + 1;
         $lines = $text->getLines();
-        $underLines = array_slice($lines, $location, null, true);
+        $belowLines = array_slice($lines, $location, null, true);
 
-        return $this->findIn($underLines, $pattern);
+        return $this->findIn($belowLines, $pattern);
     }
 
     /**

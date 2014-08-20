@@ -70,35 +70,35 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $aboveToken = array(new Token(T_OPEN_TAG, "<?php\n"));
         $currentLineNumber = 10;
         $currentToken = $this->tokenBuilder->buildClass('AppKernel');
-        $underToken = $this->tokenBuilder->buildMethod('registerBundles');
+        $belowToken = $this->tokenBuilder->buildMethod('registerBundles');
 
-        $this->findAbove($text, $underToken, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $belowToken, $currentLineNumber)->shouldBe(false);
         $this->findAbove($text, $currentToken, $currentLineNumber)->shouldBe(false);
         $this->findAbove($text, $aboveToken, $currentLineNumber)->shouldBe($aboveLineNumber);
 
         $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findAbove($text, $underToken)->shouldBe(false);
+        $this->findAbove($text, $belowToken)->shouldBe(false);
         $this->findAbove($text, $currentToken)->shouldBe(false);
         $this->findAbove($text, $aboveToken)->shouldBe($aboveLineNumber);
     }
 
-    function it_finds_under_occurences(Text $text)
+    function it_finds_below_occurences(Text $text)
     {
         $aboveToken = array(new Token(T_OPEN_TAG, "<?php\n"));
         $currentLineNumber = 10;
         $currentToken = $this->tokenBuilder->buildClass('AppKernel');
-        $underLineNumber = 15;
-        $underToken = $this->tokenBuilder->buildMethod('registerBundles');
+        $belowLineNumber = 15;
+        $belowToken = $this->tokenBuilder->buildMethod('registerBundles');
 
-        $this->findUnder($text, $aboveToken, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($text, $currentToken, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($text, $underToken, $currentLineNumber)->shouldBe($underLineNumber);
+        $this->findBelow($text, $aboveToken, $currentLineNumber)->shouldBe(false);
+        $this->findBelow($text, $currentToken, $currentLineNumber)->shouldBe(false);
+        $this->findBelow($text, $belowToken, $currentLineNumber)->shouldBe($belowLineNumber);
 
         $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findUnder($text, $aboveToken)->shouldBe(false);
-        $this->findUnder($text, $currentToken)->shouldBe(false);
-        $this->findUnder($text, $underToken)->shouldBe($underLineNumber);
+        $this->findBelow($text, $aboveToken)->shouldBe(false);
+        $this->findBelow($text, $currentToken)->shouldBe(false);
+        $this->findBelow($text, $belowToken)->shouldBe($belowLineNumber);
     }
 }

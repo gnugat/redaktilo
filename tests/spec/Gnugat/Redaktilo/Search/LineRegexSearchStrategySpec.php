@@ -52,35 +52,35 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
         $aboveLineNumber = 1;
         $currentLineRegex = '/More sniggering/';
         $currentLineNumber = 3;
-        $underLineRegex = '/\[Sniggering\]/';
+        $belowLineRegex = '/\[Sniggering\]/';
 
-        $this->findAbove($text, $underLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $belowLineRegex, $currentLineNumber)->shouldBe(false);
         $this->findAbove($text, $currentLineRegex, $currentLineNumber)->shouldBe(false);
         $this->findAbove($text, $aboveLineRegex, $currentLineNumber)->shouldBe($aboveLineNumber);
 
         $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findAbove($text, $underLineRegex)->shouldBe(false);
+        $this->findAbove($text, $belowLineRegex)->shouldBe(false);
         $this->findAbove($text, $currentLineRegex)->shouldBe(false);
         $this->findAbove($text, $aboveLineRegex)->shouldBe($aboveLineNumber);
     }
 
-    function it_finds_under_occurences(Text $text)
+    function it_finds_below_occurences(Text $text)
     {
         $aboveLineRegex = '/\[A \w+ sniggers\]/';
         $currentLineRegex = '/More sniggering/';
         $currentLineNumber = 3;
-        $underLineRegex = '/\[Sniggering\]/';
-        $underLineNumber = 5;
+        $belowLineRegex = '/\[Sniggering\]/';
+        $belowLineNumber = 5;
 
-        $this->findUnder($text, $aboveLineRegex, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($text, $currentLineRegex, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($text, $underLineRegex, $currentLineNumber)->shouldBe($underLineNumber);
+        $this->findBelow($text, $aboveLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findBelow($text, $currentLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findBelow($text, $belowLineRegex, $currentLineNumber)->shouldBe($belowLineNumber);
 
         $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findUnder($text, $aboveLineRegex)->shouldBe(false);
-        $this->findUnder($text, $currentLineRegex)->shouldBe(false);
-        $this->findUnder($text, $underLineRegex)->shouldBe($underLineNumber);
+        $this->findBelow($text, $aboveLineRegex)->shouldBe(false);
+        $this->findBelow($text, $currentLineRegex)->shouldBe(false);
+        $this->findBelow($text, $belowLineRegex)->shouldBe($belowLineNumber);
     }
 }

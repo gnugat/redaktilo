@@ -44,7 +44,7 @@ interface SearchStrategy
      *
      * @return mixed
      */
-    public function findUnder(Text $text, $pattern, $location = null);
+    public function findBelow(Text $text, $pattern, $location = null);
 
     /**
      * @param mixed $pattern

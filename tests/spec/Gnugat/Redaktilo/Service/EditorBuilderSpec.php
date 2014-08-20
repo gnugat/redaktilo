@@ -35,7 +35,7 @@ class EditorBuilderSpec extends ObjectBehavior
 
         $editor->shouldHaveCommands(array(
             'insert_above' => 'Gnugat\Redaktilo\Command\LineInsertAboveCommand',
-            'insert_under' => 'Gnugat\Redaktilo\Command\LineInsertUnderCommand',
+            'insert_below' => 'Gnugat\Redaktilo\Command\LineInsertBelowCommand',
             'replace' => 'Gnugat\Redaktilo\Command\LineReplaceCommand',
             'remove' => 'Gnugat\Redaktilo\Command\LineRemoveCommand',
         ));

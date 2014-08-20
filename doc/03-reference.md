@@ -245,7 +245,7 @@ interface SearchStrategy
 {
     // Throw PatternNotFoundException if the pattern hasn't be found
     public function findAbove(Text $text, $pattern);
-    public function findUnder(Text $text, $pattern);
+    public function findBelow(Text $text, $pattern);
 
     public function supports($pattern);
 }
@@ -255,7 +255,7 @@ interface SearchStrategy
 
 If you want to go to a given line number, use this one.
 
-The `findUnder` method will jump `n` lines under the current one,  while
+The `findBelow` method will jump `n` lines below the current one,  while
 `findAbove` will jump above.
 
 ### LineRegexSearchStrategy
@@ -286,7 +286,7 @@ tokens, use this strategy.
 The strategies seen above can be gathered in an search engine. This is used in
 the `Editor` to allow extension without having to modify it.
 
-For example, its `jumpUnder` method can accept both a string or an integer.
+For example, its `jumpBelow` method can accept both a string or an integer.
 It is passes its argument to the engine's `resolve` method: if the engine has
 a registered `SearchStrategy` which supports it, it returns it. `Editor` can
 then tell the strategy to do the work.
@@ -329,9 +329,9 @@ text to manipulate.
 
 Inserts the given addition in the given text above the given location.
 
-### LineInsertUnderCommand
+### LineInsertBelowCommand
 
-Inserts the given addition in the given text under the given location.
+Inserts the given addition in the given text below the given location.
 
 ### LineReplaceCommand
 
@@ -403,14 +403,14 @@ class Editor
 
     // Manipulating a line (by default the current one).
     public function insertAbove(Text $text, $addition, $location = null);
-    public function insertUnder(Text $text, $addition, $location = null);
+    public function insertBelow(Text $text, $addition, $location = null);
     public function replace(Text $text, $replacement, $location = null);
     public function remove(Text $text, $location = null); // Removes the current line.
 
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpUnder(Text $text, $pattern, $location = null);
+    public function jumpBelow(Text $text, $pattern, $location = null);
     public function jumpAbove(Text $text, $pattern, $location = null);
 
     // Content searching.
@@ -438,14 +438,14 @@ echo $file->getCurrentLineNumber(); // 0
 
 ### Manipulating a line
 
-You can insert additions above or under a given line (by default the current one).
+You can insert additions above or below a given line (by default the current one).
 Just keep in mind that the cursor will be set to the added line:
 
 ```php
 $emptyLine = '';
 
 echo $text->getCurrentLineNumber(); // 5
-$editor->insertUnder($text, $emptyLine);
+$editor->insertBelow($text, $emptyLine);
 echo $text->getCurrentLineNumber(); // 6
 ```
 
@@ -456,14 +456,14 @@ You can also replace a line with a new value, or remove it.
 You can jump down or up to a line which correspond to the given pattern:
 
 ```php
-$editor->jumpdUnder($text, 'The exact value of the line');
-$editor->jumpdUnder($text, 2); // Jumps two lines under the current one.
+$editor->jumpdBelow($text, 'The exact value of the line');
+$editor->jumpdBelow($text, 2); // Jumps two lines below the current one.
 ```
 
 You should keep in mind that the search is done relatively to the current one:
 
 ```php
-$editor->jumpUnder($text, $linePresentAbove); // Will throw an exception.
+$editor->jumpBelow($text, $linePresentAbove); // Will throw an exception.
 ```
 
 If you don't want to start the search from the current line, you can indicate
@@ -471,7 +471,7 @@ the one you want:
 
 ```php
 $editor->jumpAbove($text, $pattern, 42); // Starts from the 42th line
-$editor->jumpUnder($text, $pattern, 0); // Starts from the top of the text
+$editor->jumpBelow($text, $pattern, 0); // Starts from the top of the text
 ```
 
 ### Content searching

@@ -14,7 +14,7 @@ namespace spec\Gnugat\Redaktilo\Command;
 use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
-class LineInsertUnderCommandSpec extends ObjectBehavior
+class LineInsertBelowCommandSpec extends ObjectBehavior
 {
     const ORIGINAL_FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
     const EXPECTED_FILENAME = '%s/tests/fixtures/expectations/life-of-brian-insert.txt';

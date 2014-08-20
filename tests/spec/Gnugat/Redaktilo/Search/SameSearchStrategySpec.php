@@ -50,35 +50,35 @@ class SameSearchStrategySpec extends ObjectBehavior
         $aboveLineNumber = 1;
         $currentLine = '[More sniggering]';
         $currentLineNumber = 3;
-        $underLine = '[Sniggering]';
+        $belowLine = '[Sniggering]';
 
-        $this->findAbove($text, $underLine, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $belowLine, $currentLineNumber)->shouldBe(false);
         $this->findAbove($text, $currentLine, $currentLineNumber)->shouldBe(false);
         $this->findAbove($text, $aboveLine, $currentLineNumber)->shouldBe($aboveLineNumber);
 
         $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findAbove($text, $underLine)->shouldBe(false);
+        $this->findAbove($text, $belowLine)->shouldBe(false);
         $this->findAbove($text, $currentLine)->shouldBe(false);
         $this->findAbove($text, $aboveLine)->shouldBe($aboveLineNumber);
     }
 
-    function it_finds_under_occurences(Text $text)
+    function it_finds_below_occurences(Text $text)
     {
         $aboveLine = '[A guard sniggers]';
         $currentLine = '[More sniggering]';
         $currentLineNumber = 3;
-        $underLine = '[Sniggering]';
-        $underLineNumber = 5;
+        $belowLine = '[Sniggering]';
+        $belowLineNumber = 5;
 
-        $this->findUnder($text, $aboveLine, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($text, $currentLine, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($text, $underLine, $currentLineNumber)->shouldBe($underLineNumber);
+        $this->findBelow($text, $aboveLine, $currentLineNumber)->shouldBe(false);
+        $this->findBelow($text, $currentLine, $currentLineNumber)->shouldBe(false);
+        $this->findBelow($text, $belowLine, $currentLineNumber)->shouldBe($belowLineNumber);
 
         $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findUnder($text, $aboveLine)->shouldBe(false);
-        $this->findUnder($text, $currentLine)->shouldBe(false);
-        $this->findUnder($text, $underLine)->shouldBe($underLineNumber);
+        $this->findBelow($text, $aboveLine)->shouldBe(false);
+        $this->findBelow($text, $currentLine)->shouldBe(false);
+        $this->findBelow($text, $belowLine)->shouldBe($belowLineNumber);
     }
 }
