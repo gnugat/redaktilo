@@ -9,25 +9,20 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Gnugat\Redaktilo\Converter;
+namespace spec\Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Service\LineBreak;
 use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
-class PhpContentConverterSpec extends ObjectBehavior
+class TextToPhpConverterSpec extends ObjectBehavior
 {
     const FILENAME = '%s/tests/fixtures/sources/php-sample.php';
 
     function let(TokenBuilder $tokenBuilder)
     {
         $this->beConstructedWith($tokenBuilder);
-    }
-
-    function it_is_a_content_converter()
-    {
-        $this->shouldImplement('Gnugat\Redaktilo\Converter\ContentConverter');
     }
 
     function it_converts_file_content_into_php_tokens(TokenBuilder $tokenBuilder, Text $text)

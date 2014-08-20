@@ -12,11 +12,11 @@
 namespace spec\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Command\CommandInvoker;
-use Gnugat\Redaktilo\Factory\TextFactory;
 use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
+use Gnugat\Redaktilo\Service\Filesystem;
+use Gnugat\Redaktilo\Service\TextFactory;
 use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 

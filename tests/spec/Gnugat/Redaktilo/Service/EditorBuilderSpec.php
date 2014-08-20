@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace spec\Gnugat\Redaktilo;
+namespace spec\Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\Command\Command;
 use Gnugat\Redaktilo\Command\CommandInvoker;
-use Gnugat\Redaktilo\Filesystem;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
+use Gnugat\Redaktilo\Service\Filesystem;
 use PhpSpec\ObjectBehavior;
 
 class EditorBuilderSpec extends ObjectBehavior
@@ -79,16 +79,6 @@ class EditorBuilderSpec extends ObjectBehavior
 
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
         expect(static::readProperty($editor->getWrappedObject(), 'commandInvoker'))->toBe($commandInvoker);
-    }
-
-    function it_can_have_a_custom_filesystem(Filesystem $filesystem)
-    {
-        $editor = $this
-            ->setFilesystem($filesystem)
-            ->getEditor();
-
-        $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
-        expect(static::readProperty($editor->getWrappedObject(), 'filesystem'))->toBe($filesystem);
     }
 
     function getMatchers()

@@ -11,6 +11,8 @@
 
 namespace Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\Service\EditorBuilder;
+
 /**
  * @author Wouter J <wouter@wouterj.nl>
  *

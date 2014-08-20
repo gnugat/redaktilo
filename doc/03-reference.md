@@ -4,15 +4,13 @@ This chapter explains the responsibility of each classes:
 
 * [Text](#text)
 * [File](#file)
-* [Factory](#factory)
-    * [TextFactory](#textfactory)
-    * [FileFactory](#filefactory)
 * [Service](#service)
+    * [Filesystem](#filesystem)
+    * [FileFactory](#filefactory)
     * [LineBreak](#linebreak)
-* [Filesystem](#filesystem)
-* [Converter](#converter)
-    * [PhpContentConverter](#phpcontentconverter)
-* [DependencyInjection](#dependencyinjection)
+    * [TextFactory](#textfactory)
+    * [EditorBuilder](#editorbuilder)
+    * [TextToPhpConverter](#texttophpconverter)
 * [Search](#search)
     * [LineNumberSearchStrategy](#linenumbersearchstrategy)
     * [LineRegexSearchStrategy](#lineregexsearchstrategy)
@@ -92,36 +90,46 @@ As you can see, it extends the `Text` entity and adds a `filename` property:
 $file = new File($filename, $lines, $lineBreak);
 ```
 
-## Factory
+## Service
 
-While these classes aren't extension points, they might be worth knowing.
+Here lies the stateless services which are not meant to be extended.
 
-### TextFactory
+### Filesystem
 
-A stateless service which creates an instance of `Text` from the given string:
+A service which does the actual read and write operations:
 
 ```php
 <?php
 
-namespace Gnugat\Redaktilo;
+namespace Gnugat\Redaktilo\Service;
 
-use Gnugat\Redaktilo\Service\LineBreak;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-class TextFactory
+class Filesystem
 {
-    public function __construct(LineBreak $lineBreak);
+    public function __construct(SymfonyFilesystem $symfonyFilesystem);
 
-    public function make($string);
+    public function open($filename); // Throws FileNotFoundException if the file doesn't exist
+    public function create($filename); // Throws IOException if the path isn't accessible
+
+    public function exists($filename);
+
+    public function write(File $file); // Throws IOException If the file cannot be written to
 }
 ```
 
-Such a factory is usefull as it takes care of detecting the line break for you
-(used to split the string into an array of lines).
+You can only open existing files and create new files. The first two methods
+will create an instance of `File`.
+
+**Note**: `Filesystem` depends on the
+[Symfony2 Filesystem component](http://symfony.com/doc/current/components/filesystem.html).
+
 
 ### FileFactory
 
-A stateless service which creates an instance of `File` from the given filename
-and content:
+Creates an instance of `File` from the given filename and content:
 
 ```php
 <?php
@@ -139,10 +147,6 @@ class FileFactory
 ```
 
 Such a factory is usefull as it takes care of detecting the line break for you.
-
-## Service
-
-Here lies the stateless services which are not meant to be extended.
 
 ### LineBreak
 
@@ -169,63 +173,77 @@ class LineBreak
 If the string doesn't contain any line break character, the current system's one
 will be used (`PHP_EOL`).
 
-## Filesystem
+### TextFactory
 
-A service which does the actual read and write operations:
+Creates an instance of `Text` from the given string:
 
 ```php
 <?php
 
 namespace Gnugat\Redaktilo;
 
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use Gnugat\Redaktilo\Service\LineBreak;
 
-class Filesystem
+class TextFactory
 {
-    public function __construct(SymfonyFilesystem $symfonyFilesystem);
+    public function __construct(LineBreak $lineBreak);
 
-    public function open($filename); // Throws FileNotFoundException if the file doesn't exist
-    public function create($filename); // Throws IOException if the path isn't accessible
-
-    public function exists($filename);
-
-    public function write(File $file); // Throws IOException If the file cannot be written to
+    public function make($string);
 }
 ```
 
-You can only open existing files and create new files. The first two methods
-will create an instance of `File`.
+Such a factory is usefull as it takes care of detecting the line break for you
+(used to split the string into an array of lines).
 
-**Note**: `Filesystem` depends on the
-[Symfony2 Filesystem component](http://symfony.com/doc/current/components/filesystem.html).
+### EditorBuilder
 
-## Converter
-
-This interface allows you to extend **Redaktilo** in order to manipulate
-different representations of the `Text`'s lines:
+Allows you to tweak the instantiation of the `Editor` class. It also has
+defaults, in case you didn't specify anything. After configuring the build, you
+can call `getEditor()` to get the `Editor` instance:
 
 ```php
 <?php
 
-namespace Gnugat\Redaktilo\Converter;
+namespace Gnugat\Redaktilo\Service;
 
-use Gnugat\Redaktilo\Text;
+use Gnugat\Redaktilo\Command\Command;
+use Gnugat\Redaktilo\Command\CommandInvoker;
+use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Search\SearchStrategy;
 
-interface ContentConverter
+class EditorBuilder
 {
-    public function from(Text $text);
-    public function back(Text $text, $convertedContent);
+    public function getEditor();
+
+    public function setSearchEngine(SearchEngine $searchEngine);
+    public function addSearchStrategy(SearchStrategy $searchStrategy);
+
+    public function setCommandInvoker(CommandInvoker $commandInvoker);
+    public function addCommand(Command $command);
+
+    public function setFilesystem(Filesystem $filesystem);
 }
 ```
 
-Possible representations might be:
+### TextToPhpConverter
 
-* PHP tokens
-* JSON parameters
+Takes a `Text` and makes an array of PHP tokens out of it:
 
-### PhpContentConverter
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Service;
+
+use Gnugat\Redaktilo\Text;
+use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+
+class TextToPhpConverter
+{
+    public function __construct(TokenBuilder $tokenBuilder);
+
+    public function from(Text $text);
+}
+```
 
 This converter transform the content of a PHP source file into an array of tokens
 via the `token_get_all()` function.
@@ -381,36 +399,6 @@ class EditorFactory
 {
     public static function createEditor();
     public static function createBuilder();
-}
-```
-
-## EditorBuilder
-
-Allows you to tweak the instantiation of the `Editor` class. It also has
-defaults, in case you didn't specify anything. After configuring the build, you
-can call `getEditor()` to get the `Editor` instance:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo;
-
-use Gnugat\Redaktilo\Command\Command;
-use Gnugat\Redaktilo\Command\CommandInvoker;
-use Gnugat\Redaktilo\Search\SearchEngine;
-use Gnugat\Redaktilo\Search\SearchStrategy;
-
-class EditorBuilder
-{
-    public function getEditor();
-
-    public function setSearchEngine(SearchEngine $searchEngine);
-    public function addSearchStrategy(SearchStrategy $searchStrategy);
-
-    public function setCommandInvoker(CommandInvoker $commandInvoker);
-    public function addCommand(Command $command);
-
-    public function setFilesystem(Filesystem $filesystem);
 }
 ```
 

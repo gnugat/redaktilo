@@ -9,17 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace Gnugat\Redaktilo\Converter;
+namespace Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\Text;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 
 /**
  * Converts the given text's content into PHP tokens.
- *
- * @api
  */
-class PhpContentConverter implements ContentConverter
+class TextToPhpConverter
 {
     /** @param TokenBuilder $tokenBuilder */
     public function __construct(TokenBuilder $tokenBuilder)
@@ -27,7 +25,11 @@ class PhpContentConverter implements ContentConverter
         $this->tokenBuilder = $tokenBuilder;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * @param Text $text
+     *
+     * @return array
+     */
     public function from(Text $text)
     {
         $lines = $text->getLines();
@@ -36,11 +38,5 @@ class PhpContentConverter implements ContentConverter
         $rawTokens = token_get_all($content);
 
         return $this->tokenBuilder->buildFromRaw($rawTokens);
-    }
-
-    /** {@inheritdoc} */
-    public function back(Text $text, $convertedContent)
-    {
-        throw new \Exception("Conversion from PHP tokens to text content isn't implemented");
     }
 }
