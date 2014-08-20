@@ -48,10 +48,19 @@ class TextSpec extends ObjectBehavior
     {
         $this->getCurrentLineNumber()->shouldBe(0);
 
-        $middleLine = count($this->lines) / 2;
+        $middleLine = intval(count($this->lines) / 2);
 
         $this->setCurrentLineNumber($middleLine);
         $this->getCurrentLineNumber()->shouldBe($middleLine);
+    }
+
+    function it_fails_when_the_line_number_is_invalid()
+    {
+        $exception = '\InvalidArgumentException';
+
+        $this->shouldThrow($exception)->duringSetCurrentLineNumber('toto');
+        $this->shouldThrow($exception)->duringSetCurrentLineNumber(-1);
+        $this->shouldThrow($exception)->duringSetCurrentLineNumber(9);
     }
 
     function it_has_a_line_break()
