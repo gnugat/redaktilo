@@ -12,7 +12,6 @@
 namespace Sensio\Bundle\GeneratorBundle\Manipulator;
 
 use Gnugat\Redaktilo\EditorFactory;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class RoutingManipulator extends \PHPUnit_Framework_TestCase
@@ -30,10 +29,8 @@ class RoutingManipulator extends \PHPUnit_Framework_TestCase
         $copyFilename = sprintf(self::CONFIG, $rootPath, 'copies');
         $expectationFilename = sprintf(self::CONFIG, $rootPath, 'expectations');
 
-        $symfonyFilesystem = new SymfonyFilesystem();
-        if ($symfonyFilesystem->exists($copyFilename)) {
-            $symfonyFilesystem->remove($copyFilename);
-        }
+        $fileCopier = new SymfonyFilesystem();
+        $fileCopier->copy($sourceFilename, $copyFilename, true);
 
         $this->configPath = $copyFilename;
         $this->expectedConfigPath = $expectationFilename;
