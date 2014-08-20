@@ -1,5 +1,17 @@
 # Changes between versions
 
+## 1.0.0-alpha7: New src layout
+
+* Updated EditorBuilder with extensible only services
+* Removed api tag from services
+* Moved EditorBuilder into Service
+* Moved Filesystem into Service
+* Moved TextFactory into Service
+* Moved FileFactory into Service
+* Moved TextToPhpConverter into Service
+* Renamed PhpContentConverter to TextToPhpConverter
+* Removed ContentConverter interface
+
 ## 1.0.0-alpha6: Text and line content
 
 * renamed LineContentConverter to LineBreak
