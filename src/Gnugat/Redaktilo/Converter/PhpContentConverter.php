@@ -11,11 +11,11 @@
 
 namespace Gnugat\Redaktilo\Converter;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 
 /**
- * Converts the given file's content into PHP tokens.
+ * Converts the given text's content into PHP tokens.
  *
  * @api
  */
@@ -28,17 +28,19 @@ class PhpContentConverter implements ContentConverter
     }
 
     /** {@inheritdoc} */
-    public function from(File $file)
+    public function from(Text $text)
     {
-        $content = $file->read();
+        $lines = $text->getLines();
+        $lineBreak = $text->getLineBreak();
+        $content = implode($lineBreak, $lines);
         $rawTokens = token_get_all($content);
 
         return $this->tokenBuilder->buildFromRaw($rawTokens);
     }
 
     /** {@inheritdoc} */
-    public function back(File $file, $convertedContent)
+    public function back(Text $text, $convertedContent)
     {
-        throw new \Exception("Conversion from PHP tokens to file content isn't implemented");
+        throw new \Exception("Conversion from PHP tokens to text content isn't implemented");
     }
 }

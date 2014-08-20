@@ -11,34 +11,23 @@
 
 namespace Gnugat\Redaktilo\Command;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
-
 /**
- * Inserts the given addition in the given file under the given location.
+ * Inserts the given addition in the given text under the given location.
  */
 class LineInsertUnderCommand implements Command
 {
-    /** @var LineContentConverter */
-    private $converter;
-
-    /** @param LineContentConverter $converter */
-    public function __construct(LineContentConverter $converter)
-    {
-        $this->converter = $converter;
-    }
-
     /** {@inheritdoc} */
     public function execute(array $input)
     {
-        $file = $input['file'];
-        $location = 1 + (isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber());
+        $text = $input['text'];
+        $location = 1 + (isset($input['location']) ? $input['location'] : $text->getCurrentLineNumber());
         $addition = $input['addition'];
 
-        $lines = $this->converter->from($file);
+        $lines = $text->getLines();
         array_splice($lines, $location, 0, $addition);
-        $this->converter->back($file, $lines);
+        $text->setLines($lines);
 
-        $file->setCurrentLineNumber($location);
+        $text->setCurrentLineNumber($location);
     }
 
     /** {@inheritdoc} */

@@ -12,41 +12,29 @@
 namespace Gnugat\Redaktilo;
 
 /**
- * Representation of a file:
- *
- * + it has a filename
- * + it has a content which can be read and writen
- * + it has a pointer to a current line
- *
- * Also provides a line representation of the content with some basic
- * manipulations.
+ * Redaktilo's base entity representing a file: it is a Text which has a
+ * filename (which is the absolute path with the file name).
  *
  * @api
  */
-class File
+class File extends Text
 {
     /** @var string */
     private $filename;
 
-    /** @var string */
-    private $content;
-
-    /** @var int */
-    private $currentLineNumber = 0;
-
     /**
      * @param string $filename
-     * @param string $content
+     * @param array  $lines
+     * @param string $lineBreak
      */
-    public function __construct($filename, $content)
+    public function __construct($filename, array $lines, $lineBreak = PHP_EOL)
     {
         $this->filename = $filename;
-        $this->content = $content;
+
+        parent::__construct($lines, $lineBreak);
     }
 
     /**
-     * Returns the absolute path with the file name.
-     *
      * @return string
      *
      * @api
@@ -57,42 +45,12 @@ class File
     }
 
     /**
-     * Returns the full content loaded in memory (doesn't actually read the
-     * file).
-     *
-     * @return string
+     * @param string $filename
      *
      * @api
      */
-    public function read()
+    public function setFilename($filename)
     {
-        return $this->content;
-    }
-
-    /**
-     * Replaces the full content loaded in memory (doesn't actually write in the
-     * file).
-     *
-     * @param string $newContent
-     *
-     * @return string
-     *
-     * @api
-     */
-    public function write($newContent)
-    {
-        return $this->content = $newContent;
-    }
-
-    /** @return int */
-    public function getCurrentLineNumber()
-    {
-        return $this->currentLineNumber;
-    }
-
-    /** @param int $lineNumber */
-    public function setCurrentLineNumber($lineNumber)
-    {
-        $this->currentLineNumber = $lineNumber;
+        $this->filename = $filename;
     }
 }

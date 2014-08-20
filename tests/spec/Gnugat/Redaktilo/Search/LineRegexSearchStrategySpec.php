@@ -11,24 +11,21 @@
 
 namespace spec\Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
 class LineRegexSearchStrategySpec extends ObjectBehavior
 {
     const FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
 
-    function let(File $file, LineContentConverter $converter)
+    function let(Text $text)
     {
         $rootPath = __DIR__.'/../../../../..';
 
         $filename = sprintf(self::FILENAME, $rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
-        $file->getFilename()->willReturn($filename);
-        $converter->from($file)->willReturn($lines);
-        $this->beConstructedWith($converter);
+        $text->getLines()->willReturn($lines);
     }
 
     function it_is_a_search_strategy()
@@ -49,7 +46,7 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_finds_above_occurences(File $file)
+    function it_finds_above_occurences(Text $text)
     {
         $aboveLineRegex = '/\[A \w+ sniggers\]/';
         $aboveLineNumber = 1;
@@ -57,18 +54,18 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
         $currentLineNumber = 3;
         $underLineRegex = '/\[Sniggering\]/';
 
-        $this->findAbove($file, $underLineRegex, $currentLineNumber)->shouldBe(false);
-        $this->findAbove($file, $currentLineRegex, $currentLineNumber)->shouldBe(false);
-        $this->findAbove($file, $aboveLineRegex, $currentLineNumber)->shouldBe($aboveLineNumber);
+        $this->findAbove($text, $underLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $currentLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $aboveLineRegex, $currentLineNumber)->shouldBe($aboveLineNumber);
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findAbove($file, $underLineRegex)->shouldBe(false);
-        $this->findAbove($file, $currentLineRegex)->shouldBe(false);
-        $this->findAbove($file, $aboveLineRegex)->shouldBe($aboveLineNumber);
+        $this->findAbove($text, $underLineRegex)->shouldBe(false);
+        $this->findAbove($text, $currentLineRegex)->shouldBe(false);
+        $this->findAbove($text, $aboveLineRegex)->shouldBe($aboveLineNumber);
     }
 
-    function it_finds_under_occurences(File $file)
+    function it_finds_under_occurences(Text $text)
     {
         $aboveLineRegex = '/\[A \w+ sniggers\]/';
         $currentLineRegex = '/More sniggering/';
@@ -76,14 +73,14 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
         $underLineRegex = '/\[Sniggering\]/';
         $underLineNumber = 5;
 
-        $this->findUnder($file, $aboveLineRegex, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($file, $currentLineRegex, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($file, $underLineRegex, $currentLineNumber)->shouldBe($underLineNumber);
+        $this->findUnder($text, $aboveLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($text, $currentLineRegex, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($text, $underLineRegex, $currentLineNumber)->shouldBe($underLineNumber);
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findUnder($file, $aboveLineRegex)->shouldBe(false);
-        $this->findUnder($file, $currentLineRegex)->shouldBe(false);
-        $this->findUnder($file, $underLineRegex)->shouldBe($underLineNumber);
+        $this->findUnder($text, $aboveLineRegex)->shouldBe(false);
+        $this->findUnder($text, $currentLineRegex)->shouldBe(false);
+        $this->findUnder($text, $underLineRegex)->shouldBe($underLineNumber);
     }
 }

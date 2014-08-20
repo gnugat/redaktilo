@@ -14,7 +14,6 @@ namespace example\Gnugat\Redaktilo;
 use Gnugat\Redaktilo\EditorFactory;
 use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\Converter\LineContentConverter;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
@@ -42,14 +41,14 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
     public function testItRemovesCommandDollarSigns()
     {
         $editor = EditorFactory::createEditor();
-        $file = $editor->open($this->originalPath);
+        $file = $editor->openFile($this->originalPath);
 
         try {
             $this->removeDollars($editor, $file);
         } catch (\Exception $e) {
         }
 
-        $editor->save($file);
+        $editor->saveFile($file);
 
         $expected = file_get_contents($this->expectedPath);
         $actual = file_get_contents($this->originalPath);
@@ -59,10 +58,8 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
 
     protected function removeDollars(Editor $editor, File $file)
     {
-        $converter = new LineContentConverter();
-
         $editor->jumpUnder($file, '/.. code-block:: bash/');
-        $lines = $converter->from($file);
+        $lines = $file->getLines();
         $editor->jumpUnder($file, 1);
 
         while ((bool) preg_match('/^   / ', $line = $lines[$file->getCurrentLineNumber()]) || '' === $line) {

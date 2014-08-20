@@ -2,10 +2,15 @@
 
 This chapter explains the responsibility of each classes:
 
+* [Text](#text)
 * [File](#file)
+* [Factory](#factory)
+    * [TextFactory](#textfactory)
+    * [FileFactory](#filefactory)
+* [Service](#service)
+    * [LineBreak](#linebreak)
 * [Filesystem](#filesystem)
 * [Converter](#converter)
-    * [LineContentConverter](#linecontentconverter)
     * [PhpContentConverter](#phpcontentconverter)
 * [DependencyInjection](#dependencyinjection)
 * [Search](#search)
@@ -28,21 +33,24 @@ This chapter explains the responsibility of each classes:
 * [Next readings](#next-readings)
 * [Previous readings](#previous-readings)
 
-## File
+## Text
 
-**Redaktilo** is based on this domain object:
+**Redaktilo** is based on this entity:
 
 ```php
 <?php
 
 namespace Gnugat\Redaktilo;
 
-class File
+class Text
 {
-    public function getFilename();
+    public function __construct(array $lines, $lineBreak = PHP_EOL);
 
-    public function read();
-    public function write($newContent);
+    public function getLines();
+    public function setLines(array $lines);
+
+    public function getLineBreak();
+    public function setLineBreak($lineBreak);
 
     public function getCurrentLineNumber();
     public function setCurrentLineNumber($lineNumber);
@@ -52,12 +60,114 @@ class File
 Every single other classes in this project are stateless services allowing you
 to manipulate it.
 
-One last thing: creating a `File` sets its cursor to the first line:
+Basically it is a collection of lines: each line is stripped from their
+line break (`Text` stores this character in a property).
+
+A current line number is set to `0` when the `Text` is created:
 
 ```php
-$file = new File($filename, $content);
-echo $file->getCurrentLineNumber(); // 0
+$text = new Text($lines, $lineBreak);
+echo $text->getCurrentLineNumber(); // 0
 ```
+
+## File
+
+**Redaktilo** is also based on this entity:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+class File extends Text
+{
+    public function getFilename();
+    public function setFilename($filename);
+}
+```
+
+As you can see, it extends the `Text` entity and adds a `filename` property:
+
+```php
+$file = new File($filename, $lines, $lineBreak);
+```
+
+## Factory
+
+While these classes aren't extension points, they might be worth knowing.
+
+### TextFactory
+
+A stateless service which creates an instance of `Text` from the given string:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+use Gnugat\Redaktilo\Service\LineBreak;
+
+class TextFactory
+{
+    public function __construct(LineBreak $lineBreak);
+
+    public function make($string);
+}
+```
+
+Such a factory is usefull as it takes care of detecting the line break for you
+(used to split the string into an array of lines).
+
+### FileFactory
+
+A stateless service which creates an instance of `File` from the given filename
+and content:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+use Gnugat\Redaktilo\Service\LineBreak;
+
+class FileFactory
+{
+    public function __construct(LineBreak $lineBreak);
+
+    public function make($filename, $content);
+}
+```
+
+Such a factory is usefull as it takes care of detecting the line break for you.
+
+## Service
+
+Here lies the stateless services which are not meant to be extended.
+
+### LineBreak
+
+**Redaktilo** relies heavily on this service: a `Text` should be composed
+of lines, but what line break character is used?
+
+If the `Text` has been created on a Windows system, it should be `\r\n`. If it
+has been  created elsewhere, it should be `\n`.
+
+`LineBreak` helps you by returning the used line break character from the given
+string:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Service;
+
+class LineBreak
+{
+    public function detect($string);
+}
+```
+
+If the string doesn't contain any line break character, the current system's one
+will be used (`PHP_EOL`).
 
 ## Filesystem
 
@@ -70,9 +180,12 @@ namespace Gnugat\Redaktilo;
 
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class Filesystem
 {
+    public function __construct(SymfonyFilesystem $symfonyFilesystem);
+
     public function open($filename); // Throws FileNotFoundException if the file doesn't exist
     public function create($filename); // Throws IOException if the path isn't accessible
 
@@ -91,19 +204,19 @@ will create an instance of `File`.
 ## Converter
 
 This interface allows you to extend **Redaktilo** in order to manipulate
-different representations of the `File`'s content:
+different representations of the `Text`'s lines:
 
 ```php
 <?php
 
 namespace Gnugat\Redaktilo\Converter;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 
 interface ContentConverter
 {
-    public function from(File $file);
-    public function back(File $file, $convertedContent);
+    public function from(Text $text);
+    public function back(Text $text, $convertedContent);
 }
 ```
 
@@ -112,16 +225,6 @@ Possible representations might be:
 * PHP tokens
 * JSON parameters
 
-### LineContentConverter
-
-**Redaktilo** relies heavily on this representation: a `File` should be composed
-of lines.
-
-This converter takes the content, detects its line break and splits it into an
-array of lines stripped from the line break character.
-
-It is also able to merge back those lines with the appropriate line break.
-
 ### PhpContentConverter
 
 This converter transform the content of a PHP source file into an array of tokens
@@ -129,7 +232,7 @@ via the `token_get_all()` function.
 
 ## Search
 
-Another stateless service, which allows you to search patterns in the File's
+Another stateless service, which allows you to search patterns in the Text's
 content.
 
 This is actually an interface allowing you to extend Redaktilo. By default, two
@@ -140,13 +243,13 @@ implementations are provided.
 
 namespace Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 
 interface SearchStrategy
 {
     // Throw PatternNotFoundException if the pattern hasn't be found
-    public function findAbove(File $file, $pattern);
-    public function findUnder(File $file, $pattern);
+    public function findAbove(Text $text, $pattern);
+    public function findUnder(Text $text, $pattern);
 
     public function supports($pattern);
 }
@@ -189,8 +292,8 @@ the `Editor` to allow extension without having to modify it.
 
 For example, its `jumpUnder` method can accept both a string or an integer.
 It is passes its argument to the engine's `resolve` method: if the engine has
-a registered `SearchStrategy` which supports it, it returns it. `Editor` can then tell
-the strategy to do the work.
+a registered `SearchStrategy` which supports it, it returns it. `Editor` can
+then tell the strategy to do the work.
 
 ```php
 <?php
@@ -206,7 +309,7 @@ class SearchEngine
 
 ## Command
 
-Allows you to manipulate the File's content.
+Allows you to manipulate the Text's content.
 
 This is actually an interface allowing you to extend Redaktilo. By default, three
 implementations are provided.
@@ -223,16 +326,16 @@ interface Command
 }
 ```
 
-The input parameter is currently an array with at least an entry `file` with the
-file to manipulate.
+The input parameter is currently an array with at least an entry `text` with the
+text to manipulate.
 
 ### LineInsertAboveCommand
 
-Inserts the given addition in the given file above the given location.
+Inserts the given addition in the given text above the given location.
 
 ### LineInsertUnderCommand
 
-Inserts the given addition in the given file under the given location.
+Inserts the given addition in the given text under the given location.
 
 ### LineReplaceCommand
 
@@ -328,43 +431,45 @@ use Symfony\Component\Filesystem\Exception\IOException;
 
 class Editor
 {
-    public function __construct(Filesystem $filesystem);
-
     // Filesystem operations.
-    public function open($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
-    public function save(File $file); // Throws IOException if the file cannot be written to
+    public function openFile($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
+    public function saveFile(File $file); // Throws IOException if the file cannot be written to
+
+    // In case you need to manipulate a string and not a file.
+    public function openText($string);
 
     // Manipulating a line (by default the current one).
-    public function insertAbove(File $file, $addition, $location = null);
-    public function insertUnder(File $file, $addition, $location = null);
-    public function replace(File $file, $replacement, $location = null);
-    public function remove(File $file, $location = null); // Removes the current line.
+    public function insertAbove(Text $text, $addition, $location = null);
+    public function insertUnder(Text $text, $addition, $location = null);
+    public function replace(Text $text, $replacement, $location = null);
+    public function remove(Text $text, $location = null); // Removes the current line.
 
     // Content navigation.
     // Throw PatternNotFoundException If the pattern hasn't been found
     // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpUnder(File $file, $pattern, $location = null);
-    public function jumpAbove(File $file, $pattern, $location = null);
+    public function jumpUnder(Text $text, $pattern, $location = null);
+    public function jumpAbove(Text $text, $pattern, $location = null);
 
     // Content searching.
-    public function has(File $file, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
+    public function has(Text $text, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
 }
 ```
 
 ### Filesystem operations
 
-While using `save` is exactly the same as calling directly `Filesystem::write`,
-the `open` method is a wrapper allowing you to open or create files:
+While using `saveFile` is exactly the same as calling directly
+`Filesystem::write`, the `openFile` method is a wrapper allowing you to open or
+create files:
 
 ```php
-$editor->open($filename); // Throws an exception if the file doesn't exist
-$editor->open($filename, true); // Creates a new file if it doesn't exist
+$editor->openFile($filename); // Throws an exception if the file doesn't exist
+$editor->openFile($filename, true); // Creates a new file if it doesn't exist
 ```
 
 One last thing: opening or creating a file sets its cursor to the first line:
 
 ```php
-$file = $this->open($filename);
+$file = $this->openFile($filename);
 echo $file->getCurrentLineNumber(); // 0
 ```
 
@@ -376,9 +481,9 @@ Just keep in mind that the cursor will be set to the added line:
 ```php
 $emptyLine = '';
 
-echo $file->getCurrentLineNumber(); // 5
-$editor->insertUnder($file, $emptyLine);
-echo $file->getCurrentLineNumber(); // 6
+echo $text->getCurrentLineNumber(); // 5
+$editor->insertUnder($text, $emptyLine);
+echo $text->getCurrentLineNumber(); // 6
 ```
 
 You can also replace a line with a new value, or remove it.
@@ -388,31 +493,31 @@ You can also replace a line with a new value, or remove it.
 You can jump down or up to a line which correspond to the given pattern:
 
 ```php
-$editor->jumpdUnder($file, 'The exact value of the line');
-$editor->jumpdUnder($file, 2); // Jumps two lines under the current one.
+$editor->jumpdUnder($text, 'The exact value of the line');
+$editor->jumpdUnder($text, 2); // Jumps two lines under the current one.
 ```
 
 You should keep in mind that the search is done relatively to the current one:
 
 ```php
-$editor->jumpUnder($file, $linePresentAbove); // Will throw an exception.
+$editor->jumpUnder($text, $linePresentAbove); // Will throw an exception.
 ```
 
 If you don't want to start the search from the current line, you can indicate
 the one you want:
 
 ```php
-$editor->jumpAbove($file, $pattern, 42); // Starts from the 42th line
-$editor->jumpUnder($file, $pattern, 0); // Starts from the top of the file
+$editor->jumpAbove($text, $pattern, 42); // Starts from the 42th line
+$editor->jumpUnder($text, $pattern, 0); // Starts from the top of the text
 ```
 
 ### Content searching
 
 If you don't want to handle exceptions just to make sure that a line is present
-in the file, use the following:
+in the text, use the following:
 
 ```php
-$editor->has($file, $line);
+$editor->has($text, $line);
 ```
 
 ## Next readings

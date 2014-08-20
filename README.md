@@ -65,7 +65,7 @@ class KernelManipulator extends Manipulator
 
     public function addBundle($bundle)
     {
-        $file = $this->editor->open($this->appKernelFilename);
+        $file = $this->editor->openFile($this->appKernelFilename);
 
         $newLine = sprintf('            new %s(),', $bundle);
 
@@ -81,7 +81,7 @@ class KernelManipulator extends Manipulator
         $this->editor->jumpUnder($file, $lineToFind);
         $this->editor->insertAbove($file, $newLine);
 
-        $this->editor->save($file);
+        $this->editor->saveFile($file);
 
         return true;
     }

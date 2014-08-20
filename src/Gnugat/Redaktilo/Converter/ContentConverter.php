@@ -11,10 +11,10 @@
 
 namespace Gnugat\Redaktilo\Converter;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 
 /**
- * The File's content is represented as a string.
+ * The Text's content is represented as a string.
  *
  * Possible implementations can convert it into:
  *
@@ -27,23 +27,23 @@ use Gnugat\Redaktilo\File;
 interface ContentConverter
 {
     /**
-     * Returns a converted representation of the given File's content.
+     * Returns a converted representation of the given Text's content.
      *
-     * @param File $file
+     * @param Text $text
      *
      * @return mixed
      *
      * @api
      */
-    public function from(File $file);
+    public function from(Text $text);
 
     /**
-     * Converts back the representation into the given File's content.
+     * Converts back the representation into the given Text's content.
      *
-     * @param File  $file
+     * @param Text  $text
      * @param mixed $convertedContent
      *
      * @api
      */
-    public function back(File $file, $convertedContent);
+    public function back(Text $text, $convertedContent);
 }

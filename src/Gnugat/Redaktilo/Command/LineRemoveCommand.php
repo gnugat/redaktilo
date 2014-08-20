@@ -11,34 +11,23 @@
 
 namespace Gnugat\Redaktilo\Command;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
-
 /**
- * Removes the given location in the given file.
+ * Removes the given location in the given text.
  */
 class LineRemoveCommand implements Command
 {
-    /** @var LineContentConverter */
-    private $converter;
-
-    /** @param LineContentConverter $converter */
-    public function __construct(LineContentConverter $converter)
-    {
-        $this->converter = $converter;
-    }
-
     /** {@inheritdoc} */
     public function execute(array $input)
     {
-        $file = $input['file'];
-        $location = isset($input['location']) ? $input['location'] : $file->getCurrentLineNumber();
+        $text = $input['text'];
+        $location = isset($input['location']) ? $input['location'] : $text->getCurrentLineNumber();
 
-        $lines = $this->converter->from($file);
+        $lines = $text->getLines();
         unset($lines[$location]);
-        $this->converter->back($file, $lines);
+        $text->setLines($lines);
 
         $lineNumber = $location == count($lines) ? $location-1 : $location;
-        $file->setCurrentLineNumber($lineNumber);
+        $text->setCurrentLineNumber($lineNumber);
     }
 
     /** {@inheritdoc} */

@@ -11,7 +11,9 @@
 
 namespace spec\Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\Factory\FileFactory;
 use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Service\LineBreak;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -21,6 +23,7 @@ class FilesystemSpec extends ObjectBehavior
     private $copyFilename;
 
     private $fileCopier;
+    private $fileFactory;
 
     function let(SymfonyFilesystem $symfonyFilesystem)
     {
@@ -29,7 +32,9 @@ class FilesystemSpec extends ObjectBehavior
 
         $this->fileCopier = new SymfonyFilesystem();
 
-        $this->beConstructedWith($symfonyFilesystem);
+        $LineBreak = new LineBreak();
+        $this->fileFactory = new FileFactory($LineBreak);
+        $this->beConstructedWith($this->fileFactory, $symfonyFilesystem);
     }
 
     function it_opens_existing_files()
@@ -81,7 +86,7 @@ class FilesystemSpec extends ObjectBehavior
     {
         $this->fileCopier->copy($this->sourceFilename, $this->copyFilename, true);
         $content = file_get_contents($this->copyFilename);
-        $file = new File($this->copyFilename, $content);
+        $file = $this->fileFactory->make($this->copyFilename, $content);
 
         $symfonyFilesystem->dumpFile($this->copyFilename, $content, null)->shouldBeCalled();
 

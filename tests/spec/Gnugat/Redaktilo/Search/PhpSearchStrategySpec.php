@@ -12,9 +12,10 @@
 namespace spec\Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\Converter\PhpContentConverter;
-use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Search\Php\Token;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+use Gnugat\Redaktilo\Service\LineBreak;
+use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
 class PhpSearchStrategySpec extends ObjectBehavior
@@ -25,13 +26,16 @@ class PhpSearchStrategySpec extends ObjectBehavior
 
     private $tokenBuilder;
 
-    function let(File $file)
+    function let(Text $text)
     {
         $rootPath = __DIR__.'/../../../../..';
         $filename = sprintf(self::FILENAME, $rootPath);
         $content = file_get_contents($filename);
-        $file->getFilename()->willReturn($filename);
-        $file->read()->willReturn($content);
+        $lineBreak = new LineBreak();
+        $lineBreak = $lineBreak->detect($content);
+        $lines = explode($lineBreak, $content);
+        $text->getLineBreak()->willReturn($lineBreak);
+        $text->getLines()->willReturn($lines);
 
         $this->tokenBuilder = new TokenBuilder();
         $converter = new PhpContentConverter($this->tokenBuilder);
@@ -60,7 +64,7 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $this->supports($lineNumber)->shouldBe(false);
     }
 
-    function it_finds_above_occurences(File $file)
+    function it_finds_above_occurences(Text $text)
     {
         $aboveLineNumber = 0;
         $aboveToken = array(new Token(T_OPEN_TAG, "<?php\n"));
@@ -68,18 +72,18 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $currentToken = $this->tokenBuilder->buildClass('AppKernel');
         $underToken = $this->tokenBuilder->buildMethod('registerBundles');
 
-        $this->findAbove($file, $underToken, $currentLineNumber)->shouldBe(false);
-        $this->findAbove($file, $currentToken, $currentLineNumber)->shouldBe(false);
-        $this->findAbove($file, $aboveToken, $currentLineNumber)->shouldBe($aboveLineNumber);
+        $this->findAbove($text, $underToken, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $currentToken, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $aboveToken, $currentLineNumber)->shouldBe($aboveLineNumber);
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findAbove($file, $underToken)->shouldBe(false);
-        $this->findAbove($file, $currentToken)->shouldBe(false);
-        $this->findAbove($file, $aboveToken)->shouldBe($aboveLineNumber);
+        $this->findAbove($text, $underToken)->shouldBe(false);
+        $this->findAbove($text, $currentToken)->shouldBe(false);
+        $this->findAbove($text, $aboveToken)->shouldBe($aboveLineNumber);
     }
 
-    function it_finds_under_occurences(File $file)
+    function it_finds_under_occurences(Text $text)
     {
         $aboveToken = array(new Token(T_OPEN_TAG, "<?php\n"));
         $currentLineNumber = 10;
@@ -87,14 +91,14 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $underLineNumber = 15;
         $underToken = $this->tokenBuilder->buildMethod('registerBundles');
 
-        $this->findUnder($file, $aboveToken, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($file, $currentToken, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($file, $underToken, $currentLineNumber)->shouldBe($underLineNumber);
+        $this->findUnder($text, $aboveToken, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($text, $currentToken, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($text, $underToken, $currentLineNumber)->shouldBe($underLineNumber);
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findUnder($file, $aboveToken)->shouldBe(false);
-        $this->findUnder($file, $currentToken)->shouldBe(false);
-        $this->findUnder($file, $underToken)->shouldBe($underLineNumber);
+        $this->findUnder($text, $aboveToken)->shouldBe(false);
+        $this->findUnder($text, $currentToken)->shouldBe(false);
+        $this->findUnder($text, $underToken)->shouldBe($underLineNumber);
     }
 }

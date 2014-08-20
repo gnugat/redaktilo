@@ -11,7 +11,7 @@
 
 namespace Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 
 /**
  * A lookup strategy supporting a specific kind of pattern.
@@ -20,31 +20,31 @@ interface SearchStrategy
 {
     /**
      * Looks for the given pattern from the given line number ($location) to the
-     * top of the File.
-     * If no line number is given, the current line number of the file is used.
+     * top of the Text.
+     * If no line number is given, the current line number of the text is used.
      * If the pattern doesn't match anything, returns false.
      *
-     * @param File    $file
+     * @param Text    $text
      * @param mixed   $pattern
      * @param integer $location
      *
      * @return mixed
      */
-    public function findAbove(File $file, $pattern, $location = null);
+    public function findAbove(Text $text, $pattern, $location = null);
 
     /**
      * Looks for the given pattern from the given line number ($location) to the
-     * bottom of the File.
-     * If no line number is given, the current line number of the file is used.
+     * bottom of the Text.
+     * If no line number is given, the current line number of the text is used.
      * If the pattern doesn't match anything, returns false.
      *
-     * @param File    $file
+     * @param Text    $text
      * @param mixed   $pattern
      * @param integer $location
      *
      * @return mixed
      */
-    public function findUnder(File $file, $pattern, $location = null);
+    public function findUnder(Text $text, $pattern, $location = null);
 
     /**
      * @param mixed $pattern

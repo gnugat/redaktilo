@@ -12,8 +12,8 @@
 namespace Gnugat\Redaktilo\Search;
 
 use Gnugat\Redaktilo\Converter\PhpContentConverter;
-use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Search\Php\Token;
+use Gnugat\Redaktilo\Text;
 
 /**
  * Finds the given PHP token.
@@ -30,10 +30,10 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findAbove(File $file, $pattern, $location = null)
+    public function findAbove(Text $text, $pattern, $location = null)
     {
-        $location = $location ?: $file->getCurrentLineNumber();
-        $tokens = $this->converter->from($file);
+        $location = $location ?: $text->getCurrentLineNumber();
+        $tokens = $this->converter->from($text);
         $reversedTokens = array_reverse($tokens);
         $total = count($reversedTokens);
         for ($index = 0; $index < $total; $index++) {
@@ -47,10 +47,10 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /** {@inheritdoc} */
-    public function findUnder(File $file, $pattern, $location = null)
+    public function findUnder(Text $text, $pattern, $location = null)
     {
-        $location = ($location ?: $file->getCurrentLineNumber()) + 1;
-        $tokens = $this->converter->from($file);
+        $location = ($location ?: $text->getCurrentLineNumber()) + 1;
+        $tokens = $this->converter->from($text);
         $total = count($tokens);
         for ($index = 0; $index < $total; $index++) {
             $token = $tokens[$index];

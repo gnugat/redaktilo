@@ -11,24 +11,21 @@
 
 namespace spec\Gnugat\Redaktilo\Search;
 
-use Gnugat\Redaktilo\Converter\LineContentConverter;
-use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
 class LineNumberSearchStrategySpec extends ObjectBehavior
 {
     const FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
 
-    function let(File $file, LineContentConverter $converter)
+    function let(Text $text)
     {
         $rootPath = __DIR__.'/../../../../..';
 
         $filename = sprintf(self::FILENAME, $rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
-        $file->getFilename()->willReturn($filename);
-        $converter->from($file)->willReturn($lines);
-        $this->beConstructedWith($converter);
+        $text->getLines()->willReturn($lines);
     }
 
     function it_is_a_search_strategy()
@@ -47,35 +44,35 @@ class LineNumberSearchStrategySpec extends ObjectBehavior
         $this->supports($rawLine)->shouldBe(false);
     }
 
-    function it_finds_above_occurences(File $file)
+    function it_finds_above_occurences(Text $text)
     {
         $currentLineNumber = 5;
         $existingLine = 4;
         $underLineNumber = 1;
         $nonExistingLine = 23;
 
-        $this->findAbove($file, $nonExistingLine, $currentLineNumber)->shouldBe(false);
-        $this->findAbove($file, $existingLine, $currentLineNumber)->shouldBe($underLineNumber);
+        $this->findAbove($text, $nonExistingLine, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $existingLine, $currentLineNumber)->shouldBe($underLineNumber);
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findAbove($file, $nonExistingLine)->shouldBe(false);
-        $this->findAbove($file, $existingLine)->shouldBe($underLineNumber);
+        $this->findAbove($text, $nonExistingLine)->shouldBe(false);
+        $this->findAbove($text, $existingLine)->shouldBe($underLineNumber);
     }
 
-    function it_finds_under_occurences(File $file)
+    function it_finds_under_occurences(Text $text)
     {
         $currentLineNumber = 5;
         $existingLine = 2;
         $underLineNumber = 7;
         $nonExistingLine = 23;
 
-        $this->findUnder($file, $nonExistingLine, $currentLineNumber)->shouldBe(false);
-        $this->findUnder($file, $existingLine, $currentLineNumber)->shouldBe($underLineNumber);
+        $this->findUnder($text, $nonExistingLine, $currentLineNumber)->shouldBe(false);
+        $this->findUnder($text, $existingLine, $currentLineNumber)->shouldBe($underLineNumber);
 
-        $file->getCurrentLineNumber()->willReturn($currentLineNumber);
+        $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
-        $this->findUnder($file, $nonExistingLine)->shouldBe(false);
-        $this->findUnder($file, $existingLine)->shouldBe($underLineNumber);
+        $this->findUnder($text, $nonExistingLine)->shouldBe(false);
+        $this->findUnder($text, $existingLine)->shouldBe($underLineNumber);
     }
 }

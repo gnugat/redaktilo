@@ -43,7 +43,7 @@ class RoutingManipulator extends \PHPUnit_Framework_TestCase
     {
         $editor = EditorFactory::createEditor();
 
-        $file = $editor->open($this->configPath, true);
+        $file = $editor->openFile($this->configPath, true);
 
         $definitionLine = 'acme_demo:';
         $resourceLine   = '    resource: "@AcmeDemoBundle/Controller/"';
@@ -57,7 +57,7 @@ class RoutingManipulator extends \PHPUnit_Framework_TestCase
         $editor->insertUnder($file, $prefixLine);
         $editor->insertUnder($file, $emptyLine);
 
-        $editor->save($file);
+        $editor->saveFile($file);
 
         $expected = file_get_contents($this->expectedConfigPath);
         $actual = file_get_contents($this->configPath);
