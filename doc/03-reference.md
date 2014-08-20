@@ -6,7 +6,6 @@ This chapter explains the responsibility of each classes:
 * [File](#file)
 * [Service](#service)
     * [Filesystem](#filesystem)
-    * [FileFactory](#filefactory)
     * [LineBreak](#linebreak)
     * [TextFactory](#textfactory)
     * [EditorBuilder](#editorbuilder)
@@ -126,27 +125,6 @@ will create an instance of `File`.
 **Note**: `Filesystem` depends on the
 [Symfony2 Filesystem component](http://symfony.com/doc/current/components/filesystem.html).
 
-
-### FileFactory
-
-Creates an instance of `File` from the given filename and content:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo;
-
-use Gnugat\Redaktilo\Service\LineBreak;
-
-class FileFactory
-{
-    public function __construct(LineBreak $lineBreak);
-
-    public function make($filename, $content);
-}
-```
-
-Such a factory is usefull as it takes care of detecting the line break for you.
 
 ### LineBreak
 
@@ -422,9 +400,6 @@ class Editor
     // Filesystem operations.
     public function openFile($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
     public function saveFile(File $file); // Throws IOException if the file cannot be written to
-
-    // In case you need to manipulate a string and not a file.
-    public function openText($string);
 
     // Manipulating a line (by default the current one).
     public function insertAbove(Text $text, $addition, $location = null);

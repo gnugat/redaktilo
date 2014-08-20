@@ -15,7 +15,6 @@ use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Search\PatternNotFoundException;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Service\Filesystem;
-use Gnugat\Redaktilo\Service\TextFactory;
 
 /**
  * Provides convenient methods for the following filesystem operations:
@@ -35,9 +34,6 @@ use Gnugat\Redaktilo\Service\TextFactory;
  */
 class Editor
 {
-    /** @var TextFactory */
-    private $textFactory;
-
     /** @var Filesystem */
     private $filesystem;
 
@@ -48,36 +44,19 @@ class Editor
     private $commandInvoker;
 
     /**
-     * @param TextFactory    $textFactory
      * @param Filesystem     $filesystem
      * @param SearchEngine   $searchEngine
      * @param CommandInvoker $commandInvoker
      */
     public function __construct(
-        TextFactory $textFactory,
         Filesystem $filesystem,
         SearchEngine $searchEngine,
         CommandInvoker $commandInvoker
     )
     {
-        $this->textFactory = $textFactory;
         $this->filesystem = $filesystem;
         $this->searchEngine = $searchEngine;
         $this->commandInvoker = $commandInvoker;
-    }
-
-    /**
-     * Creates an instance of Text from the given string.
-     *
-     * @param string $string
-     *
-     * @return Text
-     *
-     * @api
-     */
-    public function openText($string)
-    {
-        return $this->textFactory->make($string);
     }
 
     /**

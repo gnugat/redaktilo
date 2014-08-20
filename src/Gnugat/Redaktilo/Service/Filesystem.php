@@ -21,19 +21,19 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 class Filesystem
 {
-    /** @var FileFactory */
-    private $FileFactory;
+    /** @var LineBreak */
+    private $lineBreak;
 
     /** @var SymfonyFilesystem */
     private $symfonyFilesystem;
 
     /**
-     * @param FileFactory       $fileFactory
+     * @param LineBreak         $lineBreak
      * @param SymfonyFilesystem $symfonyFilesystem
      */
-    public function __construct(FileFactory $fileFactory, SymfonyFilesystem $symfonyFilesystem)
+    public function __construct(LineBreak $lineBreak, SymfonyFilesystem $symfonyFilesystem)
     {
-        $this->fileFactory = $fileFactory;
+        $this->lineBreak = $lineBreak;
         $this->symfonyFilesystem = $symfonyFilesystem;
     }
 
@@ -56,7 +56,7 @@ class Filesystem
             throw new FileNotFoundException($message, 0, null, $filename);
         }
 
-        return $this->fileFactory->make($filename, $content);
+        return $this->makeFile($filename, $content);
     }
 
     /**
@@ -78,7 +78,15 @@ class Filesystem
             throw new IOException($message, 0, null, $filename);
         }
 
-        return $this->fileFactory->make($filename, '');
+        return $this->makeFile($filename, '');
+    }
+
+    private function makeFile($filename, $content)
+    {
+        $lineBreak = $this->lineBreak->detect($content);
+        $lines = explode($lineBreak, $content);
+
+        return new File($filename, $lines, $lineBreak);
     }
 
     /**

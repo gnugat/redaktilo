@@ -12,7 +12,6 @@
 namespace spec\Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\Service\FileFactory;
 use Gnugat\Redaktilo\Service\LineBreak;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -23,7 +22,6 @@ class FilesystemSpec extends ObjectBehavior
     private $copyFilename;
 
     private $fileCopier;
-    private $fileFactory;
 
     function let(SymfonyFilesystem $symfonyFilesystem)
     {
@@ -31,10 +29,9 @@ class FilesystemSpec extends ObjectBehavior
         $this->copyFilename = __DIR__.'/../../../../fixtures/copies/edit-me.txt';
 
         $this->fileCopier = new SymfonyFilesystem();
+        $lineBreak = new LineBreak();
 
-        $LineBreak = new LineBreak();
-        $this->fileFactory = new FileFactory($LineBreak);
-        $this->beConstructedWith($this->fileFactory, $symfonyFilesystem);
+        $this->beConstructedWith($lineBreak, $symfonyFilesystem);
     }
 
     function it_opens_existing_files()
@@ -86,7 +83,8 @@ class FilesystemSpec extends ObjectBehavior
     {
         $this->fileCopier->copy($this->sourceFilename, $this->copyFilename, true);
         $content = file_get_contents($this->copyFilename);
-        $file = $this->fileFactory->make($this->copyFilename, $content);
+        $lines = file($this->copyFilename);
+        $file = new File($this->copyFilename, $lines);
 
         $symfonyFilesystem->dumpFile($this->copyFilename, $content, null)->shouldBeCalled();
 

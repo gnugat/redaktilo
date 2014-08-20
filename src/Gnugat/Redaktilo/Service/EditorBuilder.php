@@ -32,9 +32,6 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 class EditorBuilder
 {
-    /** @var LineBreak */
-    private $lineBreak;
-
     /** @var TextToPhpConverter */
     private $phpConverter;
 
@@ -50,23 +47,8 @@ class EditorBuilder
     /** @var Command[] */
     private $commands = array();
 
-    /** @var TextFactory */
-    private $textFactory;
-
-    /** @var FileFactory */
-    private $fileFactory;
-
     /** @var Filesystem */
     private $filesystem;
-
-    protected function getLineBreak()
-    {
-        if ($this->lineBreak) {
-            return $this->lineBreak;
-        }
-
-        return $this->lineBreak = new LineBreak();
-    }
 
     protected function getPhpConverter()
     {
@@ -120,26 +102,6 @@ class EditorBuilder
         return $commandInvoker;
     }
 
-    /** @return TextFactory */
-    protected function getTextFactory()
-    {
-        if ($this->textFactory) {
-            return $this->textFactory;
-        }
-
-        return new TextFactory($this->getLineBreak());
-    }
-
-    /** @return FileFactory */
-    protected function getFileFactory()
-    {
-        if ($this->fileFactory) {
-            return $this->fileFactory;
-        }
-
-        return new FileFactory($this->getLineBreak());
-    }
-
     /** @return Filesystem */
     protected function getFilesystem()
     {
@@ -147,14 +109,13 @@ class EditorBuilder
             return $this->filesystem;
         }
 
-        return new Filesystem($this->getFileFactory(), new SymfonyFilesystem());
+        return new Filesystem(new LineBreak(), new SymfonyFilesystem());
     }
 
     /** @return Editor */
     public function getEditor()
     {
         return new Editor(
-            $this->getTextFactory(),
             $this->getFilesystem(),
             $this->getSearchEngine(),
             $this->getCommandInvoker()
