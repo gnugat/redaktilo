@@ -24,7 +24,7 @@ editor metaphor:
 Use [Composer](http://getcomposer.org/) to download and install Redaktilo in
 your projects:
 
-    composer require "gnugat/redaktilo:~1.0.0@alpha"
+    composer require "gnugat/redaktilo:~1.0.0@beta"
 
 To use Redaktilo, you have to create an editor. The most simple way to do this
 is by using the `EditorFactory`:
