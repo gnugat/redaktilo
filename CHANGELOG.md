@@ -1,5 +1,10 @@
 # Changes between versions
 
+## 1.0.0-beta2: Fixed last BC breaks
+
+* renamed under with below
+* removed File prefix from Editor's open/save
+
 ## 1.0.0-beta1: Stable API
 
 * moved FileFactory into Filesystem
