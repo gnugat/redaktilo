@@ -1,5 +1,20 @@
 # Changes between versions
 
+## 1.0.0-alpha6: Text and line content
+
+* renamed LineContentConverter to LineBreak
+* used Text instead of File
+* removed constructor API
+* removed File read and write
+* injected lines instead of content in File
+* used FileFactory in Filesystem
+* created FileFactory
+* made File a Text
+* suffixed Editor open/save with "File"
+* added newText in Editor
+* created TextFactory
+* created Text
+
 ## 1.0.0-alpha5: BC break renaming
 
 * renamed `SearchStrategy` `previous`/`next` to `above`/`under`
