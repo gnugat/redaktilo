@@ -50,9 +50,6 @@ class EditorBuilder
     /** @var Command[] */
     private $commands = array();
 
-    /** @var TextFactory */
-    private $textFactory;
-
     /** @var FileFactory */
     private $fileFactory;
 
@@ -120,16 +117,6 @@ class EditorBuilder
         return $commandInvoker;
     }
 
-    /** @return TextFactory */
-    protected function getTextFactory()
-    {
-        if ($this->textFactory) {
-            return $this->textFactory;
-        }
-
-        return new TextFactory($this->getLineBreak());
-    }
-
     /** @return FileFactory */
     protected function getFileFactory()
     {
@@ -154,7 +141,6 @@ class EditorBuilder
     public function getEditor()
     {
         return new Editor(
-            $this->getTextFactory(),
             $this->getFilesystem(),
             $this->getSearchEngine(),
             $this->getCommandInvoker()

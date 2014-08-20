@@ -423,9 +423,6 @@ class Editor
     public function openFile($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
     public function saveFile(File $file); // Throws IOException if the file cannot be written to
 
-    // In case you need to manipulate a string and not a file.
-    public function openText($string);
-
     // Manipulating a line (by default the current one).
     public function insertAbove(Text $text, $addition, $location = null);
     public function insertUnder(Text $text, $addition, $location = null);
