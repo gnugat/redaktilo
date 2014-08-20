@@ -44,7 +44,7 @@ class EditorSpec extends ObjectBehavior
         $filesystem->exists(self::FILENAME)->willReturn(true);
         $filesystem->open(self::FILENAME)->willReturn($file);
 
-        $this->openFile(self::FILENAME);
+        $this->open(self::FILENAME);
     }
 
     function it_cannot_open_new_files(Filesystem $filesystem, File $file)
@@ -54,7 +54,7 @@ class EditorSpec extends ObjectBehavior
         $filesystem->exists(self::FILENAME)->willReturn(false);
         $filesystem->open(self::FILENAME)->willThrow($exception);
 
-        $this->shouldThrow($exception)->duringOpenFile(self::FILENAME);
+        $this->shouldThrow($exception)->duringOpen(self::FILENAME);
     }
 
     function it_creates_new_files(Filesystem $filesystem, File $file)
@@ -62,7 +62,7 @@ class EditorSpec extends ObjectBehavior
         $filesystem->exists(self::FILENAME)->willReturn(false);
         $filesystem->create(self::FILENAME)->willReturn($file);
 
-        $this->openFile(self::FILENAME, true);
+        $this->open(self::FILENAME, true);
     }
 
     function it_moves_the_cursor_above_the_current_line(
@@ -299,6 +299,6 @@ class EditorSpec extends ObjectBehavior
     {
         $filesystem->write($file)->shouldBeCalled();
 
-        $this->saveFile($file);
+        $this->save($file);
     }
 }

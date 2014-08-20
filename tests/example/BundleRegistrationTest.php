@@ -41,7 +41,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
     {
         $tokenBuilder = new TokenBuilder();
         $editor = EditorFactory::createEditor();
-        $file = $editor->openFile($this->appKernelPath);
+        $file = $editor->open($this->appKernelPath);
 
         $registrationMethod = $tokenBuilder->buildMethod('registerBundles');
 
@@ -50,7 +50,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
         $editor->jumpUnder($file, '        );');
         $editor->insertAbove($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
 
-        $editor->saveFile($file);
+        $editor->save($file);
 
         $expected = file_get_contents($this->expectedAppKernelPath);
         $actual = file_get_contents($this->appKernelPath);
@@ -61,7 +61,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
     public function testItDetectsBundlePresence()
     {
         $editor = EditorFactory::createEditor();
-        $file = $editor->openFile($this->expectedAppKernelPath);
+        $file = $editor->open($this->expectedAppKernelPath);
 
         $isBundlePresent = $editor->has($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
 
@@ -71,7 +71,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
     public function testItDetectsBundleAbsence()
     {
         $editor = EditorFactory::createEditor();
-        $file = $editor->openFile($this->appKernelPath);
+        $file = $editor->open($this->appKernelPath);
 
         $isBundlePresent = $editor->has($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
 

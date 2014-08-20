@@ -398,8 +398,8 @@ use Symfony\Component\Filesystem\Exception\IOException;
 class Editor
 {
     // Filesystem operations.
-    public function openFile($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
-    public function saveFile(File $file); // Throws IOException if the file cannot be written to
+    public function open($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
+    public function save(File $file); // Throws IOException if the file cannot be written to
 
     // Manipulating a line (by default the current one).
     public function insertAbove(Text $text, $addition, $location = null);
@@ -420,19 +420,19 @@ class Editor
 
 ### Filesystem operations
 
-While using `saveFile` is exactly the same as calling directly
-`Filesystem::write`, the `openFile` method is a wrapper allowing you to open or
+While using `save` is exactly the same as calling directly
+`Filesystem::write`, the `open` method is a wrapper allowing you to open or
 create files:
 
 ```php
-$editor->openFile($filename); // Throws an exception if the file doesn't exist
-$editor->openFile($filename, true); // Creates a new file if it doesn't exist
+$editor->open($filename); // Throws an exception if the file doesn't exist
+$editor->open($filename, true); // Creates a new file if it doesn't exist
 ```
 
 One last thing: opening or creating a file sets its cursor to the first line:
 
 ```php
-$file = $this->openFile($filename);
+$file = $this->open($filename);
 echo $file->getCurrentLineNumber(); // 0
 ```
 

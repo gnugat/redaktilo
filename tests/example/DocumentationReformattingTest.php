@@ -41,14 +41,14 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
     public function testItRemovesCommandDollarSigns()
     {
         $editor = EditorFactory::createEditor();
-        $file = $editor->openFile($this->originalPath);
+        $file = $editor->open($this->originalPath);
 
         try {
             $this->removeDollars($editor, $file);
         } catch (\Exception $e) {
         }
 
-        $editor->saveFile($file);
+        $editor->save($file);
 
         $expected = file_get_contents($this->expectedPath);
         $actual = file_get_contents($this->originalPath);

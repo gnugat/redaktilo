@@ -26,8 +26,8 @@ use Symfony\Component\Filesystem\Exception\IOException;
 class Editor
 {
     // Filesystem operations.
-    public function openFile($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
-    public function saveFile(File $file); // Throws IOException if the file cannot be written to
+    public function open($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
+    public function save(File $file); // Throws IOException if the file cannot be written to
 
     // Manipulating a line (by default the current one).
     public function insertAbove(Text $text, $addition, $location = null);
