@@ -20,13 +20,13 @@ class LineRemoveCommand implements Command
     public function execute(array $input)
     {
         $text = $input['text'];
-        $location = isset($input['location']) ? $input['location'] : $text->getCurrentLineNumber();
+        $location = isset($input['location']) ? intval($input['location']) : $text->getCurrentLineNumber();
 
         $lines = $text->getLines();
         unset($lines[$location]);
         $text->setLines($lines);
 
-        $lineNumber = $location == count($lines) ? $location-1 : $location;
+        $lineNumber = ($location === count($lines)) ? $location - 1 : $location;
         $text->setCurrentLineNumber($lineNumber);
     }
 

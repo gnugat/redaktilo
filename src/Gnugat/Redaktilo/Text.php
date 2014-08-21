@@ -28,12 +28,17 @@ class Text
     protected $lines;
 
     /**
+     * @var int
+     */
+    protected $totalLineNumber;
+
+    /**
      * @var string
      */
     protected $lineBreak;
 
     /**
-     * @var ineger
+     * @var int
      */
     protected $currentLineNumber = 0;
 
@@ -43,7 +48,7 @@ class Text
      */
     public function __construct(array $lines, $lineBreak = PHP_EOL)
     {
-        $this->lines = $lines;
+        $this->setLines($lines);
         $this->lineBreak = $lineBreak;
     }
 
@@ -65,6 +70,7 @@ class Text
     public function setLines(array $lines)
     {
         $this->lines = $lines;
+        $this->totalLineNumber = count($lines);
     }
 
     /**
@@ -88,7 +94,7 @@ class Text
     }
 
     /**
-     * @return integer
+     * @return int
      *
      * @api
      */
@@ -98,12 +104,25 @@ class Text
     }
 
     /**
-     * @param integer $lineNumber
+     * @param int $lineNumber
+     *
+     * @throws \InvalidArgumentException if $lineNumber is not an integer
+     * @throws \InvalidArgumentException if $lineNumber is negative
+     * @throws \InvalidArgumentException if $lineNumber is greater or equal than the number of lines
      *
      * @api
      */
     public function setCurrentLineNumber($lineNumber)
     {
+        if (!is_int($lineNumber)) {
+            throw new \InvalidArgumentException('The line number should be an integer');
+        }
+        if ($lineNumber < 0) {
+            throw new \InvalidArgumentException('The line number should be positive');
+        }
+        if ($lineNumber >= $this->totalLineNumber) {
+            throw new \InvalidArgumentException('The line number should be strictly lower than the number of lines');
+        }
         $this->currentLineNumber = $lineNumber;
     }
 }

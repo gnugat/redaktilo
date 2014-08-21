@@ -99,9 +99,9 @@ class Editor
      * Searches the given pattern in the Text above the current line.
      * If the pattern is found, the current line is set to it.
      *
-     * @param Text    $text
-     * @param mixed   $pattern
-     * @param integer $location
+     * @param Text  $text
+     * @param mixed $pattern
+     * @param int   $location
      *
      * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
      * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
@@ -123,9 +123,9 @@ class Editor
      * Searches the given pattern in the Text below the current line.
      * If the pattern is found, the current line is set to it.
      *
-     * @param Text    $text
-     * @param mixed   $pattern
-     * @param integer $location
+     * @param Text  $text
+     * @param mixed $pattern
+     * @param int   $location
      *
      * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
      * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
@@ -166,9 +166,9 @@ class Editor
      * (or above the current one if none provided).
      * Note: the current line is then set to the new one.
      *
-     * @param Text    $text
-     * @param string  $addition
-     * @param integer $location
+     * @param Text   $text
+     * @param string $addition
+     * @param int    $location
      *
      * @api
      */
@@ -187,9 +187,9 @@ class Editor
      * (or below the current one if none provided).
      * Note: the current line is then set to the new one.
      *
-     * @param Text    $text
-     * @param string  $addition
-     * @param integer $location
+     * @param Text   $text
+     * @param string $addition
+     * @param int    $location
      *
      * @api
      */
@@ -207,9 +207,9 @@ class Editor
      * Replaces the line at the given line number
      * (or at the current one if none provided) with the given replacement.
      *
-     * @param Text    $text
-     * @param string  $replacement
-     * @param integer $location
+     * @param Text   $text
+     * @param string $replacement
+     * @param int    $location
      *
      * @api
      */
@@ -227,8 +227,8 @@ class Editor
      * Removes the line at the given location
      * (or at the current one if none provided).
      *
-     * @param Text    $text
-     * @param integer $location
+     * @param Text $text
+     * @param int  $location
      *
      * @api
      */
