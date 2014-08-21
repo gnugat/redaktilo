@@ -1,5 +1,10 @@
 # Changes between versions
 
+## 1.0.0-rc1: Safe checks
+
+* added totalLineNumber to Text
+* added safe checks
+
 ## 1.0.0-beta2: Fixed last BC breaks
 
 * renamed under with below
