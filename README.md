@@ -14,8 +14,6 @@ editor metaphor:
   * remove it
 * finally it can save the changes on the filesystem
 
-**Caution**: Project currently in version alpha, expect massive BC breaks.
-
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/mini.png)](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08)
 [![Travis CI](https://travis-ci.org/gnugat/redaktilo.png)](https://travis-ci.org/gnugat/redaktilo)
 
@@ -24,7 +22,7 @@ editor metaphor:
 Use [Composer](http://getcomposer.org/) to download and install Redaktilo in
 your projects:
 
-    composer require "gnugat/redaktilo:~1.0.0@beta"
+    composer require "gnugat/redaktilo:~1.0.0@rc"
 
 To use Redaktilo, you have to create an editor. The most simple way to do this
 is by using the `EditorFactory`:
