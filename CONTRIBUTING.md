@@ -16,7 +16,6 @@ Here's some tips to make you the best contributor ever:
 * [Standard code](#standard-code)
 * [Specifications](#specifications)
 * [Use cases](#use-cases)
-* [Branch naming](#branch-naming)
 * [Keeping your fork up-to-date](#keeping-your-fork-up-to-date)
 
 ## Green tests
@@ -55,33 +54,16 @@ Redaktilo drives its development using [phpspec](http://www.phpspec.net/):
 Redaktilo has been created to fulfill actual needs. To keep sure of it, use
 cases are created and are automated: they become part of the test suite.
 
-Have a look a `tests/examples`. You can add your own use cases.
-
-## Branch naming
-
-Redaktilo uses the following prefixes for its branch names:
-
-* __user/*__ for User Stories
-* __tech/*__ for Tech Stories
-* __doc/*__ for documentation
-* __fix/*__ for bug fixes
-
-The second part is an helpful micro title.
+Have a look at [tests/examples](./tests/examples), you might add your own.
 
 ## Keeping your fork up-to-date
 
-Once the repository is forked, you should track the upstream (original) one
+To keep your fork up-to-date, you should track the upstream (original) one
 using the following command:
 
     git remote add upstream https://github.com/gnugat/redaktilo.git
 
-Then you should create your own branch, following the
-[branch naming policy](VERSIONING.md#branch-naming):
-
-    git checkout -b <prefix>/<micro-title>-<issue-number>
-
-Once your changes are done (`git commit -am '<descriptive-message>'`), get the
-upstream changes:
+Then get the upstream changes:
 
     git checkout master
     git pull --rebase origin master
@@ -93,4 +75,4 @@ Finally, publish your changes:
 
     git push -f origin <your-branch>
 
-You should be now ready to make a pull request.
+Your pull request will be automatically updated.
