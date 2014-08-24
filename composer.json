@@ -2,23 +2,27 @@
     "name": "gnugat/redaktilo",
     "license": "MIT",
     "type": "library",
-    "description": "An editor allowing you to modify files programmatically",
+    "description": "Find, insert, replace and remove lines with an Editor-like object",
+    "keywords": ["editor", "lines", "find", "insert", "replace", "remove", "file", "edit"],
     "autoload": {
         "psr-4": {
-            "": "src",
+            "Gnugat\\Redaktilo\\": "src/Gnugat/Redaktilo",
             "example\\Gnugat\\Redaktilo\\": "tests/example"
         }
     },
     "authors": [{
         "name": "Loïc Chardonnet",
-        "role": "Lead developer"
+        "email": "loic.chardonnet@gmail.com",
+        "homepage": "http://gnugat.github.io",
+        "role": "Developer"
     }],
     "require": {
-        "symfony/filesystem": "~2.4"
+        "php": ">=5.3.3",
+        "symfony/filesystem": "~2.3"
     },
     "require-dev": {
         "phpspec/phpspec": "~2.0",
-        "phpunit/phpunit": "~4.0",
+        "phpunit/phpunit": ">=3.7,<5.0",
         "bossa/phpspec2-expect": "~1.0"
     }
 }
