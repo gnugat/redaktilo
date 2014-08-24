@@ -1,31 +1,21 @@
 # Redaktilo
 
+Redaktilo allows you to find, insert, replace and removes lines using an
+editor-like object.
+
 *Because your code too needs an editor to manipulate files*.
-
-Redaktilo provides an Object Oriented way to manipulate files, through the
-editor metaphor:
-
-* your code can open a file
-* it can then check the presence of a line in it
-* it also can navigate in the file to select a line
-* next, it can manipulate the current line:
-  * insert a new one above/below it
-  * replace it
-  * remove it
-* finally it can save the changes on the filesystem
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/mini.png)](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08)
 [![Travis CI](https://travis-ci.org/gnugat/redaktilo.png)](https://travis-ci.org/gnugat/redaktilo)
 
 ## Getting started
 
-Use [Composer](http://getcomposer.org/) to download and install Redaktilo in
-your projects:
+Use [Composer](http://getcomposer.org/) to install Redaktilo in your projects:
 
-    composer require "gnugat/redaktilo:~1.0.0@rc"
+    composer require "gnugat/redaktilo:~1.0@rc"
 
-To use Redaktilo, you have to create an editor. The most simple way to do this
-is by using the `EditorFactory`:
+Redaktilo provides an `Editor` class which can be instanciated using
+`EditorFactory`:
 
 ```php
 <?php
@@ -36,9 +26,8 @@ use Gnugat\Redaktilo\EditorFactory;
 $editor = EditorFactory::createEditor();
 ```
 
-I'll describe the
-[SensioGeneratorBundle](https://github.com/sensiolabs/SensioGeneratorBundle)
-use case in this README. This bundle has a [`KernelManipulator`](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
+The [SensioGeneratorBundle](https://github.com/sensiolabs/SensioGeneratorBundle)
+has a [`KernelManipulator`](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
 class which edits an `AppKernel` file to insert a line.
 
 Here's what the code would look like if it was using Redaktilo:
@@ -64,21 +53,14 @@ class KernelManipulator extends Manipulator
     public function addBundle($bundle)
     {
         $file = $this->editor->open($this->appKernelFilename);
+        $newBundle = sprintf('            new %s(),', $bundle);
+        if ($this->editor->has($file, $newBundle)) {
+            $message = sprintf('Bundle "%s" is already defined in "AppKernel::registerBundles()".', $bundle);
 
-        $newLine = sprintf('            new %s(),', $bundle);
-
-        if ($this->editor->has($file, $newLine)) {
-            throw new \RuntimeException(sprintf(
-                'Bundle "%s" is already defined in "AppKernel::registerBundles()".',
-                $bundle
-            ));
+            throw new \RuntimeException($message);
         }
-
-        $lineToFind = '        );';
-
-        $this->editor->jumpBelow($file, $lineToFind);
-        $this->editor->insertAbove($file, $newLine);
-
+        $this->editor->jumpBelow($file, '        );');
+        $this->editor->insertAbove($file, $newBundle);
         $this->editor->save($file);
 
         return true;
