@@ -1,5 +1,12 @@
 # Changes between versions
 
+## 1.0.0-rc2: Composer improvements
+
+* lowered requirements
+* fixed PSR4
+* added keywords
+* added @pyrech to authors
+
 ## 1.0.0-rc1: Safe checks
 
 * added totalLineNumber to Text
