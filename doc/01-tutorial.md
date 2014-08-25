@@ -11,7 +11,7 @@ This chapter shows you how to use Redaktilo and contains the following sections:
 
 ## API
 
-Redaktilo has been designed to be used uniquely via the following class:
+There's only one class to know in Redaktilo, the `Editor`:
 
 ```php
 <?php
@@ -46,9 +46,12 @@ class Editor
 }
 ```
 
+It doesn't have any state, so you can use a single instance for your entire
+application.
+
 ## Initialization
 
-In order to manipulate a file, you need to create an instance of `Editor`:
+In order to create an instance of `Editor`, you can use the following factory:
 
 ```php
 <?php
@@ -58,9 +61,6 @@ use Gnugat\Redaktilo\EditorFactory;
 
 $editor = EditorFactory::createEditor();
 ```
-
-This is the only class you need to manipulate and its stateless: you can use
-the same instance in your whole application.
 
 Let's consider the following file:
 
@@ -84,7 +84,7 @@ existing lines:
 $editor->jumpBelow($file, 'Egg'); // Current line: 1 (which is 'Egg')
 ```
 
-As you can see, there's no need to add the line break character, `Editor` will
+As you can see, there's no need to add the line break character, Redaktilo will
 take care of it for you.
 
 You should note that the lookup is directional:
@@ -92,7 +92,7 @@ You should note that the lookup is directional:
 ```php
 try {
     $editor->jumpBelow($file, 'Bacon'); // Not found because 'Bacon' is above the current line
-} catch (PatternNotFoundException $e) {
+} catch (\Gnugat\Redaktilo\Search\PatternNotFoundException $e) {
 }
 $editor->jumpAbove($file, 'Bacon'); // Current line: 0 (which is 'Bacon')
 ```
@@ -100,10 +100,11 @@ $editor->jumpAbove($file, 'Bacon'); // Current line: 0 (which is 'Bacon')
 The match is done only if the line value is exactly the same as the given one:
 
 ```php
-$editor->jumpBelow($file, 'B'); // Throws an exception.
+$editor->jumpBelow($file, 'E'); // Throws an exception.
 ```
 
-To avoid handling exception if you just want to know if a line exists, use:
+If you just want to know if a line exists, you don't have to deal with
+exceptions:
 
 ```php
 $editor->has($file, 'Beans'); // false
@@ -120,7 +121,7 @@ If you need to go the first occurence in the whole file (regardless of the
 current line), you can use:
 
 ```php
-// Searches for the line number 1, starting the lookup from the first line (instead of the current one)
+// Jumps 1 line below the line 0
 $editor->jumpBelow($file, 1, 0); // Current line: 1 (which is 'Egg')
 ```
 
