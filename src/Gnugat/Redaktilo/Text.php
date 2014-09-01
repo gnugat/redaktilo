@@ -22,24 +22,16 @@ namespace Gnugat\Redaktilo;
  */
 class Text
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $lines;
 
-    /**
-     * @var int
-     */
-    protected $totalLineNumber;
+    /** @var int */
+    protected $length;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $lineBreak;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $currentLineNumber = 0;
 
     /**
@@ -70,7 +62,17 @@ class Text
     public function setLines(array $lines)
     {
         $this->lines = $lines;
-        $this->totalLineNumber = count($lines);
+        $this->length = count($lines);
+    }
+
+    /**
+     * @return int
+     *
+     * @api
+     */
+    public function getLength()
+    {
+        return $this->length;
     }
 
     /**
@@ -120,7 +122,7 @@ class Text
         if ($lineNumber < 0) {
             throw new \InvalidArgumentException('The line number should be positive');
         }
-        if ($lineNumber >= $this->totalLineNumber) {
+        if ($lineNumber >= $this->length) {
             throw new \InvalidArgumentException('The line number should be strictly lower than the number of lines');
         }
         $this->currentLineNumber = $lineNumber;

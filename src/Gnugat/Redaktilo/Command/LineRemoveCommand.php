@@ -19,6 +19,7 @@ class LineRemoveCommand implements Command
     /** {@inheritdoc} */
     public function execute(array $input)
     {
+        /** @var \Gnugat\Redaktilo\Text $text */
         $text = $input['text'];
         $location = isset($input['location']) ? intval($input['location']) : $text->getCurrentLineNumber();
 
@@ -26,7 +27,7 @@ class LineRemoveCommand implements Command
         unset($lines[$location]);
         $text->setLines($lines);
 
-        $lineNumber = ($location === count($lines)) ? $location - 1 : $location;
+        $lineNumber = ($location === $text->getLength()) ? $location - 1 : $location;
         $text->setCurrentLineNumber($lineNumber);
     }
 

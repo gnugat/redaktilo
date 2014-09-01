@@ -25,7 +25,7 @@ class LineNumberSearchStrategySpec extends ObjectBehavior
         $filename = sprintf(self::FILENAME, $rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
-        $text->getLines()->willReturn($lines);
+        $text->getLength()->willReturn(count($lines));
     }
 
     function it_is_a_search_strategy()
