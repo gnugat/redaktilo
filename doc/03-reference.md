@@ -46,6 +46,8 @@ class Text
     public function getLines();
     public function setLines(array $lines);
 
+    public function getLength();
+
     public function getLineBreak();
     public function setLineBreak($lineBreak);
 
@@ -58,7 +60,8 @@ Every single other classes in this project are stateless services allowing you
 to manipulate it.
 
 Basically it is a collection of lines: each line is stripped from their
-line break (`Text` stores this character in a property).
+line break (`Text` stores this character in a property). It also has a `length`
+property which is the number of lines currently present in the text.
 
 A current line number is set to `0` when the `Text` is created:
 
