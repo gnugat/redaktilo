@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 1.0.0-rc3: Length
+
+* added Text length
+
 ## 1.0.0-rc2: Composer improvements
 
 * lowered requirements
