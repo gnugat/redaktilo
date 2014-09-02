@@ -50,6 +50,7 @@ class LineRemoveCommandSpec extends ObjectBehavior
         );
 
         $text->setLines($expectedLines)->shouldBeCalled();
+        $text->getLength()->willReturn(count($expectedLines));
         $text->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
         $this->execute($input);

@@ -44,6 +44,19 @@ class TextSpec extends ObjectBehavior
         $this->getLines()->shouldBe($newContent);
     }
 
+    function it_has_a_length()
+    {
+        $newContent = array(
+            'YOU',
+            'SHOULD NOT',
+            'PASS'
+        );
+
+        $this->getLength()->shouldBe(count($this->lines));
+        $this->setLines($newContent);
+        $this->getLength()->shouldBe(3);
+    }
+
     function it_has_a_current_line_number()
     {
         $this->getCurrentLineNumber()->shouldBe(0);

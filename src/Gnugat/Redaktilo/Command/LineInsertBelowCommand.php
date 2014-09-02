@@ -19,6 +19,7 @@ class LineInsertBelowCommand implements Command
     /** {@inheritdoc} */
     public function execute(array $input)
     {
+        /** @var \Gnugat\Redaktilo\Text $text */
         $text = $input['text'];
         $location = 1 + (isset($input['location']) ? intval($input['location']) : $text->getCurrentLineNumber());
         $addition = $input['addition'];

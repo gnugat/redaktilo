@@ -22,9 +22,7 @@ class LineNumberSearchStrategy implements SearchStrategy
     public function findAbove(Text $text, $pattern, $location = null)
     {
         $foundLineNumber = ($location ?: $text->getCurrentLineNumber()) - $pattern;
-        $lines = $text->getLines();
-        $totalLines = count($lines);
-        if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
+        if (0 > $foundLineNumber || $foundLineNumber >= $text->getLength()) {
             return false;
         }
 
@@ -35,9 +33,7 @@ class LineNumberSearchStrategy implements SearchStrategy
     public function findBelow(Text $text, $pattern, $location = null)
     {
         $foundLineNumber = ($location ?: $text->getCurrentLineNumber()) + $pattern;
-        $lines = $text->getLines();
-        $totalLines = count($lines);
-        if (0 > $foundLineNumber || $foundLineNumber >= $totalLines) {
+        if (0 > $foundLineNumber || $foundLineNumber >= $text->getLength()) {
             return false;
         }
 
