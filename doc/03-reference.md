@@ -234,7 +234,7 @@ via the `token_get_all()` function.
 Another stateless service, which allows you to search patterns in the Text's
 content.
 
-This is actually an interface allowing you to extend Redaktilo. By default, two
+This is actually an interface allowing you to extend Redaktilo. By default, four
 implementations are provided.
 
 ```php
@@ -290,9 +290,9 @@ The strategies seen above can be gathered in an search engine. This is used in
 the `Editor` to allow extension without having to modify it.
 
 For example, its `jumpBelow` method can accept both a string or an integer.
-It is passes its argument to the engine's `resolve` method: if the engine has
-a registered `SearchStrategy` which supports it, it returns it. `Editor` can
-then tell the strategy to do the work.
+It passes its `$pattern` argument to the engine's `resolve` method: if the
+engine has a registered `SearchStrategy` which supports it, it returns it.
+`Editor` can then tell the strategy to do the work.
 
 ```php
 <?php
@@ -310,7 +310,7 @@ class SearchEngine
 
 Allows you to manipulate the Text's content.
 
-This is actually an interface allowing you to extend Redaktilo. By default, three
+This is actually an interface allowing you to extend Redaktilo. By default, four
 implementations are provided.
 
 ```php
