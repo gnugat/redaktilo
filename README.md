@@ -3,6 +3,13 @@
 Redaktilo allows you to find, insert, replace and removes lines using an
 editor-like object.
 
+To find lines, an extensible search engine is available and provides out of the
+box:
+
+* regular expression line searching
+* strict equality line searching (`===`)
+* PHP token searching
+
 *Because your code too needs an editor to manipulate files*.
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/mini.png)](https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08)
