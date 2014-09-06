@@ -52,6 +52,7 @@ Redaktilo!
 
 * [Reference](03-reference.md)
 * [Vocabulary](04-vocabulary.md)
+* [Extending](05-extending.md)
 
 ## Previous readings
 

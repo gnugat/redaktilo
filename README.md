@@ -98,3 +98,4 @@ Next readings:
 * [Use cases](doc/02-use-cases.md)
 * [Reference](doc/03-reference.md)
 * [Vocabulary](doc/04-vocabulary.md)
+* [Extending](05-extending.md)

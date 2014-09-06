@@ -105,6 +105,10 @@ Can contain:
 * PHP
 * etc...
 
+## Next readings
+
+* [Extending](05-extending.md)
+
 ## Previous readings
 
 * [README](../README.md)
