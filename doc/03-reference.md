@@ -216,3 +216,14 @@ $editor = EditorFactory::createEditor();
 $file = $editor->open('/tmp/and-now-for-something-completly-different.txt');
 $editor->save($file); // Actually writes on the filesystem
 ```
+
+## Next readings
+
+* [Vocabulary](04-vocabulary.md)
+* [Extending](05-extending.md)
+
+## Previous readings
+
+* [README](../README.md)
+* [Tutorial](01-tutorial.md)
+* [Use cases](02-use-cases.md)
