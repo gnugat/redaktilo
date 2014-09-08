@@ -113,6 +113,9 @@ if ($editor->has($file, '/sniggers/') { // regular expression
 }
 ```
 
+**Note**: to jump to a given line number, you can directly use:
+`$text->setCurrentLineNumber($x);`.
+
 ### Content manipulation
 
 Manipulations are done by default to the current line (or, if the third argument
