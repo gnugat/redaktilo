@@ -65,6 +65,9 @@ try {
     // The file doesn't exist
 }
 $file = $editor->open('/tmp/new.txt', true); // Forces file creation when it doesn't exist
+
+// ... Make some manipulation on the file
+
 $editor->save($file); // Actually writes on the filesystem
 ```
 
@@ -105,7 +108,7 @@ try {
 } catch (\Gnugat\Redaktilo\Search\PatternNotFoundException $e) {
     // The pattern hasn't been found in the file
 }
-if ($editor->has($file, '[A guard sniggers]') { // regular expression
+if ($editor->has($file, '/sniggers/') { // regular expression
     // The pattern exists.
 }
 ```
@@ -130,7 +133,7 @@ $editor->insertBelow($file, 'Bacon'); // Current line number: 1
 $editor->replace($file, 'Spam');
 $editor->remove($file);  // Current line number: 0
 
-$editor->save($file); // Necessary to actually apply the changes one the filesystem
+$editor->save($file); // Necessary to actually apply the changes on the filesystem
 ```
 
 ## Text API
@@ -214,6 +217,7 @@ use Gnugat\Redaktilo\EditorFactory;
 
 $editor = EditorFactory::createEditor();
 $file = $editor->open('/tmp/and-now-for-something-completly-different.txt');
+// ... Edit the file
 $editor->save($file); // Actually writes on the filesystem
 ```
 

@@ -114,5 +114,5 @@ Implementations provided out of the box are:
 * [README](../README.md)
 * [Tutorial](01-tutorial.md)
 * [Use cases](02-use-cases.md)
-* [Vocabulary](03-reference.md)
+* [Reference](03-reference.md)
 * [Vocabulary](04-vocabulary.md)
