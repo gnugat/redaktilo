@@ -110,25 +110,24 @@ exceptions:
 $editor->has($file, 'Beans'); // false
 ```
 
-You can also jump a wanted number of lines above or below the current one:
-
-```php
-$editor->jumpBelow($file, 2); // Current line: 2 (which is 'Sausage')
-$editor->jumpAbove($file, 2); // Current line: 0 (which is 'Bacon')
-```
-
 If you need to go the first occurence in the whole file (regardless of the
 current line), you can use:
 
 ```php
-// Jumps 1 line below the line 0
-$editor->jumpBelow($file, 1, 0); // Current line: 1 (which is 'Egg')
+// Jumps to the first line matching the pattern, starting from the line 0
+$editor->jumpBelow($file, '/eg/', 0); // Current line: 1 (which is 'Egg')
 ```
 
 The lookup can also be done using regex:
 
 ```php
 $editor->jumpAbove($file, '/ac/'); // Current line: 0 (which is 'Bacon')
+```
+
+*Note*: You can directly interact with the current line:
+
+```php
+$file->setCurrentLineNumber(2); // Current line: 2 (which is 'Sausage')
 ```
 
 *Note*: If you're manipulating a PHP file, you can also jump to symbols like
