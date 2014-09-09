@@ -103,19 +103,12 @@ exceptions, you can use `Editor#hasBelow()` and `Editor#hasAbove()` method inste
 $editor->hasBelow($file, 'Beans', 0); // false
 ```
 
-You can also jump to a number of lines below or above the current one:
-
-```php
-$editor->jumpBelow($file, 2); // Current line: 2 ('Sausage')
-$editor->jumpAbove($file, 2); // Current line: 0 ('Bacon')
-```
-
 If you need to go the first occurence in the whole file (regardless of the
 current line), you can use:
 
 ```php
-// Jumps 1 line below the line 0
-$editor->jumpBelow($file, 1, 0); // Current line: 1 (which is 'Egg')
+// Jumps to the first line matching the pattern, starting from the line 0
+$editor->jumpBelow($file, '/eg/', 0); // Current line: 1 (which is 'Egg')
 ```
 
 The lookup can also be done using regex:
