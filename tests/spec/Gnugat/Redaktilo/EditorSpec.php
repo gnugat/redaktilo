@@ -65,6 +65,13 @@ class EditorSpec extends ObjectBehavior
         $this->open(self::FILENAME, true);
     }
 
+    function it_saves_files(Filesystem $filesystem, File $file)
+    {
+        $filesystem->write($file)->shouldBeCalled();
+
+        $this->save($file);
+    }
+
     function it_moves_the_cursor_above_the_current_line(
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
@@ -351,12 +358,5 @@ class EditorSpec extends ObjectBehavior
         $commandInvoker->run('remove', $input)->shouldBeCalled();
 
         $this->remove($text, $lineNumber);
-    }
-
-    function it_saves_files(Filesystem $filesystem, File $file)
-    {
-        $filesystem->write($file)->shouldBeCalled();
-
-        $this->save($file);
     }
 }
