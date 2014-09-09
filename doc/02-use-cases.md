@@ -1,7 +1,9 @@
 # Use cases
 
-Redaktilo has been created to meet some actual needs. You can discover them in
-this chapter which describes the following use cases:
+Redaktilo has been created to meet some actual needs, which is why its
+[Test Suite](../tests) contains an [Example](../tests/example) section.
+
+Let's discover the use cases which led to the creation of Redaktilo:
 
 * [YAML configuration edition](#yaml-configuration-edition)
 * [JSON file edition](#json-file-edition)
@@ -22,12 +24,15 @@ The only problem with it: it doesn't keep comments or empty lines.
 
 Redaktilo fits perfectly for the job.
 
+**Note**: see [BundleRoutingTest](../tests/example/BundleRoutingTest.php) for an
+actual implementation.
+
 ## JSON file edition
 
 Some projects use JSON files (like [Composer](https://getcomposer.org/)).
 
 Just like with Symfony2 YAML component, you could use `json_encode` and
-`json_decode` to edit these files, but you would lose empty lines and
+`json_decode` to edit these files, but you would lose empty lines and custom
 indentation.
 
 Redaktilo is again a good candidate.
@@ -48,10 +53,14 @@ GnugatWizardBundle will need to create its own KernelManipulator.
 The result of a simpler approach (parsing lines instead of PHP tokens) is
 Redaktilo!
 
+**Note**: see [BundleRegistrationTest](../tests/example/BundleRegistrationTest.php)
+for an actual implementation.
+
 ## Next readings
 
 * [Reference](03-reference.md)
 * [Vocabulary](04-vocabulary.md)
+* [Extending](05-extending.md)
 
 ## Previous readings
 

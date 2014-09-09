@@ -1,38 +1,147 @@
-# Architecture details
+# Redaktilo Code Reference
 
-This chapter explains the responsibility of each classes:
-
-* [Text](#text)
-* [File](#file)
-* [Service](#service)
-    * [Filesystem](#filesystem)
-    * [LineBreak](#linebreak)
-    * [TextFactory](#textfactory)
-    * [EditorBuilder](#editorbuilder)
-    * [TextToPhpConverter](#texttophpconverter)
-* [Search](#search)
-    * [LineNumberSearchStrategy](#linenumbersearchstrategy)
-    * [LineRegexSearchStrategy](#lineregexsearchstrategy)
-    * [LineSearchStrategy](#linesearchstrategy)
-    * [PhpSearchStrategy](#phpsearchstrategy)
-    * [SameSearchStrategy](#samesearchstrategy)
-    * [SearchEngine](#searchengine)
-* [Command](#command)
-    * [LineInsertCommand](#lineinsertcommand)
-    * [LineReplaceCommand](#linereplacecommand)
-    * [LineRemoveCommand](#lineremovecommand)
-    * [CommandInvoker](#commandinvoker)
-* [Editor](#editor)
+* [Editor API](#editor-api)
     * [Filesystem operations](#filesystem-operations)
-    * [Manipulating the current line](#manipulating-the-current-line)
     * [Content navigation](#content-navigation)
-    * [Content searching](#content-searching)
-* [Next readings](#next-readings)
-* [Previous readings](#previous-readings)
+    * [Content manipulation](#content-manipulation)
+* [Text API](#text-api)
+    * [Side note on LineBreak](#side-note-on-linebreak)
+* [File API](#file-api)
 
-## Text
+## Editor API
 
-**Redaktilo** is based on this entity:
+The main stateless service:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+class Editor
+{
+    public function open($filename, $force = false);
+    public function save(File $file);
+
+    // Throw Gnugat\Redaktilo\Search\PatternNotFoundException
+    public function jumpAbove(Text $text, $pattern, $location = null);
+    public function jumpBelow(Text $text, $pattern, $location = null);
+
+    public function has(Text $text, $pattern);
+
+    public function insertAbove(Text $text, $addition, $location = null);
+    public function insertBelow(Text $text, $addition, $location = null);
+    public function replace(Text $text, $replacement, $location = null);
+    public function remove(Text $text, $location = null);
+}
+```
+
+You can create one instance and use it everywhere:
+
+```php
+<?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();
+```
+
+### Filesystem operations
+
+Trying to open a non existing file will raise an exception, except if `true` is
+passed as the second parameter. In any case nothing will happen on the
+filesystem until the `save` method is called.
+
+```php
+<?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();
+try {
+    $file = $editor->open('/tmp/new.txt');
+} catch (\Symfony\Component\Filesystem\Exception\FileNotFoundException $e) {
+    // The file doesn't exist
+}
+$file = $editor->open('/tmp/new.txt', true); // Forces file creation when it doesn't exist
+
+// ... Make some manipulation on the file
+
+$editor->save($file); // Actually writes on the filesystem
+```
+
+### Content navigation
+
+`Editor` relies on `SearchEngine` in order to find a given pattern in a `Text`
+and provides by default the following `SearchStrategies`:
+
+* regular expression
+* strict equality (`===`)
+* PHP token
+
+If the pattern isn't found, or if the pattern isn't supported by any strategies
+an exception will be thrown. If the pattern is found, the `Text`'s current line
+number will be set to it.
+
+The search is done relatively to the current line (or, if the third argument is
+given, to the given location): `jumpAbove` will start from it and then the line
+above, etc until the top is reached while `jumpBelow` will go downward until the
+bottom is reached.
+
+In order to check the presence of a pattern without having to jump to the line
+found, the `has` method can be used: it doesn't throw any exceptions (checks
+from top to bottom).
+
+```php
+<?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();
+$file = $editor->open('/tmp/life-of-brian.txt', true);
+try {
+    $editor->jumpAbove($file, '[A guard sniggers]'); // strict equality
+} catch (\Gnugat\Redaktilo\Search\NotSupportedException $e) {
+    // The pattern isn't supported by any registered strategy (shouldn't occur often)
+} catch (\Gnugat\Redaktilo\Search\PatternNotFoundException $e) {
+    // The pattern hasn't been found in the file
+}
+if ($editor->has($file, '/sniggers/') { // regular expression
+    // The pattern exists.
+}
+```
+
+**Note**: to jump to a given line number, you can directly use:
+`$text->setCurrentLineNumber($x);`.
+
+### Content manipulation
+
+Manipulations are done by default to the current line (or, if the third argument
+is given, to the given location).
+
+Inserting a new line will set the current one to it.
+
+```php
+<?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();
+$file = $editor->open('/tmp/spam-menu.txt', true);
+$editor->insertAbove($file, 'Egg'); // Current line number: 0
+$editor->insertBelow($file, 'Bacon'); // Current line number: 1
+$editor->replace($file, 'Spam');
+$editor->remove($file);  // Current line number: 0
+
+$editor->save($file); // Necessary to actually apply the changes on the filesystem
+```
+
+## Text API
+
+One of the main entity:
 
 ```php
 <?php
@@ -41,38 +150,51 @@ namespace Gnugat\Redaktilo;
 
 class Text
 {
-    public function __construct(array $lines, $lineBreak = PHP_EOL);
-
     public function getLines();
     public function setLines(array $lines);
-
     public function getLength();
 
     public function getLineBreak();
     public function setLineBreak($lineBreak);
 
-    public function getCurrentLineNumber();
+    // Throws InvalidArgumentException if $lineNumber is not a positive integer lower than the length
     public function setCurrentLineNumber($lineNumber);
+    public function getCurrentLineNumber();
 }
 ```
 
-Every single other classes in this project are stateless services allowing you
-to manipulate it.
+**Important**: `lines` is an array of string stripped from their line break
+character.
 
-Basically it is a collection of lines: each line is stripped from their
-line break (`Text` stores this character in a property). It also has a `length`
-property which is the number of lines currently present in the text.
-
-A current line number is set to `0` when the `Text` is created:
+The `Editor` is a bit `File` oriented, but if you want to manipulate a simple
+string you can use `Text`:
 
 ```php
-$text = new Text($lines, $lineBreak);
-echo $text->getCurrentLineNumber(); // 0
+<?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\Service\LineBreak;
+use Gnugat\Redaktilo\Service\TextFactory;
+
+$textFactory = new TextFactory(new LineBreak());
+$text = $textFactory->make("why do witches burn?\n...because they're made of... wood?\n");
 ```
 
-## File
+**Important**: please note that upon creation, the current line number is
+initialized to the first line: `0` (array indexed).
 
-**Redaktilo** is also based on this entity:
+### Side note on LineBreak
+
+The `LineBreak` stateless service will guess the right character used to
+separate lines:
+
+* `\r\n` for windows
+* `\n` for any other operating system
+* `PHP_EOL` if no line ending has been found
+
+## File API
+
+The other main entity:
 
 ```php
 <?php
@@ -83,412 +205,29 @@ class File extends Text
 {
     public function getFilename();
     public function setFilename($filename);
+
+    // ... (Text methods)
 }
 ```
 
-As you can see, it extends the `Text` entity and adds a `filename` property:
-
-```php
-$file = new File($filename, $lines, $lineBreak);
-```
-
-## Service
-
-Here lies the stateless services which are not meant to be extended.
-
-### Filesystem
-
-A service which does the actual read and write operations:
+The best way to create it is to use the `Editor`:
 
 ```php
 <?php
+require_once __DIR__.'/vendor/autoload.php';
 
-namespace Gnugat\Redaktilo\Service;
+use Gnugat\Redaktilo\EditorFactory;
 
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
-
-class Filesystem
-{
-    public function __construct(SymfonyFilesystem $symfonyFilesystem);
-
-    public function open($filename); // Throws FileNotFoundException if the file doesn't exist
-    public function create($filename); // Throws IOException if the path isn't accessible
-
-    public function exists($filename);
-
-    public function write(File $file); // Throws IOException If the file cannot be written to
-}
-```
-
-You can only open existing files and create new files. The first two methods
-will create an instance of `File`.
-
-**Note**: `Filesystem` depends on the
-[Symfony2 Filesystem component](http://symfony.com/doc/current/components/filesystem.html).
-
-
-### LineBreak
-
-**Redaktilo** relies heavily on this service: a `Text` should be composed
-of lines, but what line break character is used?
-
-If the `Text` has been created on a Windows system, it should be `\r\n`. If it
-has been  created elsewhere, it should be `\n`.
-
-`LineBreak` helps you by returning the used line break character from the given
-string:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\Service;
-
-class LineBreak
-{
-    public function detect($string);
-}
-```
-
-If the string doesn't contain any line break character, the current system's one
-will be used (`PHP_EOL`).
-
-### TextFactory
-
-Creates an instance of `Text` from the given string:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo;
-
-use Gnugat\Redaktilo\Service\LineBreak;
-
-class TextFactory
-{
-    public function __construct(LineBreak $lineBreak);
-
-    public function make($string);
-}
-```
-
-Such a factory is usefull as it takes care of detecting the line break for you
-(used to split the string into an array of lines).
-
-### EditorBuilder
-
-Allows you to tweak the instantiation of the `Editor` class. It also has
-defaults, in case you didn't specify anything. After configuring the build, you
-can call `getEditor()` to get the `Editor` instance:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\Service;
-
-use Gnugat\Redaktilo\Command\Command;
-use Gnugat\Redaktilo\Command\CommandInvoker;
-use Gnugat\Redaktilo\Search\SearchEngine;
-use Gnugat\Redaktilo\Search\SearchStrategy;
-
-class EditorBuilder
-{
-    public function getEditor();
-
-    public function setSearchEngine(SearchEngine $searchEngine);
-    public function addSearchStrategy(SearchStrategy $searchStrategy);
-
-    public function setCommandInvoker(CommandInvoker $commandInvoker);
-    public function addCommand(Command $command);
-
-    public function setFilesystem(Filesystem $filesystem);
-}
-```
-
-### TextToPhpConverter
-
-Takes a `Text` and makes an array of PHP tokens out of it:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\Service;
-
-use Gnugat\Redaktilo\Text;
-use Gnugat\Redaktilo\Search\Php\TokenBuilder;
-
-class TextToPhpConverter
-{
-    public function __construct(TokenBuilder $tokenBuilder);
-
-    public function from(Text $text);
-}
-```
-
-This converter transform the content of a PHP source file into an array of tokens
-via the `token_get_all()` function.
-
-## Search
-
-Another stateless service, which allows you to search patterns in the Text's
-content.
-
-This is actually an interface allowing you to extend Redaktilo. By default, four
-implementations are provided.
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\Search;
-
-use Gnugat\Redaktilo\Text;
-
-interface SearchStrategy
-{
-    // Throw PatternNotFoundException if the pattern hasn't be found
-    public function findAbove(Text $text, $pattern);
-    public function findBelow(Text $text, $pattern);
-
-    public function supports($pattern);
-}
-```
-
-### LineNumberSearchStrategy
-
-If you want to go to a given line number, use this one.
-
-The `findBelow` method will jump `n` lines below the current one,  while
-`findAbove` will jump above.
-
-### LineRegexSearchStrategy
-
-You can look for a line which matches a regex.
-
-### LineSearchStrategy
-
-This abstract class allows you to create search strategies which manipulate
-array of lines.
-
-Its `find` methods create a proper subset which can then be manipulated in
-`findIn` implemntations.
-
-### SameSearchStrategy
-
-If you know exactly the value of the line you want to look for, use this one.
-
-The `find` methods will return the line number.
-
-### PhpSearchStrategy
-
-If you want to manipulate a PHP file and jump to a line containing a set of
-tokens, use this strategy.
-
-### SearchEngine
-
-The strategies seen above can be gathered in an search engine. This is used in
-the `Editor` to allow extension without having to modify it.
-
-For example, its `jumpBelow` method can accept both a string or an integer.
-It passes its `$pattern` argument to the engine's `resolve` method: if the
-engine has a registered `SearchStrategy` which supports it, it returns it.
-`Editor` can then tell the strategy to do the work.
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\Search;
-
-class SearchEngine
-{
-    public function registerStrategy(SearchStrategy $searchStrategy);
-    public function resolve($pattern); // Throws NotSupportedException If the pattern isn't supported by any registered strategy
-}
-```
-
-## Command
-
-Allows you to manipulate the Text's content.
-
-This is actually an interface allowing you to extend Redaktilo. By default, four
-implementations are provided.
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\Command;
-
-interface Command
-{
-    public function getName();
-    public function execute(array $input);
-}
-```
-
-The input parameter is currently an array with at least an entry `text` with the
-text to manipulate.
-
-### LineInsertAboveCommand
-
-Inserts the given addition in the given text above the given location.
-
-### LineInsertBelowCommand
-
-Inserts the given addition in the given text below the given location.
-
-### LineReplaceCommand
-
-Allows you to replace a line, given its number.
-
-### LineRemoveCommand
-
-Allows you to remove a line, given its number.
-
-### CommandInvoker
-
-The commands seen above can be gathered in a command invoker. This is used in
-the `Editor` to allow extension without having to modify it.
-
-The `run` method - called by manipulating methods of the `Editor` - accept in first
-argument the name to resolve the correct command to execute and in second
-argument the `$input` array to send to the command
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo\Command;
-
-class CommandInvoker
-{
-    public function addCommand(Command $command);
-    public function run($name, array $input); // Throws UnsupportedCommandException if the name doesn't correspond to any registered command
-}
-```
-
-## EditorFactory
-
-`EditorFactory` is the access point of Redaktilo. You should use it to create a
-new Editor instance. You can also create an `EditorBuilder` instance to tweak
-the instantiation of the editor.
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo;
-
-class EditorFactory
-{
-    public static function createEditor();
-    public static function createBuilder();
-}
-```
-
-## Editor
-
-`Editor` is intended to be a facade using every other services. It provides
-developers with a unique API implementing the text editor metaphor:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo;
-
-use Gnugat\Redaktilo\Engine\NotSupportedException;
-use Gnugat\Redaktilo\Search\PatternNotFoundException;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException;
-
-class Editor
-{
-    // Filesystem operations.
-    public function open($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
-    public function save(File $file); // Throws IOException if the file cannot be written to
-
-    // Manipulating a line (by default the current one).
-    public function insertAbove(Text $text, $addition, $location = null);
-    public function insertBelow(Text $text, $addition, $location = null);
-    public function replace(Text $text, $replacement, $location = null);
-    public function remove(Text $text, $location = null); // Removes the current line.
-
-    // Content navigation.
-    // Throw PatternNotFoundException If the pattern hasn't been found
-    // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpBelow(Text $text, $pattern, $location = null);
-    public function jumpAbove(Text $text, $pattern, $location = null);
-
-    // Content searching.
-    public function has(Text $text, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
-}
-```
-
-### Filesystem operations
-
-While using `save` is exactly the same as calling directly
-`Filesystem::write`, the `open` method is a wrapper allowing you to open or
-create files:
-
-```php
-$editor->open($filename); // Throws an exception if the file doesn't exist
-$editor->open($filename, true); // Creates a new file if it doesn't exist
-```
-
-One last thing: opening or creating a file sets its cursor to the first line:
-
-```php
-$file = $this->open($filename);
-echo $file->getCurrentLineNumber(); // 0
-```
-
-### Manipulating a line
-
-You can insert additions above or below a given line (by default the current one).
-Just keep in mind that the cursor will be set to the added line:
-
-```php
-$emptyLine = '';
-
-echo $text->getCurrentLineNumber(); // 5
-$editor->insertBelow($text, $emptyLine);
-echo $text->getCurrentLineNumber(); // 6
-```
-
-You can also replace a line with a new value, or remove it.
-
-### Content navigation
-
-You can jump down or up to a line which correspond to the given pattern:
-
-```php
-$editor->jumpdBelow($text, 'The exact value of the line');
-$editor->jumpdBelow($text, 2); // Jumps two lines below the current one.
-```
-
-You should keep in mind that the search is done relatively to the current one:
-
-```php
-$editor->jumpBelow($text, $linePresentAbove); // Will throw an exception.
-```
-
-If you don't want to start the search from the current line, you can indicate
-the one you want:
-
-```php
-$editor->jumpAbove($text, $pattern, 42); // Starts from the 42th line
-$editor->jumpBelow($text, $pattern, 0); // Starts from the top of the text
-```
-
-### Content searching
-
-If you don't want to handle exceptions just to make sure that a line is present
-in the text, use the following:
-
-```php
-$editor->has($text, $line);
+$editor = EditorFactory::createEditor();
+$file = $editor->open('/tmp/and-now-for-something-completly-different.txt');
+// ... Edit the file
+$editor->save($file); // Actually writes on the filesystem
 ```
 
 ## Next readings
 
 * [Vocabulary](04-vocabulary.md)
+* [Extending](05-extending.md)
 
 ## Previous readings
 
