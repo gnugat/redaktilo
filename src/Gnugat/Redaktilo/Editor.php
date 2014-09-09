@@ -282,4 +282,17 @@ class Editor
         );
         $this->commandInvoker->run('remove', $input);
     }
+
+    /**
+     * Provides acces to the CommandInvoker.
+     *
+     * @param string $name
+     * @param array  $input
+     *
+     * @throws \Gnugat\Redaktilo\Command\CommandNotFoundException If the command isn't found in the CommandInvoker
+     */
+    public function run($name, array $input)
+    {
+        $this->commandInvoker->run($name, $input);
+    }
 }
