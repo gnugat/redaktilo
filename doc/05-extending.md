@@ -75,11 +75,10 @@ $commandInvoker = $builder->getCommandInvoker();
 $editor = $builder->getEditor();
 $file = $editor->open('/tmp/menu_spam.txt', true);
 
-$commandInvoker->run('do_something', array('text' => $file));
+$editor->run('do_something', array('text' => $file));
 ```
 
-Currently commands cannot be added dynamically to `Editor`, but its following
-methods uses the `CommandInvoker`:
+`Editor` actually uses the `CommandInvoker` in its following methods:
 
 * `insertAbove`
 * `insertBelow`
