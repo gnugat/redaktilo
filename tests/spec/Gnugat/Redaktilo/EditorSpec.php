@@ -301,4 +301,14 @@ class EditorSpec extends ObjectBehavior
 
         $this->remove($text, $lineNumber);
     }
+
+    function it_runs_a_command(CommandInvoker $commandInvoker)
+    {
+        $name = 'walk_in_a_silly_way';
+        $input = array();
+
+        $commandInvoker->run($name, $input)->shouldBeCalled();
+
+        $this->run($name, $input);
+    }
 }
