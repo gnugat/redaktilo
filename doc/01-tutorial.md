@@ -9,79 +9,71 @@ This chapter shows you how to use Redaktilo and contains the following sections:
 * [Next readings](#next-readings)
 * [Previous readings](#previous-readings)
 
-## API
+## The Editor
 
-There's only one class to know in Redaktilo, the `Editor`:
+The only class you'll be using when you use Redaktilo is the `Editor` class.
+This class contains all methods you need to open, navigate, edit and save files
+or text. The editor doesn't have any state, this allows you to use a single
+instance throughout the entire application while editing multiple different
+files.
 
-```php
-<?php
+### Creating an Editor
 
-namespace Gnugat\Redaktilo;
-
-use Gnugat\Redaktilo\Search\NotSupportedException;
-use Gnugat\Redaktilo\Search\PatternNotFoundException;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException;
-
-class Editor
-{
-    // Filesystem operations.
-    public function open($filename, $force = false); // Throws FileNotFoundException if the file hasn't be found
-    public function save(File $file); // Throws IOException if the file cannot be written to
-
-    // Manipulating a line (by default the current one).
-    public function insertAbove(Text $text, $addition, $location = null);
-    public function insertBelow(Text $text, $addition, $location = null);
-    public function replace(Text $text, $replacement, $location = null);
-    public function remove(Text $text, $location = null); // Removes the current line.
-
-    // Content navigation.
-    // Throw PatternNotFoundException If the pattern hasn't been found
-    // Throw NotSupportedException If the given pattern isn't supported by any registered strategy
-    public function jumpAbove(Text $text, $pattern, $location = null);
-    public function jumpBelow(Text $text, $pattern, $location = null);
-
-    // Content searching.
-    public function has(Text $text, $pattern); // Throws NotSupportedException If the given pattern isn't supported by any registered strategy
-}
-```
-
-It doesn't have any state, so you can use a single instance for your entire
-application.
-
-## Initialization
-
-In order to create an instance of `Editor`, you can use the following factory:
+The recommend way to instantiate the `Editor` is by using the `EditorFactory`:
 
 ```php
-<?php
-require_once __DIR__.'/vendor/autoload.php';
-
 use Gnugat\Redaktilo\EditorFactory;
 
 $editor = EditorFactory::createEditor();
 ```
 
-Let's consider the following file:
+This will create a default editor.
+
+### Customizing the Editor
+
+You can also use the editor builder to customize some things of the editor:
+
+```php
+// ...
+
+$editor = EditorFactory::createEditorBuilder()
+    // ... customize the build (more on this later)
+    ->getEditor();
+```
+
+## Editing Files
+
+Assume you have the following file:
 
     Bacon
     Egg
     Sausage
 
-First things first: you need to open the file:
+First things first: you need to open the file. This can be done easily with the
+`Editor#open()` method:
 
 ```php
-$filename = '/tmp/monty-menu.txt';
-$file = $editor->openFile($filename); // Current line: 0 (which is 'Bacon')
+// ...
+
+$file = $editor->open('monty-menu.txt');
 ```
 
-## Content navigation
+This method returns a `File` instance. This object contains the content of the
+file and keeps track of the cursor. When opening the file, the cursor is set
+to line 0 ('Bacon').
+
+In case the file does not exists, you can force the creation by passing `true`
+as the second argument to `Editor#open()`.
+
+### Navigating through the Content
 
 A cursor has been set to the first line. You can move this cursor to any
-existing lines:
+existing line:
 
 ```php
-$editor->jumpBelow($file, 'Egg'); // Current line: 1 (which is 'Egg')
+// ...
+
+$editor->jumpBelow($file, 'Egg'); // Current line: 1 ('Egg')
 ```
 
 As you can see, there's no need to add the line break character, Redaktilo will
@@ -90,11 +82,9 @@ take care of it for you.
 You should note that the lookup is directional:
 
 ```php
-try {
-    $editor->jumpBelow($file, 'Bacon'); // Not found because 'Bacon' is above the current line
-} catch (\Gnugat\Redaktilo\Search\PatternNotFoundException $e) {
-}
-$editor->jumpAbove($file, 'Bacon'); // Current line: 0 (which is 'Bacon')
+$editor->jumpBelow($file, 'Bacon'); // Throws \Gnugat\Redaktilo\Search\PatternNotFoundException, because 'Bacon' is above the current line
+
+$editor->jumpAbove($file, 'Bacon'); // Current line: 0 ('Bacon')
 ```
 
 The match is done only if the line value is exactly the same as the given one:
@@ -104,17 +94,17 @@ $editor->jumpBelow($file, 'E'); // Throws an exception.
 ```
 
 If you just want to know if a line exists, you don't have to deal with
-exceptions:
+exceptions, you can use the `Editor#has()` method instead:
 
 ```php
 $editor->has($file, 'Beans'); // false
 ```
 
-You can also jump a wanted number of lines above or below the current one:
+You can also jump to a number of lines below or above the current one:
 
 ```php
-$editor->jumpBelow($file, 2); // Current line: 2 (which is 'Sausage')
-$editor->jumpAbove($file, 2); // Current line: 0 (which is 'Bacon')
+$editor->jumpBelow($file, 2); // Current line: 2 ('Sausage')
+$editor->jumpAbove($file, 2); // Current line: 0 ('Bacon')
 ```
 
 If you need to go the first occurence in the whole file (regardless of the
@@ -131,66 +121,77 @@ The lookup can also be done using regex:
 $editor->jumpAbove($file, '/ac/'); // Current line: 0 (which is 'Bacon')
 ```
 
-*Note*: If you're manipulating a PHP file, you can also jump to symbols like
-class, methods and functions:
+ > *Note*: If you're manipulating a PHP file, you can also jump to symbols like
+ > class, methods and functions:
+
+ > ```php
+ > use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+ > // ...
+ > 
+ > $tokenBuilder = new TokenBuilder();
+ > $registrationMethodName = 'registerBundles';
+ > $registrationMethod = $tokenBuilder->buildMethod($registrationMethodName);
+
+ > $editor->jumpBelow($file, $registrationMethod);
+ > ```
+
+### Manipulating a Line
+
+Now you're able to navigate through a file and while that's very important in
+order to edit a file, it doesn't help much if you can't manipulate lines.
+Luckily, Redaktilo contains lots of methods designed for manipulating lines.
+
+Using the `Editor#replace()` method, you can manipulate the current line:
 
 ```php
-use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+// ...
 
-$registrationMethodName = 'registerBundles';
-$registrationMethod = $tokenBuilder->buildMethod($registrationMethodName);
-
-$editor->jumpBelow($file, $registrationMethod);
+// ... navigate to the first line
+$editor->replace($file, 'Spam'); // Line 0 now contains 'Spam' instead of 'Bacon'
 ```
 
-## Line manipulation
+You can also insert lines below or above the current line:
 
-By default, all the manipulation methods work with the current line. If you would
-like to manipulate a given line, you can pass its number as the last parameter:
+```php
+// ...
+
+$editor->insertAbove($file, 'Beans'); // inserts a line 'Beans' above Line 0
+$editor->insertBelow($file, 'Bacon'); // inserts a line 'Bacon' below line 0
+```
+
+Please note that the cursor moves to the inserted line.
+
+By default, all the manipulation methods work from the current line. If you would
+like to manipulate a given line, you can pass its number as the third parameter:
 
 ```php
 $editor->insertAbove($file, 'Spam', 23); // Line inserted above the line number 23.
 ```
 
-**Note**: once an operation done, the cursor moves to the line updated.
-
-You can insert new lines:
+At last, you can also delete lines:
 
 ```php
-$editor->insertBelow($file, 'Spam'); // Line inserted below 'Bacon'. Current line: 'Spam'.
+// ...
+$editor->remove($file); // Removes the current line
 ```
 
-The insertion is also directional: you can either insert a new line above the
-current one, or below it.
+### Saving the Modifications
 
 For now the modification is only done in memory, to actually apply your changes
 to the file you need to save it:
 
 ```php
+// ...
+
 $editor->saveFile($file);
 ```
 
 The resulting file will be:
 
-    Bacon
+    Beans
     Spam
     Egg
     Sausage
-
-Of course you can replace the line entirely:
-
-```php
-$editor->replace($file, 'Beans');
-```
-
-Or you can remove it:
-
-```php
-$editor->remove($file); // Current line: Egg
-```
-
-Those two methods also accept a location argument if you don't want to use the
-current line number.
 
 ## Next readings
 
