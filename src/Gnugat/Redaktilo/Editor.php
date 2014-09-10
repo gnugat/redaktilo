@@ -284,7 +284,7 @@ class Editor
     }
 
     /**
-     * Provides acces to the CommandInvoker.
+     * Provides access to the CommandInvoker.
      *
      * @param string $name
      * @param array  $input
