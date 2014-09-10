@@ -103,7 +103,7 @@ exceptions, you can use `Editor#hasBelow()` and `Editor#hasAbove()` method inste
 $editor->hasBelow($file, 'Beans', 0); // false
 ```
 
-If you need to go the first occurence in the whole file (regardless of the
+If you need to go to the first occurence in the whole file (regardless of the
 current line), you can use:
 
 ```php

@@ -4,6 +4,7 @@
     * [Filesystem operations](#filesystem-operations)
     * [Content navigation](#content-navigation)
     * [Content manipulation](#content-manipulation)
+    * [Commands](#commands)
 * [Text API](#text-api)
     * [Side note on LineBreak](#side-note-on-linebreak)
 * [File API](#file-api)
@@ -32,6 +33,8 @@ class Editor
     public function insertBelow(Text $text, $addition, $location = null);
     public function replace(Text $text, $replacement, $location = null);
     public function remove(Text $text, $location = null);
+
+    public function run($name, array $input); // Throws Gnugat\Redaktilo\Command\CommandNotFoundException
 }
 ```
 
@@ -141,6 +144,45 @@ $editor->replace($file, $replace);
 $editor->remove($file);  // Current line number: 0
 
 $editor->save($file); // Necessary to actually apply the changes on the filesystem
+```
+
+### Commands
+
+`Editor` can be extended by adding custom commands to it. Those will be
+available via `Editor#run()`.
+
+Out of the box, the following ones are provided:
+
+```
+jump_above
+  Moves the cursor to x lines above the current one
+
+  Arguments:
+    text
+    number (default: 1)
+
+jump_below
+  Moves the cursor to x lines below the current one
+
+  Arguments:
+    text
+    number (default: 1)
+```
+Here's an example:
+
+```php
+<?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();
+$file = $editor->open('/tmp/dead-parrot.txt');
+$file->getCurrentLineNumber(); // 0
+$editor->run('jump_below', array('text' => $file, 'number' => 4));
+$file->getCurrentLineNumber(); // 4
+$editor->run('jump_above', array('text' => $file));
+$file->getCurrentLineNumber(); // 3
 ```
 
 ## Text API
