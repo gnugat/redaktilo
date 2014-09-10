@@ -167,7 +167,24 @@ jump_below
   Arguments:
     text
     number (default: 1)
+
+append
+  Appends a string at the end of the given location
+
+  Arguments:
+    text
+    value: the string to append
+    location (default: the current line number)
+
+prepend
+  Prepends a string at the begining of the given location
+
+  Arguments:
+    text
+    value: the string to prepend
+    location (default: the current line number)
 ```
+
 Here's an example:
 
 ```php
@@ -183,6 +200,9 @@ $editor->run('jump_below', array('text' => $file, 'number' => 4));
 $file->getCurrentLineNumber(); // 4
 $editor->run('jump_above', array('text' => $file));
 $file->getCurrentLineNumber(); // 3
+
+$editor->run('append', array('text' => $file, 'value' => ','));
+$editor->run('preprend', array('text' => $file, 'value' => ',', 'location' => 4));
 ```
 
 ## Text API

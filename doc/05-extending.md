@@ -118,10 +118,12 @@ interface Command
 
 Implementations provided out of the box are:
 
+* `LineAppendCommand`: `text`, `value` and optional `location` (name: `append`)
 * `LineInsertAboveCommand`: `text`, `addition` and optional `location` (name: `insert_above`)
 * `LineInsertBelowCommand`: `text`, `addition` and optional `location` (name: `insert_below`)
 * `LineJumpAboveCommand`: `text`, `number` (name: `jump_above`)
 * `LineJumpBelowCommand`: `text`, `number` (name: `jump_below`)
+* `LinePrependCommand`: `text`, `value` and optional `location` (name: `prepend`)
 * `LineRemoveCommand`: `text` and optional `location` (name: `remove`)
 * `LineReplaceCommand`: `text`, `replacement` and optional `location` (name: `replace`)
 
