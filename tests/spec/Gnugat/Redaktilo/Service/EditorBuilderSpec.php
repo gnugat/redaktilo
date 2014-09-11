@@ -28,9 +28,9 @@ class EditorBuilderSpec extends ObjectBehavior
 
         $editor->shouldHaveSearchStrategies(array(
             'Gnugat\Redaktilo\Search\PhpSearchStrategy',
+            'Gnugat\Redaktilo\Search\LineNumberSearchStrategy',
             'Gnugat\Redaktilo\Search\LineRegexSearchStrategy',
             'Gnugat\Redaktilo\Search\SameSearchStrategy',
-            'Gnugat\Redaktilo\Search\LineNumberSearchStrategy',
         ));
 
         $editor->shouldHaveCommands(array(
@@ -90,7 +90,15 @@ class EditorBuilderSpec extends ObjectBehavior
         return array(
             'haveSearchStrategies' => function ($subject, $expected) use ($readProperty) {
                 $engine = $readProperty($subject, 'searchEngine');
-                $strategies = array_map('get_class', $readProperty($engine, 'searchStrategies'));
+                $strategies = array_map(
+                    'get_class',
+                    array_filter(
+                        call_user_func_array(
+                            'array_merge',
+                            $readProperty($engine, 'searchStrategies')
+                        )
+                    )
+                );
 
                 $constraint = new \PHPUnit_Framework_Constraint_IsEqual($expected);
 
@@ -106,9 +114,14 @@ class EditorBuilderSpec extends ObjectBehavior
             },
             'haveSearchStrategiesCount' => function ($subject, $expected) use ($readProperty) {
                 $engine = $readProperty($subject, 'searchEngine');
-                $strategies = $readProperty($engine, 'searchStrategies');
+                $count = array_reduce(
+                    $readProperty($engine, 'searchStrategies'),
+                    function($carry, $item) {
+                        return $carry + count($item);
+                    }
+                );
 
-                return $expected == count($strategies);
+                return $expected == $count;
             },
             'haveCommandCount' => function ($subject, $expected) use ($readProperty) {
                 $commandInvoker = $readProperty($subject, 'commandInvoker');

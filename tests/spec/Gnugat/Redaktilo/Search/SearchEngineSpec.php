@@ -21,6 +21,25 @@ class SearchEngineSpec extends ObjectBehavior
         $this->registerStrategy($searchStrategy);
     }
 
+    function it_sort_registered_strategies(
+        SearchStrategy $searchStrategy1,
+        SearchStrategy $searchStrategy2,
+        SearchStrategy $searchStrategy3
+    )
+    {
+        $pattern = '/ac/';
+
+        $searchStrategy1->supports($pattern)->willReturn(true);
+        $searchStrategy2->supports($pattern)->willReturn(true);
+        $searchStrategy3->supports($pattern)->willReturn(true);
+
+        $this->registerStrategy($searchStrategy1, 10);
+        $this->registerStrategy($searchStrategy2, 0);
+        $this->registerStrategy($searchStrategy3, 20);
+
+        $this->resolve($pattern)->shouldReturn($searchStrategy3);
+    }
+
     function it_resolves_registered_strategies(SearchStrategy $searchStrategy)
     {
         $pattern = 'We are now no longer the Knights who say Ni.';

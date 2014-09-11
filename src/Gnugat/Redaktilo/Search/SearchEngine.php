@@ -16,13 +16,20 @@ namespace Gnugat\Redaktilo\Search;
  */
 class SearchEngine
 {
-    /** @var SearchStrategy[] */
+    /** @var SearchStrategy[][] */
     private $searchStrategies = array();
 
-    /** @param SearchStrategy $searchStrategy */
-    public function registerStrategy(SearchStrategy $searchStrategy)
+    /** @var array */
+    private $sorted = array();
+
+    /**
+     * @param SearchStrategy $searchStrategy
+     * @param int            $priority
+     */
+    public function registerStrategy(SearchStrategy $searchStrategy, $priority = 0)
     {
-        $this->searchStrategies[] = $searchStrategy;
+        $this->searchStrategies[$priority][] = $searchStrategy;
+        $this->sorted = array();
     }
 
     /**
@@ -34,12 +41,25 @@ class SearchEngine
      */
     public function resolve($pattern)
     {
-        foreach ($this->searchStrategies as $searchStrategy) {
+        if (empty($this->sorted)) {
+            $this->sortStrategies();
+        }
+
+        foreach ($this->sorted as $searchStrategy) {
             if ($searchStrategy->supports($pattern)) {
                 return $searchStrategy;
             }
         }
 
         throw new NotSupportedException('SearchEngine', $pattern);
+    }
+
+    /**
+     * Sort registered strategies according to their priority
+     */
+    private function sortStrategies()
+    {
+        krsort($this->searchStrategies);
+        $this->sorted = array_filter(call_user_func_array('array_merge', $this->searchStrategies));
     }
 }
