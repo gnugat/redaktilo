@@ -36,6 +36,6 @@ class LineJumpPercentCommand implements Command
     /** {@inheritdoc} */
     public function getName()
     {
-        return 'jump_below';
+        return 'jump_percent';
     }
 }
