@@ -168,6 +168,13 @@ jump_below
     text
     number (default: 1)
 
+jump_percent
+  Moves to the absolute position given in percentage.
+
+  Arguments:
+    text
+    number: an integer comprised between 0 and 100 (default: 100)
+
 append
   Appends a string at the end of the given location
 
@@ -200,6 +207,12 @@ $editor->run('jump_below', array('text' => $file, 'number' => 4));
 $file->getCurrentLineNumber(); // 4
 $editor->run('jump_above', array('text' => $file));
 $file->getCurrentLineNumber(); // 3
+
+$file->getLength(); // 10
+$editor->run('jump_percent', array('text' => $file));
+$file->getCurrentLineNumber(); // 9
+$editor->run('jump_percent', array('text' => $file, 'number' => 50));
+$file->getCurrentLineNumber(); // 5
 
 $editor->run('append', array('text' => $file, 'value' => ','));
 $editor->run('preprend', array('text' => $file, 'value' => ',', 'location' => 4));
