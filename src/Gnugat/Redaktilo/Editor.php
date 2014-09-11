@@ -290,6 +290,8 @@ class Editor
      * @param array  $input
      *
      * @throws \Gnugat\Redaktilo\Command\CommandNotFoundException If the command isn't found in the CommandInvoker
+     *
+     * @api
      */
     public function run($name, array $input)
     {
