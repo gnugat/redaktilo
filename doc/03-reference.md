@@ -5,6 +5,9 @@
     * [Content navigation](#content-navigation)
     * [Content manipulation](#content-manipulation)
     * [Commands](#commands)
+        * [Jump Relatively](#jump-relatively)
+        * [Jump to a Percentage](#jump-to-a-percentage)
+        * [Concatenation](#concatenation)
 * [Text API](#text-api)
     * [Side note on LineBreak](#side-note-on-linebreak)
 * [File API](#file-api)
@@ -148,51 +151,68 @@ $editor->save($file); // Necessary to actually apply the changes on the filesyst
 
 ### Commands
 
-`Editor` can be extended by adding custom commands to it. Those will be
-available via `Editor#run()`.
+More content manipulation are available through `Editor#run()`.
 
-Out of the box, the following ones are provided:
+#### Jump Relatively
 
-```
-jump_above
-  Moves the cursor to x lines above the current one
+The commands `jump_above` and `jump_below` take the same arguments and provide
+a way to jump a given number of lines above or below the current one.
 
-  Arguments:
-    text
-    number (default: 1)
+```php
+<?php
+require_once __DIR__.'/vendor/autoload.php';
 
-jump_below
-  Moves the cursor to x lines below the current one
+use Gnugat\Redaktilo\EditorFactory;
 
-  Arguments:
-    text
-    number (default: 1)
+$editor = EditorFactory::createEditor();
+$file = $editor->open('/tmp/spam-menu.txt', true);
+$file->getCurrentLineNumber(); // 0
 
-jump_percent
-  Moves to the absolute position given in percentage.
+$editor->run('jump_below', array('text' => $file, 'number' => 4)); // Jumps 4 lines below
+$file->getCurrentLineNumber(); // 4
 
-  Arguments:
-    text
-    number: an integer comprised between 0 and 100 (default: 100)
+$editor->run('jump_below', array('text' => $file)); // If no number specified, 1 is assumed
+$file->getCurrentLineNumber(); // 5
 
-append
-  Appends a string at the end of the given location
+$editor->run('jump_above', array('text' => $file, 'number' => 2)); // Jumps 2 lines above
+$file->getCurrentLineNumber(); // 3
 
-  Arguments:
-    text
-    value: the string to append
-    location (default: the current line number)
-
-prepend
-  Prepends a string at the begining of the given location
-
-  Arguments:
-    text
-    value: the string to prepend
-    location (default: the current line number)
+$editor->run('jump_above', array('text' => $file)); // If no number specified, 1 is assumed
+$file->getCurrentLineNumber(); // 2
 ```
 
-Here's an example:
+#### Jump to a Percentage
+
+The command `jump_percent` provides a way to jump absolutely to a given
+percentage.
+
+```php
+<?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();
+$file = $editor->open('/tmp/spam-menu.txt', true);
+$file->getLength(); // 10
+
+$editor->run('jump_percent', array('text' => $file, 'number' => 50));
+$file->getCurrentLineNumber(); // 5
+
+$editor->run('jump_percent', array('text' => $file, 'number' => 0));
+$file->getCurrentLineNumber(); // 0
+
+$editor->run('jump_percent', array('text' => $file)); // If no number specified, 100 is assumed
+$file->getCurrentLineNumber(); // 9
+```
+
+**Note**: giving a negative number or a number superior to 100 will raise a
+`\InvalidArgumentException`.
+
+#### Concatenation
+
+The commands `append` and `prepend` allow to concatene a string either at the
+begining or at the end of a line:
 
 ```php
 <?php
@@ -202,20 +222,25 @@ use Gnugat\Redaktilo\EditorFactory;
 
 $editor = EditorFactory::createEditor();
 $file = $editor->open('/tmp/dead-parrot.txt');
-$file->getCurrentLineNumber(); // 0
-$editor->run('jump_below', array('text' => $file, 'number' => 4));
-$file->getCurrentLineNumber(); // 4
-$editor->run('jump_above', array('text' => $file));
-$file->getCurrentLineNumber(); // 3
+$currentLineNumber = $file->getCurrentLineNumber();
+$lines = $file->getLines();
+$currentLine = $lines[$currentLineNumber]; // "have an argument"
 
-$file->getLength(); // 10
-$editor->run('jump_percent', array('text' => $file));
-$file->getCurrentLineNumber(); // 9
-$editor->run('jump_percent', array('text' => $file, 'number' => 50));
-$file->getCurrentLineNumber(); // 5
+$editor->run('append', array('text' => $file, 'value' => ',', 'location' => 0)); // Append ',' at the end of the first line
+$lines = $file->getLines();
+$currentLine = $lines[$currentLineNumber]; // "have an argument,"
 
-$editor->run('append', array('text' => $file, 'value' => ','));
-$editor->run('preprend', array('text' => $file, 'value' => ',', 'location' => 4));
+$editor->run('append', array('text' => $file, 'value' => 'please')); // If no location specified, the current line is assumed
+$lines = $file->getLines();
+$currentLine = $lines[$currentLineNumber]; // "have an argument, please"
+
+$editor->run('prepend', array('text' => $file, 'value' => 'to ', 'location' => 0)); // Prepend 'to ' at the end of the first line
+$lines = $file->getLines();
+$currentLine = $lines[$currentLineNumber]; // "to have an argument, please"
+
+$editor->run('prepend', array('text' => $file, 'value' => "I'd like ")); // If no location specified, the current line is assumed
+$lines = $file->getLines();
+$currentLine = $lines[$currentLineNumber]; // "I'd like to have an argument, please"
 ```
 
 ## Text API
