@@ -196,13 +196,13 @@ $editor = EditorFactory::createEditor();
 $file = $editor->open('/tmp/spam-menu.txt', true);
 $file->getLength(); // 10
 
-$editor->run('jump_percent', array('text' => $file, 'number' => 50));
+$editor->run('jump_percent', array('text' => $file, 'number' => 50)); // Jump to the middle of the text (50%)
 $file->getCurrentLineNumber(); // 5
 
-$editor->run('jump_percent', array('text' => $file, 'number' => 0));
+$editor->run('jump_percent', array('text' => $file, 'number' => 0)); // Jump to the top of the text (0%)
 $file->getCurrentLineNumber(); // 0
 
-$editor->run('jump_percent', array('text' => $file)); // If no number specified, 100 is assumed
+$editor->run('jump_percent', array('text' => $file)); // If no number specified, 100 is assumed (the bottom of the text, 100%)
 $file->getCurrentLineNumber(); // 9
 ```
 
