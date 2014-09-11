@@ -33,8 +33,13 @@ class EditorBuilderSpec extends ObjectBehavior
         ));
 
         $editor->shouldHaveCommands(array(
+            'append' => 'Gnugat\Redaktilo\Command\LineAppendCommand',
             'insert_above' => 'Gnugat\Redaktilo\Command\LineInsertAboveCommand',
             'insert_below' => 'Gnugat\Redaktilo\Command\LineInsertBelowCommand',
+            'jump_above' => 'Gnugat\Redaktilo\Command\LineJumpAboveCommand',
+            'jump_below' => 'Gnugat\Redaktilo\Command\LineJumpBelowCommand',
+            'jump_percent' => 'Gnugat\Redaktilo\Command\LineJumpPercentCommand',
+            'prepend' => 'Gnugat\Redaktilo\Command\LinePrependCommand',
             'replace' => 'Gnugat\Redaktilo\Command\LineReplaceCommand',
             'remove' => 'Gnugat\Redaktilo\Command\LineRemoveCommand',
         ));
@@ -67,7 +72,7 @@ class EditorBuilderSpec extends ObjectBehavior
             ->getEditor();
 
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
-        $editor->shouldHaveCommandCount(5);
+        $editor->shouldHaveCommandCount(10);
     }
 
     function it_can_have_a_custom_command_invoker(CommandInvoker $commandInvoker)
