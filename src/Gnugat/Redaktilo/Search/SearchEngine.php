@@ -19,8 +19,8 @@ class SearchEngine
     /** @var SearchStrategy[][] */
     private $searchStrategies = array();
 
-    /** @var array */
-    private $sorted = array();
+    /** @var bool */
+    private $isSorted = false;
 
     /**
      * @param SearchStrategy $searchStrategy
@@ -29,7 +29,7 @@ class SearchEngine
     public function registerStrategy(SearchStrategy $searchStrategy, $priority = 0)
     {
         $this->searchStrategies[$priority][] = $searchStrategy;
-        $this->sorted = array();
+        $this->isSorted = false;
     }
 
     /**
@@ -41,13 +41,15 @@ class SearchEngine
      */
     public function resolve($pattern)
     {
-        if (empty($this->sorted)) {
+        if (!$this->isSorted) {
             $this->sortStrategies();
         }
 
-        foreach ($this->sorted as $searchStrategy) {
-            if ($searchStrategy->supports($pattern)) {
-                return $searchStrategy;
+        foreach ($this->searchStrategies as $priority => $searchStrategies) {
+            foreach ($searchStrategies as $searchStrategy) {
+                if ($searchStrategy->supports($pattern)) {
+                    return $searchStrategy;
+                }
             }
         }
 
@@ -60,6 +62,6 @@ class SearchEngine
     private function sortStrategies()
     {
         krsort($this->searchStrategies);
-        $this->sorted = array_filter(call_user_func_array('array_merge', $this->searchStrategies));
+        $this->isSorted = true;
     }
 }
