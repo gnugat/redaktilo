@@ -84,4 +84,39 @@ class TextSpec extends ObjectBehavior
         $this->setLineBreak($newLineBreak);
         $this->getLineBreak()->shouldBe($newLineBreak);
     }
+
+    function it_manipulates_the_current_line()
+    {
+        $lineNumber = 1;
+        $line = '[A guard struggles not to snigger]';
+        $this->setCurrentLineNumber(1);
+
+        $this->getLine()->shouldBe('[A guard sniggers]');
+        $this->setLine($line);
+        $this->getLine()->shouldBe($line);
+    }
+
+    function it_manipulates_the_given_line()
+    {
+        $lineNumber = 5;
+        $line = '[Even more sniggering]';
+
+        $this->getLine($lineNumber)->shouldBe('[Sniggering]');
+        $this->setLine($line, $lineNumber);
+        $this->getLine($lineNumber)->shouldBe($line);
+    }
+
+    function it_cannot_manipulate_an_invalid_line()
+    {
+        $exception = '\InvalidArgumentException';
+        $line = 'I came here to learn how to fly an aeroplane';
+
+        $this->shouldThrow($exception)->duringSetLine($line, 'toto');
+        $this->shouldThrow($exception)->duringSetLine($line, -1);
+        $this->shouldThrow($exception)->duringSetLine($line, 9);
+
+        $this->shouldThrow($exception)->duringGetLine('toto');
+        $this->shouldThrow($exception)->duringGetLine(-1);
+        $this->shouldThrow($exception)->duringGetLine(9);
+    }
 }
