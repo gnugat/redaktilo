@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 1.1.0: Convenience
+
+* added priority to Search Strategies
+
 ## 1.0.0: Documentation
 
 * updated documentation
