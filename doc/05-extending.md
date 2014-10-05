@@ -31,6 +31,19 @@ given pattern) when calling one of the following `Editor` method:
 * `jumpBelow`
 * `has`
 
+If your strategy should be used instead of another already registered strategy
+(ie. they support the same pattern), you can give it a higher priority:
+
+```php
+$builder->addSearchStrategy($strategy, 50);
+```
+
+**Important**: The higher the priority is, the sooner the strategy will be
+returned if it supports the given pattern.
+
+**Note**:A default priority of 0 is assigned to strategies if you don't specify
+it.
+
 ### SearchStrategy API
 
 A lookup strategy supporting a specific kind of pattern:

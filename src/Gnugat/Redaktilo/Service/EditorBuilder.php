@@ -38,7 +38,7 @@ class EditorBuilder
     /** @var SearchEngine|null */
     private $searchEngine;
 
-    /** @var SearchStrategy[] */
+    /** @var SearchStrategy[][] */
     private $searchStrategies = array();
 
     /** @var CommandInvoker|null */
@@ -72,12 +72,14 @@ class EditorBuilder
         $phpConverter = $this->getPhpConverter();
 
         $engine->registerStrategy(new PhpSearchStrategy($phpConverter));
-        $engine->registerStrategy(new LineRegexSearchStrategy());
-        $engine->registerStrategy(new SameSearchStrategy());
+        $engine->registerStrategy(new LineRegexSearchStrategy(), 20);
+        $engine->registerStrategy(new SameSearchStrategy(), 10);
         $engine->registerStrategy(new LineNumberSearchStrategy());
 
-        foreach ($this->searchStrategies as $strategy) {
-            $engine->registerStrategy($strategy);
+        foreach ($this->searchStrategies as $priority => $strategies) {
+            foreach ($strategies as $strategy) {
+                $engine->registerStrategy($strategy, $priority);
+            }
         }
 
         return $engine;
@@ -125,12 +127,13 @@ class EditorBuilder
 
     /**
      * @param SearchStrategy $searchStrategy
+     * @param int            $priority
      *
      * @return $this
      */
-    public function addSearchStrategy(SearchStrategy $searchStrategy)
+    public function addSearchStrategy(SearchStrategy $searchStrategy, $priority = 0)
     {
-        $this->searchStrategies[] = $searchStrategy;
+        $this->searchStrategies[$priority][] = $searchStrategy;
 
         return $this;
     }
