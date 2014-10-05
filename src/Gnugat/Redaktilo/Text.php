@@ -116,6 +116,59 @@ class Text
      */
     public function setCurrentLineNumber($lineNumber)
     {
+        $this->throwOnInvalidLineNumber($lineNumber);
+        $this->currentLineNumber = $lineNumber;
+    }
+
+    /**
+     * @param int $lineNumber
+     *
+     * @return string
+     *
+     * @throws \InvalidArgumentException if $lineNumber is not an integer
+     * @throws \InvalidArgumentException if $lineNumber is negative
+     * @throws \InvalidArgumentException if $lineNumber is greater or equal than the number of lines
+     *
+     * @api
+     */
+    public function getLine($lineNumber = null)
+    {
+        if (!$lineNumber) {
+            $lineNumber = $this->currentLineNumber;
+        }
+        $this->throwOnInvalidLineNumber($lineNumber);
+
+        return $this->lines[$lineNumber];
+    }
+
+    /**
+     * @param string $line
+     * @param int    $lineNumber
+     *
+     * @throws \InvalidArgumentException if $lineNumber is not an integer
+     * @throws \InvalidArgumentException if $lineNumber is negative
+     * @throws \InvalidArgumentException if $lineNumber is greater or equal than the number of lines
+     *
+     * @api
+     */
+    public function setLine($line, $lineNumber = null)
+    {
+        if (!$lineNumber) {
+            $lineNumber = $this->currentLineNumber;
+        }
+        $this->throwOnInvalidLineNumber($lineNumber);
+        $this->lines[$lineNumber] = $line;
+    }
+
+    /**
+     * @param int $lineNumber
+     *
+     * @throws \InvalidArgumentException if $lineNumber is not an integer
+     * @throws \InvalidArgumentException if $lineNumber is negative
+     * @throws \InvalidArgumentException if $lineNumber is greater or equal than the number of lines
+     */
+    protected function throwOnInvalidLineNumber($lineNumber)
+    {
         if (!is_int($lineNumber)) {
             throw new \InvalidArgumentException('The line number should be an integer');
         }
@@ -125,6 +178,5 @@ class Text
         if ($lineNumber >= $this->length) {
             throw new \InvalidArgumentException('The line number should be strictly lower than the number of lines');
         }
-        $this->currentLineNumber = $lineNumber;
     }
 }
