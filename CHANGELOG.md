@@ -2,6 +2,7 @@
 
 ## 1.1.0: Convenience
 
+* added line getter and setter to Text
 * added priority to Search Strategies
 
 ## 1.0.0: Documentation
