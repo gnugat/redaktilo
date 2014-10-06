@@ -2,7 +2,9 @@
 
 ## 1.1.0: Convenience
 
+* deprecated string support from LineReplaceCommand
 * deprecated has from Editor
+* added callback support to LineReplaceCommand
 * added hasAbove and hasBelow to Editor
 * added loggable exceptions
 * added line getter and setter to Text
