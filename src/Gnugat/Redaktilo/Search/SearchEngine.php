@@ -53,7 +53,7 @@ class SearchEngine
             }
         }
 
-        throw new NotSupportedException('SearchEngine', $pattern);
+        throw new NotSupportedException($pattern, $this->searchStrategies);
     }
 
     /**

@@ -12,23 +12,50 @@
 namespace Gnugat\Redaktilo\Search;
 
 /**
- * If an element isn't supported by any of the registered strategy.
+ * Thrown if the pattern given to SearchEngine isn't supported by any of its
+ * registered strategies.
+ *
+ * @api
  */
 class NotSupportedException extends \Exception
 {
+    /** @var mixed */
+    private $pattern;
+
+    /** @var array */
+    private $searchStrategies;
+
     /**
-     * @param string $engine
-     * @param mixed  $rawUnsupported
+     * @param mixed $pattern
+     * @param array $searchStrategies
      */
-    public function __construct($engine, $rawUnsupported)
+    public function __construct($pattern, array $searchStrategies)
     {
-        $element = 'the given element';
-        if (is_string($rawUnsupported) || is_int($rawUnsupported)) {
-            $element = strval($rawUnsupported);
+        $this->pattern = $pattern;
+        $this->searchStrategies = $searchStrategies;
+
+        $patternMessage = 'given pattern';
+        if (is_string($pattern) || is_int($pattern)) {
+            $patternMessage = strval($pattern);
         }
 
-        $message = "$engine hasn't any registered Strategy which support $element";
+        $message = sprintf(
+            'The %s isn\'t supported by the Search Strategies registered in SearchEngine',
+            $patternMessage
+        );
 
         parent::__construct($message);
+    }
+
+    /** @return mixed */
+    public function getPattern()
+    {
+        return $this->pattern;
+    }
+
+    /** @return array */
+    public function getSearchStrategies()
+    {
+        return $this->searchStrategies;
     }
 }
