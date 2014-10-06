@@ -108,6 +108,7 @@ Can contain:
 ## Next readings
 
 * [Extending](05-extending.md)
+* [Exceptions](06-exceptions.md)
 
 ## Previous readings
 

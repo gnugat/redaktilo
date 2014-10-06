@@ -233,6 +233,7 @@ $editor->save($file); // Actually writes on the filesystem
 
 * [Vocabulary](04-vocabulary.md)
 * [Extending](05-extending.md)
+* [Exceptions](06-exceptions.md)
 
 ## Previous readings
 

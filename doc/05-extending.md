@@ -122,6 +122,10 @@ Implementations provided out of the box are:
 * `LineRemoveCommand`: `text` and optional `location` (name: `remove`)
 * `LineReplaceCommand`: `text`, `replacement` and optional `location` (name: `replace`)
 
+## Next readings
+
+* [Exceptions](06-exceptions.md)
+
 ## Previous readings
 
 * [README](../README.md)
