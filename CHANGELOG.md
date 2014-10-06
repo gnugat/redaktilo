@@ -2,6 +2,7 @@
 
 ## 1.1.0: Convenience
 
+* added loggable exceptions
 * added line getter and setter to Text
 * added priority to Search Strategies
 
