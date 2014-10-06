@@ -145,18 +145,76 @@ class EditorSpec extends ObjectBehavior
         $this->shouldThrow($exception)->duringJumpBelow($text, $pattern, 0);
     }
 
-    function it_checks_pattern_existence(
+    function it_checks_pattern_existence_above_the_current_line(
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
     )
     {
-        $pattern = 'No one expects the spanish inquisition!';
+        $pattern = 'Nobody expects the Spanish Inquisition!';
+        $foundLineNumber = 4423;
 
         $searchEngine->resolve($pattern)->willReturn($searchStrategy);
-        $searchStrategy->findBelow($text, $pattern, 0)->willReturn(42);
+        $searchStrategy->findAbove($text, $pattern, null)->willReturn($foundLineNumber);
 
-        $this->has($text, $pattern)->shouldBe(true);
+        $this->hasAbove($text, $pattern)->shouldBe(true);
+
+        $searchStrategy->findAbove($text, $pattern, null)->willReturn(false);
+        $this->hasAbove($text, $pattern)->shouldBe(false);
+    }
+
+    function it_checks_pattern_existence_above_the_given_line(
+        SearchEngine $searchEngine,
+        SearchStrategy $searchStrategy,
+        Text $text
+    )
+    {
+        $pattern = 'Nobody expects the Spanish Inquisition!';
+        $foundLineNumber = 4423;
+
+        $searchEngine->resolve($pattern)->willReturn($searchStrategy);
+        $searchStrategy->findAbove($text, $pattern, 0)->willReturn($foundLineNumber);
+
+        $this->hasAbove($text, $pattern, 0)->shouldBe(true);
+
+        $searchStrategy->findAbove($text, $pattern, 0)->willReturn(false);
+        $this->hasAbove($text, $pattern, 0)->shouldBe(false);
+    }
+
+    function it_checks_pattern_existence_below_the_current_line(
+        SearchEngine $searchEngine,
+        SearchStrategy $searchStrategy,
+        Text $text
+    )
+    {
+        $pattern = 'No one expects the Spanish inquisition!';
+        $foundLineNumber = 42;
+
+        $searchEngine->resolve($pattern)->willReturn($searchStrategy);
+        $searchStrategy->findBelow($text, $pattern, null)->willReturn($foundLineNumber);
+
+        $this->hasBelow($text, $pattern)->shouldBe(true);
+
+        $searchStrategy->findBelow($text, $pattern, null)->willReturn(false);
+        $this->hasBelow($text, $pattern)->shouldBe(false);
+    }
+
+    function it_checks_pattern_existence_below_the_given_line(
+        SearchEngine $searchEngine,
+        SearchStrategy $searchStrategy,
+        Text $text
+    )
+    {
+        $pattern = 'No one expects the Spanish inquisition!';
+        $foundLineNumber = 42;
+
+        $searchEngine->resolve($pattern)->willReturn($searchStrategy);
+        $searchStrategy->findBelow($text, $pattern, 0)->willReturn($foundLineNumber);
+
+        $this->hasBelow($text, $pattern, 0)->shouldBe(true);
+
+        $searchStrategy->findBelow($text, $pattern, 0)->willReturn(false);
+        $this->hasBelow($text, $pattern, 0)->shouldBe(false);
     }
 
     function it_inserts_lines_above_the_current_one(

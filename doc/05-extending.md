@@ -29,7 +29,8 @@ given pattern) when calling one of the following `Editor` method:
 
 * `jumpAbove`
 * `jumpBelow`
-* `has`
+* `hasAbove`
+* `hasBelow`
 
 If your strategy should be used instead of another already registered strategy
 (ie. they support the same pattern), you can give it a higher priority:

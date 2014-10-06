@@ -25,8 +25,8 @@ class Editor
     // Throw Gnugat\Redaktilo\Search\PatternNotFoundException
     public function jumpAbove(Text $text, $pattern, $location = null);
     public function jumpBelow(Text $text, $pattern, $location = null);
-
-    public function has(Text $text, $pattern);
+    public function hasBelow(Text $text, $pattern, $location = null);
+    public function hasAbove(Text $text, $pattern, $location = null);
 
     public function insertAbove(Text $text, $addition, $location = null);
     public function insertBelow(Text $text, $addition, $location = null);
@@ -90,8 +90,8 @@ above, etc until the top is reached while `jumpBelow` will go downward until the
 bottom is reached.
 
 In order to check the presence of a pattern without having to jump to the line
-found, the `has` method can be used: it doesn't throw any exceptions (checks
-from top to bottom).
+found, `hasAbove` and `hasBelow` methods can be used: it doesn't throw any
+exceptions (checks from top to bottom).
 
 ```php
 <?php
@@ -108,7 +108,7 @@ try {
 } catch (\Gnugat\Redaktilo\Search\PatternNotFoundException $e) {
     // The pattern hasn't been found in the file
 }
-if ($editor->has($file, '/sniggers/') { // regular expression
+if ($editor->hasBelow($file, '/sniggers/', 0) { // regular expression
     // The pattern exists.
 }
 ```

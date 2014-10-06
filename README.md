@@ -61,7 +61,7 @@ class KernelManipulator extends Manipulator
     {
         $file = $this->editor->open($this->appKernelFilename);
         $newBundle = sprintf('            new %s(),', $bundle);
-        if ($this->editor->has($file, $newBundle)) {
+        if ($this->editor->hasBelow($file, $newBundle, 0)) {
             $message = sprintf('Bundle "%s" is already defined in "AppKernel::registerBundles()".', $bundle);
 
             throw new \RuntimeException($message);

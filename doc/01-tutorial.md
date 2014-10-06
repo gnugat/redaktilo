@@ -97,10 +97,10 @@ $editor->jumpBelow($file, 'E'); // Throws an exception.
 ```
 
 If you just want to know if a line exists, you don't have to deal with
-exceptions, you can use the `Editor#has()` method instead:
+exceptions, you can use `Editor#hasBelow()` ans `Editor#hasAbove()` method instead:
 
 ```php
-$editor->has($file, 'Beans'); // false
+$editor->hasBelow($file, 'Beans', 0); // false
 ```
 
 You can also jump to a number of lines below or above the current one:

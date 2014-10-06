@@ -103,8 +103,8 @@ class Editor
      * @param mixed $pattern
      * @param int   $location
      *
-     * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
+     * @throws PatternNotFoundException                       If the pattern hasn't been found
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -127,8 +127,8 @@ class Editor
      * @param mixed $pattern
      * @param int   $location
      *
-     * @throws \Gnugat\Redaktilo\Search\PatternNotFoundException If the pattern hasn't been found
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException    If the given pattern isn't supported by any registered strategy
+     * @throws PatternNotFoundException                       If the pattern hasn't been found
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -144,6 +144,47 @@ class Editor
     }
 
     /**
+     * Checks the presence of the given pattern in the Text above the current
+     * line.
+     *
+     * @param Text  $text
+     * @param mixed $pattern
+     * @param int   $location
+     *
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
+     *
+     * @api
+     */
+    public function hasAbove(Text $text, $pattern, $location = null)
+    {
+        $searchStrategy = $this->searchEngine->resolve($pattern);
+        $foundLineNumber = $searchStrategy->findAbove($text, $pattern, $location);
+
+        return (false !== $foundLineNumber);
+    }
+
+    /**
+     * Checks the presence of the given pattern in the Text below the current
+     * line.
+     *
+     * @param Text  $text
+     * @param mixed $pattern
+     * @param int   $location
+     *
+     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
+     *
+     * @api
+     */
+    public function hasBelow(Text $text, $pattern, $location = null)
+    {
+        $searchStrategy = $this->searchEngine->resolve($pattern);
+        $foundLineNumber = $searchStrategy->findBelow($text, $pattern, $location);
+
+        return (false !== $foundLineNumber);
+    }
+
+
+    /**
      * @param Text  $text
      * @param mixed $pattern
      *
@@ -152,6 +193,8 @@ class Editor
      * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
      *
      * @api
+     *
+     * @deprecated 1.1 Use $editor->hasBelow($text, $pattern, 0) instead
      */
     public function has(Text $text, $pattern)
     {

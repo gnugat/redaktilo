@@ -63,7 +63,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
         $editor = EditorFactory::createEditor();
         $file = $editor->open($this->expectedAppKernelPath);
 
-        $isBundlePresent = $editor->has($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
+        $isBundlePresent = $editor->hasBelow($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),', 0);
 
         $this->assertTrue($isBundlePresent);
     }
@@ -73,7 +73,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
         $editor = EditorFactory::createEditor();
         $file = $editor->open($this->appKernelPath);
 
-        $isBundlePresent = $editor->has($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
+        $isBundlePresent = $editor->hasBelow($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),', 0);
 
         $this->assertFalse($isBundlePresent);
     }
