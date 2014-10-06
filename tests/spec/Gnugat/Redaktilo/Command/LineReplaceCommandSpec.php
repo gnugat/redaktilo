@@ -19,6 +19,8 @@ class LineReplaceCommandSpec extends ObjectBehavior
     const ORIGINAL_FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
     const EXPECTED_FILENAME = '%s/tests/fixtures/expectations/life-of-brian-replace.txt';
 
+    const LINE_NUMBER = 5;
+
     private $rootPath;
 
     function let(Text $text)
@@ -27,8 +29,9 @@ class LineReplaceCommandSpec extends ObjectBehavior
 
         $filename = sprintf(self::ORIGINAL_FILENAME, $this->rootPath);
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
+        $line = $lines[self::LINE_NUMBER];
 
-        $text->getLines()->willReturn($lines);
+        $text->getLine(self::LINE_NUMBER)->willReturn($line);
     }
 
     function it_is_a_command()
@@ -40,26 +43,28 @@ class LineReplaceCommandSpec extends ObjectBehavior
     {
         $expectedFilename = sprintf(self::EXPECTED_FILENAME, $this->rootPath);
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
-
-        $lineNumber = 5;
+        $expectedLine = $expectedLines[self::LINE_NUMBER];
+        $replacement = function ($line) {
+            return '[Even more sniggering]';
+        };
 
         $input = array(
             'text' => $text,
-            'location' => $lineNumber,
-            'replacement' => '[Even more sniggering]'
+            'location' => self::LINE_NUMBER,
+            'replacement' => $replacement,
         );
 
-        $text->setLines($expectedLines)->shouldBeCalled();
-        $text->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+        $text->setLine($expectedLine, self::LINE_NUMBER)->shouldBeCalled();
+        $text->setCurrentLineNumber(self::LINE_NUMBER)->shouldBeCalled();
 
         $this->execute($input);
 
         $input = array(
             'text' => $text,
-            'replacement' => '[Even more sniggering]'
+            'replacement' => $replacement,
         );
-        $text->getCurrentLineNumber()->willReturn($lineNumber);
-        $text->setCurrentLineNumber($lineNumber)->shouldBeCalled();
+        $text->getCurrentLineNumber()->willReturn(self::LINE_NUMBER);
+        $text->setCurrentLineNumber(self::LINE_NUMBER)->shouldBeCalled();
 
         $this->execute($input);
     }
