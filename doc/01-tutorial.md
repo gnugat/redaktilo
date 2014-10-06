@@ -130,7 +130,7 @@ $editor->jumpAbove($file, '/ac/'); // Current line: 0 (which is 'Bacon')
  > ```php
  > use Gnugat\Redaktilo\Search\Php\TokenBuilder;
  > // ...
- > 
+ >
  > $tokenBuilder = new TokenBuilder();
  > $registrationMethodName = 'registerBundles';
  > $registrationMethod = $tokenBuilder->buildMethod($registrationMethodName);
@@ -202,6 +202,7 @@ The resulting file will be:
 * [Reference](03-reference.md)
 * [Vocabulary](04-vocabulary.md)
 * [Extending](05-extending.md)
+* [Exceptions](06-exceptions.md)
 
 ## Previous readings
 

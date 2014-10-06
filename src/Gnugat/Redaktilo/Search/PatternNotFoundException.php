@@ -11,23 +11,54 @@
 
 namespace Gnugat\Redaktilo\Search;
 
+use Gnugat\Redaktilo\File;
+
 /**
- * If the pattern given to SearchEngine isn't supported by any of its registered
- * SearchStrategy.
+ * Thrown if the pattern given to the SearchEngine couldn't match anything in
+ * the Text.
+ *
+ * @api
  */
 class PatternNotFoundException extends \Exception
 {
-    /** @param mixed $pattern */
-    public function __construct($pattern)
-    {
-        $messageBits[] = 'The given pattern';
-        if (is_string($pattern) || is_int($pattern)) {
-            $messageBits[] = sprintf('"%s"', $pattern);
-        }
-        $messageBits[] = 'wasn\'t found in the text';
+    /** @var mixed */
+    private $pattern;
 
-        $message = implode(' ', $messageBits);
+    /** @var mixed */
+    private $text;
+
+    /**
+     * @param mixed $pattern
+     * @param mixed $text
+     */
+    public function __construct($pattern, $text)
+    {
+        $this->pattern = $pattern;
+        $this->text = $text;
+
+        $patternMessage = 'given pattern';
+        if (is_string($pattern) || is_int($pattern)) {
+            $patternMessage = strval($pattern);
+        }
+        $textMessage = 'the given text';
+        if ($text instanceof File) {
+            $textMessage = 'the file '.$text->getFilename();
+        }
+
+        $message = sprintf('The %s couldn\'t be find in %s', $patternMessage, $textMessage);
 
         parent::__construct($message);
+    }
+
+    /** @return mixed */
+    public function getPattern()
+    {
+        return $this->pattern;
+    }
+
+    /** @return mixed */
+    public function getText()
+    {
+        return $this->text;
     }
 }

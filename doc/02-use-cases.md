@@ -61,6 +61,7 @@ for an actual implementation.
 * [Reference](03-reference.md)
 * [Vocabulary](04-vocabulary.md)
 * [Extending](05-extending.md)
+* [Exceptions](06-exceptions.md)
 
 ## Previous readings
 

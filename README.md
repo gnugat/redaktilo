@@ -99,3 +99,4 @@ Next readings:
 * [Reference](doc/03-reference.md)
 * [Vocabulary](doc/04-vocabulary.md)
 * [Extending](doc/05-extending.md)
+* [Exceptions](doc/06-exceptions.md)

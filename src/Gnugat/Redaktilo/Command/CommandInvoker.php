@@ -34,7 +34,7 @@ class CommandInvoker
     public function run($name, array $input)
     {
         if (!isset($this->commands[$name])) {
-            throw new CommandNotFoundException($name);
+            throw new CommandNotFoundException($name, $this->commands);
         }
         $this->commands[$name]->execute($input);
     }
