@@ -129,11 +129,15 @@ require_once __DIR__.'/vendor/autoload.php';
 
 use Gnugat\Redaktilo\EditorFactory;
 
+$replace = function ($line) {
+    return strtoupper($line);
+};
+
 $editor = EditorFactory::createEditor();
 $file = $editor->open('/tmp/spam-menu.txt', true);
 $editor->insertAbove($file, 'Egg'); // Current line number: 0
 $editor->insertBelow($file, 'Bacon'); // Current line number: 1
-$editor->replace($file, 'Spam');
+$editor->replace($file, $replace);
 $editor->remove($file);  // Current line number: 0
 
 $editor->save($file); // Necessary to actually apply the changes on the filesystem

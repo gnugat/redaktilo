@@ -144,14 +144,24 @@ Now you're able to navigate through a file and while that's very important in
 order to edit a file, it doesn't help much if you can't manipulate lines.
 Luckily, Redaktilo contains lots of methods designed for manipulating lines.
 
-Using the `Editor#replace()` method, you can manipulate the current line:
+Using the `Text#setLine()` method, you can manipulate the current line:
 
 ```php
 // ...
 
 // ... navigate to the first line
-$editor->replace($file, 'Spam'); // Line 0 now contains 'Spam' instead of 'Bacon'
+$text->setLine('Spam'); // Line 0 now contains 'Spam' instead of 'Bacon'
 ```
+
+ > *Note*: Editor provides a `replace` method which accepts callbacks:
+ >
+ > ```php
+ > // Will be passed the given or current line
+ > $replace = function ($line) {
+ >     return strtoupper($line); // the line will be replaced by the returned value
+ > };
+ > $editor->replace($text, $replace, $location);
+ > ```
 
 You can also insert lines below or above the current line:
 
