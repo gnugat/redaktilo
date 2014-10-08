@@ -32,7 +32,7 @@ class PhpSearchStrategy implements SearchStrategy
     /** {@inheritdoc} */
     public function findAbove(Text $text, $pattern, $location = null)
     {
-        $location = $location ?: $text->getCurrentLineNumber();
+        $location = (null !== $location ? $location : $text->getCurrentLineNumber());
         $tokens = $this->converter->from($text);
         $reversedTokens = array_reverse($tokens);
         $total = count($reversedTokens);
@@ -49,7 +49,7 @@ class PhpSearchStrategy implements SearchStrategy
     /** {@inheritdoc} */
     public function findBelow(Text $text, $pattern, $location = null)
     {
-        $location = ($location ?: $text->getCurrentLineNumber()) + 1;
+        $location = (null !== $location ? $location : $text->getCurrentLineNumber()) + 1;
         $tokens = $this->converter->from($text);
         $total = count($tokens);
         for ($index = 0; $index < $total; $index++) {
