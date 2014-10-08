@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 1.1.2: Fixed locations
+
+* fixed passing of 0 as location
+
 ## 1.1.1: Fixed exceptions
 
 * fixed order of arguments in PatternNotFoundException
