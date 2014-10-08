@@ -36,7 +36,7 @@ class NotSupportedException extends \Exception
 
         $patternMessage = 'given pattern';
         if (is_string($pattern) || is_int($pattern)) {
-            $patternMessage = strval($pattern);
+            $patternMessage .= ' "'.strval($pattern).'"';
         }
 
         $message = sprintf(

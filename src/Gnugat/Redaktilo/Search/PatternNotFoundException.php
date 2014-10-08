@@ -38,11 +38,11 @@ class PatternNotFoundException extends \Exception
 
         $patternMessage = 'given pattern';
         if (is_string($pattern) || is_int($pattern)) {
-            $patternMessage = strval($pattern);
+            $patternMessage .= ' "'.strval($pattern).'"';
         }
         $textMessage = 'the given text';
         if ($text instanceof File) {
-            $textMessage = 'the file '.$text->getFilename();
+            $textMessage = 'the given file '.$text->getFilename();
         }
 
         $message = sprintf('The %s couldn\'t be find in %s', $patternMessage, $textMessage);
