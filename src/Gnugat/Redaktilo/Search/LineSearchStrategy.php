@@ -12,7 +12,7 @@ abstract class LineSearchStrategy implements SearchStrategy
     /** {@inheritdoc} */
     public function findAbove(Text $text, $pattern, $location = null)
     {
-        $location = ($location ?: $text->getCurrentLineNumber()) - 1;
+        $location = (null !== $location ? $location : $text->getCurrentLineNumber()) - 1;
         $lines = $text->getLines();
         $aboveLines = array_slice($lines, 0, $location, true);
         $reversedAboveLines = array_reverse($aboveLines, true);
@@ -23,7 +23,7 @@ abstract class LineSearchStrategy implements SearchStrategy
     /** {@inheritdoc} */
     public function findBelow(Text $text, $pattern, $location = null)
     {
-        $location = ($location ?: $text->getCurrentLineNumber()) + 1;
+        $location = (null !== $location ? $location : $text->getCurrentLineNumber()) + 1;
         $lines = $text->getLines();
         $belowLines = array_slice($lines, $location, null, true);
 
