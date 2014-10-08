@@ -1,5 +1,10 @@
 # Changes between versions
 
+## 1.1.1: Fixed exceptions
+
+* fixed order of arguments in PatternNotFoundException
+* fixed message in NotSupportedException and PatternNotFoundException
+
 ## 1.1.0: Convenience
 
 * deprecated string support from LineReplaceCommand
