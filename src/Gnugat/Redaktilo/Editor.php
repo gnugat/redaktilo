@@ -113,7 +113,7 @@ class Editor
         $searchStrategy = $this->searchEngine->resolve($pattern);
         $foundLineNumber = $searchStrategy->findAbove($text, $pattern, $location);
         if (false === $foundLineNumber) {
-            throw new PatternNotFoundException($text, $pattern);
+            throw new PatternNotFoundException($pattern, $text);
         }
 
         $text->setCurrentLineNumber($foundLineNumber);
@@ -137,7 +137,7 @@ class Editor
         $searchStrategy = $this->searchEngine->resolve($pattern);
         $foundLineNumber = $searchStrategy->findBelow($text, $pattern, $location);
         if (false === $foundLineNumber) {
-            throw new PatternNotFoundException($text, $pattern);
+            throw new PatternNotFoundException($pattern, $text);
         }
 
         $text->setCurrentLineNumber($foundLineNumber);
