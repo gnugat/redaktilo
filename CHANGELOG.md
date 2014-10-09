@@ -1,5 +1,11 @@
 # Changes between versions
 
+## 1.1.4: Fixed Text InvalidLineNumberException
+
+* added tests for search relative to the first line
+* added tests for line search with the immediate line above
+* fixed Text to actually throw InvalidLineNumberException
+
 ## 1.1.3: Fixed line search above
 
 * fixed LineSearchStrategy#findAbove
