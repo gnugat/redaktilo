@@ -108,7 +108,7 @@ class TextSpec extends ObjectBehavior
 
     function it_cannot_manipulate_an_invalid_line()
     {
-        $exception = '\InvalidArgumentException';
+        $exception = 'Gnugat\Redaktilo\InvalidLineNumberException';
         $line = 'I came here to learn how to fly an aeroplane';
 
         $this->shouldThrow($exception)->duringSetLine($line, 'toto');
