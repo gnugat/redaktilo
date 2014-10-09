@@ -75,4 +75,15 @@ class LineNumberSearchStrategySpec extends ObjectBehavior
         $this->findBelow($text, $nonExistingLine)->shouldBe(false);
         $this->findBelow($text, $existingLine)->shouldBe($belowLineNumber);
     }
+
+    function it_finds_relatively_to_the_first_line(Text $text)
+    {
+        $pattern = 1;
+        $lineNumber = 1;
+        $text->getCurrentLineNumber()->shouldNotBeCalled();
+
+        $this->findAbove($text, $pattern, 0)->shouldBe(false);
+        $this->findBelow($text, $pattern, 0)->shouldBe($lineNumber);
+    }
+
 }

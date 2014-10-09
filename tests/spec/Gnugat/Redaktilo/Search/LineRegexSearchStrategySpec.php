@@ -91,4 +91,14 @@ class LineRegexSearchStrategySpec extends ObjectBehavior
         $this->findBelow($text, $immediateLineBelowRegex)->shouldBe($immediateLineBelowNumber);
         $this->findBelow($text, $belowLineRegex)->shouldBe($belowLineNumber);
     }
+
+    function it_finds_relatively_to_the_first_line(Text $text)
+    {
+        $pattern = '/\[Sniggering\]/';
+        $lineNumber = 5;
+        $text->getCurrentLineNumber()->shouldNotBeCalled();
+
+        $this->findAbove($text, $pattern, 0)->shouldBe(false);
+        $this->findBelow($text, $pattern, 0)->shouldBe($lineNumber);
+    }
 }

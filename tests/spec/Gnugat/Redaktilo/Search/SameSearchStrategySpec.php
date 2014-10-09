@@ -85,4 +85,14 @@ class SameSearchStrategySpec extends ObjectBehavior
         $this->findBelow($text, $currentLine)->shouldBe(false);
         $this->findBelow($text, $belowLine)->shouldBe($belowLineNumber);
     }
+
+    function it_finds_relatively_to_the_first_line(Text $text)
+    {
+        $pattern = '[Sniggering]';
+        $lineNumber = 5;
+        $text->getCurrentLineNumber()->shouldNotBeCalled();
+
+        $this->findAbove($text, $pattern, 0)->shouldBe(false);
+        $this->findBelow($text, $pattern, 0)->shouldBe($lineNumber);
+    }
 }

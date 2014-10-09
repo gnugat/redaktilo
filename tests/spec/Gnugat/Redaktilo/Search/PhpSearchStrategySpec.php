@@ -101,4 +101,15 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $this->findBelow($text, $currentToken)->shouldBe(false);
         $this->findBelow($text, $belowToken)->shouldBe($belowLineNumber);
     }
+
+    function it_finds_relatively_to_the_first_line(Text $text)
+    {
+        $pattern = $this->tokenBuilder->buildMethod('registerBundles');
+        $lineNumber = 15;
+
+        $text->getCurrentLineNumber()->shouldNotBeCalled();
+
+        $this->findAbove($text, $pattern, 0)->shouldBe(false);
+        $this->findBelow($text, $pattern, 0)->shouldBe($lineNumber);
+    }
 }
