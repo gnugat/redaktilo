@@ -48,18 +48,22 @@ class SameSearchStrategySpec extends ObjectBehavior
     {
         $aboveLine = '[A guard sniggers]';
         $aboveLineNumber = 1;
+        $immediateAboveLine = 'Pontius Pilate: \'...Dickus?\'';
+        $immediateAboveLineNumber = 2;
         $currentLine = '[More sniggering]';
         $currentLineNumber = 3;
         $belowLine = '[Sniggering]';
 
         $this->findAbove($text, $belowLine, $currentLineNumber)->shouldBe(false);
         $this->findAbove($text, $currentLine, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $immediateAboveLine, $currentLineNumber)->shouldBe($immediateAboveLineNumber);
         $this->findAbove($text, $aboveLine, $currentLineNumber)->shouldBe($aboveLineNumber);
 
         $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
         $this->findAbove($text, $belowLine)->shouldBe(false);
         $this->findAbove($text, $currentLine)->shouldBe(false);
+        $this->findAbove($text, $immediateAboveLine)->shouldBe($immediateAboveLineNumber);
         $this->findAbove($text, $aboveLine)->shouldBe($aboveLineNumber);
     }
 
