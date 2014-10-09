@@ -161,12 +161,12 @@ class Text
     public function getLineBreak();
     public function setLineBreak($lineBreak);
 
-    // Throws InvalidArgumentException if $lineNumber is not a positive integer lower than the length
+    // Throws InvalidLineNumberException if $lineNumber is not a positive integer lower than the length
     public function setCurrentLineNumber($lineNumber);
     public function getCurrentLineNumber();
 
 
-    // Throws InvalidArgumentException if $lineNumber is not a positive integer lower than the length
+    // Throws InvalidLineNumberException if $lineNumber is not a positive integer lower than the length
     public function getLine($lineNumber = null);
     public function setLine($line, $lineNumber = null);
 }

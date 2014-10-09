@@ -108,9 +108,9 @@ class Text
     /**
      * @param int $lineNumber
      *
-     * @throws \InvalidArgumentException if $lineNumber is not an integer
-     * @throws \InvalidArgumentException if $lineNumber is negative
-     * @throws \InvalidArgumentException if $lineNumber is greater or equal than the number of lines
+     * @throws InvalidLineNumberException if $lineNumber is not an integer
+     * @throws InvalidLineNumberException if $lineNumber is negative
+     * @throws InvalidLineNumberException if $lineNumber is greater or equal than the number of lines
      *
      * @api
      */
@@ -125,9 +125,9 @@ class Text
      *
      * @return string
      *
-     * @throws \InvalidArgumentException if $lineNumber is not an integer
-     * @throws \InvalidArgumentException if $lineNumber is negative
-     * @throws \InvalidArgumentException if $lineNumber is greater or equal than the number of lines
+     * @throws InvalidLineNumberException if $lineNumber is not an integer
+     * @throws InvalidLineNumberException if $lineNumber is negative
+     * @throws InvalidLineNumberException if $lineNumber is greater or equal than the number of lines
      *
      * @api
      */
@@ -145,9 +145,9 @@ class Text
      * @param string $line
      * @param int    $lineNumber
      *
-     * @throws \InvalidArgumentException if $lineNumber is not an integer
-     * @throws \InvalidArgumentException if $lineNumber is negative
-     * @throws \InvalidArgumentException if $lineNumber is greater or equal than the number of lines
+     * @throws InvalidLineNumberException if $lineNumber is not an integer
+     * @throws InvalidLineNumberException if $lineNumber is negative
+     * @throws InvalidLineNumberException if $lineNumber is greater or equal than the number of lines
      *
      * @api
      */
@@ -163,20 +163,20 @@ class Text
     /**
      * @param int $lineNumber
      *
-     * @throws \InvalidArgumentException if $lineNumber is not an integer
-     * @throws \InvalidArgumentException if $lineNumber is negative
-     * @throws \InvalidArgumentException if $lineNumber is greater or equal than the number of lines
+     * @throws InvalidLineNumberException if $lineNumber is not an integer
+     * @throws InvalidLineNumberException if $lineNumber is negative
+     * @throws InvalidLineNumberException if $lineNumber is greater or equal than the number of lines
      */
     protected function throwOnInvalidLineNumber($lineNumber)
     {
         if (!is_int($lineNumber)) {
-            throw new \InvalidArgumentException('The line number should be an integer');
+            throw new InvalidLineNumberException($lineNumber, $this, 'The line number should be an integer');
         }
         if ($lineNumber < 0) {
-            throw new \InvalidArgumentException('The line number should be positive');
+            throw new InvalidLineNumberException($lineNumber, $this, 'The line number should be positive');
         }
         if ($lineNumber >= $this->length) {
-            throw new \InvalidArgumentException('The line number should be strictly lower than the number of lines');
+            throw new InvalidLineNumberException($lineNumber, $this, 'The line number should be strictly lower than the number of lines');
         }
     }
 }
