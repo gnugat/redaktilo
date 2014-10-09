@@ -48,18 +48,22 @@ class SameSearchStrategySpec extends ObjectBehavior
     {
         $aboveLine = '[A guard sniggers]';
         $aboveLineNumber = 1;
+        $immediateAboveLine = 'Pontius Pilate: \'...Dickus?\'';
+        $immediateAboveLineNumber = 2;
         $currentLine = '[More sniggering]';
         $currentLineNumber = 3;
         $belowLine = '[Sniggering]';
 
         $this->findAbove($text, $belowLine, $currentLineNumber)->shouldBe(false);
         $this->findAbove($text, $currentLine, $currentLineNumber)->shouldBe(false);
+        $this->findAbove($text, $immediateAboveLine, $currentLineNumber)->shouldBe($immediateAboveLineNumber);
         $this->findAbove($text, $aboveLine, $currentLineNumber)->shouldBe($aboveLineNumber);
 
         $text->getCurrentLineNumber()->willReturn($currentLineNumber);
 
         $this->findAbove($text, $belowLine)->shouldBe(false);
         $this->findAbove($text, $currentLine)->shouldBe(false);
+        $this->findAbove($text, $immediateAboveLine)->shouldBe($immediateAboveLineNumber);
         $this->findAbove($text, $aboveLine)->shouldBe($aboveLineNumber);
     }
 
@@ -80,5 +84,15 @@ class SameSearchStrategySpec extends ObjectBehavior
         $this->findBelow($text, $aboveLine)->shouldBe(false);
         $this->findBelow($text, $currentLine)->shouldBe(false);
         $this->findBelow($text, $belowLine)->shouldBe($belowLineNumber);
+    }
+
+    function it_finds_relatively_to_the_first_line(Text $text)
+    {
+        $pattern = '[Sniggering]';
+        $lineNumber = 5;
+        $text->getCurrentLineNumber()->shouldNotBeCalled();
+
+        $this->findAbove($text, $pattern, 0)->shouldBe(false);
+        $this->findBelow($text, $pattern, 0)->shouldBe($lineNumber);
     }
 }
