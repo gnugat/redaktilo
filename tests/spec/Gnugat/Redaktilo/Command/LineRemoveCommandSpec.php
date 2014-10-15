@@ -17,6 +17,7 @@ use PhpSpec\ObjectBehavior;
 class LineRemoveCommandSpec extends ObjectBehavior
 {
     const ORIGINAL_FILENAME = '%s/tests/fixtures/sources/life-of-brian.txt';
+    const EXPECTED_FILENAME = '%s/tests/fixtures/expectations/life-of-brian-remove.txt';
 
     private $rootPath;
 
@@ -37,12 +38,10 @@ class LineRemoveCommandSpec extends ObjectBehavior
 
     function it_removes_lines(Text $text)
     {
-        $expectedFilename = sprintf(self::ORIGINAL_FILENAME, $this->rootPath);
+        $expectedFilename = sprintf(self::EXPECTED_FILENAME, $this->rootPath);
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
 
         $lineNumber = 2;
-
-        unset($expectedLines[$lineNumber]);
 
         $input = array(
             'text' => $text,
