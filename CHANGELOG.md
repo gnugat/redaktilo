@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 1.1.5: Fixed remove command
+
+* fixed line numbers after line removal
+
 ## 1.1.4: Fixed Text InvalidLineNumberException
 
 * added tests for search relative to the first line
