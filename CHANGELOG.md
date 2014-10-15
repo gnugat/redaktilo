@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 1.1.6: Applying fix for line removal
+
+* fixed line number after line removal
+
 ## 1.1.5: Fixed remove command
 
 * fixed line numbers after line removal
