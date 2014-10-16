@@ -24,9 +24,8 @@ class LineRemoveCommand implements Command
         $location = isset($input['location']) ? intval($input['location']) : $text->getCurrentLineNumber();
 
         $lines = $text->getLines();
-        unset($lines[$location]);
-        $reorderedLines = array_values($lines);
-        $text->setLines($reorderedLines);
+        array_splice($lines, $location, 1);
+        $text->setLines($lines);
 
         $lineNumber = ($location === $text->getLength()) ? $location - 1 : $location;
         $text->setCurrentLineNumber($lineNumber);
