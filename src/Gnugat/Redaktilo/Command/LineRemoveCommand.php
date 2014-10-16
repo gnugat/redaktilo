@@ -11,17 +11,35 @@
 
 namespace Gnugat\Redaktilo\Command;
 
+use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
+use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
+
 /**
  * Removes the given location in the given text.
  */
 class LineRemoveCommand implements Command
 {
+    /** @var TextSanitizer */
+    private $textSanitizer;
+
+    /** @var LocationSanitizer */
+    private $locationSanitizer;
+
+    /**
+     * @param TextSanitizer     $textSanitizer
+     * @param LocationSanitizer $locationSanitizer
+     */
+    public function __construct(TextSanitizer $textSanitizer, LocationSanitizer $locationSanitizer)
+    {
+        $this->textSanitizer = $textSanitizer;
+        $this->locationSanitizer = $locationSanitizer;
+    }
+
     /** {@inheritdoc} */
     public function execute(array $input)
     {
-        /** @var \Gnugat\Redaktilo\Text $text */
-        $text = $input['text'];
-        $location = isset($input['location']) ? intval($input['location']) : $text->getCurrentLineNumber();
+        $text = $this->textSanitizer->sanitize($input);
+        $location = $this->locationSanitizer->sanitize($input);
 
         $lines = $text->getLines();
         unset($lines[$location]);

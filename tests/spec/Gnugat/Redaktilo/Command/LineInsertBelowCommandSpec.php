@@ -11,6 +11,8 @@
 
 namespace spec\Gnugat\Redaktilo\Command;
 
+use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
+use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
 use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
@@ -21,7 +23,7 @@ class LineInsertBelowCommandSpec extends ObjectBehavior
 
     private $rootPath;
 
-    function let(Text $text)
+    function let(TextSanitizer $textSanitizer, LocationSanitizer $locationSanitizer, Text $text)
     {
         $this->rootPath = __DIR__.'/../../../../../';
 
@@ -29,6 +31,11 @@ class LineInsertBelowCommandSpec extends ObjectBehavior
         $lines = file($filename, FILE_IGNORE_NEW_LINES);
 
         $text->getLines()->willReturn($lines);
+
+        $this->beConstructedWith(
+            $textSanitizer,
+            $locationSanitizer
+        );
     }
 
     function it_is_a_command()
@@ -36,7 +43,7 @@ class LineInsertBelowCommandSpec extends ObjectBehavior
         $this->shouldImplement('Gnugat\Redaktilo\Command\Command');
     }
 
-    function it_inserts_new_lines(Text $text)
+    function it_inserts_new_lines(TextSanitizer $textSanitizer, LocationSanitizer $locationSanitizer, Text $text)
     {
         $expectedFilename = sprintf(self::EXPECTED_FILENAME, $this->rootPath);
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
@@ -49,6 +56,9 @@ class LineInsertBelowCommandSpec extends ObjectBehavior
             'addition' => "Pontius Pilate: '...Dickus?'"
         );
 
+        $textSanitizer->sanitize($input)->willReturn($text);
+        $locationSanitizer->sanitize($input)->willReturn($lineNumber - 1);
+
         $text->setLines($expectedLines)->shouldBeCalled();
         $text->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
@@ -58,6 +68,10 @@ class LineInsertBelowCommandSpec extends ObjectBehavior
             'text' => $text,
             'addition' => "Pontius Pilate: '...Dickus?'"
         );
+
+        $textSanitizer->sanitize($input)->willReturn($text);
+        $locationSanitizer->sanitize($input)->willReturn($lineNumber - 1);
+
         $text->getCurrentLineNumber()->willReturn($lineNumber - 1);
         $text->setCurrentLineNumber($lineNumber)->shouldBeCalled();
 
