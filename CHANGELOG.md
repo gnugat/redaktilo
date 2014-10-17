@@ -1,8 +1,12 @@
 # Changes between versions
 
-## 1.1.7: Fixed text first line getter setter
+## 1.2.0: InputSanitizers
 
 * fixed text first line getter setter
+* fixed LineRemoveCommand using array_splice
+* added LocationSanitizer
+* added TextSanitizer
+* added InputSanitizer interface
 
 ## 1.1.6: Applying fix for line removal
 
