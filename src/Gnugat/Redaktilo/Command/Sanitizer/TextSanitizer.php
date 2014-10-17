@@ -19,14 +19,16 @@ class TextSanitizer implements InputSanitizer
      * {@inheritdoc}
      *
      * @return Text
+     *
+     * @throws InvalidArgumentException If the text parameter is missing
+     * @throws InvalidArgumentException If the text parameter is not an instance of Text
      */
     public function sanitize(array $input)
     {
         if (!isset($input['text'])) {
             throw new \InvalidArgumentException('A \'text\' entry should have been given in the input array');
         }
-
-        if (!is_object($input['text']) || !$input['text'] instanceof Text) {
+        if (!is_object($input['text']) || !($input['text'] instanceof Text)) {
             throw new \InvalidArgumentException('The \'text\' entry should be a instance of Text');
         }
 
