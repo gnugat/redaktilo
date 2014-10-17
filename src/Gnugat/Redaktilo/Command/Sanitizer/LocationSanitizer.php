@@ -18,7 +18,7 @@ class LocationSanitizer implements InputSanitizer
     /** @var TextSanitizer */
     private $textSanitizer;
 
-    function __construct(TextSanitizer $textSanitizer)
+    public function __construct(TextSanitizer $textSanitizer)
     {
         $this->textSanitizer = $textSanitizer;
     }

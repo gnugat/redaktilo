@@ -48,7 +48,7 @@ class LineReplaceCommand implements Command
         if (is_string($input['replacement'])) {
             // @deprecated 1.1 use $text->setLine($replacement, $location) instead
             $replacement = $input['replacement'];
-        } else if (is_callable($input['replacement'])) {
+        } elseif (is_callable($input['replacement'])) {
             $line = $text->getLine($location);
             $replacement = $input['replacement']($line);
         } else {

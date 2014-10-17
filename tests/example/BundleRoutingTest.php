@@ -14,7 +14,7 @@ namespace Sensio\Bundle\GeneratorBundle\Manipulator;
 use Gnugat\Redaktilo\EditorFactory;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-class RoutingManipulator extends \PHPUnit_Framework_TestCase
+class BundleRoutingTest extends \PHPUnit_Framework_TestCase
 {
     const CONFIG = '%s/tests/fixtures/%s/routing.yml';
 

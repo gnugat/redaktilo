@@ -15,7 +15,6 @@ use Gnugat\Redaktilo\Command\Command;
 use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
-use Gnugat\Redaktilo\Service\Filesystem;
 use PhpSpec\ObjectBehavior;
 
 class EditorBuilderSpec extends ObjectBehavior
@@ -116,7 +115,7 @@ class EditorBuilderSpec extends ObjectBehavior
                 $engine = $readProperty($subject, 'searchEngine');
                 $count = array_reduce(
                     $readProperty($engine, 'searchStrategies'),
-                    function($carry, $item) {
+                    function ($carry, $item) {
                         return $carry + count($item);
                     }
                 );
