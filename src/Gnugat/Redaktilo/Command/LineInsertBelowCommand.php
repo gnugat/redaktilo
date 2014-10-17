@@ -11,17 +11,36 @@
 
 namespace Gnugat\Redaktilo\Command;
 
+use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
+use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
+
 /**
  * Inserts the given addition in the given text below the given location.
  */
 class LineInsertBelowCommand implements Command
 {
+    /** @var TextSanitizer */
+    private $textSanitizer;
+
+    /** @var LocationSanitizer */
+    private $locationSanitizer;
+
+    /**
+     * @param TextSanitizer     $textSanitizer
+     * @param LocationSanitizer $locationSanitizer
+     */
+    public function __construct(TextSanitizer $textSanitizer, LocationSanitizer $locationSanitizer)
+    {
+        $this->textSanitizer = $textSanitizer;
+        $this->locationSanitizer = $locationSanitizer;
+    }
+
     /** {@inheritdoc} */
     public function execute(array $input)
     {
-        /** @var \Gnugat\Redaktilo\Text $text */
-        $text = $input['text'];
-        $location = 1 + (isset($input['location']) ? intval($input['location']) : $text->getCurrentLineNumber());
+        $text = $this->textSanitizer->sanitize($input);
+        $location = 1 + $this->locationSanitizer->sanitize($input);
+
         $addition = $input['addition'];
 
         $lines = $text->getLines();

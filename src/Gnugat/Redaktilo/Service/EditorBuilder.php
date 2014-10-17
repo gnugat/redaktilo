@@ -11,13 +11,15 @@
 
 namespace Gnugat\Redaktilo\Service;
 
-use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\Command\Command;
 use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
 use Gnugat\Redaktilo\Command\LineInsertBelowCommand;
 use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
+use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
+use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
+use Gnugat\Redaktilo\Editor;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
@@ -49,6 +51,12 @@ class EditorBuilder
 
     /** @var Filesystem */
     private $filesystem;
+
+    /** @var TextSanitizer */
+    private $textSanitizer;
+
+    /** @var LocationSanitizer */
+    private $locationSanitizer;
 
     /** @return TextToPhpConverter */
     protected function getPhpConverter()
@@ -93,10 +101,10 @@ class EditorBuilder
         }
         $commandInvoker = new CommandInvoker();
 
-        $commandInvoker->addCommand(new LineInsertAboveCommand());
-        $commandInvoker->addCommand(new LineInsertBelowCommand());
-        $commandInvoker->addCommand(new LineReplaceCommand());
-        $commandInvoker->addCommand(new LineRemoveCommand());
+        $commandInvoker->addCommand(new LineInsertAboveCommand($this->getTextSanitizer(), $this->getLocationSanitizer()));
+        $commandInvoker->addCommand(new LineInsertBelowCommand($this->getTextSanitizer(), $this->getLocationSanitizer()));
+        $commandInvoker->addCommand(new LineReplaceCommand($this->getTextSanitizer(), $this->getLocationSanitizer()));
+        $commandInvoker->addCommand(new LineRemoveCommand($this->getTextSanitizer(), $this->getLocationSanitizer()));
 
         foreach ($this->commands as $command) {
             $commandInvoker->addCommand($command);
@@ -172,5 +180,25 @@ class EditorBuilder
         $this->commandInvoker = $commandInvoker;
 
         return $this;
+    }
+
+    /** @return TextSanitizer */
+    protected function getTextSanitizer()
+    {
+        if ($this->textSanitizer) {
+            return $this->textSanitizer;
+        }
+
+        return $this->textSanitizer = new TextSanitizer();
+    }
+
+    /** @return LocationSanitizer */
+    protected function getLocationSanitizer()
+    {
+        if ($this->locationSanitizer) {
+            return $this->locationSanitizer;
+        }
+
+        return $this->locationSanitizer = new LocationSanitizer($this->getTextSanitizer());
     }
 }

@@ -11,11 +11,30 @@
 
 namespace Gnugat\Redaktilo\Command;
 
+use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
+use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
+
 /**
  * Replaces the given location in the given text with the given replacement.
  */
 class LineReplaceCommand implements Command
 {
+    /** @var TextSanitizer */
+    private $textSanitizer;
+
+    /** @var LocationSanitizer */
+    private $locationSanitizer;
+
+    /**
+     * @param TextSanitizer     $textSanitizer
+     * @param LocationSanitizer $locationSanitizer
+     */
+    public function __construct(TextSanitizer $textSanitizer, LocationSanitizer $locationSanitizer)
+    {
+        $this->textSanitizer = $textSanitizer;
+        $this->locationSanitizer = $locationSanitizer;
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -23,9 +42,9 @@ class LineReplaceCommand implements Command
      */
     public function execute(array $input)
     {
-        /** @var \Gnugat\Redaktilo\Text $text */
-        $text = $input['text'];
-        $location = isset($input['location']) ? intval($input['location']) : $text->getCurrentLineNumber();
+        $text = $this->textSanitizer->sanitize($input);
+        $location = $this->locationSanitizer->sanitize($input);
+
         if (is_string($input['replacement'])) {
             // @deprecated 1.1 use $text->setLine($replacement, $location) instead
             $replacement = $input['replacement'];

@@ -11,6 +11,8 @@
 
 namespace spec\Gnugat\Redaktilo\Command;
 
+use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
+use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
 use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
@@ -23,7 +25,7 @@ class LineReplaceCommandSpec extends ObjectBehavior
 
     private $rootPath;
 
-    function let(Text $text)
+    function let(TextSanitizer $textSanitizer, LocationSanitizer $locationSanitizer, Text $text)
     {
         $this->rootPath = __DIR__.'/../../../../../';
 
@@ -32,6 +34,11 @@ class LineReplaceCommandSpec extends ObjectBehavior
         $line = $lines[self::LINE_NUMBER];
 
         $text->getLine(self::LINE_NUMBER)->willReturn($line);
+
+        $this->beConstructedWith(
+            $textSanitizer,
+            $locationSanitizer
+        );
     }
 
     function it_is_a_command()
@@ -39,7 +46,7 @@ class LineReplaceCommandSpec extends ObjectBehavior
         $this->shouldImplement('Gnugat\Redaktilo\Command\Command');
     }
 
-    function it_replaces_line(Text $text)
+    function it_replaces_line(TextSanitizer $textSanitizer, LocationSanitizer $locationSanitizer, Text $text)
     {
         $expectedFilename = sprintf(self::EXPECTED_FILENAME, $this->rootPath);
         $expectedLines = file($expectedFilename, FILE_IGNORE_NEW_LINES);
@@ -54,6 +61,9 @@ class LineReplaceCommandSpec extends ObjectBehavior
             'replacement' => $replacement,
         );
 
+        $textSanitizer->sanitize($input)->willReturn($text);
+        $locationSanitizer->sanitize($input)->willReturn(self::LINE_NUMBER);
+
         $text->setLine($expectedLine, self::LINE_NUMBER)->shouldBeCalled();
         $text->setCurrentLineNumber(self::LINE_NUMBER)->shouldBeCalled();
 
@@ -63,6 +73,10 @@ class LineReplaceCommandSpec extends ObjectBehavior
             'text' => $text,
             'replacement' => $replacement,
         );
+
+        $textSanitizer->sanitize($input)->willReturn($text);
+        $locationSanitizer->sanitize($input)->willReturn(self::LINE_NUMBER);
+
         $text->getCurrentLineNumber()->willReturn(self::LINE_NUMBER);
         $text->setCurrentLineNumber(self::LINE_NUMBER)->shouldBeCalled();
 
