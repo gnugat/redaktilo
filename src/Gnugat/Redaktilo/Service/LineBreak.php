@@ -28,16 +28,26 @@ class LineBreak
      * @param string $string
      *
      * @return string
+     *
+     * @throws DifferentLineBreaksFoundException if different kind of line breaks are found in the string
      */
     public function detect($string)
     {
-        if (false === strpos($string, self::LINE_BREAK_OTHER)) {
+        $numberLineBreakWindows = substr_count($string, self::LINE_BREAK_WINDOWS);
+        $numberLineBreakOther = substr_count($string, self::LINE_BREAK_OTHER) - $numberLineBreakWindows;
+
+        if ($numberLineBreakOther === 0 && $numberLineBreakWindows === 0) {
             return PHP_EOL;
         }
-        if (false !== strpos($string, self::LINE_BREAK_WINDOWS)) {
-            return self::LINE_BREAK_WINDOWS;
+
+        if ($numberLineBreakOther > 0 && $numberLineBreakWindows > 0) {
+            throw new DifferentLineBreaksFoundException(
+                $string,
+                $numberLineBreakOther,
+                $numberLineBreakWindows
+            );
         }
 
-        return self::LINE_BREAK_OTHER;
+        return $numberLineBreakOther > 0 ? self::LINE_BREAK_OTHER : self::LINE_BREAK_WINDOWS;
     }
 }

@@ -34,8 +34,15 @@ class TextFactory
      */
     public function make($string)
     {
-        $lineBreak = $this->lineBreak->detect($string);
-        $lines = explode($lineBreak, $string);
+        try {
+            $lineBreak = $this->lineBreak->detect($string);
+        } catch (DifferentLineBreaksFoundException $e) {
+            $lineBreak = $e->getNumberLineBreakOther() >= $e->getNumberLineBreakWindows()
+                ? LineBreak::LINE_BREAK_OTHER
+                : LineBreak::LINE_BREAK_WINDOWS;
+        }
+
+        $lines = preg_split('/\R/', $string);
 
         return new Text($lines, $lineBreak);
     }
