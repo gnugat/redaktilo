@@ -13,8 +13,6 @@ namespace Gnugat\Redaktilo\Service;
 
 /**
  * Thrown if the string given to LineBreak service contains different line breaks.
- *
- * @api
  */
 class DifferentLineBreaksFoundException extends \Exception
 {
@@ -40,8 +38,8 @@ class DifferentLineBreaksFoundException extends \Exception
 
         $message = sprintf(
             'The given string contains different line breaks,'
-            .'%n LF (\'\n\', usually found on Unix/Linux systems)'
-            .'and %n CR+LF (\'\r\n\', usually found on Windows systems)',
+            .'%d LF (\'\n\', usually found on Unix/Linux systems)'
+            .'and %d CR+LF (\'\r\n\', usually found on Windows systems)',
             $this->numberLineBreakOther,
             $this->numberLineBreakWindows);
 
@@ -65,6 +63,4 @@ class DifferentLineBreaksFoundException extends \Exception
     {
         return $this->numberLineBreakWindows;
     }
-
-
 }
