@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 1.1.7: Fixed text first line getter setter
+
+* fixed text first line getter setter
+
 ## 1.1.6: Applying fix for line removal
 
 * fixed line number after line removal
