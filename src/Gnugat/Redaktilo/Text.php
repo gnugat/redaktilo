@@ -133,7 +133,7 @@ class Text
      */
     public function getLine($lineNumber = null)
     {
-        if (!$lineNumber) {
+        if (null === $lineNumber) {
             $lineNumber = $this->currentLineNumber;
         }
         $this->throwOnInvalidLineNumber($lineNumber);
@@ -153,7 +153,7 @@ class Text
      */
     public function setLine($line, $lineNumber = null)
     {
-        if (!$lineNumber) {
+        if (null === $lineNumber) {
             $lineNumber = $this->currentLineNumber;
         }
         $this->throwOnInvalidLineNumber($lineNumber);
