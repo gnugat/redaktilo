@@ -4,6 +4,7 @@
     * [SearchStrategy API](#searchstrategy-api)
 * [Commands](#commands)
     * [Command API](#command-api)
+    * [Input Sanitizers](#input-sanitizers)
 
 ## Search
 
@@ -122,6 +123,29 @@ Implementations provided out of the box are:
 * `LineInsertBelowCommand`: `text`, `addition` and optional `location` (name: `insert_below`)
 * `LineRemoveCommand`: `text` and optional `location` (name: `remove`)
 * `LineReplaceCommand`: `text`, `replacement` and optional `location` (name: `replace`)
+
+### Input Sanitizers
+
+In order to extract safely the parameters in the given input, commands can rely
+on implementations of `InputSanitizer`:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Command\Sanitizer;
+
+interface InputSanitizer
+{
+    public function sanitize(array $input);
+}
+```
+
+Currently, here's the sanitizers provided out of the box:
+
+* `LocationSanitizer`: checks if the line number is valid
+  (positive integer strictly inferior to the text's length) or return the
+  current line number
+* `TextSanitizer`: checks the presence and type of the `text` parameter
 
 ## Next readings
 
