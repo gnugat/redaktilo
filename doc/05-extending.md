@@ -126,8 +126,8 @@ Implementations provided out of the box are:
 
 ### Input Sanitizers
 
-In order to extract safely the parameters in the given input, commands can rely
-on implementations of `InputSanitizer`:
+In order to safely extract the parameters in the given input, commands can rely
+on input sanitizer:
 
 ```php
 <?php
