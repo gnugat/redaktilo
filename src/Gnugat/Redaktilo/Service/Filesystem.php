@@ -48,9 +48,7 @@ class Filesystem
      */
     public function open($filename)
     {
-        $content = @file_get_contents($filename);
-
-        if (false === $content) {
+        if (!$this->exists($filename) || false === $content = file_get_contents($filename)) {
             $message = sprintf('Failed to open "%s" because it does not exist.', $filename);
 
             throw new FileNotFoundException($message, 0, null, $filename);
