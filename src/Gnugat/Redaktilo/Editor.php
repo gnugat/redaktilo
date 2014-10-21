@@ -183,7 +183,6 @@ class Editor
         return (false !== $foundLineNumber);
     }
 
-
     /**
      * @param Text  $text
      * @param mixed $pattern

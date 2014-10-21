@@ -12,7 +12,6 @@
 namespace spec\Gnugat\Redaktilo;
 
 use PhpSpec\ObjectBehavior;
-use Symfony\Component\Filesystem\Filesystem as FileCopier;
 
 class FileSpec extends ObjectBehavior
 {

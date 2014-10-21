@@ -18,7 +18,8 @@ class LocationSanitizer implements InputSanitizer
     /** @var TextSanitizer */
     private $textSanitizer;
 
-    function __construct(TextSanitizer $textSanitizer)
+    /** @param TextSanitizer $textSanitizer */
+    public function __construct(TextSanitizer $textSanitizer)
     {
         $this->textSanitizer = $textSanitizer;
     }
@@ -31,11 +32,10 @@ class LocationSanitizer implements InputSanitizer
     public function sanitize(array $input)
     {
         $text = $this->textSanitizer->sanitize($input);
-
-        if (!isset($input['location']) || null === $location = $input['location']) {
-            $location = $text->getCurrentLineNumber();
+        $location = isset($input['location']) ? $input['location'] : null;
+        if (null === $location) {
+            return $text->getCurrentLineNumber();
         }
-
         if (!is_int($location)) {
             throw new InvalidLineNumberException($location, $text, 'The line number should be an integer');
         }

@@ -21,7 +21,7 @@ class LineNumberSearchStrategy implements SearchStrategy
     /** {@inheritdoc} */
     public function findAbove(Text $text, $pattern, $location = null)
     {
-        $foundLineNumber = (null !== $location? $location : $text->getCurrentLineNumber()) - $pattern;
+        $foundLineNumber = (null !== $location ? $location : $text->getCurrentLineNumber()) - $pattern;
         if (0 > $foundLineNumber || $foundLineNumber >= $text->getLength()) {
             return false;
         }
