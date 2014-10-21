@@ -83,8 +83,15 @@ class Filesystem
 
     private function makeFile($filename, $content)
     {
-        $lineBreak = $this->lineBreak->detect($content);
-        $lines = explode($lineBreak, $content);
+        try {
+            $lineBreak = $this->lineBreak->detect($content);
+        } catch (DifferentLineBreaksFoundException $e) {
+            $lineBreak = $e->getNumberLineBreakOther() >= $e->getNumberLineBreakWindows()
+                ? LineBreak::LINE_BREAK_OTHER
+                : LineBreak::LINE_BREAK_WINDOWS;
+        }
+
+        $lines = preg_split('/\R/', $content);
 
         return new File($filename, $lines, $lineBreak);
     }

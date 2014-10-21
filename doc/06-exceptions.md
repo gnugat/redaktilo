@@ -10,6 +10,7 @@ Here's the list of the available getters:
 * [NotSupportedException](#notsupportedexception)
 * [PatternNotFoundException](#patternnotfoundexception)
 * [InvalidLineNumberException](#invalidlinenumberexception)
+* [DifferentLineBreaksFoundException](#differentlinebreaksfoundexception)
 
 ## CommandNotFoundException
 
@@ -64,6 +65,21 @@ class InvalidLineNumberException extends \InvalidArgumentException
 {
     public function getLineNumber();
     public function getText();
+}
+```
+
+## DifferentLineBreaksFoundException
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo\Service;
+
+class DifferentLineBreaksFoundException extends \Exception
+{
+    public function getString();
+    public function getNumberLineBreakOther();
+    public function getNumberLineBreakWindows();
 }
 ```
 
