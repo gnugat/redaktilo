@@ -2,6 +2,7 @@
 
 ## 1.2.0: InputSanitizers
 
+* added mix of line break management
 * fixed text first line getter setter
 * fixed LineRemoveCommand using array_splice
 * added LocationSanitizer
