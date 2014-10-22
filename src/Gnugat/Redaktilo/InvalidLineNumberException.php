@@ -16,6 +16,8 @@ namespace Gnugat\Redaktilo;
  * the total number of lines in text.
  *
  * @api
+ *
+ * @deprecated since 1.x, use the class from the Exception namespace instead
  */
 class InvalidLineNumberException extends \InvalidArgumentException
 {

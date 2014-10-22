@@ -15,6 +15,8 @@ namespace Gnugat\Redaktilo\Command;
  * Thrown if the name given to CommandInvoker isn't in its collection.
  *
  * @api
+ *
+ * @deprecated since 1.x, use the class from the Exception namespace instead
  */
 class CommandNotFoundException extends \Exception
 {

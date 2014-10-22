@@ -18,6 +18,8 @@ use Gnugat\Redaktilo\File;
  * the Text.
  *
  * @api
+ *
+ * @deprecated since 1.x, use the class from the Exception namespace instead
  */
 class PatternNotFoundException extends \Exception
 {

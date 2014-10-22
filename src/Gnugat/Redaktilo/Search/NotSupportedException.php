@@ -16,6 +16,8 @@ namespace Gnugat\Redaktilo\Search;
  * registered strategies.
  *
  * @api
+ *
+ * @deprecated since 1.x, use the class from the Exception namespace instead
  */
 class NotSupportedException extends \Exception
 {
