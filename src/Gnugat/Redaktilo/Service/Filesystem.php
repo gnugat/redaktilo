@@ -11,6 +11,7 @@
 
 namespace Gnugat\Redaktilo\Service;
 
+use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
 use Gnugat\Redaktilo\File;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;

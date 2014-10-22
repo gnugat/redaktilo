@@ -11,6 +11,8 @@
 
 namespace Gnugat\Redaktilo\Service;
 
+use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
+
 /**
  * Detects the line break of the given string.
  *

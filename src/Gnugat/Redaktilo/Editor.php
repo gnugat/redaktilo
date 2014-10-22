@@ -12,7 +12,7 @@
 namespace Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Command\CommandInvoker;
-use Gnugat\Redaktilo\Search\PatternNotFoundException;
+use Gnugat\Redaktilo\Exception\PatternNotFoundException;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Service\Filesystem;
 
@@ -103,8 +103,8 @@ class Editor
      * @param mixed $pattern
      * @param int   $location
      *
-     * @throws PatternNotFoundException                       If the pattern hasn't been found
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
+     * @throws PatternNotFoundException                          If the pattern hasn't been found
+     * @throws \Gnugat\Redaktilo\Exception\NotSupportedException If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -127,8 +127,8 @@ class Editor
      * @param mixed $pattern
      * @param int   $location
      *
-     * @throws PatternNotFoundException                       If the pattern hasn't been found
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
+     * @throws PatternNotFoundException                          If the pattern hasn't been found
+     * @throws \Gnugat\Redaktilo\Exception\NotSupportedException If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -151,7 +151,9 @@ class Editor
      * @param mixed $pattern
      * @param int   $location
      *
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
+     * @return bool
+     *
+     * @throws \Gnugat\Redaktilo\Exception\NotSupportedException If the given pattern isn't supported by any registered strategy
      *
      * @api
      */
@@ -171,7 +173,9 @@ class Editor
      * @param mixed $pattern
      * @param int   $location
      *
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
+     * @return bool
+     *
+     * @throws \Gnugat\Redaktilo\Exception\NotSupportedException If the given pattern isn't supported by any registered strategy
      *
      * @api
      */

@@ -36,7 +36,7 @@ class TextFactory
     {
         try {
             $lineBreak = $this->lineBreak->detect($string);
-        } catch (DifferentLineBreaksFoundException $e) {
+        } catch (\Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException $e) {
             $lineBreak = $e->getNumberLineBreakOther() >= $e->getNumberLineBreakWindows()
                 ? LineBreak::LINE_BREAK_OTHER
                 : LineBreak::LINE_BREAK_WINDOWS;

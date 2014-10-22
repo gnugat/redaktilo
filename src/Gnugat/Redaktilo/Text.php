@@ -11,6 +11,8 @@
 
 namespace Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\Exception\InvalidLineNumberException;
+
 /**
  * Redaktilo's base entity representing a collection of lines: each line is
  * stripped from its line break character.

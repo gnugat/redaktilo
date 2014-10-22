@@ -11,6 +11,8 @@
 
 namespace Gnugat\Redaktilo\Command;
 
+use Gnugat\Redaktilo\Exception\CommandNotFoundException;
+
 /**
  * Executes a command with the given input.
  */
