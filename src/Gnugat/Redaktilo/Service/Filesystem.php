@@ -12,10 +12,11 @@
 namespace Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
+use Gnugat\Redaktilo\Exception\FileNotFoundException;
+use Gnugat\Redaktilo\Exception\IOException;
 use Gnugat\Redaktilo\File;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 
 /**
  * Manages actual operations on the filesystem using File as a data source.
@@ -131,6 +132,12 @@ class Filesystem
         $filename = $file->getFilename();
         $content = $this->contentFactory->make($file);
 
-        $this->symfonyFilesystem->dumpFile($filename, $content, null);
+        try {
+            $this->symfonyFilesystem->dumpFile($filename, $content, null);
+        } catch (SymfonyIOException $e) {
+            $message = sprintf('Failed to write "%s".', $filename);
+
+            throw new IOException($message, 0, $e, $filename);
+        }
     }
 }
