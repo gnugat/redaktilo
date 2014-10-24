@@ -122,7 +122,6 @@ Implementations provided out of the box are:
 * `LineInsertBelowCommand`: `text`, `addition` and optional `location` (name: `insert_below`)
 * `LineJumpAboveCommand`: `text` and optional `number` (name: `jump_above`)
 * `LineJumpBelowCommand`: `text` and optional `number` (name: `jump_below`)
-* `LineJumpPercentCommand`: `text` and optional `number` (name: `jump_percent`)
 * `LineRemoveCommand`: `text` and optional `location` (name: `remove`)
 * `LineReplaceCommand`: `text`, `replacement` and optional `location` (name: `replace`)
 

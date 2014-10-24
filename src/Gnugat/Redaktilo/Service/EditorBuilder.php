@@ -17,7 +17,6 @@ use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
 use Gnugat\Redaktilo\Command\LineInsertBelowCommand;
 use Gnugat\Redaktilo\Command\LineJumpAboveCommand;
 use Gnugat\Redaktilo\Command\LineJumpBelowCommand;
-use Gnugat\Redaktilo\Command\LineJumpPercentCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
 use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
@@ -110,7 +109,8 @@ class EditorBuilder
         $commandInvoker->addCommand(new LineRemoveCommand($this->getTextSanitizer(), $this->getLocationSanitizer()));
         $commandInvoker->addCommand(new LineJumpAboveCommand());
         $commandInvoker->addCommand(new LineJumpBelowCommand());
-        $commandInvoker->addCommand(new LineJumpPercentCommand());
+        $commandInvoker->addCommand(new LineReplaceCommand());
+        $commandInvoker->addCommand(new LineRemoveCommand());
 
         foreach ($this->commands as $command) {
             $commandInvoker->addCommand($command);

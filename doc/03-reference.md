@@ -6,7 +6,6 @@
     * [Content manipulation](#content-manipulation)
     * [Commands](#commands)
         * [Jump Relatively](#jump-relatively)
-        * [Jump to a Percentage](#jump-to-a-percentage)
 * [Text API](#text-api)
     * [Side note on LineBreak](#side-note-on-linebreak)
 * [File API](#file-api)
@@ -179,34 +178,6 @@ $file->getCurrentLineNumber(); // 3
 $editor->run('jump_above', array('text' => $file)); // If no number specified, 1 is assumed
 $file->getCurrentLineNumber(); // 2
 ```
-
-#### Jump to a Percentage
-
-The command `jump_percent` provides a way to jump absolutely to a given
-percentage.
-
-```php
-<?php
-require_once __DIR__.'/vendor/autoload.php';
-
-use Gnugat\Redaktilo\EditorFactory;
-
-$editor = EditorFactory::createEditor();
-$file = $editor->open('/tmp/spam-menu.txt', true);
-$file->getLength(); // 10
-
-$editor->run('jump_percent', array('text' => $file, 'number' => 50)); // Jump to the middle of the text (50%)
-$file->getCurrentLineNumber(); // 5
-
-$editor->run('jump_percent', array('text' => $file, 'number' => 0)); // Jump to the top of the text (0%)
-$file->getCurrentLineNumber(); // 0
-
-$editor->run('jump_percent', array('text' => $file)); // If no number specified, 100 is assumed (the bottom of the text, 100%)
-$file->getCurrentLineNumber(); // 9
-```
-
-**Note**: giving a negative number or a number superior to 100 will raise a
-`\InvalidArgumentException`.
 
 ## Text API
 
