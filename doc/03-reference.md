@@ -7,7 +7,6 @@
     * [Commands](#commands)
         * [Jump Relatively](#jump-relatively)
         * [Jump to a Percentage](#jump-to-a-percentage)
-        * [Concatenation](#concatenation)
 * [Text API](#text-api)
     * [Side note on LineBreak](#side-note-on-linebreak)
 * [File API](#file-api)
@@ -208,40 +207,6 @@ $file->getCurrentLineNumber(); // 9
 
 **Note**: giving a negative number or a number superior to 100 will raise a
 `\InvalidArgumentException`.
-
-#### Concatenation
-
-The commands `append` and `prepend` allow to concatene a string either at the
-begining or at the end of a line:
-
-```php
-<?php
-require_once __DIR__.'/vendor/autoload.php';
-
-use Gnugat\Redaktilo\EditorFactory;
-
-$editor = EditorFactory::createEditor();
-$file = $editor->open('/tmp/dead-parrot.txt');
-$currentLineNumber = $file->getCurrentLineNumber();
-$lines = $file->getLines();
-$currentLine = $lines[$currentLineNumber]; // "have an argument"
-
-$editor->run('append', array('text' => $file, 'value' => ',', 'location' => 0)); // Append ',' at the end of the first line
-$lines = $file->getLines();
-$currentLine = $lines[$currentLineNumber]; // "have an argument,"
-
-$editor->run('append', array('text' => $file, 'value' => 'please')); // If no location specified, the current line is assumed
-$lines = $file->getLines();
-$currentLine = $lines[$currentLineNumber]; // "have an argument, please"
-
-$editor->run('prepend', array('text' => $file, 'value' => 'to ', 'location' => 0)); // Prepend 'to ' at the end of the first line
-$lines = $file->getLines();
-$currentLine = $lines[$currentLineNumber]; // "to have an argument, please"
-
-$editor->run('prepend', array('text' => $file, 'value' => "I'd like ")); // If no location specified, the current line is assumed
-$lines = $file->getLines();
-$currentLine = $lines[$currentLineNumber]; // "I'd like to have an argument, please"
-```
 
 ## Text API
 
