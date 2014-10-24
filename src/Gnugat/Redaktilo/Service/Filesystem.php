@@ -27,14 +27,24 @@ class Filesystem
     /** @var SymfonyFilesystem */
     private $symfonyFilesystem;
 
+    /** @var ContentFactory */
+    private $contentFactory;
+
     /**
      * @param LineBreak         $lineBreak
      * @param SymfonyFilesystem $symfonyFilesystem
+     * @param ContentFactory    $contentFactory
      */
-    public function __construct(LineBreak $lineBreak, SymfonyFilesystem $symfonyFilesystem)
+    public function __construct(
+        LineBreak $lineBreak,
+        SymfonyFilesystem $symfonyFilesystem,
+        ContentFactory $contentFactory = null
+    )
     {
         $this->lineBreak = $lineBreak;
         $this->symfonyFilesystem = $symfonyFilesystem;
+        // @deprecated 1.3 ContentFactory becomes mandatory
+        $this->contentFactory = $contentFactory ?: new ContentFactory();
     }
 
     /**
@@ -118,9 +128,7 @@ class Filesystem
     public function write(File $file)
     {
         $filename = $file->getFilename();
-        $lines = $file->getLines();
-        $lineBreak = $file->getLineBreak();
-        $content = implode($lineBreak, $lines);
+        $content = $this->contentFactory->make($file);
 
         $this->symfonyFilesystem->dumpFile($filename, $content, null);
     }

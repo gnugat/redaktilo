@@ -120,7 +120,7 @@ class EditorBuilder
             return $this->filesystem;
         }
 
-        return new Filesystem(new LineBreak(), new SymfonyFilesystem());
+        return new Filesystem(new LineBreak(), new SymfonyFilesystem(), new ContentFactory());
     }
 
     /** @return Editor */
