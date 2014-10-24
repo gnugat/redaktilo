@@ -35,8 +35,6 @@ class EditorBuilderSpec extends ObjectBehavior
         $editor->shouldHaveCommands(array(
             'insert_above' => 'Gnugat\Redaktilo\Command\LineInsertAboveCommand',
             'insert_below' => 'Gnugat\Redaktilo\Command\LineInsertBelowCommand',
-            'jump_above' => 'Gnugat\Redaktilo\Command\LineJumpAboveCommand',
-            'jump_below' => 'Gnugat\Redaktilo\Command\LineJumpBelowCommand',
             'replace' => 'Gnugat\Redaktilo\Command\LineReplaceCommand',
             'remove' => 'Gnugat\Redaktilo\Command\LineRemoveCommand',
         ));
@@ -69,7 +67,7 @@ class EditorBuilderSpec extends ObjectBehavior
             ->getEditor();
 
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
-        $editor->shouldHaveCommandCount(7);
+        $editor->shouldHaveCommandCount(5);
     }
 
     function it_can_have_a_custom_command_invoker(CommandInvoker $commandInvoker)

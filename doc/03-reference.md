@@ -5,7 +5,6 @@
     * [Content navigation](#content-navigation)
     * [Content manipulation](#content-manipulation)
     * [Commands](#commands)
-        * [Jump Relatively](#jump-relatively)
 * [Text API](#text-api)
     * [Side note on LineBreak](#side-note-on-linebreak)
 * [File API](#file-api)
@@ -150,34 +149,6 @@ $editor->save($file); // Necessary to actually apply the changes on the filesyst
 ### Commands
 
 More content manipulation are available through `Editor#run()`.
-
-#### Jump Relatively
-
-The commands `jump_above` and `jump_below` take the same arguments and provide
-a way to jump a given number of lines above or below the current one.
-
-```php
-<?php
-require_once __DIR__.'/vendor/autoload.php';
-
-use Gnugat\Redaktilo\EditorFactory;
-
-$editor = EditorFactory::createEditor();
-$file = $editor->open('/tmp/spam-menu.txt', true);
-$file->getCurrentLineNumber(); // 0
-
-$editor->run('jump_below', array('text' => $file, 'number' => 4)); // Jumps 4 lines below
-$file->getCurrentLineNumber(); // 4
-
-$editor->run('jump_below', array('text' => $file)); // If no number specified, 1 is assumed
-$file->getCurrentLineNumber(); // 5
-
-$editor->run('jump_above', array('text' => $file, 'number' => 2)); // Jumps 2 lines above
-$file->getCurrentLineNumber(); // 3
-
-$editor->run('jump_above', array('text' => $file)); // If no number specified, 1 is assumed
-$file->getCurrentLineNumber(); // 2
-```
 
 ## Text API
 
