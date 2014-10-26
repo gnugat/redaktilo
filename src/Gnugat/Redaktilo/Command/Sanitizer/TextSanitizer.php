@@ -30,7 +30,7 @@ class TextSanitizer implements InputSanitizer
             throw new InvalidArgumentException('A \'text\' entry should have been given in the input array');
         }
         if (!is_object($input['text']) || !($input['text'] instanceof Text)) {
-            throw new InvalidArgumentException('The \'text\' entry should be a instance of Text');
+            throw new InvalidArgumentException('The \'text\' entry should be an instance of Text');
         }
 
         return $input['text'];
