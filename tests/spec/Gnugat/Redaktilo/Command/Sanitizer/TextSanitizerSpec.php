@@ -19,7 +19,7 @@ class TextSanitizerSpec extends ObjectBehavior
 {
     function it_fails_when_no_text_is_given()
     {
-        $exception = '\InvalidArgumentException';
+        $exception = '\Gnugat\Redaktilo\Exception\InvalidArgumentException';
 
         $input = array();
         $this->shouldThrow($exception)->duringSanitize($input);

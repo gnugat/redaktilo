@@ -39,7 +39,7 @@ class LocationSanitizerSpec extends ObjectBehavior
 
     function it_fails_when_the_line_number_is_invalid(TextSanitizer $textSanitizer, Text $text)
     {
-        $exception = '\Gnugat\Redaktilo\InvalidLineNumberException';
+        $exception = '\Gnugat\Redaktilo\Exception\InvalidLineNumberException';
 
         $input = array(
             'location' => 'toto'

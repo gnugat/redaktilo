@@ -24,7 +24,7 @@ class CommandInvokerSpec extends ObjectBehavior
     function it_fails_when_the_command_is_not_supported(Command $command)
     {
         $name = 'test';
-        $exception = 'Gnugat\Redaktilo\Command\CommandNotFoundException';
+        $exception = '\Gnugat\Redaktilo\Exception\CommandNotFoundException';
         $input = array();
 
         $command->getName()->willReturn('some-command');
