@@ -14,7 +14,7 @@ namespace Gnugat\Redaktilo\Service;
 /**
  * Thrown if the string given to LineBreak service contains different line breaks.
  *
- * @deprecated since 1.x, use the class from the Exception namespace instead
+ * @deprecated since 1.4, use the class from the Exception namespace instead
  */
 class DifferentLineBreaksFoundException extends \Exception
 {

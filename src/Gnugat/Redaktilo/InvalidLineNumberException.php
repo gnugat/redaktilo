@@ -17,7 +17,7 @@ namespace Gnugat\Redaktilo;
  *
  * @api
  *
- * @deprecated since 1.x, use the class from the Exception namespace instead
+ * @deprecated since 1.4, use the class from the Exception namespace instead
  */
 class InvalidLineNumberException extends \InvalidArgumentException
 {
