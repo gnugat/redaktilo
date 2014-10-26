@@ -18,9 +18,46 @@ use Gnugat\Redaktilo\Search\NotSupportedException as BaseException;
  * registered strategies.
  *
  * @api
- *
- * @todo Move all code from deprecated parent to this class
  */
 class NotSupportedException extends BaseException implements Exception
 {
+    /** @var mixed */
+    private $pattern;
+
+    /** @var array */
+    private $searchStrategies;
+
+    /**
+     * @param mixed $pattern
+     * @param array $searchStrategies
+     */
+    public function __construct($pattern, array $searchStrategies)
+    {
+        $this->pattern = $pattern;
+        $this->searchStrategies = $searchStrategies;
+
+        $patternMessage = 'given pattern';
+        if (is_string($pattern) || is_int($pattern)) {
+            $patternMessage .= ' "'.strval($pattern).'"';
+        }
+
+        $message = sprintf(
+            'The %s isn\'t supported by the Search Strategies registered in SearchEngine',
+            $patternMessage
+        );
+
+        parent::__construct($message);
+    }
+
+    /** @return mixed */
+    public function getPattern()
+    {
+        return $this->pattern;
+    }
+
+    /** @return array */
+    public function getSearchStrategies()
+    {
+        return $this->searchStrategies;
+    }
 }

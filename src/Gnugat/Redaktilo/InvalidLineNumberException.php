@@ -19,36 +19,11 @@ namespace Gnugat\Redaktilo;
  *
  * @deprecated since 1.4, use the class from the Exception namespace instead
  */
-class InvalidLineNumberException extends \InvalidArgumentException
+abstract class InvalidLineNumberException extends \InvalidArgumentException
 {
-    /** @var mixed */
-    private $lineNumber;
-
-    /** @var $text */
-    private $text;
-
-    /**
-     * @param mixed  $lineNumber
-     * @param Text   $text
-     * @param string $message
-     */
-    public function __construct($lineNumber, Text $text, $message)
-    {
-        $this->lineNumber = $lineNumber;
-        $this->text = $text;
-
-        parent::__construct($message);
-    }
-
     /** @return mixed */
-    public function getLineNumber()
-    {
-        return $this->lineNumber;
-    }
+    abstract public function getLineNumber();
 
     /** @return Text */
-    public function getText()
-    {
-        return $this->text;
-    }
+    abstract public function getText();
 }

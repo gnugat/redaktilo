@@ -18,37 +18,11 @@ namespace Gnugat\Redaktilo\Command;
  *
  * @deprecated since 1.4, use the class from the Exception namespace instead
  */
-class CommandNotFoundException extends \Exception
+abstract class CommandNotFoundException extends \Exception
 {
-    /** @var string */
-    private $name;
-
-    /** @var array */
-    private $commands;
-
-    /**
-     * @param string $name
-     * @param array  $commands
-     */
-    public function __construct($name, array $commands)
-    {
-        $this->name = $name;
-        $this->commands = $commands;
-
-        $message = sprintf('The command "%s" was not found in CommandInvoker', $name);
-
-        parent::__construct($message);
-    }
-
     /** @return string */
-    public function getName()
-    {
-        return $this->name;
-    }
+    abstract public function getName();
 
     /** @return array */
-    public function getCommands()
-    {
-        return $this->commands;
-    }
+    abstract public function getCommands();
 }
