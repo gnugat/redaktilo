@@ -23,7 +23,7 @@ class Editor
     public function open($filename, $force = false);
     public function save(File $file);
 
-    // Throw Gnugat\Redaktilo\Search\PatternNotFoundException
+    // Throw Gnugat\Redaktilo\Exception\PatternNotFoundException
     public function jumpAbove(Text $text, $pattern, $location = null);
     public function jumpBelow(Text $text, $pattern, $location = null);
     public function hasBelow(Text $text, $pattern, $location = null);
@@ -65,7 +65,7 @@ use Gnugat\Redaktilo\EditorFactory;
 $editor = EditorFactory::createEditor();
 try {
     $file = $editor->open('/tmp/new.txt');
-} catch (\Symfony\Component\Filesystem\Exception\FileNotFoundException $e) {
+} catch (\Gnugat\Redaktilo\Exception\FileNotFoundException $e) {
     // The file doesn't exist
 }
 $file = $editor->open('/tmp/new.txt', true); // Forces file creation when it doesn't exist
@@ -107,9 +107,9 @@ $editor = EditorFactory::createEditor();
 $file = $editor->open('/tmp/life-of-brian.txt', true);
 try {
     $editor->jumpAbove($file, '[A guard sniggers]'); // strict equality
-} catch (\Gnugat\Redaktilo\Search\NotSupportedException $e) {
+} catch (\Gnugat\Redaktilo\Exception\NotSupportedException $e) {
     // The pattern isn't supported by any registered strategy (shouldn't occur often)
-} catch (\Gnugat\Redaktilo\Search\PatternNotFoundException $e) {
+} catch (\Gnugat\Redaktilo\Exception\PatternNotFoundException $e) {
     // The pattern hasn't been found in the file
 }
 if ($editor->hasBelow($file, '/sniggers/', 0) { // regular expression
