@@ -15,6 +15,7 @@ use Gnugat\Redaktilo\Command\Command;
 use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
 use Gnugat\Redaktilo\Command\LineInsertBelowCommand;
+use Gnugat\Redaktilo\Command\LineReplaceAllCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
 use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
@@ -57,6 +58,12 @@ class EditorBuilder
 
     /** @var LocationSanitizer */
     private $locationSanitizer;
+
+    /** @var ContentFactory */
+    private $contentFactory;
+
+    /** @var LineBreak */
+    private $lineBreak;
 
     /** @return TextToPhpConverter */
     protected function getPhpConverter()
@@ -103,6 +110,7 @@ class EditorBuilder
 
         $commandInvoker->addCommand(new LineInsertAboveCommand($this->getTextSanitizer(), $this->getLocationSanitizer()));
         $commandInvoker->addCommand(new LineInsertBelowCommand($this->getTextSanitizer(), $this->getLocationSanitizer()));
+        $commandInvoker->addCommand(new LineReplaceAllCommand($this->getContentFactory(), $this->getTextFactory(), $this->getTextSanitizer()));
         $commandInvoker->addCommand(new LineReplaceCommand($this->getTextSanitizer(), $this->getLocationSanitizer()));
         $commandInvoker->addCommand(new LineRemoveCommand($this->getTextSanitizer(), $this->getLocationSanitizer()));
 
@@ -120,7 +128,7 @@ class EditorBuilder
             return $this->filesystem;
         }
 
-        return new Filesystem(new LineBreak(), new SymfonyFilesystem(), new ContentFactory());
+        return new Filesystem($this->getLineBreak(), new SymfonyFilesystem(), $this->getContentFactory());
     }
 
     /** @return Editor */
@@ -131,6 +139,12 @@ class EditorBuilder
             $this->getSearchEngine(),
             $this->getCommandInvoker()
         );
+    }
+
+    /** @return TextFactory */
+    public function getTextFactory()
+    {
+        return new TextFactory($this->getLineBreak());
     }
 
     /**
@@ -200,5 +214,25 @@ class EditorBuilder
         }
 
         return $this->locationSanitizer = new LocationSanitizer($this->getTextSanitizer());
+    }
+
+    /** @return ContentFactory */
+    protected function getContentFactory()
+    {
+        if ($this->contentFactory) {
+            return $this->contentFactory;
+        }
+
+        return $this->contentFactory = new ContentFactory();
+    }
+
+    /** @return LineBreak */
+    protected function getLineBreak()
+    {
+        if ($this->lineBreak) {
+            return $this->lineBreak;
+        }
+
+        return $this->lineBreak = new LineBreak();
     }
 }

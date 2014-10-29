@@ -99,6 +99,7 @@ $editor->run('do_something', array('text' => $file));
 * `insertBelow`
 * `remove`
 * `replace`
+* `replace_all`
 
 ### Command API
 
@@ -122,6 +123,7 @@ Implementations provided out of the box are:
 * `LineInsertBelowCommand`: `text`, `addition` and optional `location` (name: `insert_below`)
 * `LineRemoveCommand`: `text` and optional `location` (name: `remove`)
 * `LineReplaceCommand`: `text`, `replacement` and optional `location` (name: `replace`)
+* `LineReplaceAllCommand`: `text`, `pattern` and `replacement` (name: `replace_all`)
 
 ### Input Sanitizers
 
