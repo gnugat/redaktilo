@@ -329,6 +329,24 @@ class EditorSpec extends ObjectBehavior
         $this->replace($text, $replacement, $lineNumber);
     }
 
+    function it_replaces_all_occurences(
+        CommandInvoker $commandInvoker,
+        Text $text
+    )
+    {
+        $pattern = '/*/';
+        $replacement = 'Spam';
+        $input = array(
+            'text' => $text,
+            'pattern' => $pattern,
+            'replacement' => $replacement,
+        );
+
+        $commandInvoker->run('replace_all', $input)->shouldBeCalled();
+
+        $this->replaceAll($text, $pattern, $replacement);
+    }
+
     function it_removes_the_current_line(
         CommandInvoker $commandInvoker,
         Text $text

@@ -266,6 +266,26 @@ class Editor
     }
 
     /**
+     * Replaces all the occurences which match the given pattern with the given
+     * replacement.
+     *
+     * @param Text   $text
+     * @param string $pattern
+     * @param string $replacement
+     *
+     * @api
+     */
+    public function replaceAll(Text $text, $pattern, $replacement)
+    {
+        $input = array(
+            'text' => $text,
+            'pattern' => $pattern,
+            'replacement' => $replacement,
+        );
+        $this->commandInvoker->run('replace_all', $input);
+    }
+
+    /**
      * Removes the line at the given location
      * (or at the current one if none provided).
      *
