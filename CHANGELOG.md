@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 1.2.1: Fixed Backward Compatibility Break
+
+* fixed BC break by making command constructor arguments optional
+
 ## 1.2.0: InputSanitizers
 
 * added mix of line break management
