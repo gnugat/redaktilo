@@ -28,11 +28,13 @@ class LineRemoveCommand implements Command
     /**
      * @param TextSanitizer     $textSanitizer
      * @param LocationSanitizer $locationSanitizer
+     *
+     * @deprecated 1.2 input sanitizers will become mandatory from 2.0
      */
-    public function __construct(TextSanitizer $textSanitizer, LocationSanitizer $locationSanitizer)
+    public function __construct(TextSanitizer $textSanitizer = null, LocationSanitizer $locationSanitizer = null)
     {
-        $this->textSanitizer = $textSanitizer;
-        $this->locationSanitizer = $locationSanitizer;
+        $this->textSanitizer = $textSanitizer ?: new TextSanitizer();
+        $this->locationSanitizer = $locationSanitizer ?: new LocationSanitizer($this->textSanitizer);
     }
 
     /** {@inheritdoc} */
