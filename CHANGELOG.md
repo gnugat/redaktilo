@@ -1,5 +1,11 @@
 # Changes between versions
 
+## 1.3.0: Chicken Run
+
+* added ContentFactory
+* added LineReplaceAllCommand
+* added Editor#run
+
 ## 1.2.1: Fixed Backward Compatibility Break
 
 * fixed BC break by making command constructor arguments optional
