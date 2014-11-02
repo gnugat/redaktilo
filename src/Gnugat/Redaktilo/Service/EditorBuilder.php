@@ -15,9 +15,9 @@ use Gnugat\Redaktilo\Command\Command;
 use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Command\LineInsertAboveCommand;
 use Gnugat\Redaktilo\Command\LineInsertBelowCommand;
+use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\LineReplaceAllCommand;
 use Gnugat\Redaktilo\Command\LineReplaceCommand;
-use Gnugat\Redaktilo\Command\LineRemoveCommand;
 use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
 use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
 use Gnugat\Redaktilo\Editor;
@@ -52,6 +52,9 @@ class EditorBuilder
 
     /** @var Filesystem */
     private $filesystem;
+
+    /** @var TextFactory */
+    private $textFactory;
 
     /** @var TextSanitizer */
     private $textSanitizer;
@@ -144,7 +147,11 @@ class EditorBuilder
     /** @return TextFactory */
     public function getTextFactory()
     {
-        return new TextFactory($this->getLineBreak());
+        if ($this->textFactory) {
+            return $this->textFactory;
+        }
+
+        return $this->textFactory = new TextFactory($this->getLineBreak());
     }
 
     /**

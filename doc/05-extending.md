@@ -100,6 +100,7 @@ $editor->run('do_something', array('text' => $file));
 * `remove`
 * `replace`
 * `replace_all`
+* `run`
 
 ### Command API
 
