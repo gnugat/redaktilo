@@ -12,6 +12,7 @@
 namespace spec\Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\File;
+use Gnugat\Redaktilo\Service\ContentFactory;
 use Gnugat\Redaktilo\Service\LineBreak;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
@@ -30,8 +31,9 @@ class FilesystemSpec extends ObjectBehavior
 
         $this->fileCopier = new SymfonyFilesystem();
         $lineBreak = new LineBreak();
+        $contentFactory = new ContentFactory();
 
-        $this->beConstructedWith($lineBreak, $symfonyFilesystem);
+        $this->beConstructedWith($lineBreak, $symfonyFilesystem, $contentFactory);
     }
 
     function it_opens_existing_files()

@@ -65,6 +65,13 @@ class EditorSpec extends ObjectBehavior
         $this->open(self::FILENAME, true);
     }
 
+    function it_saves_files(Filesystem $filesystem, File $file)
+    {
+        $filesystem->write($file)->shouldBeCalled();
+
+        $this->save($file);
+    }
+
     function it_moves_the_cursor_above_the_current_line(
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
@@ -322,6 +329,24 @@ class EditorSpec extends ObjectBehavior
         $this->replace($text, $replacement, $lineNumber);
     }
 
+    function it_replaces_all_occurences(
+        CommandInvoker $commandInvoker,
+        Text $text
+    )
+    {
+        $pattern = '/*/';
+        $replacement = 'Spam';
+        $input = array(
+            'text' => $text,
+            'pattern' => $pattern,
+            'replacement' => $replacement,
+        );
+
+        $commandInvoker->run('replace_all', $input)->shouldBeCalled();
+
+        $this->replaceAll($text, $pattern, $replacement);
+    }
+
     function it_removes_the_current_line(
         CommandInvoker $commandInvoker,
         Text $text
@@ -353,10 +378,13 @@ class EditorSpec extends ObjectBehavior
         $this->remove($text, $lineNumber);
     }
 
-    function it_saves_files(Filesystem $filesystem, File $file)
+    function it_runs_a_command(CommandInvoker $commandInvoker)
     {
-        $filesystem->write($file)->shouldBeCalled();
+        $name = 'walk_in_a_silly_way';
+        $input = array();
 
-        $this->save($file);
+        $commandInvoker->run($name, $input)->shouldBeCalled();
+
+        $this->run($name, $input);
     }
 }

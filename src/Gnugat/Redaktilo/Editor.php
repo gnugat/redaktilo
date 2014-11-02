@@ -266,6 +266,26 @@ class Editor
     }
 
     /**
+     * Replaces all the occurences which match the given pattern with the given
+     * replacement.
+     *
+     * @param Text   $text
+     * @param string $pattern
+     * @param string $replacement
+     *
+     * @api
+     */
+    public function replaceAll(Text $text, $pattern, $replacement)
+    {
+        $input = array(
+            'text' => $text,
+            'pattern' => $pattern,
+            'replacement' => $replacement,
+        );
+        $this->commandInvoker->run('replace_all', $input);
+    }
+
+    /**
      * Removes the line at the given location
      * (or at the current one if none provided).
      *
@@ -281,5 +301,20 @@ class Editor
             'location' => $location,
         );
         $this->commandInvoker->run('remove', $input);
+    }
+
+    /**
+     * Provides access to the CommandInvoker.
+     *
+     * @param string $name
+     * @param array  $input
+     *
+     * @throws \Gnugat\Redaktilo\Command\CommandNotFoundException If the command isn't found in the CommandInvoker
+     *
+     * @api
+     */
+    public function run($name, array $input)
+    {
+        $this->commandInvoker->run($name, $input);
     }
 }

@@ -90,16 +90,17 @@ $commandInvoker = $builder->getCommandInvoker();
 $editor = $builder->getEditor();
 $file = $editor->open('/tmp/menu_spam.txt', true);
 
-$commandInvoker->run('do_something', array('text' => $file));
+$editor->run('do_something', array('text' => $file));
 ```
 
-Currently commands cannot be added dynamically to `Editor`, but its following
-methods uses the `CommandInvoker`:
+`Editor` actually uses the `CommandInvoker` in its following methods:
 
 * `insertAbove`
 * `insertBelow`
 * `remove`
 * `replace`
+* `replace_all`
+* `run`
 
 ### Command API
 
@@ -123,6 +124,7 @@ Implementations provided out of the box are:
 * `LineInsertBelowCommand`: `text`, `addition` and optional `location` (name: `insert_below`)
 * `LineRemoveCommand`: `text` and optional `location` (name: `remove`)
 * `LineReplaceCommand`: `text`, `replacement` and optional `location` (name: `replace`)
+* `LineReplaceAllCommand`: `text`, `pattern` and `replacement` (name: `replace_all`)
 
 ### Input Sanitizers
 

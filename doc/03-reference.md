@@ -4,6 +4,7 @@
     * [Filesystem operations](#filesystem-operations)
     * [Content navigation](#content-navigation)
     * [Content manipulation](#content-manipulation)
+    * [Commands](#commands)
 * [Text API](#text-api)
     * [Side note on LineBreak](#side-note-on-linebreak)
 * [File API](#file-api)
@@ -31,7 +32,10 @@ class Editor
     public function insertAbove(Text $text, $addition, $location = null);
     public function insertBelow(Text $text, $addition, $location = null);
     public function replace(Text $text, $replacement, $location = null);
+    public function replaceAll(Text $text, $pattern, $replacement);
     public function remove(Text $text, $location = null);
+
+    public function run($name, array $input); // Throws Gnugat\Redaktilo\Command\CommandNotFoundException
 }
 ```
 
@@ -138,10 +142,15 @@ $file = $editor->open('/tmp/spam-menu.txt', true);
 $editor->insertAbove($file, 'Egg'); // Current line number: 0
 $editor->insertBelow($file, 'Bacon'); // Current line number: 1
 $editor->replace($file, $replace);
+$editor->replaceAll($file, '/*/', 'Spam');
 $editor->remove($file);  // Current line number: 0
 
 $editor->save($file); // Necessary to actually apply the changes on the filesystem
 ```
+
+### Commands
+
+More content manipulation are available through `Editor#run()`.
 
 ## Text API
 
@@ -164,7 +173,6 @@ class Text
     // Throws InvalidLineNumberException if $lineNumber is not a positive integer lower than the length
     public function setCurrentLineNumber($lineNumber);
     public function getCurrentLineNumber();
-
 
     // Throws InvalidLineNumberException if $lineNumber is not a positive integer lower than the length
     public function getLine($lineNumber = null);

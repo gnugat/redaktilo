@@ -42,34 +42,12 @@ class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
     {
         $editor = EditorFactory::createEditor();
         $file = $editor->open($this->originalPath);
-
-        try {
-            $this->removeDollars($editor, $file);
-        } catch (\Exception $e) {
-        }
-
+        $editor->replaceAll($file, '/\$ /', '');
         $editor->save($file);
 
         $expected = file_get_contents($this->expectedPath);
         $actual = file_get_contents($this->originalPath);
 
         $this->assertSame($expected, $actual);
-    }
-
-    protected function removeDollars(Editor $editor, File $file)
-    {
-        $editor->jumpBelow($file, '/.. code-block:: bash/');
-        $lines = $file->getLines();
-        $editor->jumpBelow($file, 1);
-
-        while ((bool) preg_match('/^   / ', $line = $lines[$file->getCurrentLineNumber()]) || '' === $line) {
-            if ('' !== $line) {
-                $replacement = preg_replace('/\$ /', '', $line);
-                $editor->replace($file, $replacement);
-            }
-            $editor->jumpBelow($file, 1);
-        }
-
-        $this->removeDollars($editor, $file);
     }
 }
