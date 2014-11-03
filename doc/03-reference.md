@@ -35,7 +35,7 @@ class Editor
     public function replaceAll(Text $text, $pattern, $replacement);
     public function remove(Text $text, $location = null);
 
-    public function run($name, array $input); // Throws Gnugat\Redaktilo\Command\CommandNotFoundException
+    public function run($name, array $input); // Throws Gnugat\Redaktilo\Exception\CommandNotFoundException
 }
 ```
 

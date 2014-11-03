@@ -313,7 +313,7 @@ class Editor
      * @param string $name
      * @param array  $input
      *
-     * @throws \Gnugat\Redaktilo\Command\CommandNotFoundException If the command isn't found in the CommandInvoker
+     * @throws \Gnugat\Redaktilo\Exception\CommandNotFoundException If the command isn't found in the CommandInvoker
      *
      * @api
      */
