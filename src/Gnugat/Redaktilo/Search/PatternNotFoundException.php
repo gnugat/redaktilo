@@ -24,6 +24,6 @@ abstract class PatternNotFoundException extends \Exception
     /** @return mixed */
     abstract public function getPattern();
 
-    /** @return mixed */
+    /** @return \Gnugat\Redaktilo\Text */
     abstract public function getText();
 }

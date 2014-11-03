@@ -13,6 +13,7 @@ namespace Gnugat\Redaktilo\Exception;
 
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Search\PatternNotFoundException as BaseException;
+use Gnugat\Redaktilo\Text;
 
 /**
  * Thrown if the pattern given to the SearchEngine couldn't match anything in
@@ -25,14 +26,14 @@ class PatternNotFoundException extends BaseException implements Exception
     /** @var mixed */
     private $pattern;
 
-    /** @var mixed */
+    /** @var Text */
     private $text;
 
     /**
      * @param mixed $pattern
-     * @param mixed $text
+     * @param Text $text
      */
-    public function __construct($pattern, $text)
+    public function __construct($pattern, Text $text)
     {
         $this->pattern = $pattern;
         $this->text = $text;
@@ -57,7 +58,7 @@ class PatternNotFoundException extends BaseException implements Exception
         return $this->pattern;
     }
 
-    /** @return mixed */
+    /** @return Text */
     public function getText()
     {
         return $this->text;

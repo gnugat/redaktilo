@@ -23,12 +23,12 @@ class CommandNotFoundException extends BaseException implements Exception
     /** @var string */
     private $name;
 
-    /** @var array */
+    /** @var \Gnugat\Redaktilo\Command\Command[] */
     private $commands;
 
     /**
-     * @param string $name
-     * @param array  $commands
+     * @param string                              $name
+     * @param \Gnugat\Redaktilo\Command\Command[] $commands
      */
     public function __construct($name, array $commands)
     {
@@ -46,7 +46,7 @@ class CommandNotFoundException extends BaseException implements Exception
         return $this->name;
     }
 
-    /** @return array */
+    /** @return \Gnugat\Redaktilo\Command\Command[] */
     public function getCommands()
     {
         return $this->commands;

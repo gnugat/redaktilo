@@ -16,7 +16,7 @@ class InvalidLineNumberException extends BaseException implements Exception
     /** @var mixed */
     private $lineNumber;
 
-    /** @var $text */
+    /** @var Text */
     private $text;
 
     /**

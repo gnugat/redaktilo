@@ -23,6 +23,6 @@ abstract class CommandNotFoundException extends \Exception
     /** @return string */
     abstract public function getName();
 
-    /** @return array */
+    /** @return \Gnugat\Redaktilo\Command\Command[] */
     abstract public function getCommands();
 }

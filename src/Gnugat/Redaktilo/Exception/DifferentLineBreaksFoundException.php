@@ -41,11 +41,10 @@ class DifferentLineBreaksFoundException extends BaseException implements Excepti
         $this->numberLineBreakWindows = (int) $numberLineBreakWindows;
 
         $message = sprintf(
-            'The given string contains different line breaks,'
-            .'%d LF (\'\n\', usually found on Unix/Linux systems)'
-            .'and %d CR+LF (\'\r\n\', usually found on Windows systems)',
+            'The given string contains different line breaks, %d LF (\'\n\', usually found on Unix/Linux systems) and %d CR+LF (\'\r\n\', usually found on Windows systems)',
             $this->numberLineBreakOther,
-            $this->numberLineBreakWindows);
+            $this->numberLineBreakWindows
+        );
 
         parent::__construct($message);
     }
