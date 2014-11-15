@@ -18,6 +18,8 @@ use Gnugat\Redaktilo\Search\NotSupportedException as BaseException;
  * registered strategies.
  *
  * @api
+ *
+ * @todo Make this exception extends \Exception in Redaktilo v2
  */
 class NotSupportedException extends BaseException implements Exception
 {

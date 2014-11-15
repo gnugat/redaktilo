@@ -17,6 +17,8 @@ use Gnugat\Redaktilo\Command\CommandNotFoundException as BaseException;
  * Thrown if the name given to CommandInvoker isn't in its collection.
  *
  * @api
+ *
+ * @todo Make this exception extends \Exception in Redaktilo v2
  */
 class CommandNotFoundException extends BaseException implements Exception
 {

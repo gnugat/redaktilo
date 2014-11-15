@@ -17,6 +17,8 @@ use Gnugat\Redaktilo\Service\DifferentLineBreaksFoundException as BaseException;
  * Thrown if the string given to LineBreak service contains different line breaks.
  *
  * @api
+ *
+ * @todo Make this exception extends \Exception in Redaktilo v2
  */
 class DifferentLineBreaksFoundException extends BaseException implements Exception
 {

@@ -11,6 +11,7 @@
 
 namespace Gnugat\Redaktilo\Service;
 
+/** @todo Remove this alias in Redaktilo v2 */
 use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException as AliasedDifferentLineBreaksFoundException;
 use Gnugat\Redaktilo\Text;
 

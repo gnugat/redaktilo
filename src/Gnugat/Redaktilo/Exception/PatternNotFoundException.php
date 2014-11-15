@@ -20,6 +20,8 @@ use Gnugat\Redaktilo\Text;
  * the Text.
  *
  * @api
+ *
+ * @todo Make this exception extends \Exception in Redaktilo v2
  */
 class PatternNotFoundException extends BaseException implements Exception
 {

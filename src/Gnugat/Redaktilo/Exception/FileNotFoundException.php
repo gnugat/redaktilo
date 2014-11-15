@@ -17,6 +17,8 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileN
  * Thrown if the file couldn't be opened.
  *
  * @api
+ *
+ * @todo Make this exception extends \RuntimeException in Redaktilo v2
  */
 class FileNotFoundException extends SymfonyFileNotFoundException implements Exception
 {
