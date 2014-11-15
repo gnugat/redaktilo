@@ -49,7 +49,9 @@ class EditorSpec extends ObjectBehavior
 
     function it_cannot_open_new_files(Filesystem $filesystem, File $file)
     {
-        $exception = '\Gnugat\Redaktilo\Exception\FileNotFoundException';
+        $exception = new \Gnugat\Redaktilo\Exception\FileNotFoundException(
+            self::FILENAME
+        );
 
         $filesystem->exists(self::FILENAME)->willReturn(false);
         $filesystem->open(self::FILENAME)->willThrow($exception);

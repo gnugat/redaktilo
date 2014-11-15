@@ -20,4 +20,24 @@ use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
  */
 class IOException extends SymfonyIOException implements Exception
 {
+    /** @var string */
+    private $path;
+
+    /**
+     * @param string          $path
+     * @param string          $message
+     * @param \Exception|null $previous
+     */
+    public function __construct($path, $message, \Exception $previous = null)
+    {
+        $this->path = $path;
+
+        parent::__construct($message, 0, $previous);
+    }
+
+    /** @return string */
+    public function getPath()
+    {
+        return $this->path;
+    }
 }

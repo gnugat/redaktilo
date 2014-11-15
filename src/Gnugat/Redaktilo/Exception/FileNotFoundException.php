@@ -20,4 +20,25 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileN
  */
 class FileNotFoundException extends SymfonyFileNotFoundException implements Exception
 {
+    /** @var string */
+    private $path;
+
+    /**
+     * @param string          $path
+     * @param \Exception|null $previous
+     */
+    public function __construct($path, \Exception $previous = null)
+    {
+        $this->path = $path;
+
+        $message = sprintf('Failed to open "%s" because it does not exist.', $path);
+
+        parent::__construct($message, 0, $previous);
+    }
+
+    /** @return string */
+    public function getPath()
+    {
+        return $this->path;
+    }
 }

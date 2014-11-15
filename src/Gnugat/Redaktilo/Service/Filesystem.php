@@ -61,9 +61,7 @@ class Filesystem
     public function open($filename)
     {
         if (!$this->exists($filename) || false === $content = file_get_contents($filename)) {
-            $message = sprintf('Failed to open "%s" because it does not exist.', $filename);
-
-            throw new FileNotFoundException($message, 0, null, $filename);
+            throw new FileNotFoundException($filename);
         }
 
         return $this->makeFile($filename, $content);
@@ -85,7 +83,7 @@ class Filesystem
         if ($this->exists($filename)) {
             $message = sprintf('Failed to create "%s" because its path is not accessible.', $filename);
 
-            throw new IOException($message, 0, null, $filename);
+            throw new IOException($filename, $message);
         }
 
         return $this->makeFile($filename, '');
@@ -137,7 +135,7 @@ class Filesystem
         } catch (SymfonyIOException $e) {
             $message = sprintf('Failed to write "%s".', $filename);
 
-            throw new IOException($message, 0, $e, $filename);
+            throw new IOException($filename, $message, $e);
         }
     }
 }
