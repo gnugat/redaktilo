@@ -107,11 +107,8 @@ class DifferentLineBreaksFoundException extends \Exception implements Exception
 
 namespace Gnugat\Redaktilo\Exception;
 
-use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
-
-class FileNotFoundException extends SymfonyFileNotFoundException implements Exception
+class FileNotFoundException extends \RuntimeException implements Exception
 {
-    // Inherited from Symfony Exception
     public function getPath();
 }
 ```
@@ -123,11 +120,8 @@ class FileNotFoundException extends SymfonyFileNotFoundException implements Exce
 
 namespace Gnugat\Redaktilo\Exception;
 
-use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
-
-class IOException extends SymfonyIOException implements Exception
+class IOException extends \RuntimeException implements Exception
 {
-    // Inherited from Symfony Exception
     public function getPath();
 }
 ```
