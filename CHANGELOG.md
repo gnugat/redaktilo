@@ -1,5 +1,17 @@
 # Changes between versions
 
+## 1.4.0: Exception
+
+* added PatternNotFoundException
+* added NotSupportedException
+* added InvalidLineNumberException
+* added InvalidArgumentException
+* added IOException
+* added FileNotFoundException
+* added DifferentLineBreaksFoundException
+* added CommandNotFoundException
+* added Exception
+
 ## 1.3.0: Chicken Run
 
 * added ContentFactory
