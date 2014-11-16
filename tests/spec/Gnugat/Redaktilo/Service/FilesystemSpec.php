@@ -49,7 +49,7 @@ class FilesystemSpec extends ObjectBehavior
     {
         @unlink($this->copyFilename);
 
-        $exception = 'Symfony\Component\Filesystem\Exception\FileNotFoundException';
+        $exception = '\Gnugat\Redaktilo\Exception\FileNotFoundException';
         $this->shouldThrow($exception)->duringOpen($this->copyFilename);
     }
 
@@ -66,7 +66,7 @@ class FilesystemSpec extends ObjectBehavior
     {
         $this->fileCopier->copy($this->sourceFilename, $this->copyFilename, true);
 
-        $exception = 'Symfony\Component\Filesystem\Exception\IOException';
+        $exception = '\Gnugat\Redaktilo\Exception\IOException';
         $this->shouldThrow($exception)->duringCreate($this->copyFilename);
     }
 

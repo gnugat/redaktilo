@@ -11,10 +11,12 @@
 
 namespace Gnugat\Redaktilo\Service;
 
+use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
+use Gnugat\Redaktilo\Exception\FileNotFoundException;
+use Gnugat\Redaktilo\Exception\IOException;
 use Gnugat\Redaktilo\File;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
 
 /**
  * Manages actual operations on the filesystem using File as a data source.
@@ -59,9 +61,7 @@ class Filesystem
     public function open($filename)
     {
         if (!$this->exists($filename) || false === $content = file_get_contents($filename)) {
-            $message = sprintf('Failed to open "%s" because it does not exist.', $filename);
-
-            throw new FileNotFoundException($message, 0, null, $filename);
+            throw new FileNotFoundException($filename);
         }
 
         return $this->makeFile($filename, $content);
@@ -83,7 +83,7 @@ class Filesystem
         if ($this->exists($filename)) {
             $message = sprintf('Failed to create "%s" because its path is not accessible.', $filename);
 
-            throw new IOException($message, 0, null, $filename);
+            throw new IOException($filename, $message);
         }
 
         return $this->makeFile($filename, '');
@@ -130,6 +130,12 @@ class Filesystem
         $filename = $file->getFilename();
         $content = $this->contentFactory->make($file);
 
-        $this->symfonyFilesystem->dumpFile($filename, $content, null);
+        try {
+            $this->symfonyFilesystem->dumpFile($filename, $content, null);
+        } catch (SymfonyIOException $e) {
+            $message = sprintf('Failed to write "%s".', $filename);
+
+            throw new IOException($filename, $message, $e);
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Gnugat\Redaktilo\Command;
 
 use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
 use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
+use Gnugat\Redaktilo\Exception\InvalidArgumentException;
 
 /**
  * Replaces the given location in the given text with the given replacement.
@@ -40,7 +41,7 @@ class LineReplaceCommand implements Command
     /**
      * {@inheritdoc}
      *
-     * @throws \InvalidArgumentException If replacement isn't valid
+     * @throws InvalidArgumentException If replacement isn't valid
      */
     public function execute(array $input)
     {
@@ -54,7 +55,7 @@ class LineReplaceCommand implements Command
             $line = $text->getLine($location);
             $replacement = $input['replacement']($line);
         } else {
-            throw new \InvalidArgumentException('Invalid replacement');
+            throw new InvalidArgumentException('Invalid replacement');
         }
 
         $text->setLine($replacement, $location);

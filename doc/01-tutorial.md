@@ -85,7 +85,7 @@ take care of it for you.
 You should note that the lookup is directional:
 
 ```php
-$editor->jumpBelow($file, 'Bacon'); // Throws \Gnugat\Redaktilo\Search\PatternNotFoundException, because 'Bacon' is above the current line
+$editor->jumpBelow($file, 'Bacon'); // Throws \Gnugat\Redaktilo\Exception\PatternNotFoundException, because 'Bacon' is above the current line
 
 $editor->jumpAbove($file, 'Bacon'); // Current line: 0 ('Bacon')
 ```

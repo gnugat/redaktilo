@@ -49,7 +49,9 @@ class EditorSpec extends ObjectBehavior
 
     function it_cannot_open_new_files(Filesystem $filesystem, File $file)
     {
-        $exception = 'Symfony\Component\Filesystem\Exception\FileNotFoundException';
+        $exception = new \Gnugat\Redaktilo\Exception\FileNotFoundException(
+            self::FILENAME
+        );
 
         $filesystem->exists(self::FILENAME)->willReturn(false);
         $filesystem->open(self::FILENAME)->willThrow($exception);
@@ -88,7 +90,7 @@ class EditorSpec extends ObjectBehavior
         $this->jumpAbove($text, $pattern);
 
         $searchStrategy->findAbove($text, $pattern, null)->willReturn(false);
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+        $exception = '\Gnugat\Redaktilo\Exception\PatternNotFoundException';
         $this->shouldThrow($exception)->duringJumpAbove($text, $pattern);
     }
 
@@ -108,7 +110,7 @@ class EditorSpec extends ObjectBehavior
         $this->jumpAbove($text, $pattern, 0);
 
         $searchStrategy->findAbove($text, $pattern, 0)->willReturn(false);
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+        $exception = '\Gnugat\Redaktilo\Exception\PatternNotFoundException';
         $this->shouldThrow($exception)->duringJumpAbove($text, $pattern, 0);
     }
 
@@ -128,7 +130,7 @@ class EditorSpec extends ObjectBehavior
         $this->jumpBelow($text, $pattern);
 
         $searchStrategy->findBelow($text, $pattern, null)->willReturn(false);
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+        $exception = '\Gnugat\Redaktilo\Exception\PatternNotFoundException';
         $this->shouldThrow($exception)->duringJumpBelow($text, $pattern);
     }
 
@@ -148,7 +150,7 @@ class EditorSpec extends ObjectBehavior
         $this->jumpBelow($text, $pattern, 0);
 
         $searchStrategy->findBelow($text, $pattern, 0)->willReturn(false);
-        $exception = 'Gnugat\Redaktilo\Search\PatternNotFoundException';
+        $exception = '\Gnugat\Redaktilo\Exception\PatternNotFoundException';
         $this->shouldThrow($exception)->duringJumpBelow($text, $pattern, 0);
     }
 

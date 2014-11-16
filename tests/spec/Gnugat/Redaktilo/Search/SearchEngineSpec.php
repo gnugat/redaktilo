@@ -52,7 +52,7 @@ class SearchEngineSpec extends ObjectBehavior
     function it_fails_when_the_strategy_is_not_supported(SearchStrategy $searchStrategy)
     {
         $pattern = 'We are now no longer the Knights who say Ni.';
-        $exception = 'Gnugat\Redaktilo\Search\NotSupportedException';
+        $exception = '\Gnugat\Redaktilo\Exception\NotSupportedException';
 
         $searchStrategy->supports($pattern)->willReturn(false);
 

@@ -11,6 +11,8 @@
 
 namespace Gnugat\Redaktilo\Service;
 
+/** @todo Remove this alias in Redaktilo v2 */
+use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException as AliasedDifferentLineBreaksFoundException;
 use Gnugat\Redaktilo\Text;
 
 /**
@@ -36,7 +38,7 @@ class TextFactory
     {
         try {
             $lineBreak = $this->lineBreak->detect($string);
-        } catch (DifferentLineBreaksFoundException $e) {
+        } catch (AliasedDifferentLineBreaksFoundException $e) {
             $lineBreak = $e->getNumberLineBreakOther() >= $e->getNumberLineBreakWindows()
                 ? LineBreak::LINE_BREAK_OTHER
                 : LineBreak::LINE_BREAK_WINDOWS;

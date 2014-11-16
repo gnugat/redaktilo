@@ -11,6 +11,7 @@
 
 namespace Gnugat\Redaktilo\Command\Sanitizer;
 
+use Gnugat\Redaktilo\Exception\InvalidArgumentException;
 use Gnugat\Redaktilo\Text;
 
 class TextSanitizer implements InputSanitizer
@@ -26,10 +27,10 @@ class TextSanitizer implements InputSanitizer
     public function sanitize(array $input)
     {
         if (!isset($input['text'])) {
-            throw new \InvalidArgumentException('A \'text\' entry should have been given in the input array');
+            throw new InvalidArgumentException('A \'text\' entry should have been given in the input array');
         }
         if (!is_object($input['text']) || !($input['text'] instanceof Text)) {
-            throw new \InvalidArgumentException('The \'text\' entry should be a instance of Text');
+            throw new InvalidArgumentException('The \'text\' entry should be an instance of Text');
         }
 
         return $input['text'];

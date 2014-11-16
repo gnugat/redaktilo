@@ -11,7 +11,7 @@
 
 namespace Gnugat\Redaktilo\Command\Sanitizer;
 
-use Gnugat\Redaktilo\InvalidLineNumberException;
+use Gnugat\Redaktilo\Exception\InvalidLineNumberException;
 
 class LocationSanitizer implements InputSanitizer
 {

@@ -11,7 +11,7 @@
 
 namespace spec\Gnugat\Redaktilo\Service;
 
-use Gnugat\Redaktilo\Service\DifferentLineBreaksFoundException;
+use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
 use PhpSpec\ObjectBehavior;
 use Gnugat\Redaktilo\Service\LineBreak;
 
