@@ -6,7 +6,11 @@
     "keywords": ["editor", "lines", "find", "insert", "replace", "remove", "file", "edit"],
     "autoload": {
         "psr-4": {
-            "Gnugat\\Redaktilo\\": "src/Gnugat/Redaktilo",
+            "Gnugat\\Redaktilo\\": "src/Gnugat/Redaktilo"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "example\\Gnugat\\Redaktilo\\": "tests/example"
         }
     },
