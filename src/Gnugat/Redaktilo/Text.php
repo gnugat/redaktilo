@@ -163,6 +163,42 @@ class Text
     }
 
     /**
+     * @param int $lines
+     *
+     * @throws InvalidLineNumberException if $lines is not an integer
+     * @throws InvalidLineNumberException if $lines is negative
+     * @throws InvalidLineNumberException if $lines is greater or equal than the number of lines
+     * @throws InvalidLineNumberException if the result would be greater or equal than the number of lines
+     *
+     * @api
+     */
+    public function incrementCurrentLineNumber($lines)
+    {
+        $this->throwOnInvalidLineNumber($lines);
+        $newCurrentLineNumber = $this->currentLineNumber + $lines;
+        $this->throwOnInvalidLineNumber($newCurrentLineNumber);
+        $this->currentLineNumber = $newCurrentLineNumber;
+    }
+
+    /**
+     * @param int $lines
+     *
+     * @throws InvalidLineNumberException if $lines is not an integer
+     * @throws InvalidLineNumberException if $lines is negative
+     * @throws InvalidLineNumberException if $lines is greater or equal than the number of lines
+     * @throws InvalidLineNumberException if the result would be negative
+     *
+     * @api
+     */
+    public function decrementCurrentLineNumber($lines)
+    {
+        $this->throwOnInvalidLineNumber($lines);
+        $newCurrentLineNumber = $this->currentLineNumber - $lines;
+        $this->throwOnInvalidLineNumber($newCurrentLineNumber);
+        $this->currentLineNumber = $newCurrentLineNumber;
+    }
+
+    /**
      * @param int $lineNumber
      *
      * @throws InvalidLineNumberException if $lineNumber is not an integer

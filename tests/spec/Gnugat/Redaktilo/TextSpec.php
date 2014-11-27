@@ -18,6 +18,7 @@ class TextSpec extends ObjectBehavior
 {
     private $lines;
     private $lineBreak;
+    private $length;
 
     function let()
     {
@@ -28,6 +29,7 @@ class TextSpec extends ObjectBehavior
         $lineBreak = new LineBreak();
         $this->lineBreak = $lineBreak->detect($content);
         $this->lines = explode($this->lineBreak, $content);
+        $this->length = count($this->lines);
 
         $this->beConstructedWith($this->lines, $this->lineBreak);
     }
@@ -118,5 +120,47 @@ class TextSpec extends ObjectBehavior
         $this->shouldThrow($exception)->duringGetLine('toto');
         $this->shouldThrow($exception)->duringGetLine(-1);
         $this->shouldThrow($exception)->duringGetLine(9);
+    }
+
+    function it_increments_current_line_number()
+    {
+        $this->setCurrentLineNumber(0);
+        $this->incrementCurrentLineNumber(2);
+
+        $this->getCurrentLineNumber()->shouldBe(2);
+    }
+
+    function it_cannot_increment_current_line_number_with_invalid_lines()
+    {
+        $exception = '\Gnugat\Redaktilo\Exception\InvalidLineNumberException';
+
+        $this->setCurrentLineNumber(1);
+        $lastLineNumber = $this->length - 1;
+
+        $this->shouldThrow($exception)->duringIncrementCurrentLineNumber('toto');
+        $this->shouldThrow($exception)->duringIncrementCurrentLineNumber(-1);
+        $this->shouldThrow($exception)->duringIncrementCurrentLineNumber(4423);
+        $this->shouldThrow($exception)->duringIncrementCurrentLineNumber($lastLineNumber);
+    }
+
+    function it_decrements_current_line_number()
+    {
+        $this->setCurrentLineNumber(3);
+        $this->decrementCurrentLineNumber(2);
+
+        $this->getCurrentLineNumber()->shouldBe(1);
+    }
+
+    function it_cannot_decrement_current_line_number_with_invalid_lines()
+    {
+        $exception = '\Gnugat\Redaktilo\Exception\InvalidLineNumberException';
+
+        $lastLineNumber = $this->length - 1;
+        $this->setCurrentLineNumber($lastLineNumber - 1);
+
+        $this->shouldThrow($exception)->duringDecrementCurrentLineNumber('toto');
+        $this->shouldThrow($exception)->duringDecrementCurrentLineNumber(-1);
+        $this->shouldThrow($exception)->duringDecrementCurrentLineNumber(4423);
+        $this->shouldThrow($exception)->duringDecrementCurrentLineNumber($lastLineNumber);
     }
 }
