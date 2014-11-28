@@ -173,8 +173,8 @@ class Text
     // Throws InvalidLineNumberException if $lineNumber is not a positive integer lower than the length
     public function setCurrentLineNumber($lineNumber);
     public function getCurrentLineNumber();
-    public function incrementCurrentLineNumber($lines);
-    public function decrementCurrentLineNumber($lines);
+    public function incrementCurrentLineNumber($number);
+    public function decrementCurrentLineNumber($number);
 
     // Throws InvalidLineNumberException if $lineNumber is not a positive integer lower than the length
     public function getLine($lineNumber = null);

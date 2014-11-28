@@ -130,7 +130,7 @@ class TextSpec extends ObjectBehavior
         $this->getCurrentLineNumber()->shouldBe(2);
     }
 
-    function it_cannot_increment_current_line_number_with_invalid_lines()
+    function it_cannot_increment_current_line_number_with_invalid_number()
     {
         $exception = '\Gnugat\Redaktilo\Exception\InvalidLineNumberException';
 
@@ -151,7 +151,7 @@ class TextSpec extends ObjectBehavior
         $this->getCurrentLineNumber()->shouldBe(1);
     }
 
-    function it_cannot_decrement_current_line_number_with_invalid_lines()
+    function it_cannot_decrement_current_line_number_with_invalid_number()
     {
         $exception = '\Gnugat\Redaktilo\Exception\InvalidLineNumberException';
 
