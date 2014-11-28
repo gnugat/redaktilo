@@ -167,8 +167,8 @@ class Text
      *
      * @throws InvalidLineNumberException if $number is not an integer
      * @throws InvalidLineNumberException if $number is negative
-     * @throws InvalidLineNumberException if $number is greater or equal than the number of lines
-     * @throws InvalidLineNumberException if the result would be greater or equal than the number of lines
+     * @throws InvalidLineNumberException if $number is greater or equal than the length
+     * @throws InvalidLineNumberException if the result would be greater or equal than the length
      *
      * @api
      */
@@ -183,9 +183,9 @@ class Text
     /**
      * @param int $number
      *
-     * @throws InvalidLineNumberException if $lines is not an integer
-     * @throws InvalidLineNumberException if $lines is negative
-     * @throws InvalidLineNumberException if $lines is greater or equal than the number of lines
+     * @throws InvalidLineNumberException if $number is not an integer
+     * @throws InvalidLineNumberException if $number is negative
+     * @throws InvalidLineNumberException if $number is greater or equal than the length
      * @throws InvalidLineNumberException if the result would be negative
      *
      * @api
@@ -203,7 +203,7 @@ class Text
      *
      * @throws InvalidLineNumberException if $lineNumber is not an integer
      * @throws InvalidLineNumberException if $lineNumber is negative
-     * @throws InvalidLineNumberException if $lineNumber is greater or equal than the number of lines
+     * @throws InvalidLineNumberException if $lineNumber is greater or equal than the length
      */
     protected function throwOnInvalidLineNumber($lineNumber)
     {
