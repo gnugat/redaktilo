@@ -1,5 +1,10 @@
 # Changes between versions
 
+## 1.5.0: Current line number Incrementation
+
+* added Text#decrementCurrentLineNumber
+* added Text#incrementCurrentLineNumber
+
 ## 1.4.0: Exception
 
 * added PatternNotFoundException
