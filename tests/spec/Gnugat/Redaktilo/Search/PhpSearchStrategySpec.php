@@ -16,6 +16,7 @@ use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Service\LineBreak;
 use Gnugat\Redaktilo\Service\TextToPhpConverter;
 use Gnugat\Redaktilo\Text;
+use Gnugat\Redaktilo\Util\StringUtil;
 use PhpSpec\ObjectBehavior;
 
 class PhpSearchStrategySpec extends ObjectBehavior
@@ -31,8 +32,7 @@ class PhpSearchStrategySpec extends ObjectBehavior
         $rootPath = __DIR__.'/../../../../..';
         $filename = sprintf(self::FILENAME, $rootPath);
         $content = file_get_contents($filename);
-        $lineBreak = new LineBreak();
-        $lineBreak = $lineBreak->detect($content);
+        $lineBreak = StringUtil::detectLineBreak($content);
         $lines = explode($lineBreak, $content);
         $text->getLineBreak()->willReturn($lineBreak);
         $text->getLines()->willReturn($lines);

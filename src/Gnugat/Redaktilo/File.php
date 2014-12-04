@@ -19,23 +19,11 @@ namespace Gnugat\Redaktilo;
  */
 class File extends Text
 {
-    /** @var string */
+    /** @var string|null */
     private $filename;
 
     /**
-     * @param string $filename
-     * @param array  $lines
-     * @param string $lineBreak
-     */
-    public function __construct($filename, array $lines, $lineBreak = PHP_EOL)
-    {
-        $this->filename = $filename;
-
-        parent::__construct($lines, $lineBreak);
-    }
-
-    /**
-     * @return string
+     * @return string|null
      *
      * @api
      */
