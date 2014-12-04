@@ -1,5 +1,6 @@
 # Changes between versions
 
+* added an optional filename argument to Editor#save
 * removed TextFactory in favor of Text::fromString
 * added Text::fromString and Text::fromArray and removed constructing Text directly
 * removed LinkBreak in favor of StringUtil#detectLineBreak
