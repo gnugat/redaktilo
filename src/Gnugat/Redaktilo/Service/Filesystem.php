@@ -116,6 +116,9 @@ class Filesystem
     public function write(File $file)
     {
         $filename = $file->getFilename();
+        if (null === $filename) {
+            throw new NoFilenameGivenException();
+        }
         $content = $this->contentFactory->make($file);
 
         try {
