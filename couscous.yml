@@ -1,0 +1,35 @@
+template:
+    url: https://github.com/CouscousPHP/Template-Light.git
+
+baseUrl: http://gnugat.github.io/redaktilo
+
+title: Redaktilo
+subTitle: An easy "line manipulation" PHP lib: jump, insert and do anything!
+
+github:
+    user: gnugat
+    repo: redaktilo
+
+menu:
+    items:
+        home:
+            text: Home
+            relativeUrl:
+        tutorial:
+            text: Tutorial
+            relativeUrl: doc/01-tutorial.html
+        use-cases:
+            text: Use cases
+            relativeUrl: doc/02-use-cases.html
+        reference:
+            text: Reference
+            relativeUrl: doc/03-reference.html
+        vocabulary:
+            text: Vocabulary
+            relativeUrl: doc/04-vocabulary.html
+        extending:
+            text: Extending
+            relativeUrl: doc/05-extending.html
+        exceptions:
+            text: Exceptions
+            relativeUrl: doc/06-exceptions.html
