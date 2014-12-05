@@ -3,7 +3,7 @@
 * added an optional filename argument to Editor#save
 * removed TextFactory in favor of Text::fromString
 * added Text::fromString and Text::fromArray and removed constructing Text directly
-* removed LinkBreak in favor of StringUtil#detectLineBreak
+* removed LineBreak in favor of StringUtil#detectLineBreak
 * added StringUtil
 
 ## 1.5.0: Current line number Incrementation
