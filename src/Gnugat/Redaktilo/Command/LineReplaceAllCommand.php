@@ -14,6 +14,7 @@ namespace Gnugat\Redaktilo\Command;
 use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
 use Gnugat\Redaktilo\Service\ContentFactory;
 use Gnugat\Redaktilo\Service\TextFactory;
+use Gnugat\Redaktilo\Text;
 
 /**
  * Replaces all occurences of pattern in Text by given replacement.
@@ -22,9 +23,6 @@ class LineReplaceAllCommand implements Command
 {
     /** @var ContentFactory */
     private $contentFactory;
-
-    /** @var TextFactory */
-    private $textFactory;
 
     /** @var TextSanitizer */
     private $textSanitizer;
@@ -36,12 +34,10 @@ class LineReplaceAllCommand implements Command
      */
     public function __construct(
         ContentFactory $contentFactory,
-        TextFactory $textFactory,
         TextSanitizer $textSanitizer
     )
     {
         $this->contentFactory = $contentFactory;
-        $this->textFactory = $textFactory;
         $this->textSanitizer = $textSanitizer;
     }
 
@@ -54,7 +50,7 @@ class LineReplaceAllCommand implements Command
 
         $content = $this->contentFactory->make($text);
         $replacedContent = preg_replace($pattern, $replacement, $content);
-        $replacedText = $this->textFactory->make($replacedContent);
+        $replacedText = Text::fromString($replacedContent);
         $text->setLines($replacedText->getLines());
     }
 

@@ -90,8 +90,12 @@ class Editor
      *
      * @api
      */
-    public function save(File $file)
+    public function save(File $file, $filename = null)
     {
+        if ($filename !== null) {
+            $file->setFilename($filename);
+        }
+
         $this->filesystem->write($file);
     }
 

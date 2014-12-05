@@ -12,26 +12,23 @@
 namespace spec\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Service\LineBreak;
+use Gnugat\Redaktilo\Util\StringUtil;
 use PhpSpec\ObjectBehavior;
 
 class TextSpec extends ObjectBehavior
 {
+    private $content;
     private $lines;
-    private $lineBreak;
-    private $length;
 
     function let()
     {
         $rootPath = __DIR__.'/../../../../';
         $filename = '%s/tests/fixtures/sources/life-of-brian.txt';
-        $content = file_get_contents(sprintf($filename, $rootPath));
+        $this->content = file_get_contents(sprintf($filename, $rootPath));
 
-        $lineBreak = new LineBreak();
-        $this->lineBreak = $lineBreak->detect($content);
-        $this->lines = explode($this->lineBreak, $content);
-        $this->length = count($this->lines);
+        $this->lines = preg_split('/\R/', $this->content);
 
-        $this->beConstructedWith($this->lines, $this->lineBreak);
+        $this->beConstructedThrough('fromString', array($this->content));
     }
 
     function it_has_lines()
@@ -42,6 +39,7 @@ class TextSpec extends ObjectBehavior
         );
 
         $this->getLines()->shouldBe($this->lines);
+
         $this->setLines($newContent);
         $this->getLines()->shouldBe($newContent);
     }
@@ -55,6 +53,7 @@ class TextSpec extends ObjectBehavior
         );
 
         $this->getLength()->shouldBe(count($this->lines));
+
         $this->setLines($newContent);
         $this->getLength()->shouldBe(3);
     }
@@ -80,16 +79,16 @@ class TextSpec extends ObjectBehavior
 
     function it_has_a_line_break()
     {
-        $newLineBreak = '\r\n';
+        $newLineBreak = "\r\n";
 
-        $this->getLineBreak()->shouldBe($this->lineBreak);
+        $this->getLineBreak()->shouldBe(StringUtil::detectLineBreak($this->content));
+
         $this->setLineBreak($newLineBreak);
         $this->getLineBreak()->shouldBe($newLineBreak);
     }
 
     function it_manipulates_the_current_line()
     {
-        $lineNumber = 1;
         $line = '[A guard struggles not to snigger]';
         $this->setCurrentLineNumber(1);
 
@@ -135,7 +134,7 @@ class TextSpec extends ObjectBehavior
         $exception = '\Gnugat\Redaktilo\Exception\InvalidLineNumberException';
 
         $this->setCurrentLineNumber(1);
-        $lastLineNumber = $this->length - 1;
+        $lastLineNumber = count($this->lines) - 1;
 
         $this->shouldThrow($exception)->duringIncrementCurrentLineNumber('toto');
         $this->shouldThrow($exception)->duringIncrementCurrentLineNumber(-1);
@@ -155,7 +154,7 @@ class TextSpec extends ObjectBehavior
     {
         $exception = '\Gnugat\Redaktilo\Exception\InvalidLineNumberException';
 
-        $lastLineNumber = $this->length - 1;
+        $lastLineNumber = count($this->lines) - 1;
         $this->setCurrentLineNumber($lastLineNumber - 1);
 
         $this->shouldThrow($exception)->duringDecrementCurrentLineNumber('toto');

@@ -14,6 +14,7 @@ namespace spec\Gnugat\Redaktilo\Service;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Service\LineBreak;
 use Gnugat\Redaktilo\Text;
+use Gnugat\Redaktilo\Util\StringUtil;
 use PhpSpec\ObjectBehavior;
 
 class TextToPhpConverterSpec extends ObjectBehavior
@@ -30,8 +31,7 @@ class TextToPhpConverterSpec extends ObjectBehavior
         $rootPath = __DIR__.'/../../../../../';
         $filename = sprintf(self::FILENAME, $rootPath);
         $content = file_get_contents($filename);
-        $lineBreak = new LineBreak();
-        $lineBreak = $lineBreak->detect($content);
+        $lineBreak = StringUtil::detectLineBreak($content);
         $lines = explode($lineBreak, $content);
         $rawTokens = token_get_all($content);
         $text->getLineBreak()->willReturn($lineBreak);

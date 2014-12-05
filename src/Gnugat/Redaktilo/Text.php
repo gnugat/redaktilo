@@ -11,7 +11,9 @@
 
 namespace Gnugat\Redaktilo;
 
+use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
 use Gnugat\Redaktilo\Exception\InvalidLineNumberException;
+use Gnugat\Redaktilo\Util\StringUtil;
 
 /**
  * Redaktilo's base entity representing a collection of lines: each line is
@@ -40,10 +42,43 @@ class Text
      * @param array  $lines
      * @param string $lineBreak
      */
-    public function __construct(array $lines, $lineBreak = PHP_EOL)
+    protected function __construct(array $lines, $lineBreak = PHP_EOL)
     {
         $this->setLines($lines);
         $this->lineBreak = $lineBreak;
+    }
+
+    /**
+     * Creates a Text instance from a string.
+     *
+     * @param $string
+     *
+     * @return static
+     */
+    public static function fromString($string)
+    {
+        try {
+            $lineBreak = StringUtil::detectLineBreak($string);
+        } catch (DifferentLineBreaksFoundException $e) {
+            $lineBreak = $e->getNumberLineBreakOther() >= $e->getNumberLineBreakWindows()
+                ? StringUtil::LINE_BREAK_OTHER
+                : StringUtil::LINE_BREAK_WINDOWS;
+        }
+
+        return new static(StringUtil::breakIntoLines($string), $lineBreak);
+    }
+
+    /**
+     * Creates a Text instance from an array of lines.
+     *
+     * @param array  $lines
+     * @param string $lineBreak
+     *
+     * @return static
+     */
+    public static function fromArray(array $lines, $lineBreak = PHP_EOL)
+    {
+        return new static($lines, $lineBreak);
     }
 
     /**

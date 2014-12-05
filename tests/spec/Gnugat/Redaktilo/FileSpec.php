@@ -15,15 +15,9 @@ use PhpSpec\ObjectBehavior;
 
 class FileSpec extends ObjectBehavior
 {
-    private $filename;
-
     function let()
     {
-        $this->filename = '/tmp/egg.txt';
-        $lines = array();
-        $lineBreak = "\n";
-
-        $this->beConstructedWith($this->filename, $lines, $lineBreak);
+        $this->beConstructedThrough('fromString', array('Hello World'));
     }
 
     function it_is_a_text()
@@ -31,12 +25,12 @@ class FileSpec extends ObjectBehavior
         $this->shouldBeAnInstanceOf('Gnugat\Redaktilo\Text');
     }
 
-    function it_has_a_filename()
+    function it_can_have_a_filename()
     {
-        $newFilename = '/tmp/spam.txt';
+        $this->setFilename('tmp/old.txt');
+        $this->getFilename()->shouldBe('tmp/old.txt');
 
-        $this->getFilename()->shouldBe($this->filename);
-        $this->setFilename($newFilename);
-        $this->getFilename()->shouldBe($newFilename);
+        $this->setFilename('tmp/new.txt');
+        $this->getFilename()->shouldBe('tmp/new.txt');
     }
 }

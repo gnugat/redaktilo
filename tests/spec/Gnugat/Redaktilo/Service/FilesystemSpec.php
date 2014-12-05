@@ -30,10 +30,9 @@ class FilesystemSpec extends ObjectBehavior
         $this->copyFilename = __DIR__.'/../../../../fixtures/copies/edit-me.txt';
 
         $this->fileCopier = new SymfonyFilesystem();
-        $lineBreak = new LineBreak();
         $contentFactory = new ContentFactory();
 
-        $this->beConstructedWith($lineBreak, $symfonyFilesystem, $contentFactory);
+        $this->beConstructedWith($symfonyFilesystem, $contentFactory);
     }
 
     function it_opens_existing_files()
@@ -86,7 +85,8 @@ class FilesystemSpec extends ObjectBehavior
         $this->fileCopier->copy($this->sourceFilename, $this->copyFilename, true);
         $content = file_get_contents($this->copyFilename);
         $lines = file($this->copyFilename);
-        $file = new File($this->copyFilename, $lines);
+        $file = File::fromArray($lines);
+        $file->setFilename($this->copyFilename);
 
         $symfonyFilesystem->dumpFile($this->copyFilename, $content, null)->shouldBeCalled();
 

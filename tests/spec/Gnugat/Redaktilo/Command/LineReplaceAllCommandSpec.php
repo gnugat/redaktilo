@@ -28,10 +28,9 @@ class LineReplaceAllCommandSpec extends ObjectBehavior
     function let()
     {
         $this->contentFactory = new ContentFactory();
-        $textFactory = new TextFactory(new LineBreak());
         $textSanitizer = new TextSanitizer();
 
-        $this->beConstructedWith($this->contentFactory, $textFactory, $textSanitizer);
+        $this->beConstructedWith($this->contentFactory, $textSanitizer);
     }
 
     function it_is_a_command()

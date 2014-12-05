@@ -163,6 +163,10 @@ namespace Gnugat\Redaktilo;
 
 class Text
 {
+    // factory methods
+    public static function fromString($string);
+    public static function fromArray(array $lines, $lineBreak = PHP_EOL);
+
     public function getLines();
     public function setLines(array $lines);
     public function getLength();
@@ -192,20 +196,18 @@ string you can use `Text`:
 <?php
 require_once __DIR__.'/vendor/autoload.php';
 
-use Gnugat\Redaktilo\Service\LineBreak;
-use Gnugat\Redaktilo\Service\TextFactory;
+use Gnugat\Redaktilo\Text;
 
-$textFactory = new TextFactory(new LineBreak());
-$text = $textFactory->make("why do witches burn?\n...because they're made of... wood?\n");
+$text = Text::fromString("why do witches burn?\n...because they're made of... wood?\n");
 ```
 
 **Important**: please note that upon creation, the current line number is
 initialized to the first line: `0` (array indexed).
 
-### Side note on LineBreak
+### Side note on Line Breaks
 
-The `LineBreak` stateless service will guess the right character used to
-separate lines:
+A `StringUtil#detectLineBreak` method is used to find the line break, this is done using
+the following rules:
 
 * `\r\n` for windows
 * `\n` for any other operating system

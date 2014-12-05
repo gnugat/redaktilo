@@ -23,8 +23,6 @@ use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
  */
 class Filesystem
 {
-    /** @var LineBreak */
-    private $lineBreak;
 
     /** @var SymfonyFilesystem */
     private $symfonyFilesystem;
@@ -33,17 +31,14 @@ class Filesystem
     private $contentFactory;
 
     /**
-     * @param LineBreak         $lineBreak
      * @param SymfonyFilesystem $symfonyFilesystem
      * @param ContentFactory    $contentFactory
      */
     public function __construct(
-        LineBreak $lineBreak,
         SymfonyFilesystem $symfonyFilesystem,
         ContentFactory $contentFactory = null
     )
     {
-        $this->lineBreak = $lineBreak;
         $this->symfonyFilesystem = $symfonyFilesystem;
         // @deprecated 1.3 ContentFactory becomes mandatory
         $this->contentFactory = $contentFactory ?: new ContentFactory();
@@ -91,17 +86,10 @@ class Filesystem
 
     private function makeFile($filename, $content)
     {
-        try {
-            $lineBreak = $this->lineBreak->detect($content);
-        } catch (DifferentLineBreaksFoundException $e) {
-            $lineBreak = $e->getNumberLineBreakOther() >= $e->getNumberLineBreakWindows()
-                ? LineBreak::LINE_BREAK_OTHER
-                : LineBreak::LINE_BREAK_WINDOWS;
-        }
+        $file = File::fromString($content);
+        $file->setFilename($filename);
 
-        $lines = preg_split('/\R/', $content);
-
-        return new File($filename, $lines, $lineBreak);
+        return $file;
     }
 
     /**
@@ -128,6 +116,9 @@ class Filesystem
     public function write(File $file)
     {
         $filename = $file->getFilename();
+        if (null === $filename) {
+            throw new NoFilenameGivenException();
+        }
         $content = $this->contentFactory->make($file);
 
         try {
