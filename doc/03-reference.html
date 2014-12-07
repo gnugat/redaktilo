@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Redaktilo</title>
+
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://gnugat.github.io/redaktilo/">
+                Redaktilo
+                <small class="hidden-xs hidden-sm">
+                    An easy &quot;line manipulation&quot; PHP lib: jump, insert and do anything!
+                </small>
+            </a>
+
+                            <a href="https://github.com/gnugat/redaktilo">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/">
+                                        Home
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/01-tutorial.html">
+                                        Tutorial
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/02-use-cases.html">
+                                        Use cases
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/03-reference.html">
+                                        Reference
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/04-vocabulary.html">
+                                        Vocabulary
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/05-extending.html">
+                                        Extending
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/06-exceptions.html">
+                                        Exceptions
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1>Redaktilo Code Reference</h1>
+<ul>
+<li><a href="#editor-api">Editor API</a>
+<ul>
+<li><a href="#filesystem-operations">Filesystem operations</a></li>
+<li><a href="#content-navigation">Content navigation</a></li>
+<li><a href="#content-manipulation">Content manipulation</a></li>
+<li><a href="#commands">Commands</a></li>
+</ul></li>
+<li><a href="#text-api">Text API</a>
+<ul>
+<li><a href="#side-note-on-linebreak">Side note on LineBreak</a></li>
+</ul></li>
+<li><a href="#file-api">File API</a></li>
+</ul>
+<h2>Editor API</h2>
+<p>The main stateless service:</p>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo;
+
+class Editor
+{
+    public function open($filename, $force = false);
+    public function save(File $file);
+
+    // Throw Gnugat\Redaktilo\Exception\PatternNotFoundException
+    public function jumpAbove(Text $text, $pattern, $location = null);
+    public function jumpBelow(Text $text, $pattern, $location = null);
+    public function hasBelow(Text $text, $pattern, $location = null);
+    public function hasAbove(Text $text, $pattern, $location = null);
+
+    public function insertAbove(Text $text, $addition, $location = null);
+    public function insertBelow(Text $text, $addition, $location = null);
+    public function replace(Text $text, $replacement, $location = null);
+    public function replaceAll(Text $text, $pattern, $replacement);
+    public function remove(Text $text, $location = null);
+
+    public function run($name, array $input); // Throws Gnugat\Redaktilo\Exception\CommandNotFoundException
+}</code></pre>
+<p>You can create one instance and use it everywhere:</p>
+<pre><code class="language-php">&lt;?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();</code></pre>
+<h3>Filesystem operations</h3>
+<p>Trying to open a non existing file will raise an exception, except if <code>true</code> is
+passed as the second parameter. In any case nothing will happen on the
+filesystem until the <code>save</code> method is called.</p>
+<pre><code class="language-php">&lt;?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();
+try {
+    $file = $editor-&gt;open('/tmp/new.txt');
+} catch (\Gnugat\Redaktilo\Exception\FileNotFoundException $e) {
+    // The file doesn't exist
+}
+$file = $editor-&gt;open('/tmp/new.txt', true); // Forces file creation when it doesn't exist
+
+// ... Make some manipulation on the file
+
+$editor-&gt;save($file); // Actually writes on the filesystem</code></pre>
+<h3>Content navigation</h3>
+<p><code>Editor</code> relies on <code>SearchEngine</code> in order to find a given pattern in a <code>Text</code>
+and provides by default the following <code>SearchStrategies</code>:</p>
+<ul>
+<li>regular expression</li>
+<li>strict equality (<code>===</code>)</li>
+<li>PHP token</li>
+</ul>
+<p>If the pattern isn't found, or if the pattern isn't supported by any strategies
+an exception will be thrown. If the pattern is found, the <code>Text</code>'s current line
+number will be set to it.</p>
+<p>The search is done relatively to the current line (or, if the third argument is
+given, to the given location): <code>jumpAbove</code> will start from it and then the line
+above, etc until the top is reached while <code>jumpBelow</code> will go downward until the
+bottom is reached.</p>
+<p>In order to check the presence of a pattern without having to jump to the line
+found, <code>hasAbove</code> and <code>hasBelow</code> methods can be used: it doesn't throw any
+exceptions (checks from top to bottom).</p>
+<pre><code class="language-php">&lt;?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();
+$file = $editor-&gt;open('/tmp/life-of-brian.txt', true);
+try {
+    $editor-&gt;jumpAbove($file, '[A guard sniggers]'); // strict equality
+} catch (\Gnugat\Redaktilo\Exception\NotSupportedException $e) {
+    // The pattern isn't supported by any registered strategy (shouldn't occur often)
+} catch (\Gnugat\Redaktilo\Exception\PatternNotFoundException $e) {
+    // The pattern hasn't been found in the file
+}
+if ($editor-&gt;hasBelow($file, '/sniggers/', 0) { // regular expression
+    // The pattern exists.
+}</code></pre>
+<p><strong>Note</strong>: to jump to a given line number, you can directly use:
+<code>$text-&gt;setCurrentLineNumber($x);</code>.</p>
+<h3>Content manipulation</h3>
+<p>Manipulations are done by default to the current line (or, if the third argument
+is given, to the given location).</p>
+<p>Inserting a new line will set the current one to it.</p>
+<pre><code class="language-php">&lt;?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$replace = function ($line) {
+    return strtoupper($line);
+};
+
+$editor = EditorFactory::createEditor();
+$file = $editor-&gt;open('/tmp/spam-menu.txt', true);
+$editor-&gt;insertAbove($file, 'Egg'); // Current line number: 0
+$editor-&gt;insertBelow($file, 'Bacon'); // Current line number: 1
+$editor-&gt;replace($file, $replace);
+$editor-&gt;replaceAll($file, '/*/', 'Spam');
+$editor-&gt;remove($file);  // Current line number: 0
+
+$editor-&gt;save($file); // Necessary to actually apply the changes on the filesystem</code></pre>
+<h3>Commands</h3>
+<p>More content manipulation are available through <code>Editor#run()</code>.</p>
+<h2>Text API</h2>
+<p>One of the main entity:</p>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo;
+
+class Text
+{
+    // factory methods
+    public static function fromString($string);
+    public static function fromArray(array $lines, $lineBreak = PHP_EOL);
+
+    public function getLines();
+    public function setLines(array $lines);
+    public function getLength();
+
+    public function getLineBreak();
+    public function setLineBreak($lineBreak);
+
+    // Throws InvalidLineNumberException if $lineNumber is not a positive integer lower than the length
+    public function setCurrentLineNumber($lineNumber);
+    public function getCurrentLineNumber();
+    public function incrementCurrentLineNumber($number);
+    public function decrementCurrentLineNumber($number);
+
+    // Throws InvalidLineNumberException if $lineNumber is not a positive integer lower than the length
+    public function getLine($lineNumber = null);
+    public function setLine($line, $lineNumber = null);
+}</code></pre>
+<p><strong>Important</strong>: <code>lines</code> is an array of string stripped from their line break
+character.</p>
+<p>The <code>Editor</code> is a bit <code>File</code> oriented, but if you want to manipulate a simple
+string you can use <code>Text</code>:</p>
+<pre><code class="language-php">&lt;?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\Text;
+
+$text = Text::fromString("why do witches burn?\n...because they're made of... wood?\n");</code></pre>
+<p><strong>Important</strong>: please note that upon creation, the current line number is
+initialized to the first line: <code>0</code> (array indexed).</p>
+<h3>Side note on Line Breaks</h3>
+<p>A <code>StringUtil#detectLineBreak</code> method is used to find the line break, this is done using
+the following rules:</p>
+<ul>
+<li><code>\r\n</code> for windows</li>
+<li><code>\n</code> for any other operating system</li>
+<li><code>PHP_EOL</code> if no line ending has been found</li>
+</ul>
+<h2>File API</h2>
+<p>The other main entity:</p>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo;
+
+class File extends Text
+{
+    public function getFilename();
+    public function setFilename($filename);
+
+    // ... (Text methods)
+}</code></pre>
+<p>The best way to create it is to use the <code>Editor</code>:</p>
+<pre><code class="language-php">&lt;?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();
+$file = $editor-&gt;open('/tmp/and-now-for-something-completly-different.txt');
+// ... Edit the file
+$editor-&gt;save($file); // Actually writes on the filesystem</code></pre>
+<h2>Next readings</h2>
+<ul>
+<li><a href="04-vocabulary.html">Vocabulary</a></li>
+<li><a href="05-extending.html">Extending</a></li>
+<li><a href="06-exceptions.html">Exceptions</a></li>
+</ul>
+<h2>Previous readings</h2>
+<ul>
+<li><a href="../README.html">README</a></li>
+<li><a href="01-tutorial.html">Tutorial</a></li>
+<li><a href="02-use-cases.html">Use cases</a></li>
+</ul>
+                </section>
+
+            </div>
+        </main>
+
+        <footer>
+            <div class="container-fluid">
+                <p class="text-muted">
+                    website generated with <a href="http://couscous.io" title="Markdown website generator">Couscous</a>
+                </p>
+            </div>
+        </footer>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="http://yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Redaktilo</title>
+
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://gnugat.github.io/redaktilo/">
+                Redaktilo
+                <small class="hidden-xs hidden-sm">
+                    An easy &quot;line manipulation&quot; PHP lib: jump, insert and do anything!
+                </small>
+            </a>
+
+                            <a href="https://github.com/gnugat/redaktilo">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/">
+                                        Home
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/01-tutorial.html">
+                                        Tutorial
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/02-use-cases.html">
+                                        Use cases
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/03-reference.html">
+                                        Reference
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/04-vocabulary.html">
+                                        Vocabulary
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/05-extending.html">
+                                        Extending
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/06-exceptions.html">
+                                        Exceptions
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1>Usage</h1>
+<p>This chapter shows you how to use Redaktilo and contains the following sections:</p>
+<ul>
+<li><a href="#the-editor">The Editor</a>
+<ul>
+<li><a href="#creating-an-editor">Creating an Editor</a></li>
+<li><a href="#customizing-the-editor">Customizing the Editor</a></li>
+</ul></li>
+<li><a href="#editing-files">Editing Files</a>
+<ul>
+<li><a href="#navigating-through-the-content">Navigating through the Content</a></li>
+<li><a href="#manipulating-a-line">Manipulating a Line</a></li>
+<li><a href="#saving-the-modifications">Saving the Modifications</a></li>
+</ul></li>
+<li><a href="#next-readings">Next readings</a></li>
+<li><a href="#previous-readings">Previous readings</a></li>
+</ul>
+<h2>The Editor</h2>
+<p>The only class you'll be using when you use Redaktilo is the <code>Editor</code> class.
+This class contains all methods you need to open, navigate, edit and save files
+or text. The editor doesn't have any state, this allows you to use a single
+instance throughout the entire application while editing multiple different
+files.</p>
+<h3>Creating an Editor</h3>
+<p>The recommend way to instantiate the <code>Editor</code> is by using the <code>EditorFactory</code>:</p>
+<pre><code class="language-php">use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();</code></pre>
+<p>This will create a default editor.</p>
+<h3>Customizing the Editor</h3>
+<p>You can also use the editor builder to customize some things of the editor:</p>
+<pre><code class="language-php">// ...
+
+$editor = EditorFactory::createEditorBuilder()
+    // ... customize the build (more on this later)
+    -&gt;getEditor();</code></pre>
+<h2>Editing Files</h2>
+<p>Assume you have the following file:</p>
+<pre><code>Bacon
+Egg
+Sausage</code></pre>
+<p>First things first: you need to open the file. This can be done easily with the
+<code>Editor#open()</code> method:</p>
+<pre><code class="language-php">// ...
+
+$file = $editor-&gt;open('monty-menu.txt');</code></pre>
+<p>This method returns a <code>File</code> instance. This object contains the content of the
+file and keeps track of the cursor. When opening the file, the cursor is set
+to line 0 ('Bacon').</p>
+<p>In case the file does not exists, you can force the creation by passing <code>true</code>
+as the second argument to <code>Editor#open()</code>.</p>
+<h3>Navigating through the Content</h3>
+<p>A cursor has been set to the first line. You can move this cursor to any
+existing line:</p>
+<pre><code class="language-php">// ...
+
+$editor-&gt;jumpBelow($file, 'Egg'); // Current line: 1 ('Egg')</code></pre>
+<p>As you can see, there's no need to add the line break character, Redaktilo will
+take care of it for you.</p>
+<p>You should note that the lookup is directional:</p>
+<pre><code class="language-php">$editor-&gt;jumpBelow($file, 'Bacon'); // Throws \Gnugat\Redaktilo\Exception\PatternNotFoundException, because 'Bacon' is above the current line
+
+$editor-&gt;jumpAbove($file, 'Bacon'); // Current line: 0 ('Bacon')</code></pre>
+<p>The match is done only if the line value is exactly the same as the given one:</p>
+<pre><code class="language-php">$editor-&gt;jumpBelow($file, 'E'); // Throws an exception.</code></pre>
+<p>If you just want to know if a line exists, you don't have to deal with
+exceptions, you can use <code>Editor#hasBelow()</code> and <code>Editor#hasAbove()</code> method instead:</p>
+<pre><code class="language-php">$editor-&gt;hasBelow($file, 'Beans', 0); // false</code></pre>
+<p>If you need to go to the first occurence in the whole file (regardless of the
+current line), you can use:</p>
+<pre><code class="language-php">// Jumps to the first line matching the pattern, starting from the line 0
+$editor-&gt;jumpBelow($file, '/eg/', 0); // Current line: 1 (which is 'Egg')</code></pre>
+<p>The lookup can also be done using regex:</p>
+<pre><code class="language-php">$editor-&gt;jumpAbove($file, '/ac/'); // Current line: 0 (which is 'Bacon')</code></pre>
+<blockquote>
+<p><em>Note</em>: If you're manipulating a PHP file, you can also jump to symbols like
+class, methods and functions:</p>
+<pre><code class="language-php">use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+// ...
+
+$tokenBuilder = new TokenBuilder();
+$registrationMethodName = 'registerBundles';
+$registrationMethod = $tokenBuilder-&gt;buildMethod($registrationMethodName);
+
+$editor-&gt;jumpBelow($file, $registrationMethod);</code></pre>
+</blockquote>
+<h3>Manipulating a Line</h3>
+<p>Now you're able to navigate through a file and while that's very important in
+order to edit a file, it doesn't help much if you can't manipulate lines.
+Luckily, Redaktilo contains lots of methods designed for manipulating lines.</p>
+<p>Using the <code>Text#setLine()</code> method, you can manipulate the current line:</p>
+<pre><code class="language-php">// ...
+
+// ... navigate to the first line
+$text-&gt;setLine('Spam'); // Line 0 now contains 'Spam' instead of 'Bacon'</code></pre>
+<blockquote>
+<p><em>Note</em>: Editor provides a <code>replace</code> method which accepts callbacks:</p>
+<pre><code class="language-php">// Will be passed the given or current line
+$replace = function ($line) {
+    return strtoupper($line); // the line will be replaced by the returned value
+};
+$editor-&gt;replace($text, $replace, $location);</code></pre>
+</blockquote>
+<p>You can also insert lines below or above the current line:</p>
+<pre><code class="language-php">// ...
+
+$editor-&gt;insertAbove($file, 'Beans'); // inserts a line 'Beans' above Line 0
+$editor-&gt;insertBelow($file, 'Bacon'); // inserts a line 'Bacon' below line 0</code></pre>
+<p>Please note that the cursor moves to the inserted line.</p>
+<p>By default, all the manipulation methods work from the current line. If you would
+like to manipulate a given line, you can pass its number as the third parameter:</p>
+<pre><code class="language-php">$editor-&gt;insertAbove($file, 'Spam', 23); // Line inserted above the line number 23.</code></pre>
+<p>At last, you can also delete lines:</p>
+<pre><code class="language-php">// ...
+$editor-&gt;remove($file); // Removes the current line</code></pre>
+<h3>Saving the Modifications</h3>
+<p>For now the modification is only done in memory, to actually apply your changes
+to the file you need to save it:</p>
+<pre><code class="language-php">// ...
+
+$editor-&gt;saveFile($file);</code></pre>
+<p>The resulting file will be:</p>
+<pre><code>Beans
+Spam
+Egg
+Sausage</code></pre>
+<h2>Next readings</h2>
+<ul>
+<li><a href="02-use-cases.html">Use cases</a></li>
+<li><a href="03-reference.html">Reference</a></li>
+<li><a href="04-vocabulary.html">Vocabulary</a></li>
+<li><a href="05-extending.html">Extending</a></li>
+<li><a href="06-exceptions.html">Exceptions</a></li>
+</ul>
+<h2>Previous readings</h2>
+<ul>
+<li><a href="../README.html">README</a></li>
+</ul>
+                </section>
+
+            </div>
+        </main>
+
+        <footer>
+            <div class="container-fluid">
+                <p class="text-muted">
+                    website generated with <a href="http://couscous.io" title="Markdown website generator">Couscous</a>
+                </p>
+            </div>
+        </footer>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="http://yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

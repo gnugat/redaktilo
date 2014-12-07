@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Redaktilo</title>
+
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://gnugat.github.io/redaktilo/">
+                Redaktilo
+                <small class="hidden-xs hidden-sm">
+                    An easy &quot;line manipulation&quot; PHP lib: jump, insert and do anything!
+                </small>
+            </a>
+
+                            <a href="https://github.com/gnugat/redaktilo">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/">
+                                        Home
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/01-tutorial.html">
+                                        Tutorial
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/02-use-cases.html">
+                                        Use cases
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/03-reference.html">
+                                        Reference
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/04-vocabulary.html">
+                                        Vocabulary
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/05-extending.html">
+                                        Extending
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/06-exceptions.html">
+                                        Exceptions
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1>Vocabulary</h1>
+<ul>
+<li><a href="#actions">Actions</a>
+<ul>
+<li><a href="#insert">insert</a></li>
+<li><a href="#remove">remove</a></li>
+<li><a href="#replace">replace</a></li>
+</ul></li>
+<li><a href="#cursor">Cursor</a></li>
+<li><a href="#directions">Directions</a>
+<ul>
+<li><a href="#above">above</a></li>
+<li><a href="#below">below</a></li>
+</ul></li>
+<li><a href="#editor">Editor</a></li>
+<li><a href="#file">File</a></li>
+<li><a href="#line">Line</a></li>
+<li><a href="#location">Location</a></li>
+<li><a href="#redaktilo">Redaktilo</a></li>
+<li><a href="#text">Text</a></li>
+</ul>
+<h2>Actions</h2>
+<p>Here's the vocabulary for the possible actions on a line.</p>
+<h3>insert</h3>
+<p>Should be prefered over the word <code>add</code>.</p>
+<h3>remove</h3>
+<p>Should be prefered over the word <code>delete</code>.</p>
+<h3>replace</h3>
+<p>Should be prefered over the word <code>change</code>.</p>
+<h2>Cursor</h2>
+<p>Also used to mean the current line.</p>
+<p>An indicator used to know the position in the text. Currently a line number is
+used, but it could change to:</p>
+<ul>
+<li>a line and a column</li>
+<li>a token's place in an array</li>
+</ul>
+<p>This is useful when a pattern occurs many times in the text: it enables the
+editor to select the wanted one.</p>
+<p>The cursor also enables to manipulate the selected element.</p>
+<h2>Directions</h2>
+<p>Here's the vocabulary to locate something relatively in a collection of lines.</p>
+<h3>above</h3>
+<p>Used when doing something.</p>
+<p>Should be prefered over the words <code>over</code>, <code>before</code>, <code>previous</code> or <code>up</code>.</p>
+<h3>below</h3>
+<p>Used when doing something.</p>
+<p>Should be prefered over the words <code>under</code>, <code>after</code>, <code>next</code> or <code>down</code>.</p>
+<h2>Editor</h2>
+<p>Also called "text editor".</p>
+<p>A piece of software which is able to change the content of a text.
+In the case of Redaktilo, the editor is an object provided by a library.</p>
+<h2>File</h2>
+<p>Also called "text file", to be opposed to "binary file".</p>
+<p>See <a href="#text">Text</a>.</p>
+<h2>Line</h2>
+<p>The unit with which <strong>Redaktilo</strong> works. It's a simple string which ends at the
+line break:</p>
+<ul>
+<li><code>\r\n</code> for texts created on Windows</li>
+<li><code>\n</code> for texts created on the other operating systems</li>
+</ul>
+<p>To make it easier for the developers, <strong>Redaktilo</strong> takes care of the line
+break, so you should only provide it with a string stripped of it.</p>
+<h2>Location</h2>
+<p>The given line number, to which you can relatively search or do something.</p>
+<h2>Redaktilo</h2>
+<p>This means <code>editor</code> in esperanto. Technically <code>Tekstoredaktilo</code> should have been
+used (<code>text editor</code>), but it was a bit too long for a project name.</p>
+<h2>Text</h2>
+<p>Can contain:</p>
+<ul>
+<li>plain text</li>
+<li>JSON</li>
+<li>YAML</li>
+<li>PHP</li>
+<li>etc...</li>
+</ul>
+<h2>Next readings</h2>
+<ul>
+<li><a href="05-extending.html">Extending</a></li>
+<li><a href="06-exceptions.html">Exceptions</a></li>
+</ul>
+<h2>Previous readings</h2>
+<ul>
+<li><a href="../README.html">README</a></li>
+<li><a href="01-tutorial.html">Tutorial</a></li>
+<li><a href="02-use-cases.html">Use cases</a></li>
+<li><a href="03-reference.html">Reference</a></li>
+</ul>
+                </section>
+
+            </div>
+        </main>
+
+        <footer>
+            <div class="container-fluid">
+                <p class="text-muted">
+                    website generated with <a href="http://couscous.io" title="Markdown website generator">Couscous</a>
+                </p>
+            </div>
+        </footer>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="http://yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

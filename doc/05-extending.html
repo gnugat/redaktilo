@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Redaktilo</title>
+
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://gnugat.github.io/redaktilo/">
+                Redaktilo
+                <small class="hidden-xs hidden-sm">
+                    An easy &quot;line manipulation&quot; PHP lib: jump, insert and do anything!
+                </small>
+            </a>
+
+                            <a href="https://github.com/gnugat/redaktilo">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/">
+                                        Home
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/01-tutorial.html">
+                                        Tutorial
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/02-use-cases.html">
+                                        Use cases
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/03-reference.html">
+                                        Reference
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/04-vocabulary.html">
+                                        Vocabulary
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/05-extending.html">
+                                        Extending
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/06-exceptions.html">
+                                        Exceptions
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1>Redaktilo Extension Points</h1>
+<ul>
+<li><a href="#search">Search</a>
+<ul>
+<li><a href="#searchstrategy-api">SearchStrategy API</a></li>
+</ul></li>
+<li><a href="#commands">Commands</a>
+<ul>
+<li><a href="#command-api">Command API</a></li>
+<li><a href="#input-sanitizers">Input Sanitizers</a></li>
+</ul></li>
+</ul>
+<h2>Search</h2>
+<p>Use the <code>EditorBuilder</code> in order to register custom <code>SearchStrategy</code>
+implementations:</p>
+<pre><code class="language-php">&lt;?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$strategy = new MyCustomStrategy();
+
+$builder = EditorFactory::createBuilder();
+$builder-&gt;addSearchStrategy($strategy);
+
+$editor = $builder-&gt;getEditor();</code></pre>
+<p>The strategy will then be automatically used (if it's the first to support the
+given pattern) when calling one of the following <code>Editor</code> method:</p>
+<ul>
+<li><code>jumpAbove</code></li>
+<li><code>jumpBelow</code></li>
+<li><code>hasAbove</code></li>
+<li><code>hasBelow</code></li>
+</ul>
+<p>If your strategy should be used instead of another already registered strategy
+(ie. they support the same pattern), you can give it a higher priority:</p>
+<pre><code class="language-php">$builder-&gt;addSearchStrategy($strategy, 50);</code></pre>
+<p><strong>Important</strong>: The higher the priority is, the sooner the strategy will be
+returned if it supports the given pattern.</p>
+<p><strong>Note</strong>:A default priority of 0 is assigned to strategies if you don't specify
+it.</p>
+<h3>SearchStrategy API</h3>
+<p>A lookup strategy supporting a specific kind of pattern:</p>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Search;
+
+use Gnugat\Redaktilo\Text;
+
+interface SearchStrategy
+{
+    public function findAbove(Text $text, $pattern, $location = null);
+    public function findBelow(Text $text, $pattern, $location = null);
+
+    public function supports($pattern);
+}</code></pre>
+<p>Implementations provided out of the box are:</p>
+<ul>
+<li><code>PhpSearchStrategy</code>: PHP token search, supports array of <code>Gnugat\Redaktilo\Search\Php\Token</code></li>
+<li><code>LineRegexSearchStrategy</code>: regular expression search, supports regex (<code>/pattern/</code>)</li>
+<li><code>SameSearchStrategy</code>: strict equality search (<code>===</code>), supports strings</li>
+</ul>
+<h2>Commands</h2>
+<p>Use the <code>EditorBuilder</code> in order to register custom <code>Command</code> implementations:</p>
+<pre><code class="language-php">&lt;?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$command = new DoSomethingCommand();
+
+$builder = EditorFactory::createBuilder();
+$builder-&gt;addCommand($command);
+$commandInvoker = $builder-&gt;getCommandInvoker();
+$editor = $builder-&gt;getEditor();
+$file = $editor-&gt;open('/tmp/menu_spam.txt', true);
+
+$editor-&gt;run('do_something', array('text' =&gt; $file));</code></pre>
+<p><code>Editor</code> actually uses the <code>CommandInvoker</code> in its following methods:</p>
+<ul>
+<li><code>insertAbove</code></li>
+<li><code>insertBelow</code></li>
+<li><code>remove</code></li>
+<li><code>replace</code></li>
+<li><code>replace_all</code></li>
+<li><code>run</code></li>
+</ul>
+<h3>Command API</h3>
+<p>Executes a task with the given input:</p>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Command;
+
+interface Command
+{
+    public function getName();
+    public function execute(array $input);
+}</code></pre>
+<p>Implementations provided out of the box are:</p>
+<ul>
+<li><code>LineInsertAboveCommand</code>: <code>text</code>, <code>addition</code> and optional <code>location</code> (name: <code>insert_above</code>)</li>
+<li><code>LineInsertBelowCommand</code>: <code>text</code>, <code>addition</code> and optional <code>location</code> (name: <code>insert_below</code>)</li>
+<li><code>LineRemoveCommand</code>: <code>text</code> and optional <code>location</code> (name: <code>remove</code>)</li>
+<li><code>LineReplaceCommand</code>: <code>text</code>, <code>replacement</code> and optional <code>location</code> (name: <code>replace</code>)</li>
+<li><code>LineReplaceAllCommand</code>: <code>text</code>, <code>pattern</code> and <code>replacement</code> (name: <code>replace_all</code>)</li>
+</ul>
+<h3>Input Sanitizers</h3>
+<p>In order to safely extract the parameters in the given input, commands can rely
+on input sanitizer:</p>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Command\Sanitizer;
+
+interface InputSanitizer
+{
+    public function sanitize(array $input);
+}</code></pre>
+<p>Currently, here's the sanitizers provided out of the box:</p>
+<ul>
+<li><code>LocationSanitizer</code>: checks if the line number is valid
+(positive integer strictly inferior to the text's length) or return the
+current line number</li>
+<li><code>TextSanitizer</code>: checks the presence and type of the <code>text</code> parameter</li>
+</ul>
+<h2>Next readings</h2>
+<ul>
+<li><a href="06-exceptions.html">Exceptions</a></li>
+</ul>
+<h2>Previous readings</h2>
+<ul>
+<li><a href="../README.html">README</a></li>
+<li><a href="01-tutorial.html">Tutorial</a></li>
+<li><a href="02-use-cases.html">Use cases</a></li>
+<li><a href="03-reference.html">Reference</a></li>
+<li><a href="04-vocabulary.html">Vocabulary</a></li>
+</ul>
+                </section>
+
+            </div>
+        </main>
+
+        <footer>
+            <div class="container-fluid">
+                <p class="text-muted">
+                    website generated with <a href="http://couscous.io" title="Markdown website generator">Couscous</a>
+                </p>
+            </div>
+        </footer>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="http://yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

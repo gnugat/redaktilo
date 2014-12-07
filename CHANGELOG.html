@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Redaktilo</title>
+
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://gnugat.github.io/redaktilo/">
+                Redaktilo
+                <small class="hidden-xs hidden-sm">
+                    An easy &quot;line manipulation&quot; PHP lib: jump, insert and do anything!
+                </small>
+            </a>
+
+                            <a href="https://github.com/gnugat/redaktilo">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/">
+                                        Home
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/01-tutorial.html">
+                                        Tutorial
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/02-use-cases.html">
+                                        Use cases
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/03-reference.html">
+                                        Reference
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/04-vocabulary.html">
+                                        Vocabulary
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/05-extending.html">
+                                        Extending
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/06-exceptions.html">
+                                        Exceptions
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1>Changes between versions</h1>
+<ul>
+<li>added an optional filename argument to Editor#save</li>
+<li>removed TextFactory in favor of Text::fromString</li>
+<li>added Text::fromString and Text::fromArray and removed constructing Text directly</li>
+<li>removed LineBreak in favor of StringUtil#detectLineBreak</li>
+<li>added StringUtil</li>
+</ul>
+<h2>1.5.0: Current line number Incrementation</h2>
+<ul>
+<li>added Text#decrementCurrentLineNumber</li>
+<li>added Text#incrementCurrentLineNumber</li>
+</ul>
+<h2>1.4.0: Exception</h2>
+<ul>
+<li>added PatternNotFoundException</li>
+<li>added NotSupportedException</li>
+<li>added InvalidLineNumberException</li>
+<li>added InvalidArgumentException</li>
+<li>added IOException</li>
+<li>added FileNotFoundException</li>
+<li>added DifferentLineBreaksFoundException</li>
+<li>added CommandNotFoundException</li>
+<li>added Exception</li>
+</ul>
+<h2>1.3.0: Chicken Run</h2>
+<ul>
+<li>added ContentFactory</li>
+<li>added LineReplaceAllCommand</li>
+<li>added Editor#run</li>
+</ul>
+<h2>1.2.1: Fixed Backward Compatibility Break</h2>
+<ul>
+<li>fixed BC break by making command constructor arguments optional</li>
+</ul>
+<h2>1.2.0: InputSanitizers</h2>
+<ul>
+<li>added mix of line break management</li>
+<li>fixed text first line getter setter</li>
+<li>fixed LineRemoveCommand using array_splice</li>
+<li>added LocationSanitizer</li>
+<li>added TextSanitizer</li>
+<li>added InputSanitizer interface</li>
+</ul>
+<h2>1.1.6: Applying fix for line removal</h2>
+<ul>
+<li>fixed line number after line removal</li>
+</ul>
+<h2>1.1.5: Fixed remove command</h2>
+<ul>
+<li>fixed line numbers after line removal</li>
+</ul>
+<h2>1.1.4: Fixed Text InvalidLineNumberException</h2>
+<ul>
+<li>added tests for search relative to the first line</li>
+<li>added tests for line search with the immediate line above</li>
+<li>fixed Text to actually throw InvalidLineNumberException</li>
+</ul>
+<h2>1.1.3: Fixed line search above</h2>
+<ul>
+<li>fixed LineSearchStrategy#findAbove</li>
+</ul>
+<h2>1.1.2: Fixed locations</h2>
+<ul>
+<li>fixed passing of 0 as location</li>
+</ul>
+<h2>1.1.1: Fixed exceptions</h2>
+<ul>
+<li>fixed order of arguments in PatternNotFoundException</li>
+<li>fixed message in NotSupportedException and PatternNotFoundException</li>
+</ul>
+<h2>1.1.0: Convenience</h2>
+<ul>
+<li>deprecated string support from LineReplaceCommand</li>
+<li>deprecated has from Editor</li>
+<li>added callback support to LineReplaceCommand</li>
+<li>added hasAbove and hasBelow to Editor</li>
+<li>added loggable exceptions</li>
+<li>added line getter and setter to Text</li>
+<li>added priority to Search Strategies</li>
+</ul>
+<h2>1.0.0: Documentation</h2>
+<ul>
+<li>updated documentation</li>
+</ul>
+<h2>1.0.0-rc3: Length</h2>
+<ul>
+<li>added Text length</li>
+</ul>
+<h2>1.0.0-rc2: Composer improvements</h2>
+<ul>
+<li>lowered requirements</li>
+<li>fixed PSR4</li>
+<li>added keywords</li>
+<li>added @pyrech to authors</li>
+</ul>
+<h2>1.0.0-rc1: Safe checks</h2>
+<ul>
+<li>added totalLineNumber to Text</li>
+<li>added safe checks</li>
+</ul>
+<h2>1.0.0-beta2: Fixed last BC breaks</h2>
+<ul>
+<li>renamed under with below</li>
+<li>removed File prefix from Editor's open/save</li>
+</ul>
+<h2>1.0.0-beta1: Stable API</h2>
+<ul>
+<li>moved FileFactory into Filesystem</li>
+<li>removed newText from Editor</li>
+</ul>
+<h2>1.0.0-alpha7: New src layout</h2>
+<ul>
+<li>Updated EditorBuilder with extensible only services</li>
+<li>Removed api tag from services</li>
+<li>Moved EditorBuilder into Service</li>
+<li>Moved Filesystem into Service</li>
+<li>Moved TextFactory into Service</li>
+<li>Moved FileFactory into Service</li>
+<li>Moved TextToPhpConverter into Service</li>
+<li>Renamed PhpContentConverter to TextToPhpConverter</li>
+<li>Removed ContentConverter interface</li>
+</ul>
+<h2>1.0.0-alpha6: Text and line content</h2>
+<ul>
+<li>renamed LineContentConverter to LineBreak</li>
+<li>used Text instead of File</li>
+<li>removed constructor API</li>
+<li>removed File read and write</li>
+<li>injected lines instead of content in File</li>
+<li>used FileFactory in Filesystem</li>
+<li>created FileFactory</li>
+<li>made File a Text</li>
+<li>suffixed Editor open/save with "File"</li>
+<li>added newText in Editor</li>
+<li>created TextFactory</li>
+<li>created Text</li>
+</ul>
+<h2>1.0.0-alpha5: BC break renaming</h2>
+<ul>
+<li>renamed <code>SearchStrategy</code> <code>previous</code>/<code>next</code> to <code>above</code>/<code>under</code></li>
+<li>renamed <code>Editor</code> <code>addBefore</code>/<code>addAfter</code> to <code>insertAbove</code>/<code>insertUnder</code></li>
+<li>renamed <code>Editor</code> <code>changeTo</code> to <code>rename</code></li>
+<li>renamed <code>Editor</code> <code>jumpUpTo</code>/<code>jumpDownTo</code> to <code>jumpAbove</code>/<code>jumpUnder</code></li>
+<li>improved the vocabulary with <code>Actions</code>, <code>Directions</code> and <code>Location</code></li>
+</ul>
+<h2>1.0.0-alpha4: Fix current line</h2>
+<ul>
+<li>fixed current line update's responsability in commands</li>
+</ul>
+<h2>1.0.0-alpha3: Deprecations</h2>
+<ul>
+<li>removed <code>changeTo</code> from <code>File</code></li>
+</ul>
+<h2>1.0.0-alpha2: Quality</h2>
+<ul>
+<li>fixed Insight analysis 15</li>
+</ul>
+<h2>1.0.0-alpha1: Commands, boolean finds and locations</h2>
+<ul>
+<li>removed <code>SubstringSearchStrategy</code></li>
+<li>removed <code>replaceWith</code> from <code>Editor</code></li>
+<li>added <code>LineInsertAboveCommand</code></li>
+<li>added <code>LineInsertUnderCommand</code></li>
+<li>removed <code>LineInsertCommand</code></li>
+<li>moved line management from <code>Editor</code> to commands</li>
+<li>renamed <code>UnsupportedCommandException</code> into <code>CommandNotFoundException</code></li>
+<li>added before/after to the <code>Editor</code> jumpTo methods</li>
+<li>removed <code>FactoryMethod</code></li>
+<li>removed <code>SearchStrategy</code>'s <code>has</code> method</li>
+<li>added before/after to the <code>SearchStrategy</code> find methods</li>
+<li>added abstract class <code>LineSearchStrategy</code></li>
+<li>renamed <code>LineSearchStrategy</code> to <code>SameSearchStrategy</code></li>
+<li>moved search exception throwing from <code>Search</code> to the <code>Editor</code></li>
+<li>added location for <code>Editor</code>'s manipulation methods</li>
+<li>moved <code>NotSupportedException</code> from <code>Engine</code> to <code>Search</code></li>
+<li>replaced <code>ReplaceEngine</code> with <code>CommandInvoker</code></li>
+<li>removed <code>ReplaceStrategy</code></li>
+<li>added <code>InsertCommand</code></li>
+<li>added <code>RemoveCommand</code></li>
+<li>added <code>ReplaceCommand</code></li>
+</ul>
+<h2>0.9.0: PhpSearchStrategy</h2>
+<ul>
+<li>added <code>PhpSearchStrategy</code></li>
+<li>moved <code>SearchEngine</code> from the <code>Engine</code> namespace to the <code>Search</code> namespace</li>
+<li>moved <code>ReplaceEngine</code> from the <code>Engine</code> namespace to the <code>Replace</code> namespace</li>
+</ul>
+<h2>0.8.0: SearchStrategy and EditorFactory</h2>
+<ul>
+<li>removed <code>StaticContainer</code> in favor of <code>EditorBuilder</code> and <code>EditorFactory</code></li>
+<li>added <code>SubstringSearchStrategy</code></li>
+<li>fixed <code>tester.sh</code> exit status</li>
+<li>added <code>LineRegexSearchStrategy</code></li>
+</ul>
+<h2>0.7.2: Fixed routing test</h2>
+<ul>
+<li>fixed the routing test by removing the dependency on sf2's DI component</li>
+</ul>
+<h2>0.7.1: Fixed line break</h2>
+<ul>
+<li>fixed line break in line content converter's back method</li>
+</ul>
+<h2>0.7.0: ContentConverter</h2>
+<ul>
+<li>replaced introduction with tutorial</li>
+<li>replaced architecture details with reference</li>
+<li>added vocabulary (cursor and line)</li>
+<li>added static DIC documentation</li>
+<li>added factory methods documentation</li>
+<li>added <code>BundleRouting</code> example</li>
+<li>fixed <code>Editor::addAfter</code> by moving down the cursor</li>
+<li>added <code>Line</code> factory method for empty ones</li>
+<li>added <code>Filesystem</code> factory method to force creation</li>
+<li>moved factory methods into <code>Gnugat\Redaktilo</code></li>
+<li>removed <code>Filesystem</code>'s <code>detectLineBreak</code> method</li>
+<li>removed <code>File</code>'s <code>readlines</code> and <code>writelines</code> methods</li>
+<li>injected <code>LineContentConverter</code> into:
+<ul>
+<li><code>LineReplaceStrategy</code></li>
+<li><code>LineSearchStrategy</code></li>
+<li><code>LineNumberSearchStrategy</code></li>
+</ul></li>
+<li>added <code>LineContentConverter</code></li>
+<li>added <code>ContentConverter</code></li>
+</ul>
+<h2>0.6.1: Fixed DIC</h2>
+<ul>
+<li>fixed private methods into public static ones</li>
+</ul>
+<h2>0.6.0: ReplaceEngine</h2>
+<ul>
+<li>moved Engines into thei own directory</li>
+<li>added <code>ReplaceEngine</code> to comply to the open/closed principle</li>
+<li>removed <code>File</code>'s <code>hasLine</code></li>
+<li>added a Dependency Injection Container</li>
+<li>added a use case for line presence checking</li>
+<li>added a use case for "documentation reformatting"</li>
+<li>replaced Behat by PHPUnit for automated use cases</li>
+</ul>
+<h2>0.5.0: SearchEngine</h2>
+<ul>
+<li>added <code>SearchEngine</code> to comply to the open/closed principle</li>
+</ul>
+<h2>0.4.0: Line manipulations</h2>
+<ul>
+<li>added line replacement</li>
+<li>added line removal</li>
+<li>added checking of line presence</li>
+</ul>
+<h2>0.3.0: File coming out</h2>
+<ul>
+<li>added file existence check</li>
+<li>added line break detection</li>
+<li>added <code>bin/tester.sh</code> script</li>
+<li>moved stateness from <code>Editor</code> to <code>File</code></li>
+<li>moved classes at the root</li>
+<li>removed interfaces</li>
+<li>compiled documentation</li>
+<li>improved tests</li>
+</ul>
+<h2>0.2.0: Jump to</h2>
+<ul>
+<li>added jump to methods to Editor</li>
+<li>removed autosave</li>
+<li>added manual save</li>
+<li>added usage documentation</li>
+<li>added use cases documentation</li>
+<li>removed installer</li>
+</ul>
+<h2>0.1.2: Fix open</h2>
+<ul>
+<li>fixed <code>openFile</code> to <code>open</code></li>
+</ul>
+<h2>0.1.1: Continuous Integration</h2>
+<ul>
+<li>fixed Insight analysis 1</li>
+<li>added travis configuration</li>
+<li>added badges on README</li>
+</ul>
+<h2>0.1.0: Initial release</h2>
+<ul>
+<li>created file opening</li>
+<li>created insertion of line after a given one</li>
+</ul>
+                </section>
+
+            </div>
+        </main>
+
+        <footer>
+            <div class="container-fluid">
+                <p class="text-muted">
+                    website generated with <a href="http://couscous.io" title="Markdown website generator">Couscous</a>
+                </p>
+            </div>
+        </footer>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="http://yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

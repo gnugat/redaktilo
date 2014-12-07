@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Redaktilo</title>
+
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/highlight.dark.css">
+        <link rel="stylesheet" href="http://gnugat.github.io/redaktilo/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://gnugat.github.io/redaktilo/">
+                Redaktilo
+                <small class="hidden-xs hidden-sm">
+                    An easy &quot;line manipulation&quot; PHP lib: jump, insert and do anything!
+                </small>
+            </a>
+
+                            <a href="https://github.com/gnugat/redaktilo">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                        <ul class="nav nav-pills nav-stacked">
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/">
+                                        Home
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/01-tutorial.html">
+                                        Tutorial
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/02-use-cases.html">
+                                        Use cases
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/03-reference.html">
+                                        Reference
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/04-vocabulary.html">
+                                        Vocabulary
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/05-extending.html">
+                                        Extending
+                                    </a>
+                                </li>
+                                                            <li class="">
+                                    <a href="http://gnugat.github.io/redaktilo/doc/06-exceptions.html">
+                                        Exceptions
+                                    </a>
+                                </li>
+                                                    </ul>
+
+                    </nav>
+
+                
+                <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1>Exceptions</h1>
+<p>All the exceptions thrown in Redaktilo live in the <code>Gnugat\Redaktilo\Exception</code>
+namespace and implement a common interface allowing you to catch any of them
+easily:</p>
+<pre><code class="language-php">&lt;?php
+
+try {
+
+    // any operations made with Redaktilo
+
+} catch (\Gnugat\Redaktilo\Exception\Exception $e) { ... }</code></pre>
+<p>Redaktilo's exceptions all have a descriptive message allowing developers to
+understand what went wrong. If the message is not enough, use their getter
+to get more context.</p>
+<p>Here's the list of the exceptions that can be thrown:</p>
+<ul>
+<li><a href="#commandnotfoundexception">CommandNotFoundException</a></li>
+<li><a href="#notsupportedexception">NotSupportedException</a></li>
+<li><a href="#patternnotfoundexception">PatternNotFoundException</a></li>
+<li><a href="#invalidlinenumberexception">InvalidLineNumberException</a></li>
+<li><a href="#differentlinebreaksfoundexception">DifferentLineBreaksFoundException</a></li>
+<li><a href="#filenotfoundexception">FileNotFoundException</a></li>
+<li><a href="#ioexception">IOException</a></li>
+<li><a href="#invalidargumentexception">InvalidArgumentException</a></li>
+</ul>
+<h2>CommandNotFoundException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class CommandNotFoundException extends \Exception implements Exception
+{
+    public function getName();
+    public function getCommands();
+}</code></pre>
+<h2>NotSupportedException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class NotSupportedException extends \Exception implements Exception
+{
+    public function getPattern();
+    public function getSearchStrategies();
+}</code></pre>
+<h2>PatternNotFoundException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class PatternNotFoundException extends \Exception implements Exception
+{
+    public function getPattern();
+    public function getText();
+}</code></pre>
+<h2>InvalidLineNumberException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class InvalidLineNumberException extends \InvalidArgumentException implements Exception
+{
+    public function getLineNumber();
+    public function getText();
+}</code></pre>
+<h2>DifferentLineBreaksFoundException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class DifferentLineBreaksFoundException extends \Exception implements Exception
+{
+    public function getString();
+    public function getNumberLineBreakOther();
+    public function getNumberLineBreakWindows();
+}</code></pre>
+<h2>FileNotFoundException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class FileNotFoundException extends \RuntimeException implements Exception
+{
+    public function getPath();
+}</code></pre>
+<h2>IOException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class IOException extends \RuntimeException implements Exception
+{
+    public function getPath();
+}</code></pre>
+<h2>InvalidArgumentException</h2>
+<pre><code class="language-php">&lt;?php
+
+namespace Gnugat\Redaktilo\Exception;
+
+class InvalidArgumentException extends \InvalidArgumentException implements Exception
+{
+}</code></pre>
+<h2>Previous readings</h2>
+<ul>
+<li><a href="../README.html">README</a></li>
+<li><a href="01-tutorial.html">Tutorial</a></li>
+<li><a href="02-use-cases.html">Use cases</a></li>
+<li><a href="03-reference.html">Reference</a></li>
+<li><a href="04-vocabulary.html">Vocabulary</a></li>
+<li><a href="05-extending.html">Extending</a></li>
+</ul>
+                </section>
+
+            </div>
+        </main>
+
+        <footer>
+            <div class="container-fluid">
+                <p class="text-muted">
+                    website generated with <a href="http://couscous.io" title="Markdown website generator">Couscous</a>
+                </p>
+            </div>
+        </footer>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="http://yastatic.net/highlightjs/8.2/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>
