@@ -11,7 +11,6 @@
 
 namespace Gnugat\Redaktilo\Service;
 
-use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
 use Gnugat\Redaktilo\Exception\FileNotFoundException;
 use Gnugat\Redaktilo\Exception\IOException;
 use Gnugat\Redaktilo\Exception\NoFilenameGivenException;
@@ -24,7 +23,6 @@ use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
  */
 class Filesystem
 {
-
     /** @var SymfonyFilesystem */
     private $symfonyFilesystem;
 
@@ -38,8 +36,7 @@ class Filesystem
     public function __construct(
         SymfonyFilesystem $symfonyFilesystem,
         ContentFactory $contentFactory = null
-    )
-    {
+    ) {
         $this->symfonyFilesystem = $symfonyFilesystem;
         // @deprecated 1.3 ContentFactory becomes mandatory
         $this->contentFactory = $contentFactory ?: new ContentFactory();

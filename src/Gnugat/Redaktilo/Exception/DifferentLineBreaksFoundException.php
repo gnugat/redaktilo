@@ -36,7 +36,7 @@ class DifferentLineBreaksFoundException extends BaseException implements Excepti
      * @param int    $numberLineBreakOther
      * @param int    $numberLineBreakWindows
      */
-    function __construct($string, $numberLineBreakOther, $numberLineBreakWindows)
+    public function __construct($string, $numberLineBreakOther, $numberLineBreakWindows)
     {
         $this->string = (string) $string;
         $this->numberLineBreakOther = (int) $numberLineBreakOther;

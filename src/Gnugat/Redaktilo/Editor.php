@@ -52,8 +52,7 @@ class Editor
         Filesystem $filesystem,
         SearchEngine $searchEngine,
         CommandInvoker $commandInvoker
-    )
-    {
+    ) {
         $this->filesystem = $filesystem;
         $this->searchEngine = $searchEngine;
         $this->commandInvoker = $commandInvoker;

@@ -35,8 +35,7 @@ class LineReplaceAllCommand implements Command
     public function __construct(
         ContentFactory $contentFactory,
         TextSanitizer $textSanitizer
-    )
-    {
+    ) {
         $this->contentFactory = $contentFactory;
         $this->textSanitizer = $textSanitizer;
     }
