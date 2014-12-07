@@ -2,6 +2,8 @@
 
 namespace Gnugat\Redaktilo\Util;
 
+use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
+
 /**
  * @author Wouter J <wouter@wouterj.nl>
  */
