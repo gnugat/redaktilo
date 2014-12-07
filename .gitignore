@@ -5,3 +5,6 @@
 
 /vendor/
 /composer.lock
+
+# Couscous
+/.couscous/
