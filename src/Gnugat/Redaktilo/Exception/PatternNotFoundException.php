@@ -33,7 +33,7 @@ class PatternNotFoundException extends BaseException implements Exception
 
     /**
      * @param mixed $pattern
-     * @param Text $text
+     * @param Text  $text
      */
     public function __construct($pattern, Text $text)
     {
