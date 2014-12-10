@@ -1,14 +1,7 @@
 # Redaktilo
 
-Redaktilo allows you to find, insert, replace and removes lines using an
+Redaktilo allows you to find, insert, replace and remove lines using an
 editor-like object.
-
-To find lines, an extensible search engine is available and provides out of the
-box:
-
-* regular expression line searching
-* strict equality line searching (`===`)
-* PHP token searching
 
 *Because your code too needs an editor to manipulate files*.
 
@@ -33,11 +26,13 @@ use Gnugat\Redaktilo\EditorFactory;
 $editor = EditorFactory::createEditor();
 ```
 
-The [SensioGeneratorBundle](https://github.com/sensiolabs/SensioGeneratorBundle)
-has a [`KernelManipulator`](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
-class which edits an `AppKernel` file to insert a line.
+## Real life example
 
-Here's what the code would look like if it was using Redaktilo:
+For our example, we will create a [`KernelManipulator`](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
+similar to the one we can find in [SensioGeneratorBundle](https://github.com/sensiolabs/SensioGeneratorBundle).
+
+It takes a bundle's fully qualified classname and instert it in the `AppKernel`
+file:
 
 ```php
 <?php
@@ -59,16 +54,16 @@ class KernelManipulator extends Manipulator
 
     public function addBundle($bundle)
     {
-        $file = $this->editor->open($this->appKernelFilename);
-        $newBundle = sprintf('            new %s(),', $bundle);
-        if ($this->editor->hasBelow($file, $newBundle, 0)) {
+        $appKernel = $this->editor->open($this->appKernelFilename);
+        $newBundle = "            new $bundle(),";
+        if ($this->editor->hasBelow($appKernel, $newBundle)) {
             $message = sprintf('Bundle "%s" is already defined in "AppKernel::registerBundles()".', $bundle);
 
             throw new \RuntimeException($message);
         }
-        $this->editor->jumpBelow($file, '        );');
-        $this->editor->insertAbove($file, $newBundle);
-        $this->editor->save($file);
+        $this->editor->jumpBelow($appKernel, '        );');
+        $this->editor->insertAbove($appKernel, $newBundle);
+        $this->editor->save($appKernel);
 
         return true;
     }
@@ -91,6 +86,7 @@ You can find more documentation at the following links:
 * [copyright and MIT license](LICENSE)
 * [versioning and branching models](VERSIONING.md)
 * [contribution instructions](CONTRIBUTING.md)
+* [migration to 2.0 instructions](UPGRADE-2.0.md)
 
 Next readings:
 

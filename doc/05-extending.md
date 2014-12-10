@@ -40,11 +40,11 @@ If your strategy should be used instead of another already registered strategy
 $builder->addSearchStrategy($strategy, 50);
 ```
 
-**Important**: The higher the priority is, the sooner the strategy will be
-returned if it supports the given pattern.
+> **Important**: The higher the priority is, the sooner the strategy will be
+> returned if it supports the given pattern.
 
-**Note**:A default priority of 0 is assigned to strategies if you don't specify
-it.
+> **Note**:A default priority of 0 is assigned to strategies if you don't specify
+> it.
 
 ### SearchStrategy API
 
@@ -68,7 +68,6 @@ interface SearchStrategy
 
 Implementations provided out of the box are:
 
-* `PhpSearchStrategy`: PHP token search, supports array of `Gnugat\Redaktilo\Search\Php\Token`
 * `LineRegexSearchStrategy`: regular expression search, supports regex (`/pattern/`)
 * `SameSearchStrategy`: strict equality search (`===`), supports strings
 
@@ -99,7 +98,7 @@ $editor->run('do_something', array('text' => $file));
 * `insertBelow`
 * `remove`
 * `replace`
-* `replace_all`
+* `replaceAll`
 * `run`
 
 ### Command API

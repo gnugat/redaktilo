@@ -15,10 +15,11 @@ This chapter shows you how to use Redaktilo and contains the following sections:
 ## The Editor
 
 The only class you'll be using when you use Redaktilo is the `Editor` class.
-This class contains all methods you need to open, navigate, edit and save files
-or text. The editor doesn't have any state, this allows you to use a single
+This class contains all methods you need to navigate and edit texts (it can also
+open and save files).
+The editor doesn't have any state, this allows you to use a single
 instance throughout the entire application while editing multiple different
-files.
+texts.
 
 ### Creating an Editor
 
@@ -58,10 +59,10 @@ First things first: you need to open the file. This can be done easily with the
 ```php
 // ...
 
-$file = $editor->open('monty-menu.txt');
+$montyMenu = $editor->open('monty-menu.txt');
 ```
 
-This method returns a `File` instance. This object contains the content of the
+This method returns a `Text` instance. This object contains the content of the
 file and keeps track of the cursor. When opening the file, the cursor is set
 to line 0 ('Bacon').
 
@@ -76,7 +77,7 @@ existing line:
 ```php
 // ...
 
-$editor->jumpBelow($file, 'Egg'); // Current line: 1 ('Egg')
+$editor->jumpBelow($montyMenu, 'Egg'); // Current line: 1 ('Egg')
 ```
 
 As you can see, there's no need to add the line break character, Redaktilo will
@@ -85,22 +86,22 @@ take care of it for you.
 You should note that the lookup is directional:
 
 ```php
-$editor->jumpBelow($file, 'Bacon'); // Throws \Gnugat\Redaktilo\Exception\PatternNotFoundException, because 'Bacon' is above the current line
+$editor->jumpBelow($montyMenu, 'Bacon'); // Throws \Gnugat\Redaktilo\Exception\PatternNotFoundException, because 'Bacon' is above the current line
 
-$editor->jumpAbove($file, 'Bacon'); // Current line: 0 ('Bacon')
+$editor->jumpAbove($montyMenu, 'Bacon'); // Current line: 0 ('Bacon')
 ```
 
 The match is done only if the line value is exactly the same as the given one:
 
 ```php
-$editor->jumpBelow($file, 'E'); // Throws an exception.
+$editor->jumpBelow($montyMenu, 'E'); // Throws an exception.
 ```
 
 If you just want to know if a line exists, you don't have to deal with
 exceptions, you can use `Editor#hasBelow()` and `Editor#hasAbove()` method instead:
 
 ```php
-$editor->hasBelow($file, 'Beans', 0); // false
+$editor->hasBelow($montyMenu, 'Beans', 0); // false
 ```
 
 If you need to go to the first occurence in the whole file (regardless of the
@@ -108,34 +109,20 @@ current line), you can use:
 
 ```php
 // Jumps to the first line matching the pattern, starting from the line 0
-$editor->jumpBelow($file, '/eg/', 0); // Current line: 1 (which is 'Egg')
+$editor->jumpBelow($montyMenu, '/eg/', 0); // Current line: 1 (which is 'Egg')
 ```
 
 The lookup can also be done using regex:
 
 ```php
-$editor->jumpAbove($file, '/ac/'); // Current line: 0 (which is 'Bacon')
+$editor->jumpAbove($montyMenu, '/ac/'); // Current line: 0 (which is 'Bacon')
 ```
-
- > *Note*: If you're manipulating a PHP file, you can also jump to symbols like
- > class, methods and functions:
-
- > ```php
- > use Gnugat\Redaktilo\Search\Php\TokenBuilder;
- > // ...
- >
- > $tokenBuilder = new TokenBuilder();
- > $registrationMethodName = 'registerBundles';
- > $registrationMethod = $tokenBuilder->buildMethod($registrationMethodName);
-
- > $editor->jumpBelow($file, $registrationMethod);
- > ```
 
 ### Manipulating a Line
 
 Now you're able to navigate through a file and while that's very important in
 order to edit a file, it doesn't help much if you can't manipulate lines.
-Luckily, Redaktilo contains lots of methods designed for manipulating lines.
+Luckily, Redaktilo contains lots of methods designed for this purpose.
 
 Using the `Text#setLine()` method, you can manipulate the current line:
 
@@ -161,8 +148,8 @@ You can also insert lines below or above the current line:
 ```php
 // ...
 
-$editor->insertAbove($file, 'Beans'); // inserts a line 'Beans' above Line 0
-$editor->insertBelow($file, 'Bacon'); // inserts a line 'Bacon' below line 0
+$editor->insertAbove($montyMenu, 'Beans'); // inserts a line 'Beans' above Line 0
+$editor->insertBelow($montyMenu, 'Bacon'); // inserts a line 'Bacon' below line 0
 ```
 
 Please note that the cursor moves to the inserted line.
@@ -171,14 +158,14 @@ By default, all the manipulation methods work from the current line. If you woul
 like to manipulate a given line, you can pass its number as the third parameter:
 
 ```php
-$editor->insertAbove($file, 'Spam', 23); // Line inserted above the line number 23.
+$editor->insertAbove($montyMenu, 'Spam', 23); // Line inserted above the line number 23.
 ```
 
 At last, you can also delete lines:
 
 ```php
 // ...
-$editor->remove($file); // Removes the current line
+$editor->remove($montyMenu); // Removes the current line
 ```
 
 ### Saving the Modifications
@@ -189,7 +176,7 @@ to the file you need to save it:
 ```php
 // ...
 
-$editor->saveFile($file);
+$editor->save($montyMenu, 'monty-menu.txt');
 ```
 
 The resulting file will be:

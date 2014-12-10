@@ -35,11 +35,7 @@ Should be prefered over the word `change`.
 
 Also used to mean the current line.
 
-An indicator used to know the position in the text. Currently a line number is
-used, but it could change to:
-
-* a line and a column
-* a token's place in an array
+An indicator used to know the position in the text.
 
 This is useful when a pattern occurs many times in the text: it enables the
 editor to select the wanted one.
@@ -52,13 +48,9 @@ Here's the vocabulary to locate something relatively in a collection of lines.
 
 ### above
 
-Used when doing something.
-
 Should be prefered over the words `over`, `before`, `previous` or `up`.
 
 ### below
-
-Used when doing something.
 
 Should be prefered over the words `under`, `after`, `next` or `down`.
 
