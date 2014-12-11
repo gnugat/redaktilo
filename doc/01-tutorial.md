@@ -133,15 +133,15 @@ Using the `Text#setLine()` method, you can manipulate the current line:
 $text->setLine('Spam'); // Line 0 now contains 'Spam' instead of 'Bacon'
 ```
 
- > *Note*: Editor provides a `replace` method which accepts callbacks:
- >
- > ```php
- > // Will be passed the given or current line
- > $replace = function ($line) {
- >     return strtoupper($line); // the line will be replaced by the returned value
- > };
- > $editor->replace($text, $replace, $location);
- > ```
+> **Note**: Editor provides a `replace` method which accepts callbacks:
+>
+> ```php
+> // Will be passed the given or current line
+> $replace = function ($line) {
+>     return strtoupper($line); // the line will be replaced by the returned value
+> };
+> $editor->replace($text, $replace, $location);
+> ```
 
 You can also insert lines below or above the current line:
 

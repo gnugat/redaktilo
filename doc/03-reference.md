@@ -115,8 +115,8 @@ if ($editor->hasBelow($file, '/sniggers/', 0) { // regular expression
 }
 ```
 
-**Note**: to jump to a given line number, you can directly use:
-`$text->setCurrentLineNumber($x);`.
+> **Note**: to jump to a given line number, you can directly use:
+> `$text->setCurrentLineNumber($x);`.
 
 ### Content manipulation
 
@@ -184,8 +184,8 @@ class Text
 }
 ```
 
-**Important**: `lines` is an array of string stripped from their line break
-character.
+> **Important**: `lines` is an array of string stripped from their line break
+> character.
 
 If you need to manipulate a simple string you can use `Text#fromString`:
 
