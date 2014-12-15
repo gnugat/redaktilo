@@ -24,8 +24,8 @@ The only problem with it: it doesn't keep comments or empty lines.
 
 Redaktilo fits perfectly for the job.
 
-**Note**: see [BundleRoutingTest](../tests/example/BundleRoutingTest.php) for an
-actual implementation.
+> **Note**: see [BundleRoutingTest](../tests/example/BundleRoutingTest.php) for
+> an actual implementation.
 
 ## JSON file edition
 
@@ -53,8 +53,8 @@ GnugatWizardBundle will need to create its own KernelManipulator.
 The result of a simpler approach (parsing lines instead of PHP tokens) is
 Redaktilo!
 
-**Note**: see [BundleRegistrationTest](../tests/example/BundleRegistrationTest.php)
-for an actual implementation.
+> **Note**: see [BundleRegistrationTest](../tests/example/BundleRegistrationTest.php)
+> for an actual implementation.
 
 ## Next readings
 

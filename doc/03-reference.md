@@ -7,7 +7,6 @@
     * [Commands](#commands)
 * [Text API](#text-api)
     * [Side note on LineBreak](#side-note-on-linebreak)
-* [File API](#file-api)
 
 ## Editor API
 
@@ -21,7 +20,7 @@ namespace Gnugat\Redaktilo;
 class Editor
 {
     public function open($filename, $force = false);
-    public function save(File $file);
+    public function save(File $file, $filename);
 
     // Throw Gnugat\Redaktilo\Exception\PatternNotFoundException
     public function jumpAbove(Text $text, $pattern, $location = null);
@@ -72,7 +71,7 @@ $file = $editor->open('/tmp/new.txt', true); // Forces file creation when it doe
 
 // ... Make some manipulation on the file
 
-$editor->save($file); // Actually writes on the filesystem
+$editor->save($file, '/tmp/new.txt'); // Actually writes on the filesystem
 ```
 
 ### Content navigation
@@ -82,7 +81,6 @@ and provides by default the following `SearchStrategies`:
 
 * regular expression
 * strict equality (`===`)
-* PHP token
 
 If the pattern isn't found, or if the pattern isn't supported by any strategies
 an exception will be thrown. If the pattern is found, the `Text`'s current line
@@ -117,8 +115,8 @@ if ($editor->hasBelow($file, '/sniggers/', 0) { // regular expression
 }
 ```
 
-**Note**: to jump to a given line number, you can directly use:
-`$text->setCurrentLineNumber($x);`.
+> **Note**: to jump to a given line number, you can directly use:
+> `$text->setCurrentLineNumber($x);`.
 
 ### Content manipulation
 
@@ -138,19 +136,19 @@ $replace = function ($line) {
 };
 
 $editor = EditorFactory::createEditor();
-$file = $editor->open('/tmp/spam-menu.txt', true);
-$editor->insertAbove($file, 'Egg'); // Current line number: 0
-$editor->insertBelow($file, 'Bacon'); // Current line number: 1
-$editor->replace($file, $replace);
-$editor->replaceAll($file, '/*/', 'Spam');
-$editor->remove($file);  // Current line number: 0
+$spamMenu = $editor->open('/tmp/spam-menu.txt', true);
+$editor->insertAbove($spamMenu, 'Egg'); // Current line number: 0
+$editor->insertBelow($spamMenu, 'Bacon'); // Current line number: 1
+$editor->replace($spamMenu, $replace);
+$editor->replaceAll($spamMenu, '/*/', 'Spam');
+$editor->remove($spamMenu);  // Current line number: 0
 
-$editor->save($file); // Necessary to actually apply the changes on the filesystem
+$editor->save($spamMenu, '/tmp/spam-menu.txt'); // Necessary to actually apply the changes on the filesystem
 ```
 
 ### Commands
 
-More content manipulation are available through `Editor#run()`.
+You can define your own commands and use them through `Editor#run()`.
 
 ## Text API
 
@@ -186,11 +184,10 @@ class Text
 }
 ```
 
-**Important**: `lines` is an array of string stripped from their line break
-character.
+> **Important**: `lines` is an array of string stripped from their line break
+> character.
 
-The `Editor` is a bit `File` oriented, but if you want to manipulate a simple
-string you can use `Text`:
+If you need to manipulate a simple string you can use `Text#fromString`:
 
 ```php
 <?php
@@ -201,49 +198,17 @@ use Gnugat\Redaktilo\Text;
 $text = Text::fromString("why do witches burn?\n...because they're made of... wood?\n");
 ```
 
-**Important**: please note that upon creation, the current line number is
-initialized to the first line: `0` (array indexed).
+> **Important**: please note that upon creation, the current line number is
+> initialized to the first line: `0` (array indexed).
 
 ### Side note on Line Breaks
 
-A `StringUtil#detectLineBreak` method is used to find the line break, this is done using
-the following rules:
+A `StringUtil#detectLineBreak` method is used to find the line break, this is
+done using the following rules:
 
 * `\r\n` for windows
 * `\n` for any other operating system
 * `PHP_EOL` if no line ending has been found
-
-## File API
-
-The other main entity:
-
-```php
-<?php
-
-namespace Gnugat\Redaktilo;
-
-class File extends Text
-{
-    public function getFilename();
-    public function setFilename($filename);
-
-    // ... (Text methods)
-}
-```
-
-The best way to create it is to use the `Editor`:
-
-```php
-<?php
-require_once __DIR__.'/vendor/autoload.php';
-
-use Gnugat\Redaktilo\EditorFactory;
-
-$editor = EditorFactory::createEditor();
-$file = $editor->open('/tmp/and-now-for-something-completly-different.txt');
-// ... Edit the file
-$editor->save($file); // Actually writes on the filesystem
-```
 
 ## Next readings
 
