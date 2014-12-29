@@ -1,5 +1,7 @@
 # Changes between versions
 
+* added Text#map
+
 ## 1.6.0: Text construction
 
 * added an optional filename argument to Editor#save

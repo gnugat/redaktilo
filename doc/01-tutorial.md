@@ -118,6 +118,17 @@ The lookup can also be done using regex:
 $editor->jumpAbove($montyMenu, '/ac/'); // Current line: 0 (which is 'Bacon')
 ```
 
+At last, you can also loop through all files using `Text#map()`:
+
+```php
+use Gnugat\Redaktilo\Text;
+
+// ...
+$montyMenu->map(function ($line, $lineNumber, Text $text) {
+    // this callable is executed for each line in the file
+});
+```
+
 ### Manipulating a Line
 
 Now you're able to navigate through a file and while that's very important in
