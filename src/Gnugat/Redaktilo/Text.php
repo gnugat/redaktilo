@@ -13,6 +13,7 @@ namespace Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
 use Gnugat\Redaktilo\Exception\InvalidLineNumberException;
+use Gnugat\Redaktilo\Exception\InvalidArgumentException;
 use Gnugat\Redaktilo\Util\StringUtil;
 
 /**
@@ -153,7 +154,7 @@ class Text
      */
     public function setCurrentLineNumber($lineNumber)
     {
-        $this->throwOnInvalidLineNumber($lineNumber);
+        $this->checkIfLineNumberIsValid($lineNumber);
         $this->currentLineNumber = $lineNumber;
     }
 
@@ -173,7 +174,7 @@ class Text
         if (null === $lineNumber) {
             $lineNumber = $this->currentLineNumber;
         }
-        $this->throwOnInvalidLineNumber($lineNumber);
+        $this->checkIfLineNumberIsValid($lineNumber);
 
         return $this->lines[$lineNumber];
     }
@@ -193,8 +194,27 @@ class Text
         if (null === $lineNumber) {
             $lineNumber = $this->currentLineNumber;
         }
-        $this->throwOnInvalidLineNumber($lineNumber);
+        $this->checkIfLineNumberIsValid($lineNumber);
         $this->lines[$lineNumber] = $line;
+    }
+
+    /**
+     * Calls the given callback for each line in Text.
+     *
+     * @param callable $callback
+     *
+     * @throws InvalidArgumentException if $callback is not callable
+     */
+    public function map($callback)
+    {
+        if (!is_callable($callback)) {
+            throw new InvalidArgumentException('Callback has to be a valid callable, '.gettype($callback).' given.');
+        }
+
+        for ($i = 0; $this->checkIfLineNumberIsValid($i, false); $i++) {
+            $this->setCurrentLineNumber($i);
+            call_user_func($callback, $this->getLine($i), $i, $this);
+        }
     }
 
     /**
@@ -209,9 +229,9 @@ class Text
      */
     public function incrementCurrentLineNumber($number)
     {
-        $this->throwOnInvalidLineNumber($number);
+        $this->checkIfLineNumberIsValid($number);
         $newCurrentLineNumber = $this->currentLineNumber + $number;
-        $this->throwOnInvalidLineNumber($newCurrentLineNumber);
+        $this->checkIfLineNumberIsValid($newCurrentLineNumber);
         $this->currentLineNumber = $newCurrentLineNumber;
     }
 
@@ -227,9 +247,9 @@ class Text
      */
     public function decrementCurrentLineNumber($number)
     {
-        $this->throwOnInvalidLineNumber($number);
+        $this->checkIfLineNumberIsValid($number);
         $newCurrentLineNumber = $this->currentLineNumber - $number;
-        $this->throwOnInvalidLineNumber($newCurrentLineNumber);
+        $this->checkIfLineNumberIsValid($newCurrentLineNumber);
         $this->currentLineNumber = $newCurrentLineNumber;
     }
 
@@ -240,16 +260,24 @@ class Text
      * @throws InvalidLineNumberException if $lineNumber is negative
      * @throws InvalidLineNumberException if $lineNumber is greater or equal than the length
      */
-    protected function throwOnInvalidLineNumber($lineNumber)
+    protected function checkIfLineNumberIsValid($lineNumber, $throw = true)
     {
         if (!is_int($lineNumber)) {
-            throw new InvalidLineNumberException($lineNumber, $this, 'The line number should be an integer');
+            $e = new InvalidLineNumberException($lineNumber, $this, 'The line number should be an integer');
+        } elseif ($lineNumber < 0) {
+            $e = new InvalidLineNumberException($lineNumber, $this, 'The line number should be positive');
+        } elseif ($lineNumber >= $this->length) {
+            $e = new InvalidLineNumberException($lineNumber, $this, 'The line number should be strictly lower than the number of lines');
         }
-        if ($lineNumber < 0) {
-            throw new InvalidLineNumberException($lineNumber, $this, 'The line number should be positive');
+
+        if (isset($e)) {
+            if ($throw) {
+                throw $e;
+            }
+
+            return false;
         }
-        if ($lineNumber >= $this->length) {
-            throw new InvalidLineNumberException($lineNumber, $this, 'The line number should be strictly lower than the number of lines');
-        }
+
+        return true;
     }
 }
