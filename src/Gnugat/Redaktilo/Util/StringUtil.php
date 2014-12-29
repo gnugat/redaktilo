@@ -7,7 +7,7 @@ use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
 /**
  * @author Wouter J <wouter@wouterj.nl>
  */
-class StringUtil
+final class StringUtil
 {
     const LINE_BREAK_OTHER = "\n";
     const LINE_BREAK_WINDOWS = "\r\n";

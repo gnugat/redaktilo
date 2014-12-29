@@ -33,7 +33,7 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 /**
  * @author Wouter J <wouter@wouterj.nl>
  */
-class EditorBuilder
+final class EditorBuilder
 {
     /** @var TextToPhpConverter */
     private $phpConverter;

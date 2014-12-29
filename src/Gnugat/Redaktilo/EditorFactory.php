@@ -18,7 +18,7 @@ use Gnugat\Redaktilo\Service\EditorBuilder;
  *
  * @api
  */
-class EditorFactory
+final class EditorFactory
 {
     /**
      * @return EditorBuilder
