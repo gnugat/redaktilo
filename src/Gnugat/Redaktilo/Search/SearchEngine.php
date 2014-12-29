@@ -16,7 +16,7 @@ use Gnugat\Redaktilo\Exception\NotSupportedException;
 /**
  * Provides the SearchStrategy which supports the given pattern.
  */
-final class SearchEngine
+class SearchEngine
 {
     /** @var SearchStrategy[][] */
     private $searchStrategies = array();

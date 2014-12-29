@@ -16,7 +16,7 @@ use Gnugat\Redaktilo\Exception\CommandNotFoundException;
 /**
  * Executes a command with the given input.
  */
-final class CommandInvoker
+class CommandInvoker
 {
     /** @var Command[] */
     private $commands = array();
