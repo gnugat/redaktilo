@@ -191,26 +191,6 @@ class Editor
     }
 
     /**
-     * @param Text  $text
-     * @param mixed $pattern
-     *
-     * @return bool
-     *
-     * @throws \Gnugat\Redaktilo\Search\NotSupportedException If the given pattern isn't supported by any registered strategy
-     *
-     * @api
-     *
-     * @deprecated 1.1 Use $editor->hasBelow($text, $pattern, 0) instead
-     */
-    public function has(Text $text, $pattern)
-    {
-        $searchStrategy = $this->searchEngine->resolve($pattern);
-        $found = $searchStrategy->findBelow($text, $pattern, 0);
-
-        return (false !== $found);
-    }
-
-    /**
      * Inserts the given line above the given line number
      * (or above the current one if none provided).
      * Note: the current line is then set to the new one.

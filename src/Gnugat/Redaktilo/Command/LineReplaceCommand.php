@@ -57,15 +57,12 @@ class LineReplaceCommand implements Command
         $text = $this->textSanitizer->sanitize($input);
         $location = $this->locationSanitizer->sanitize($input);
 
-        if (is_string($input['replacement'])) {
-            // @deprecated 1.1 use $text->setLine($replacement, $location) instead
-            $replacement = $input['replacement'];
-        } elseif (is_callable($input['replacement'])) {
-            $line = $text->getLine($location);
-            $replacement = $input['replacement']($line);
-        } else {
+        if (!is_callable($input['replacement'])) {
             throw new InvalidArgumentException('Invalid replacement');
         }
+
+        $line = $text->getLine($location);
+        $replacement = $input['replacement']($line);
 
         $text->setLine($replacement, $location);
         $text->setCurrentLineNumber($location);
