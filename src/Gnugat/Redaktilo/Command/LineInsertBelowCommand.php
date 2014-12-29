@@ -33,8 +33,17 @@ class LineInsertBelowCommand implements Command
      */
     public function __construct(TextSanitizer $textSanitizer = null, LocationSanitizer $locationSanitizer = null)
     {
-        $this->textSanitizer = $textSanitizer ?: new TextSanitizer();
-        $this->locationSanitizer = $locationSanitizer ?: new LocationSanitizer($this->textSanitizer);
+        if (!$textSanitizer) {
+            $textSanitizer = new TextSanitizer();
+            trigger_error(__CLASS__.' now expects a text sanitizer as first argument', \E_USER_DEPRECATED);
+        }
+        if (!$locationSanitizer) {
+            $locationSanitizer = new LocationSanitizer($textSanitizer);
+            trigger_error(__CLASS__.' now expects a location sanitizer as first argument', \E_USER_DEPRECATED);
+        }
+
+        $this->textSanitizer = $textSanitizer;
+        $this->locationSanitizer = $locationSanitizer;
     }
 
     /** {@inheritdoc} */
