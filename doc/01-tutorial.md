@@ -187,7 +187,7 @@ to the file you need to save it:
 ```php
 // ...
 
-$editor->save($montyMenu, 'monty-menu.txt');
+$editor->save($montyMenu);
 ```
 
 The resulting file will be:
