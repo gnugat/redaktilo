@@ -11,6 +11,9 @@
 
 namespace Gnugat\Redaktilo\Search\Php;
 
+/**
+ * @deprecated 1.7 No replacement
+ */
 class TokenBuilder
 {
     /**
@@ -21,6 +24,7 @@ class TokenBuilder
      */
     public function makeFromRaw($rawToken, $lineNumber = 0)
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
         if (!is_array($rawToken)) {
             return new Token(null, $rawToken, $lineNumber);
         }
@@ -31,18 +35,24 @@ class TokenBuilder
     /** @return Token */
     public function makeFunction()
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
+
         return new Token(T_FUNCTION, 'function');
     }
 
     /** @return Token */
     public function makeMethod()
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
+
         return $this->makeFunction();
     }
 
     /** @return Token */
     public function makeClass()
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
+
         return new Token(T_CLASS, 'class');
     }
 
@@ -53,6 +63,8 @@ class TokenBuilder
      */
     public function makeWhitespace($whitespace)
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
+
         return new Token(T_WHITESPACE, $whitespace);
     }
 
@@ -64,6 +76,8 @@ class TokenBuilder
      */
     public function makeString($string)
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
+
         return new Token(T_STRING, $string);
     }
 
@@ -74,6 +88,7 @@ class TokenBuilder
      */
     public function buildFromRaw(array $rawTokens)
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
         $lineNumber = 0;
         $tokens = array();
         foreach ($rawTokens as $rawToken) {
@@ -94,6 +109,7 @@ class TokenBuilder
      */
     public function buildClass($className)
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
         $class = $this->makeClass();
         $whitespace = $this->makeWhitespace(null);
         $string = $this->makeString($className);
@@ -108,6 +124,7 @@ class TokenBuilder
      */
     public function buildFunction($functionName)
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
         $function = $this->makeFunction();
         $whitespace = $this->makeWhitespace(null);
         $string = $this->makeString($functionName);
@@ -122,6 +139,8 @@ class TokenBuilder
      */
     public function buildMethod($methodName)
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
+
         return $this->buildFunction($methodName);
     }
 }

@@ -17,6 +17,8 @@ use Gnugat\Redaktilo\Text;
 
 /**
  * Finds the given PHP token.
+ *
+ * @deprecated 1.7 No replacement
  */
 class PhpSearchStrategy implements SearchStrategy
 {
@@ -32,6 +34,7 @@ class PhpSearchStrategy implements SearchStrategy
     /** {@inheritdoc} */
     public function findAbove(Text $text, $pattern, $location = null)
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
         $location = (null !== $location ? $location : $text->getCurrentLineNumber());
         $tokens = $this->converter->from($text);
         $reversedTokens = array_reverse($tokens);

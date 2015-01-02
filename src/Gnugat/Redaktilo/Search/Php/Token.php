@@ -11,6 +11,9 @@
 
 namespace Gnugat\Redaktilo\Search\Php;
 
+/**
+ * @deprecated 1.7 No replacement
+ */
 class Token
 {
     /** @var int */
@@ -29,6 +32,7 @@ class Token
      */
     public function __construct($number = null, $value = null, $lineNumber = null)
     {
+        trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
         $this->number = $number;
         $this->value = $value;
         $this->lineNumber = $lineNumber;
