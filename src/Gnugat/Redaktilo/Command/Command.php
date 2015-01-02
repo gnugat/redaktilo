@@ -13,6 +13,8 @@ namespace Gnugat\Redaktilo\Command;
 
 /**
  * Executes a task with the given input.
+ *
+ * @api
  */
 interface Command
 {

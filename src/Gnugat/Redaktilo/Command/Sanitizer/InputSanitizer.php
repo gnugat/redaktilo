@@ -13,6 +13,8 @@ namespace Gnugat\Redaktilo\Command\Sanitizer;
 
 /**
  * Implementations are used by Commands to sanitize the given input
+ *
+ * @api
  */
 interface InputSanitizer
 {
