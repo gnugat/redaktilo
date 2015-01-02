@@ -172,6 +172,8 @@ class Text
     public function getLineBreak();
     public function setLineBreak($lineBreak);
 
+    public function map($callback);
+
     // Throws InvalidLineNumberException if $lineNumber is not a positive integer lower than the length
     public function setCurrentLineNumber($lineNumber);
     public function getCurrentLineNumber();

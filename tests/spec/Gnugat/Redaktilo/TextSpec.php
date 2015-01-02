@@ -162,4 +162,23 @@ class TextSpec extends ObjectBehavior
         $this->shouldThrow($exception)->duringDecrementCurrentLineNumber(4423);
         $this->shouldThrow($exception)->duringDecrementCurrentLineNumber($lastLineNumber);
     }
+
+    function it_can_loop_over_lines()
+    {
+        $i = 0;
+        $lines = $this->lines;
+        reset($lines);
+
+        $this->map(function ($line, $lineNumber, $text) use (&$i, &$lines) {
+            expect($line)->toBe(current($lines));
+            expect($lineNumber)->toBe($i++);
+            expect($text)->toHaveType('Gnugat\Redaktilo\Text');
+
+            next($lines);
+        });
+
+        expect($i)->toBe(9); // 8 lines + 1 last line feed character
+
+        $this->getCurrentLineNumber()->shouldBe(8);
+    }
 }
