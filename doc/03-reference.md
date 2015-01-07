@@ -190,7 +190,7 @@ class Text
 > **Important**: `lines` is an array of string stripped from their line break
 > character.
 
-If you need to manipulate a simple string you can use `Text#fromString`:
+If you need to manipulate a simple string you can use `Text::fromString`:
 
 ```php
 <?php
@@ -206,7 +206,7 @@ $text = Text::fromString("why do witches burn?\n...because they're made of... wo
 
 ### Side note on Line Breaks
 
-A `StringUtil#detectLineBreak` method is used to find the line break, this is
+A `StringUtil::detectLineBreak` method is used to find the line break, this is
 done using the following rules:
 
 * `\r\n` for windows
