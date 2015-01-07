@@ -12,9 +12,9 @@
 * removed TextFactory
 * removed Text#__construct
 * removed LineBreak
-* added Text#fromArray
-* added Text#fromString
-* added StringUtil#detectLineBreak
+* added Text::fromArray
+* added Text::fromString
+* added StringUtil::detectLineBreak
 
 ## 1.5.0: Current line number Incrementation
 
