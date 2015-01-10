@@ -17,7 +17,7 @@ Here's a list of features removed, with their replacement:
 The following commands now takes a `TextSanitizer` and a `LocationSanitizer`
 mandatory argument in their constructor:
 
-* `LineInsertAboveCommand`,
+* `LineInsertAboveCommand`
 * `LineReplaceCommand`
 * `LineInsertBelowCommand`
 * `LineRemoveCommand`
@@ -35,7 +35,11 @@ The following exceptions have been removed:
 Please use their equivalent (same name) from the following namespace:
 `Gnugat\Redaktilo\Exception`.
 
-## File removal (1.6)
+## PHP and Number Search Removal (1.7)
 
-* `File` has been removed, use `Text` instead
-* `Editor#save`'s `filename` argument is now mandatory
+The following classes have been removed:
+
+* `LineNumberSearchStrategy`, use `Text#setCurrentLineNumber` instead
+* `PhpSearchStrategy`
+* `Php/Token`
+* `Php/TokenBuilder`

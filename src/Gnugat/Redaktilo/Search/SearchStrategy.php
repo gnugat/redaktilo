@@ -15,6 +15,8 @@ use Gnugat\Redaktilo\Text;
 
 /**
  * A lookup strategy supporting a specific kind of pattern.
+ *
+ * @api
  */
 interface SearchStrategy
 {

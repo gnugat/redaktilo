@@ -22,6 +22,8 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
     private $appKernelPath;
     private $expectedAppKernelPath;
 
+    private $editor;
+
     protected function setUp()
     {
         $rootPath = __DIR__.'/../..';
@@ -35,22 +37,15 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
 
         $this->appKernelPath = $copyFilename;
         $this->expectedAppKernelPath = $expectationFilename;
+        $this->editor = EditorFactory::createEditor();
     }
 
     public function testItRegistersBundleInSymfonyApplication()
     {
-        $tokenBuilder = new TokenBuilder();
-        $editor = EditorFactory::createEditor();
-        $file = $editor->open($this->appKernelPath);
-
-        $registrationMethod = $tokenBuilder->buildMethod('registerBundles');
-
-        $editor->jumpBelow($file, $registrationMethod);
-        $editor->jumpBelow($file, '        $bundles = array(');
-        $editor->jumpBelow($file, '        );');
-        $editor->insertAbove($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
-
-        $editor->save($file);
+        $appKernel = $this->editor->open($this->appKernelPath);
+        $this->editor->jumpBelow($appKernel, '        );');
+        $this->editor->insertAbove($appKernel,'            new Gnugat\WizardBundle\GnugatWizardBundle(),');
+        $this->editor->save($appKernel);
 
         $expected = file_get_contents($this->expectedAppKernelPath);
         $actual = file_get_contents($this->appKernelPath);
@@ -60,20 +55,18 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
 
     public function testItDetectsBundlePresence()
     {
-        $editor = EditorFactory::createEditor();
-        $file = $editor->open($this->expectedAppKernelPath);
+        $file = $this->editor->open($this->expectedAppKernelPath);
 
-        $isBundlePresent = $editor->hasBelow($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),', 0);
+        $isBundlePresent = $this->editor->hasBelow($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),', 0);
 
         $this->assertTrue($isBundlePresent);
     }
 
     public function testItDetectsBundleAbsence()
     {
-        $editor = EditorFactory::createEditor();
-        $file = $editor->open($this->appKernelPath);
+        $file = $this->editor->open($this->appKernelPath);
 
-        $isBundlePresent = $editor->hasBelow($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),', 0);
+        $isBundlePresent = $this->editor->hasBelow($file, '            new Gnugat\WizardBundle\GnugatWizardBundle(),', 0);
 
         $this->assertFalse($isBundlePresent);
     }

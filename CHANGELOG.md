@@ -1,6 +1,10 @@
 # Changes between versions
 
+## 1.7.0: Brace yourselves, v2 is coming
+
+* added documentation to upgrade to 2.0
 * added Text#map
+* added deprecation messages
 
 ## 1.6.0: Text construction
 
@@ -8,9 +12,9 @@
 * removed TextFactory
 * removed Text#__construct
 * removed LineBreak
-* added Text#fromArray
-* added Text#fromString
-* added StringUtil#detectLineBreak
+* added Text::fromArray
+* added Text::fromString
+* added StringUtil::detectLineBreak
 
 ## 1.5.0: Current line number Incrementation
 

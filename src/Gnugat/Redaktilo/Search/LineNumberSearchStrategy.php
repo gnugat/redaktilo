@@ -15,12 +15,15 @@ use Gnugat\Redaktilo\Text;
 
 /**
  * Moves x lines above or below the current one.
+ *
+ * @deprecated 1.7 Use Text#setCurrentLineNumber instead
  */
 class LineNumberSearchStrategy implements SearchStrategy
 {
     /** {@inheritdoc} */
     public function findAbove(Text $text, $pattern, $location = null)
     {
+        trigger_error(__CLASS__.' has been replaced by Text#setCurrentLineNumber', \E_USER_DEPRECATED);
         $foundLineNumber = (null !== $location ? $location : $text->getCurrentLineNumber()) - $pattern;
         if (0 > $foundLineNumber || $foundLineNumber >= $text->getLength()) {
             return false;
@@ -32,6 +35,7 @@ class LineNumberSearchStrategy implements SearchStrategy
     /** {@inheritdoc} */
     public function findBelow(Text $text, $pattern, $location = null)
     {
+        trigger_error(__CLASS__.' has been replaced by Text#setCurrentLineNumber', \E_USER_DEPRECATED);
         $foundLineNumber = (null !== $location ? $location : $text->getCurrentLineNumber()) + $pattern;
         if (0 > $foundLineNumber || $foundLineNumber >= $text->getLength()) {
             return false;
@@ -43,6 +47,8 @@ class LineNumberSearchStrategy implements SearchStrategy
     /** {@inheritdoc} */
     public function supports($pattern)
     {
+        trigger_error(__CLASS__.' has been replaced by Text#setCurrentLineNumber', \E_USER_DEPRECATED);
+
         return (is_int($pattern) && $pattern >= 0);
     }
 }

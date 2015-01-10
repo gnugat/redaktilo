@@ -7,6 +7,7 @@
     * [Commands](#commands)
 * [Text API](#text-api)
     * [Side note on LineBreak](#side-note-on-linebreak)
+* [File API](#file-api)
 
 ## Editor API
 
@@ -20,7 +21,7 @@ namespace Gnugat\Redaktilo;
 class Editor
 {
     public function open($filename, $force = false);
-    public function save(File $file, $filename);
+    public function save(File $file, $filename = null);
 
     // Throw Gnugat\Redaktilo\Exception\PatternNotFoundException
     public function jumpAbove(Text $text, $pattern, $location = null);
@@ -71,7 +72,7 @@ $file = $editor->open('/tmp/new.txt', true); // Forces file creation when it doe
 
 // ... Make some manipulation on the file
 
-$editor->save($file, '/tmp/new.txt'); // Actually writes on the filesystem
+$editor->save($file); // Actually writes on the filesystem
 ```
 
 ### Content navigation
@@ -189,7 +190,7 @@ class Text
 > **Important**: `lines` is an array of string stripped from their line break
 > character.
 
-If you need to manipulate a simple string you can use `Text#fromString`:
+If you need to manipulate a simple string you can use `Text::fromString`:
 
 ```php
 <?php
@@ -205,12 +206,43 @@ $text = Text::fromString("why do witches burn?\n...because they're made of... wo
 
 ### Side note on Line Breaks
 
-A `StringUtil#detectLineBreak` method is used to find the line break, this is
+A `StringUtil::detectLineBreak` method is used to find the line break, this is
 done using the following rules:
 
 * `\r\n` for windows
 * `\n` for any other operating system
 * `PHP_EOL` if no line ending has been found
+
+## File API
+
+The other main entity:
+
+```php
+<?php
+
+namespace Gnugat\Redaktilo;
+
+class File extends Text
+{
+    public function getFilename();
+    public function setFilename($filename);
+
+    // ... (Text methods)
+}
+```
+
+The best way to create it is to use the `Editor`:
+
+```php
+<?php
+require_once __DIR__.'/vendor/autoload.php';
+
+use Gnugat\Redaktilo\EditorFactory;
+
+$editor = EditorFactory::createEditor();
+$file = $editor->open('/tmp/and-now-for-something-completly-different.txt');
+// ... Edit the file
+$editor->save($file); // Actually writes on the filesystem
 
 ## Next readings
 
