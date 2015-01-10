@@ -32,7 +32,7 @@ use Gnugat\Redaktilo\Service\Filesystem;
  *
  * @api
  */
-class Editor
+final class Editor
 {
     /** @var Filesystem */
     private $filesystem;
