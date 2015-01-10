@@ -11,16 +11,12 @@
 
 namespace Gnugat\Redaktilo\Exception;
 
-use Gnugat\Redaktilo\Service\DifferentLineBreaksFoundException as BaseException;
-
 /**
  * Thrown if the string given to LineBreak service contains different line breaks.
  *
  * @api
- *
- * @todo Make this exception extends \Exception in Redaktilo v2
  */
-class DifferentLineBreaksFoundException extends BaseException implements Exception
+class DifferentLineBreaksFoundException extends \RuntimeException implements Exception
 {
     /** @var string */
     private $string;

@@ -28,20 +28,9 @@ class LineInsertAboveCommand implements Command
     /**
      * @param TextSanitizer     $textSanitizer
      * @param LocationSanitizer $locationSanitizer
-     *
-     * @deprecated 1.2 input sanitizers will become mandatory from 2.0
      */
-    public function __construct(TextSanitizer $textSanitizer = null, LocationSanitizer $locationSanitizer = null)
+    public function __construct(TextSanitizer $textSanitizer, LocationSanitizer $locationSanitizer)
     {
-        if (!$textSanitizer) {
-            $textSanitizer = new TextSanitizer();
-            trigger_error(__CLASS__.' now expects a text sanitizer as first argument', \E_USER_DEPRECATED);
-        }
-        if (!$locationSanitizer) {
-            $locationSanitizer = new LocationSanitizer($textSanitizer);
-            trigger_error(__CLASS__.' now expects a location sanitizer as first argument', \E_USER_DEPRECATED);
-        }
-
         $this->textSanitizer = $textSanitizer;
         $this->locationSanitizer = $locationSanitizer;
     }

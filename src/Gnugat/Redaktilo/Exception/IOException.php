@@ -11,16 +11,12 @@
 
 namespace Gnugat\Redaktilo\Exception;
 
-use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
-
 /**
  * Thrown if the path isn't accessible or the file could not be written to.
  *
  * @api
- *
- * @todo Make this exception extends \RuntimeException in Redaktilo v2
  */
-class IOException extends SymfonyIOException implements Exception
+class IOException extends \RuntimeException implements Exception
 {
     /** @var string */
     private $path;

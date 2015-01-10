@@ -12,7 +12,6 @@
 namespace Gnugat\Redaktilo\Exception;
 
 use Gnugat\Redaktilo\File;
-use Gnugat\Redaktilo\Search\PatternNotFoundException as BaseException;
 use Gnugat\Redaktilo\Text;
 
 /**
@@ -20,10 +19,8 @@ use Gnugat\Redaktilo\Text;
  * the Text.
  *
  * @api
- *
- * @todo Make this exception extends \Exception in Redaktilo v2
  */
-class PatternNotFoundException extends BaseException implements Exception
+class PatternNotFoundException extends \RuntimeException implements Exception
 {
     /** @var mixed */
     private $pattern;

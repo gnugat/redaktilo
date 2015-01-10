@@ -11,17 +11,13 @@
 
 namespace Gnugat\Redaktilo\Exception;
 
-use Gnugat\Redaktilo\Search\NotSupportedException as BaseException;
-
 /**
  * Thrown if the pattern given to SearchEngine isn't supported by any of its
  * registered strategies.
  *
  * @api
- *
- * @todo Make this exception extends \Exception in Redaktilo v2
  */
-class NotSupportedException extends BaseException implements Exception
+class NotSupportedException extends \LogicException implements Exception
 {
     /** @var mixed */
     private $pattern;

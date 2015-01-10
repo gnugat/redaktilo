@@ -11,16 +11,12 @@
 
 namespace Gnugat\Redaktilo\Exception;
 
-use Symfony\Component\Filesystem\Exception\FileNotFoundException as SymfonyFileNotFoundException;
-
 /**
  * Thrown if the file couldn't be opened.
  *
  * @api
- *
- * @todo Make this exception extends \RuntimeException in Redaktilo v2
  */
-class FileNotFoundException extends SymfonyFileNotFoundException implements Exception
+class FileNotFoundException extends \RuntimeException implements Exception
 {
     /** @var string */
     private $path;

@@ -2,7 +2,6 @@
 
 namespace Gnugat\Redaktilo\Exception;
 
-use Gnugat\Redaktilo\InvalidLineNumberException as BaseException;
 use Gnugat\Redaktilo\Text;
 
 /**
@@ -10,10 +9,8 @@ use Gnugat\Redaktilo\Text;
  * the total number of lines in text.
  *
  * @api
- *
- * @todo Make this exception extends InvalidArgumentException in Redaktilo v2
  */
-class InvalidLineNumberException extends BaseException implements Exception
+class InvalidLineNumberException extends InvalidArgumentException
 {
     /** @var mixed */
     private $lineNumber;
