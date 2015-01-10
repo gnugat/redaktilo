@@ -54,7 +54,7 @@ Redaktilo drives its development using [phpspec](http://www.phpspec.net/):
 Redaktilo has been created to fulfill actual needs. To keep sure of it, use
 cases are created and are automated: they become part of the test suite.
 
-Have a look at [tests/examples](./tests/examples), you might add your own.
+Have a look at `tests/examples`, you might add your own.
 
 ## Keeping your fork up-to-date
 

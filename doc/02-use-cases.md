@@ -1,7 +1,7 @@
 # Use cases
 
 Redaktilo has been created to meet some actual needs, which is why its
-[Test Suite](../tests) contains an [Example](../tests/example) section.
+Test Suite contains an Example section.
 
 Let's discover the use cases which led to the creation of Redaktilo:
 
@@ -24,8 +24,7 @@ The only problem with it: it doesn't keep comments or empty lines.
 
 Redaktilo fits perfectly for the job.
 
-> **Note**: see [BundleRoutingTest](../tests/example/BundleRoutingTest.php) for
-> an actual implementation.
+> **Note**: see `BundleRoutingTest` for an actual implementation.
 
 ## JSON file edition
 
@@ -53,8 +52,7 @@ GnugatWizardBundle will need to create its own KernelManipulator.
 The result of a simpler approach (parsing lines instead of PHP tokens) is
 Redaktilo!
 
-> **Note**: see [BundleRegistrationTest](../tests/example/BundleRegistrationTest.php)
-> for an actual implementation.
+> **Note**: see `BundleRegistrationTest` for an actual implementation.
 
 ## Next readings
 
