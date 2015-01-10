@@ -17,7 +17,7 @@ Here's a list of features removed, with their replacement:
 The following commands now takes a `TextSanitizer` and a `LocationSanitizer`
 mandatory argument in their constructor:
 
-* `LineInsertAboveCommand`,
+* `LineInsertAboveCommand`
 * `LineReplaceCommand`
 * `LineInsertBelowCommand`
 * `LineRemoveCommand`
@@ -39,7 +39,7 @@ Please use their equivalent (same name) from the following namespace:
 
 The following classes have been removed:
 
-* `LineNumberSearchStrategy`
+* `LineNumberSearchStrategy`, use `Text#setCurrentLineNumber` instead
 * `PhpSearchStrategy`
 * `Php/Token`
 * `Php/TokenBuilder`
