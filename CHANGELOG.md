@@ -1,5 +1,12 @@
 # Changes between versions
 
+## 2.0.0: Diet
+
+* added lock to StringUtil
+* added lock to EditorBuilder
+* added lock to EditorFactory
+* removed deprecated features
+
 ## 1.7.0: Brace yourselves, v2 is coming
 
 * added documentation to upgrade to 2.0

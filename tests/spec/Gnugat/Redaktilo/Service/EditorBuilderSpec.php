@@ -26,8 +26,6 @@ class EditorBuilderSpec extends ObjectBehavior
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
 
         $editor->shouldHaveSearchStrategies(array(
-            'Gnugat\Redaktilo\Search\PhpSearchStrategy',
-            'Gnugat\Redaktilo\Search\LineNumberSearchStrategy',
             'Gnugat\Redaktilo\Search\LineRegexSearchStrategy',
             'Gnugat\Redaktilo\Search\SameSearchStrategy',
         ));
@@ -48,7 +46,7 @@ class EditorBuilderSpec extends ObjectBehavior
             ->getEditor();
 
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
-        $editor->shouldHaveSearchStrategiesCount(5);
+        $editor->shouldHaveSearchStrategiesCount(3);
     }
 
     function it_can_have_a_custom_search_engine(SearchEngine $searchEngine)
