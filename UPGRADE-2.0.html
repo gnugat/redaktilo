@@ -76,85 +76,43 @@
 
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
-                    <h1>Redaktilo</h1>
-<p>Redaktilo allows you to find, insert, replace and remove lines using an
-editor-like object.</p>
-<p><em>Because your code too needs an editor to manipulate files</em>.</p>
-<p><a href="https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08"><img alt="SensioLabsInsight" src="https://insight.sensiolabs.com/projects/fbe2d89f-f64d-45c2-a680-bbafac4b0d08/mini.png" /></a>
-<a href="https://travis-ci.org/gnugat/redaktilo"><img alt="Travis CI" src="https://travis-ci.org/gnugat/redaktilo.png" /></a></p>
-<h2>Getting started</h2>
-<p>Use <a href="http://getcomposer.org/">Composer</a> to install Redaktilo in your projects:</p>
-<pre><code>composer require "gnugat/redaktilo:~1.0"</code></pre>
-<p>Redaktilo provides an <code>Editor</code> class which can be instanciated using
-<code>EditorFactory</code>:</p>
-<pre><code class="language-php">&lt;?php
-require_once __DIR__.'/vendor/autoload.php';
-
-use Gnugat\Redaktilo\EditorFactory;
-
-$editor = EditorFactory::createEditor();</code></pre>
-<h2>Real life example</h2>
-<p>For our example, we will create a <a href="https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php"><code>KernelManipulator</code></a>
-similar to the one we can find in <a href="https://github.com/sensiolabs/SensioGeneratorBundle">SensioGeneratorBundle</a>.</p>
-<p>It takes a bundle's fully qualified classname and instert it in the <code>AppKernel</code>
-file:</p>
-<pre><code class="language-php">&lt;?php
-
-namespace Sensio\Bundle\GeneratorBundle\Manipulator;
-
-use Gnugat\Redaktilo\Editor;
-
-class KernelManipulator extends Manipulator
-{
-    protected $editor;
-    protected $appKernelFilename;
-
-    public function __construct(Editor $editor, $appKernelFilename)
-    {
-        $this-&gt;editor = $editor;
-        $this-&gt;appKernelFilename = $appKernelFilename;
-    }
-
-    public function addBundle($bundle)
-    {
-        $appKernel = $this-&gt;editor-&gt;open($this-&gt;appKernelFilename);
-        $newBundle = "            new $bundle(),";
-        if ($this-&gt;editor-&gt;hasBelow($appKernel, $newBundle)) {
-            $message = sprintf('Bundle "%s" is already defined in "AppKernel::registerBundles()".', $bundle);
-
-            throw new \RuntimeException($message);
-        }
-        $this-&gt;editor-&gt;jumpBelow($appKernel, '        );');
-        $this-&gt;editor-&gt;insertAbove($appKernel, $newBundle);
-        $this-&gt;editor-&gt;save($appKernel);
-
-        return true;
-    }
-}</code></pre>
-<p>As you can see it's easier to read and to understand than
-<a href="https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php">the original PHP token parsing</a>.</p>
-<h2>Further documentation</h2>
-<p>You can see the current and past versions using one of the following:</p>
+                    <h1>Backward Compatibility breaks in 2.0</h1>
+<p>This file describes the step to follow in order to migrate your projects to
+Redaktilo 2.0.</p>
+<p>The changes done in 2.0 can be found in <a href="./CHANGELOG.html">CHANGELOG</a>.</p>
+<h2>Misc (1.1)</h2>
+<p>Here's a list of features removed, with their replacement:</p>
 <ul>
-<li>the <code>git tag</code> command</li>
-<li>the <a href="https://github.com/gnugat/redaktilo/releases">releases page on Github</a></li>
-<li>the file listing the <a href="CHANGELOG.html">changes between versions</a></li>
+<li><code>Editor#has</code> has been removed, use <code>Editor#hasBelow</code> instead</li>
+<li><code>LineReplaceCommand</code> no longer accepts strings, use <code>Text#setLine</code> instead</li>
 </ul>
-<p>You can find more documentation at the following links:</p>
+<h2>Sanitizers (1.2)</h2>
+<p>The following commands now takes a <code>TextSanitizer</code> and a <code>LocationSanitizer</code>
+mandatory argument in their constructor:</p>
 <ul>
-<li><a href="LICENSE">copyright and MIT license</a></li>
-<li><a href="VERSIONING.html">versioning and branching models</a></li>
-<li><a href="CONTRIBUTING.html">contribution instructions</a></li>
-<li><a href="UPGRADE-2.0.html">migration to 2.0 instructions</a></li>
+<li><code>LineInsertAboveCommand</code></li>
+<li><code>LineReplaceCommand</code></li>
+<li><code>LineInsertBelowCommand</code></li>
+<li><code>LineRemoveCommand</code></li>
 </ul>
-<p>Next readings:</p>
+<h2>Exceptions (1.4)</h2>
+<p>The following exceptions have been removed:</p>
 <ul>
-<li><a href="doc/01-tutorial.html">Tutorial</a></li>
-<li><a href="doc/02-use-cases.html">Use cases</a></li>
-<li><a href="doc/03-reference.html">Reference</a></li>
-<li><a href="doc/04-vocabulary.html">Vocabulary</a></li>
-<li><a href="doc/05-extending.html">Extending</a></li>
-<li><a href="doc/06-exceptions.html">Exceptions</a></li>
+<li><code>Gnugat\Redaktilo\Command\CommandNotFoundException</code></li>
+<li><code>Gnugat\Redaktilo\Search\NotSupportedException</code></li>
+<li><code>Gnugat\Redaktilo\Search\PatternNotFoundException</code></li>
+<li><code>Gnugat\Redaktilo\InvalidLineNumberException</code></li>
+<li><code>Gnugat\Redaktilo\Service\DifferentLineBreaksFoundException</code></li>
+</ul>
+<p>Please use their equivalent (same name) from the following namespace:
+<code>Gnugat\Redaktilo\Exception</code>.</p>
+<h2>PHP and Number Search Removal (1.7)</h2>
+<p>The following classes have been removed:</p>
+<ul>
+<li><code>LineNumberSearchStrategy</code>, use <code>Text#setCurrentLineNumber</code> instead</li>
+<li><code>PhpSearchStrategy</code></li>
+<li><code>Php/Token</code></li>
+<li><code>Php/TokenBuilder</code></li>
 </ul>
                 </section>
 

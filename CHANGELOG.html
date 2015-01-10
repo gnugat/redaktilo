@@ -77,12 +77,21 @@
                 
                 <section id="content" class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
                     <h1>Changes between versions</h1>
+<h2>1.7.0: Brace yourselves, v2 is coming</h2>
+<ul>
+<li>added documentation to upgrade to 2.0</li>
+<li>added Text#map</li>
+<li>added deprecation messages</li>
+</ul>
+<h2>1.6.0: Text construction</h2>
 <ul>
 <li>added an optional filename argument to Editor#save</li>
-<li>removed TextFactory in favor of Text::fromString</li>
-<li>added Text::fromString and Text::fromArray and removed constructing Text directly</li>
-<li>removed LineBreak in favor of StringUtil#detectLineBreak</li>
-<li>added StringUtil</li>
+<li>removed TextFactory</li>
+<li>removed Text#__construct</li>
+<li>removed LineBreak</li>
+<li>added Text::fromArray</li>
+<li>added Text::fromString</li>
+<li>added StringUtil::detectLineBreak</li>
 </ul>
 <h2>1.5.0: Current line number Incrementation</h2>
 <ul>

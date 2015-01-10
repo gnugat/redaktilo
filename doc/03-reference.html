@@ -100,7 +100,7 @@ namespace Gnugat\Redaktilo;
 class Editor
 {
     public function open($filename, $force = false);
-    public function save(File $file);
+    public function save(File $file, $filename = null);
 
     // Throw Gnugat\Redaktilo\Exception\PatternNotFoundException
     public function jumpAbove(Text $text, $pattern, $location = null);
@@ -149,7 +149,6 @@ and provides by default the following <code>SearchStrategies</code>:</p>
 <ul>
 <li>regular expression</li>
 <li>strict equality (<code>===</code>)</li>
-<li>PHP token</li>
 </ul>
 <p>If the pattern isn't found, or if the pattern isn't supported by any strategies
 an exception will be thrown. If the pattern is found, the <code>Text</code>'s current line
@@ -178,8 +177,10 @@ try {
 if ($editor-&gt;hasBelow($file, '/sniggers/', 0) { // regular expression
     // The pattern exists.
 }</code></pre>
+<blockquote>
 <p><strong>Note</strong>: to jump to a given line number, you can directly use:
 <code>$text-&gt;setCurrentLineNumber($x);</code>.</p>
+</blockquote>
 <h3>Content manipulation</h3>
 <p>Manipulations are done by default to the current line (or, if the third argument
 is given, to the given location).</p>
@@ -194,16 +195,16 @@ $replace = function ($line) {
 };
 
 $editor = EditorFactory::createEditor();
-$file = $editor-&gt;open('/tmp/spam-menu.txt', true);
-$editor-&gt;insertAbove($file, 'Egg'); // Current line number: 0
-$editor-&gt;insertBelow($file, 'Bacon'); // Current line number: 1
-$editor-&gt;replace($file, $replace);
-$editor-&gt;replaceAll($file, '/*/', 'Spam');
-$editor-&gt;remove($file);  // Current line number: 0
+$spamMenu = $editor-&gt;open('/tmp/spam-menu.txt', true);
+$editor-&gt;insertAbove($spamMenu, 'Egg'); // Current line number: 0
+$editor-&gt;insertBelow($spamMenu, 'Bacon'); // Current line number: 1
+$editor-&gt;replace($spamMenu, $replace);
+$editor-&gt;replaceAll($spamMenu, '/*/', 'Spam');
+$editor-&gt;remove($spamMenu);  // Current line number: 0
 
-$editor-&gt;save($file); // Necessary to actually apply the changes on the filesystem</code></pre>
+$editor-&gt;save($spamMenu, '/tmp/spam-menu.txt'); // Necessary to actually apply the changes on the filesystem</code></pre>
 <h3>Commands</h3>
-<p>More content manipulation are available through <code>Editor#run()</code>.</p>
+<p>You can define your own commands and use them through <code>Editor#run()</code>.</p>
 <h2>Text API</h2>
 <p>One of the main entity:</p>
 <pre><code class="language-php">&lt;?php
@@ -223,6 +224,8 @@ class Text
     public function getLineBreak();
     public function setLineBreak($lineBreak);
 
+    public function map($callback);
+
     // Throws InvalidLineNumberException if $lineNumber is not a positive integer lower than the length
     public function setCurrentLineNumber($lineNumber);
     public function getCurrentLineNumber();
@@ -233,21 +236,24 @@ class Text
     public function getLine($lineNumber = null);
     public function setLine($line, $lineNumber = null);
 }</code></pre>
+<blockquote>
 <p><strong>Important</strong>: <code>lines</code> is an array of string stripped from their line break
 character.</p>
-<p>The <code>Editor</code> is a bit <code>File</code> oriented, but if you want to manipulate a simple
-string you can use <code>Text</code>:</p>
+</blockquote>
+<p>If you need to manipulate a simple string you can use <code>Text::fromString</code>:</p>
 <pre><code class="language-php">&lt;?php
 require_once __DIR__.'/vendor/autoload.php';
 
 use Gnugat\Redaktilo\Text;
 
 $text = Text::fromString("why do witches burn?\n...because they're made of... wood?\n");</code></pre>
+<blockquote>
 <p><strong>Important</strong>: please note that upon creation, the current line number is
 initialized to the first line: <code>0</code> (array indexed).</p>
+</blockquote>
 <h3>Side note on Line Breaks</h3>
-<p>A <code>StringUtil#detectLineBreak</code> method is used to find the line break, this is done using
-the following rules:</p>
+<p>A <code>StringUtil::detectLineBreak</code> method is used to find the line break, this is
+done using the following rules:</p>
 <ul>
 <li><code>\r\n</code> for windows</li>
 <li><code>\n</code> for any other operating system</li>
@@ -267,7 +273,8 @@ class File extends Text
     // ... (Text methods)
 }</code></pre>
 <p>The best way to create it is to use the <code>Editor</code>:</p>
-<pre><code class="language-php">&lt;?php
+<pre><code class="language-php">
+&lt;?php
 require_once __DIR__.'/vendor/autoload.php';
 
 use Gnugat\Redaktilo\EditorFactory;
@@ -275,19 +282,19 @@ use Gnugat\Redaktilo\EditorFactory;
 $editor = EditorFactory::createEditor();
 $file = $editor-&gt;open('/tmp/and-now-for-something-completly-different.txt');
 // ... Edit the file
-$editor-&gt;save($file); // Actually writes on the filesystem</code></pre>
-<h2>Next readings</h2>
-<ul>
-<li><a href="04-vocabulary.html">Vocabulary</a></li>
-<li><a href="05-extending.html">Extending</a></li>
-<li><a href="06-exceptions.html">Exceptions</a></li>
-</ul>
-<h2>Previous readings</h2>
-<ul>
-<li><a href="../README.html">README</a></li>
-<li><a href="01-tutorial.html">Tutorial</a></li>
-<li><a href="02-use-cases.html">Use cases</a></li>
-</ul>
+$editor-&gt;save($file); // Actually writes on the filesystem
+
+## Next readings
+
+* [Vocabulary](04-vocabulary.html)
+* [Extending](05-extending.html)
+* [Exceptions](06-exceptions.html)
+
+## Previous readings
+
+* [README](../README.html)
+* [Tutorial](01-tutorial.html)
+* [Use cases](02-use-cases.html)</code></pre>
                 </section>
 
             </div>

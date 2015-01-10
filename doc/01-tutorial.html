@@ -95,10 +95,11 @@
 </ul>
 <h2>The Editor</h2>
 <p>The only class you'll be using when you use Redaktilo is the <code>Editor</code> class.
-This class contains all methods you need to open, navigate, edit and save files
-or text. The editor doesn't have any state, this allows you to use a single
+This class contains all methods you need to navigate and edit texts (it can also
+open and save files).
+The editor doesn't have any state, this allows you to use a single
 instance throughout the entire application while editing multiple different
-files.</p>
+texts.</p>
 <h3>Creating an Editor</h3>
 <p>The recommend way to instantiate the <code>Editor</code> is by using the <code>EditorFactory</code>:</p>
 <pre><code class="language-php">use Gnugat\Redaktilo\EditorFactory;
@@ -121,8 +122,8 @@ Sausage</code></pre>
 <code>Editor#open()</code> method:</p>
 <pre><code class="language-php">// ...
 
-$file = $editor-&gt;open('monty-menu.txt');</code></pre>
-<p>This method returns a <code>File</code> instance. This object contains the content of the
+$montyMenu = $editor-&gt;open('monty-menu.txt');</code></pre>
+<p>This method returns a <code>Text</code> instance. This object contains the content of the
 file and keeps track of the cursor. When opening the file, the cursor is set
 to line 0 ('Bacon').</p>
 <p>In case the file does not exists, you can force the creation by passing <code>true</code>
@@ -132,47 +133,42 @@ as the second argument to <code>Editor#open()</code>.</p>
 existing line:</p>
 <pre><code class="language-php">// ...
 
-$editor-&gt;jumpBelow($file, 'Egg'); // Current line: 1 ('Egg')</code></pre>
+$editor-&gt;jumpBelow($montyMenu, 'Egg'); // Current line: 1 ('Egg')</code></pre>
 <p>As you can see, there's no need to add the line break character, Redaktilo will
 take care of it for you.</p>
 <p>You should note that the lookup is directional:</p>
-<pre><code class="language-php">$editor-&gt;jumpBelow($file, 'Bacon'); // Throws \Gnugat\Redaktilo\Exception\PatternNotFoundException, because 'Bacon' is above the current line
+<pre><code class="language-php">$editor-&gt;jumpBelow($montyMenu, 'Bacon'); // Throws \Gnugat\Redaktilo\Exception\PatternNotFoundException, because 'Bacon' is above the current line
 
-$editor-&gt;jumpAbove($file, 'Bacon'); // Current line: 0 ('Bacon')</code></pre>
+$editor-&gt;jumpAbove($montyMenu, 'Bacon'); // Current line: 0 ('Bacon')</code></pre>
 <p>The match is done only if the line value is exactly the same as the given one:</p>
-<pre><code class="language-php">$editor-&gt;jumpBelow($file, 'E'); // Throws an exception.</code></pre>
+<pre><code class="language-php">$editor-&gt;jumpBelow($montyMenu, 'E'); // Throws an exception.</code></pre>
 <p>If you just want to know if a line exists, you don't have to deal with
 exceptions, you can use <code>Editor#hasBelow()</code> and <code>Editor#hasAbove()</code> method instead:</p>
-<pre><code class="language-php">$editor-&gt;hasBelow($file, 'Beans', 0); // false</code></pre>
+<pre><code class="language-php">$editor-&gt;hasBelow($montyMenu, 'Beans', 0); // false</code></pre>
 <p>If you need to go to the first occurence in the whole file (regardless of the
 current line), you can use:</p>
 <pre><code class="language-php">// Jumps to the first line matching the pattern, starting from the line 0
-$editor-&gt;jumpBelow($file, '/eg/', 0); // Current line: 1 (which is 'Egg')</code></pre>
+$editor-&gt;jumpBelow($montyMenu, '/eg/', 0); // Current line: 1 (which is 'Egg')</code></pre>
 <p>The lookup can also be done using regex:</p>
-<pre><code class="language-php">$editor-&gt;jumpAbove($file, '/ac/'); // Current line: 0 (which is 'Bacon')</code></pre>
-<blockquote>
-<p><em>Note</em>: If you're manipulating a PHP file, you can also jump to symbols like
-class, methods and functions:</p>
-<pre><code class="language-php">use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+<pre><code class="language-php">$editor-&gt;jumpAbove($montyMenu, '/ac/'); // Current line: 0 (which is 'Bacon')</code></pre>
+<p>At last, you can also loop through all files using <code>Text#map()</code>:</p>
+<pre><code class="language-php">use Gnugat\Redaktilo\Text;
+
 // ...
-
-$tokenBuilder = new TokenBuilder();
-$registrationMethodName = 'registerBundles';
-$registrationMethod = $tokenBuilder-&gt;buildMethod($registrationMethodName);
-
-$editor-&gt;jumpBelow($file, $registrationMethod);</code></pre>
-</blockquote>
+$montyMenu-&gt;map(function ($line, $lineNumber, Text $text) {
+    // this callable is executed for each line in the file
+});</code></pre>
 <h3>Manipulating a Line</h3>
 <p>Now you're able to navigate through a file and while that's very important in
 order to edit a file, it doesn't help much if you can't manipulate lines.
-Luckily, Redaktilo contains lots of methods designed for manipulating lines.</p>
+Luckily, Redaktilo contains lots of methods designed for this purpose.</p>
 <p>Using the <code>Text#setLine()</code> method, you can manipulate the current line:</p>
 <pre><code class="language-php">// ...
 
 // ... navigate to the first line
 $text-&gt;setLine('Spam'); // Line 0 now contains 'Spam' instead of 'Bacon'</code></pre>
 <blockquote>
-<p><em>Note</em>: Editor provides a <code>replace</code> method which accepts callbacks:</p>
+<p><strong>Note</strong>: Editor provides a <code>replace</code> method which accepts callbacks:</p>
 <pre><code class="language-php">// Will be passed the given or current line
 $replace = function ($line) {
     return strtoupper($line); // the line will be replaced by the returned value
@@ -182,21 +178,21 @@ $editor-&gt;replace($text, $replace, $location);</code></pre>
 <p>You can also insert lines below or above the current line:</p>
 <pre><code class="language-php">// ...
 
-$editor-&gt;insertAbove($file, 'Beans'); // inserts a line 'Beans' above Line 0
-$editor-&gt;insertBelow($file, 'Bacon'); // inserts a line 'Bacon' below line 0</code></pre>
+$editor-&gt;insertAbove($montyMenu, 'Beans'); // inserts a line 'Beans' above Line 0
+$editor-&gt;insertBelow($montyMenu, 'Bacon'); // inserts a line 'Bacon' below line 0</code></pre>
 <p>Please note that the cursor moves to the inserted line.</p>
 <p>By default, all the manipulation methods work from the current line. If you would
 like to manipulate a given line, you can pass its number as the third parameter:</p>
-<pre><code class="language-php">$editor-&gt;insertAbove($file, 'Spam', 23); // Line inserted above the line number 23.</code></pre>
+<pre><code class="language-php">$editor-&gt;insertAbove($montyMenu, 'Spam', 23); // Line inserted above the line number 23.</code></pre>
 <p>At last, you can also delete lines:</p>
 <pre><code class="language-php">// ...
-$editor-&gt;remove($file); // Removes the current line</code></pre>
+$editor-&gt;remove($montyMenu); // Removes the current line</code></pre>
 <h3>Saving the Modifications</h3>
 <p>For now the modification is only done in memory, to actually apply your changes
 to the file you need to save it:</p>
 <pre><code class="language-php">// ...
 
-$editor-&gt;saveFile($file);</code></pre>
+$editor-&gt;save($montyMenu);</code></pre>
 <p>The resulting file will be:</p>
 <pre><code>Beans
 Spam

@@ -113,10 +113,12 @@ given pattern) when calling one of the following <code>Editor</code> method:</p>
 <p>If your strategy should be used instead of another already registered strategy
 (ie. they support the same pattern), you can give it a higher priority:</p>
 <pre><code class="language-php">$builder-&gt;addSearchStrategy($strategy, 50);</code></pre>
+<blockquote>
 <p><strong>Important</strong>: The higher the priority is, the sooner the strategy will be
 returned if it supports the given pattern.</p>
 <p><strong>Note</strong>:A default priority of 0 is assigned to strategies if you don't specify
 it.</p>
+</blockquote>
 <h3>SearchStrategy API</h3>
 <p>A lookup strategy supporting a specific kind of pattern:</p>
 <pre><code class="language-php">&lt;?php
@@ -134,7 +136,6 @@ interface SearchStrategy
 }</code></pre>
 <p>Implementations provided out of the box are:</p>
 <ul>
-<li><code>PhpSearchStrategy</code>: PHP token search, supports array of <code>Gnugat\Redaktilo\Search\Php\Token</code></li>
 <li><code>LineRegexSearchStrategy</code>: regular expression search, supports regex (<code>/pattern/</code>)</li>
 <li><code>SameSearchStrategy</code>: strict equality search (<code>===</code>), supports strings</li>
 </ul>
@@ -160,7 +161,7 @@ $editor-&gt;run('do_something', array('text' =&gt; $file));</code></pre>
 <li><code>insertBelow</code></li>
 <li><code>remove</code></li>
 <li><code>replace</code></li>
-<li><code>replace_all</code></li>
+<li><code>replaceAll</code></li>
 <li><code>run</code></li>
 </ul>
 <h3>Command API</h3>
