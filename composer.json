@@ -33,8 +33,13 @@
         "symfony/filesystem": "~2.4,>=2.4.3"
     },
     "require-dev": {
-        "phpspec/phpspec": "~2.1@rc",
+        "phpspec/phpspec": "~2.1",
         "phpunit/phpunit": ">=3.7,<5.0",
         "bossa/phpspec2-expect": "~1.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0-dev"
+        }
     }
 }
