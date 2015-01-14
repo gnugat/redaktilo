@@ -31,7 +31,7 @@ $editor = EditorFactory::createEditor();
 For our example, we will create a [`KernelManipulator`](https://github.com/sensiolabs/SensioGeneratorBundle/blob/8b7a33aa3d22388443b6de0b0cf184122e9f60d2/Manipulator/KernelManipulator.php)
 similar to the one we can find in [SensioGeneratorBundle](https://github.com/sensiolabs/SensioGeneratorBundle).
 
-It takes a bundle's fully qualified classname and instert it in the `AppKernel`
+It takes a bundle's fully qualified classname and inserts it in the `AppKernel`
 file:
 
 ```php
