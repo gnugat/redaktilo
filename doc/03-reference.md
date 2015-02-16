@@ -111,7 +111,7 @@ try {
 } catch (\Gnugat\Redaktilo\Exception\PatternNotFoundException $e) {
     // The pattern hasn't been found in the file
 }
-if ($editor->hasBelow($file, '/sniggers/', 0) { // regular expression
+if ($editor->hasBelow($file, '/sniggers/', 0)) { // regular expression
     // The pattern exists.
 }
 ```
