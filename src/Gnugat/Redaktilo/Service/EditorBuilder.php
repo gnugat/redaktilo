@@ -83,10 +83,10 @@ class EditorBuilder
         $engine = new SearchEngine();
         $phpConverter = $this->getPhpConverter();
 
-        $engine->registerStrategy(new PhpSearchStrategy($phpConverter));
         $engine->registerStrategy(new LineRegexSearchStrategy(), 20);
         $engine->registerStrategy(new SameSearchStrategy(), 10);
         $engine->registerStrategy(new LineNumberSearchStrategy());
+        $engine->registerStrategy(new PhpSearchStrategy($phpConverter));
 
         foreach ($this->searchStrategies as $priority => $strategies) {
             foreach ($strategies as $strategy) {
