@@ -12,7 +12,6 @@
 namespace example\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\EditorFactory;
-use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
