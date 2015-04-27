@@ -19,7 +19,7 @@ matrix:
           env: COMPOSER_FLAGS="--prefer-lowest"
 
 before_script:
-    - composer selfupdate
+    - composer selfupdate || true
     - composer update $COMPOSER_FLAGS
 
 script:
