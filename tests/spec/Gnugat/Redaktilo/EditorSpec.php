@@ -44,7 +44,7 @@ class EditorSpec extends ObjectBehavior
         $filesystem->exists(self::FILENAME)->willReturn(true);
         $filesystem->open(self::FILENAME)->willReturn($file);
 
-        $this->open(self::FILENAME);
+        $this->open(self::FILENAME)->shouldReturn($file);
     }
 
     function it_cannot_open_new_files(Filesystem $filesystem, File $file)
