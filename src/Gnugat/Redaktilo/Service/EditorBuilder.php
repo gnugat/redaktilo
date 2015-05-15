@@ -21,12 +21,9 @@ use Gnugat\Redaktilo\Command\LineReplaceCommand;
 use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
 use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
 use Gnugat\Redaktilo\Editor;
-use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
-use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
 use Gnugat\Redaktilo\Search\LineRegexSearchStrategy;
-use Gnugat\Redaktilo\Search\PhpSearchStrategy;
 use Gnugat\Redaktilo\Search\SameSearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
@@ -35,9 +32,6 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
  */
 final class EditorBuilder
 {
-    /** @var TextToPhpConverter */
-    private $phpConverter;
-
     /** @var SearchEngine|null */
     private $searchEngine;
 
@@ -62,17 +56,6 @@ final class EditorBuilder
     /** @var ContentFactory */
     private $contentFactory;
 
-    /** @return TextToPhpConverter */
-    protected function getPhpConverter()
-    {
-        if ($this->phpConverter) {
-            return $this->phpConverter;
-        }
-        $tokenBuilder = new TokenBuilder();
-
-        return $this->phpConverter = new TextToPhpConverter($tokenBuilder);
-    }
-
     /** @return SearchEngine */
     protected function getSearchEngine()
     {
@@ -81,12 +64,9 @@ final class EditorBuilder
         }
 
         $engine = new SearchEngine();
-        $phpConverter = $this->getPhpConverter();
 
-        $engine->registerStrategy(new PhpSearchStrategy($phpConverter));
         $engine->registerStrategy(new LineRegexSearchStrategy(), 20);
         $engine->registerStrategy(new SameSearchStrategy(), 10);
-        $engine->registerStrategy(new LineNumberSearchStrategy());
 
         foreach ($this->searchStrategies as $priority => $strategies) {
             foreach ($strategies as $strategy) {
