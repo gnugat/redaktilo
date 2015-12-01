@@ -6,7 +6,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 /**
  * Definition of the registered bundles and the configuration.
  *
- * @author Loïc Chardonnet <loic.chardonnet@gmail.com>
+ * @author Loïc Faugeron <faugeron.loic@gmail.com>
  */
 class AppKernel extends Kernel
 {
