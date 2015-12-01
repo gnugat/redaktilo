@@ -1,5 +1,13 @@
 # Changes between versions
 
+## 1.7.1: Updated dependencies
+
+* added support to Symfony 3
+* added support to PHP 7
+* updated to phpspec 2.4
+* updated to PHPUnit 4.5
+* added support to PHPUnit 5
+
 ## 1.7.0: Brace yourselves, v2 is coming
 
 * added documentation to upgrade to 2.0
