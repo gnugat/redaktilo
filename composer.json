@@ -29,13 +29,13 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "symfony/filesystem": "~2.4,>=2.4.3"
+        "php": "^5.3|^7.0",
+        "symfony/filesystem": "^2.4.3|^3.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "~2.1",
-        "phpunit/phpunit": ">=3.7,<5.0",
-        "bossa/phpspec2-expect": "~1.0"
+        "phpspec/phpspec": "^2.4",
+        "phpunit/phpunit": "^4.5|^5.0",
+        "bossa/phpspec2-expect": "^1.0"
     },
     "extra": {
         "branch-alias": {
