@@ -26,10 +26,10 @@ class EditorBuilderSpec extends ObjectBehavior
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
 
         $editor->shouldHaveSearchStrategies(array(
-            'Gnugat\Redaktilo\Search\PhpSearchStrategy',
-            'Gnugat\Redaktilo\Search\LineNumberSearchStrategy',
             'Gnugat\Redaktilo\Search\LineRegexSearchStrategy',
             'Gnugat\Redaktilo\Search\SameSearchStrategy',
+            'Gnugat\Redaktilo\Search\LineNumberSearchStrategy',
+            'Gnugat\Redaktilo\Search\PhpSearchStrategy',
         ));
 
         $editor->shouldHaveCommands(array(

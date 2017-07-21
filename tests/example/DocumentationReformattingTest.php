@@ -12,8 +12,6 @@
 namespace example\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\EditorFactory;
-use Gnugat\Redaktilo\Editor;
-use Gnugat\Redaktilo\File;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
