@@ -1,5 +1,13 @@
 # Changes between versions
 
+## 1.7.3: Symfony 4
+
+* added support for Symfony 4
+
+## 1.7.2: No Final
+
+* removed final
+
 ## 1.7.1: Updated dependencies
 
 * added support to Symfony 3
