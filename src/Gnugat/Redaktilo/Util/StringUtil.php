@@ -31,16 +31,12 @@ final class StringUtil
         $numberLineBreakWindows = substr_count($string, self::LINE_BREAK_WINDOWS);
         $numberLineBreakOther = substr_count($string, self::LINE_BREAK_OTHER) - $numberLineBreakWindows;
 
-        if ($numberLineBreakOther === 0 && $numberLineBreakWindows === 0) {
+        if (0 === $numberLineBreakOther && 0 === $numberLineBreakWindows) {
             return PHP_EOL;
         }
 
         if ($numberLineBreakOther > 0 && $numberLineBreakWindows > 0) {
-            throw new DifferentLineBreaksFoundException(
-                $string,
-                $numberLineBreakOther,
-                $numberLineBreakWindows
-            );
+            throw new DifferentLineBreaksFoundException($string, $numberLineBreakOther, $numberLineBreakWindows);
         }
 
         return $numberLineBreakOther > 0 ? self::LINE_BREAK_OTHER : self::LINE_BREAK_WINDOWS;

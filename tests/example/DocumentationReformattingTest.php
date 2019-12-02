@@ -12,18 +12,17 @@
 namespace example\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\EditorFactory;
-use Gnugat\Redaktilo\Editor;
-use Gnugat\Redaktilo\File;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-class DocumentationReformattingTest extends \PHPUnit_Framework_TestCase
+class DocumentationReformattingTest extends TestCase
 {
     const APP_KERNEL = '%s/tests/fixtures/%s/doctrine.rst';
 
     private $originalPath;
     private $expectedPath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $rootPath = __DIR__.'/../..';
 

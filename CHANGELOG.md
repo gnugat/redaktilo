@@ -1,5 +1,10 @@
 # Changes between versions
 
+## 2.0.0: Symfony 5 / PHP 7.2
+
+* bumped requirement to Symfony 5
+* bumped requirement to PHP 7.2
+
 ## 1.7.3: Symfony 4
 
 * added support for Symfony 4

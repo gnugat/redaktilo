@@ -19,14 +19,13 @@ use Gnugat\Redaktilo\Exception\NotSupportedException;
 class SearchEngine
 {
     /** @var SearchStrategy[][] */
-    private $searchStrategies = array();
+    private $searchStrategies = [];
 
     /** @var bool */
     private $isSorted = false;
 
     /**
-     * @param SearchStrategy $searchStrategy
-     * @param int            $priority
+     * @param int $priority
      */
     public function registerStrategy(SearchStrategy $searchStrategy, $priority = 0)
     {
@@ -59,7 +58,7 @@ class SearchEngine
     }
 
     /**
-     * Sort registered strategies according to their priority
+     * Sort registered strategies according to their priority.
      */
     private function sortStrategies()
     {

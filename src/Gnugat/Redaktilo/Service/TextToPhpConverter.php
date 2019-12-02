@@ -11,8 +11,8 @@
 
 namespace Gnugat\Redaktilo\Service;
 
-use Gnugat\Redaktilo\Text;
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+use Gnugat\Redaktilo\Text;
 
 /**
  * Converts the given text's content into PHP tokens.
@@ -26,8 +26,6 @@ class TextToPhpConverter
     }
 
     /**
-     * @param Text $text
-     *
      * @return array
      */
     public function from(Text $text)

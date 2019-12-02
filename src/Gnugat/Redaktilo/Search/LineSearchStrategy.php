@@ -40,7 +40,6 @@ abstract class LineSearchStrategy implements SearchStrategy
     }
 
     /**
-     * @param array $lines
      * @param mixed $pattern
      *
      * @return mixed

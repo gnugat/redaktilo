@@ -49,6 +49,6 @@ class LineNumberSearchStrategy implements SearchStrategy
     {
         trigger_error(__CLASS__.' has been replaced by Text#setCurrentLineNumber', \E_USER_DEPRECATED);
 
-        return (is_int($pattern) && $pattern >= 0);
+        return is_int($pattern) && $pattern >= 0;
     }
 }

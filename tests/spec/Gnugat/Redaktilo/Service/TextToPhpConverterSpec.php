@@ -12,7 +12,6 @@
 namespace spec\Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\Search\Php\TokenBuilder;
-use Gnugat\Redaktilo\Service\LineBreak;
 use Gnugat\Redaktilo\Text;
 use Gnugat\Redaktilo\Util\StringUtil;
 use PhpSpec\ObjectBehavior;
@@ -37,7 +36,7 @@ class TextToPhpConverterSpec extends ObjectBehavior
         $text->getLineBreak()->willReturn($lineBreak);
         $text->getLines()->willReturn($lines);
 
-        $tokenBuilder->buildFromRaw($rawTokens)->willReturn(array());
+        $tokenBuilder->buildFromRaw($rawTokens)->willReturn([]);
         $this->from($text);
     }
 }

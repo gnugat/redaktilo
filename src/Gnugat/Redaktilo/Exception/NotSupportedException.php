@@ -27,7 +27,6 @@ class NotSupportedException extends \LogicException implements Exception
 
     /**
      * @param mixed $pattern
-     * @param array $searchStrategies
      */
     public function __construct($pattern, array $searchStrategies)
     {

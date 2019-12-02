@@ -21,13 +21,13 @@ use Gnugat\Redaktilo\Command\LineReplaceCommand;
 use Gnugat\Redaktilo\Command\Sanitizer\LocationSanitizer;
 use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
 use Gnugat\Redaktilo\Editor;
-use Gnugat\Redaktilo\Search\Php\TokenBuilder;
-use Gnugat\Redaktilo\Search\SearchEngine;
-use Gnugat\Redaktilo\Search\SearchStrategy;
 use Gnugat\Redaktilo\Search\LineNumberSearchStrategy;
 use Gnugat\Redaktilo\Search\LineRegexSearchStrategy;
+use Gnugat\Redaktilo\Search\Php\TokenBuilder;
 use Gnugat\Redaktilo\Search\PhpSearchStrategy;
 use Gnugat\Redaktilo\Search\SameSearchStrategy;
+use Gnugat\Redaktilo\Search\SearchEngine;
+use Gnugat\Redaktilo\Search\SearchStrategy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
@@ -42,13 +42,13 @@ final class EditorBuilder
     private $searchEngine;
 
     /** @var SearchStrategy[][] */
-    private $searchStrategies = array();
+    private $searchStrategies = [];
 
     /** @var CommandInvoker|null */
     private $commandInvoker;
 
     /** @var Command[] */
-    private $commands = array();
+    private $commands = [];
 
     /** @var Filesystem */
     private $filesystem;
@@ -139,8 +139,7 @@ final class EditorBuilder
     }
 
     /**
-     * @param SearchStrategy $searchStrategy
-     * @param int            $priority
+     * @param int $priority
      *
      * @return $this
      */
@@ -152,8 +151,6 @@ final class EditorBuilder
     }
 
     /**
-     * @param SearchEngine $searchEngine
-     *
      * @return $this
      */
     public function setSearchEngine(SearchEngine $searchEngine)
@@ -164,8 +161,6 @@ final class EditorBuilder
     }
 
     /**
-     * @param Command $command
-     *
      * @return $this
      */
     public function addCommand(Command $command)
@@ -176,8 +171,6 @@ final class EditorBuilder
     }
 
     /**
-     * @param CommandInvoker $commandInvoker
-     *
      * @return $this
      */
     public function setCommandInvoker(CommandInvoker $commandInvoker)

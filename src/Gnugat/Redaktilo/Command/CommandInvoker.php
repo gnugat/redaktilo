@@ -19,7 +19,7 @@ use Gnugat\Redaktilo\Exception\CommandNotFoundException;
 class CommandInvoker
 {
     /** @var Command[] */
-    private $commands = array();
+    private $commands = [];
 
     /** @param Command $command */
     public function addCommand(Command $command)
@@ -29,7 +29,6 @@ class CommandInvoker
 
     /**
      * @param string $name
-     * @param array  $input
      *
      * @throws CommandNotFoundException
      */

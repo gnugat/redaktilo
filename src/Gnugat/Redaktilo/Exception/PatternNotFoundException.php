@@ -30,7 +30,6 @@ class PatternNotFoundException extends \RuntimeException implements Exception
 
     /**
      * @param mixed $pattern
-     * @param Text  $text
      */
     public function __construct($pattern, Text $text)
     {

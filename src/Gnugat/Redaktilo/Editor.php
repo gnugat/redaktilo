@@ -17,7 +17,7 @@ use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Service\Filesystem;
 
 /**
- * Provides convenient methods for the following filesystem operations:
+ * Provides convenient methods for the following filesystem operations:.
  *
  * + opening/creating files
  * + createing text
@@ -43,11 +43,6 @@ class Editor
     /** @var CommandInvoker */
     private $commandInvoker;
 
-    /**
-     * @param Filesystem     $filesystem
-     * @param SearchEngine   $searchEngine
-     * @param CommandInvoker $commandInvoker
-     */
     public function __construct(
         Filesystem $filesystem,
         SearchEngine $searchEngine,
@@ -66,7 +61,7 @@ class Editor
      *
      * @return File
      *
-     * @throws \Symfony\Component\Filesystem\Exception\FileNotFoundException If the file hasn't be found.
+     * @throws \Symfony\Component\Filesystem\Exception\FileNotFoundException if the file hasn't be found
      *
      * @api
      */
@@ -83,15 +78,13 @@ class Editor
      * File changes are made in memory only, until this methods actually applies
      * them on the filesystem.
      *
-     * @param File $file
-     *
-     * @throws \Symfony\Component\Filesystem\Exception\IOException If the file cannot be written to.
+     * @throws \Symfony\Component\Filesystem\Exception\IOException if the file cannot be written to
      *
      * @api
      */
     public function save(File $file, $filename = null)
     {
-        if ($filename !== null) {
+        if (null !== $filename) {
             $file->setFilename($filename);
         }
 
@@ -102,7 +95,6 @@ class Editor
      * Searches the given pattern in the Text above the current line.
      * If the pattern is found, the current line is set to it.
      *
-     * @param Text  $text
      * @param mixed $pattern
      * @param int   $location
      *
@@ -126,7 +118,6 @@ class Editor
      * Searches the given pattern in the Text below the current line.
      * If the pattern is found, the current line is set to it.
      *
-     * @param Text  $text
      * @param mixed $pattern
      * @param int   $location
      *
@@ -150,7 +141,6 @@ class Editor
      * Checks the presence of the given pattern in the Text above the current
      * line.
      *
-     * @param Text  $text
      * @param mixed $pattern
      * @param int   $location
      *
@@ -165,14 +155,13 @@ class Editor
         $searchStrategy = $this->searchEngine->resolve($pattern);
         $foundLineNumber = $searchStrategy->findAbove($text, $pattern, $location);
 
-        return (false !== $foundLineNumber);
+        return false !== $foundLineNumber;
     }
 
     /**
      * Checks the presence of the given pattern in the Text below the current
      * line.
      *
-     * @param Text  $text
      * @param mixed $pattern
      * @param int   $location
      *
@@ -187,7 +176,7 @@ class Editor
         $searchStrategy = $this->searchEngine->resolve($pattern);
         $foundLineNumber = $searchStrategy->findBelow($text, $pattern, $location);
 
-        return (false !== $foundLineNumber);
+        return false !== $foundLineNumber;
     }
 
     /**
@@ -195,7 +184,6 @@ class Editor
      * (or above the current one if none provided).
      * Note: the current line is then set to the new one.
      *
-     * @param Text   $text
      * @param string $addition
      * @param int    $location
      *
@@ -203,11 +191,11 @@ class Editor
      */
     public function insertAbove(Text $text, $addition, $location = null)
     {
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => $location,
             'addition' => $addition,
-        );
+        ];
         $this->commandInvoker->run('insert_above', $input);
     }
 
@@ -216,7 +204,6 @@ class Editor
      * (or below the current one if none provided).
      * Note: the current line is then set to the new one.
      *
-     * @param Text   $text
      * @param string $addition
      * @param int    $location
      *
@@ -224,11 +211,11 @@ class Editor
      */
     public function insertBelow(Text $text, $addition, $location = null)
     {
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => $location,
             'addition' => $addition,
-        );
+        ];
         $this->commandInvoker->run('insert_below', $input);
     }
 
@@ -236,7 +223,6 @@ class Editor
      * Replaces the line at the given line number
      * (or at the current one if none provided) with the given replacement.
      *
-     * @param Text   $text
      * @param string $replacement
      * @param int    $location
      *
@@ -244,11 +230,11 @@ class Editor
      */
     public function replace(Text $text, $replacement, $location = null)
     {
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => $location,
             'replacement' => $replacement,
-        );
+        ];
         $this->commandInvoker->run('replace', $input);
     }
 
@@ -256,7 +242,6 @@ class Editor
      * Replaces all the occurences which match the given pattern with the given
      * replacement.
      *
-     * @param Text   $text
      * @param string $pattern
      * @param string $replacement
      *
@@ -264,11 +249,11 @@ class Editor
      */
     public function replaceAll(Text $text, $pattern, $replacement)
     {
-        $input = array(
+        $input = [
             'text' => $text,
             'pattern' => $pattern,
             'replacement' => $replacement,
-        );
+        ];
         $this->commandInvoker->run('replace_all', $input);
     }
 
@@ -276,17 +261,16 @@ class Editor
      * Removes the line at the given location
      * (or at the current one if none provided).
      *
-     * @param Text $text
-     * @param int  $location
+     * @param int $location
      *
      * @api
      */
     public function remove(Text $text, $location = null)
     {
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => $location,
-        );
+        ];
         $this->commandInvoker->run('remove', $input);
     }
 
@@ -294,7 +278,6 @@ class Editor
      * Provides access to the CommandInvoker.
      *
      * @param string $name
-     * @param array  $input
      *
      * @throws \Gnugat\Redaktilo\Exception\CommandNotFoundException If the command isn't found in the CommandInvoker
      *

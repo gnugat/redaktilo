@@ -12,10 +12,10 @@
 namespace example\Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\EditorFactory;
-use Gnugat\Redaktilo\Search\Php\TokenBuilder;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
+class BundleRegistrationTest extends TestCase
 {
     const APP_KERNEL = '%s/tests/fixtures/%s/AppKernel.php';
 
@@ -24,7 +24,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
 
     private $editor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $rootPath = __DIR__.'/../..';
 
@@ -44,7 +44,7 @@ class BundleRegistrationTest extends \PHPUnit_Framework_TestCase
     {
         $appKernel = $this->editor->open($this->appKernelPath);
         $this->editor->jumpBelow($appKernel, '        );');
-        $this->editor->insertAbove($appKernel,'            new Gnugat\WizardBundle\GnugatWizardBundle(),');
+        $this->editor->insertAbove($appKernel, '            new Gnugat\WizardBundle\GnugatWizardBundle(),');
         $this->editor->save($appKernel);
 
         $expected = file_get_contents($this->expectedAppKernelPath);

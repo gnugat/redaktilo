@@ -11,7 +11,6 @@
 
 namespace spec\Gnugat\Redaktilo;
 
-use Gnugat\Redaktilo\Service\LineBreak;
 use Gnugat\Redaktilo\Util\StringUtil;
 use PhpSpec\ObjectBehavior;
 
@@ -28,15 +27,15 @@ class TextSpec extends ObjectBehavior
 
         $this->lines = preg_split('/\R/', $this->content);
 
-        $this->beConstructedThrough('fromString', array($this->content));
+        $this->beConstructedThrough('fromString', [$this->content]);
     }
 
     function it_has_lines()
     {
-        $newContent = array(
+        $newContent = [
             'This',
-            'is an EX parrot!'
-        );
+            'is an EX parrot!',
+        ];
 
         $this->getLines()->shouldBe($this->lines);
 
@@ -46,11 +45,11 @@ class TextSpec extends ObjectBehavior
 
     function it_has_a_length()
     {
-        $newContent = array(
+        $newContent = [
             'YOU',
             'SHOULD NOT',
-            'PASS'
-        );
+            'PASS',
+        ];
 
         $this->getLength()->shouldBe(count($this->lines));
 

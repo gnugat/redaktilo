@@ -29,7 +29,6 @@ class InvalidLineNumberException extends InvalidArgumentException
 
     /**
      * @param mixed  $lineNumber
-     * @param Text   $text
      * @param string $message
      */
     public function __construct($lineNumber, Text $text, $message)

@@ -18,24 +18,25 @@
         {
             "name": "Loïc Faugeron",
             "email": "faugeron.loic@gmail.com",
-            "homepage": "http://gnugat.github.io",
+            "homepage": "https://gnugat.github.io",
             "role": "Developer"
         },
         {
             "name": "Loïck Piera",
             "email": "pyrech@gmail.com",
-            "homepage": "http://loickpiera.com/",
+            "homepage": "https://loickpiera.com/",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^5.3 || ^7.0",
-        "symfony/filesystem": "^2.4.3 || ^3.0 || ^4.0"
+        "php": "^7.2",
+        "symfony/filesystem": "^5.0"
     },
     "require-dev": {
-        "phpspec/phpspec": "^2.4",
-        "phpunit/phpunit": "^4.5 || ^5.0",
-        "bossa/phpspec2-expect": "^1.0"
+        "bossa/phpspec2-expect": "^3.1",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpspec/phpspec": "^6.1",
+        "phpunit/phpunit": "^8.4"
     },
     "extra": {
         "branch-alias": {
