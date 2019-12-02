@@ -41,7 +41,7 @@ class Token
     /** @return bool */
     public function hasNumber()
     {
-        return $this->number !== null;
+        return null !== $this->number;
     }
 
     /** @return int */
@@ -53,7 +53,7 @@ class Token
     /** @return bool */
     public function hasValue()
     {
-        return $this->value !== null;
+        return null !== $this->value;
     }
 
     /** @return string */
@@ -65,7 +65,7 @@ class Token
     /** @return bool */
     public function hasLineNumber()
     {
-        return $this->lineNumber !== null;
+        return null !== $this->lineNumber;
     }
 
     /** @return int */
@@ -75,8 +75,6 @@ class Token
     }
 
     /**
-     * @param Token $token
-     *
      * @return bool
      */
     public function isSameAs(Token $token)

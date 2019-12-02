@@ -15,8 +15,8 @@ use Gnugat\Redaktilo\Exception\FileNotFoundException;
 use Gnugat\Redaktilo\Exception\IOException;
 use Gnugat\Redaktilo\Exception\NoFilenameGivenException;
 use Gnugat\Redaktilo\File;
-use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Exception\IOException as SymfonyIOException;
+use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**
  * Manages actual operations on the filesystem using File as a data source.
@@ -30,8 +30,7 @@ class Filesystem
     private $contentFactory;
 
     /**
-     * @param SymfonyFilesystem $symfonyFilesystem
-     * @param ContentFactory    $contentFactory
+     * @param ContentFactory $contentFactory
      */
     public function __construct(
         SymfonyFilesystem $symfonyFilesystem,
@@ -69,7 +68,7 @@ class Filesystem
      *
      * @return File
      *
-     * @throws IOException If the path isn't accessible.
+     * @throws IOException if the path isn't accessible
      */
     public function create($filename)
     {
@@ -93,7 +92,7 @@ class Filesystem
     /**
      * Possible reasons of failure:
      * + path doesn't exists
-     * + path isn't accessible
+     * + path isn't accessible.
      *
      * @param string $filename
      *
@@ -107,9 +106,7 @@ class Filesystem
     /**
      * Atomically writes the given File's content on the actual file.
      *
-     * @param File $file
-     *
-     * @throws IOException If the file cannot be written to.
+     * @throws IOException if the file cannot be written to
      */
     public function write(File $file)
     {

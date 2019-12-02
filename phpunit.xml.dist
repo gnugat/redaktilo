@@ -4,7 +4,6 @@
 <phpunit
     backupGlobals="false"
     colors="true"
-    syntaxCheck="false"
     bootstrap="vendor/autoload.php"
     >
 

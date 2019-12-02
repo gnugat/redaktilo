@@ -55,11 +55,11 @@ class LineReplaceCommandSpec extends ObjectBehavior
             return '[Even more sniggering]';
         };
 
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => self::LINE_NUMBER,
             'replacement' => $replacement,
-        );
+        ];
 
         $textSanitizer->sanitize($input)->willReturn($text);
         $locationSanitizer->sanitize($input)->willReturn(self::LINE_NUMBER);
@@ -69,10 +69,10 @@ class LineReplaceCommandSpec extends ObjectBehavior
 
         $this->execute($input);
 
-        $input = array(
+        $input = [
             'text' => $text,
             'replacement' => $replacement,
-        );
+        ];
 
         $textSanitizer->sanitize($input)->willReturn($text);
         $locationSanitizer->sanitize($input)->willReturn(self::LINE_NUMBER);

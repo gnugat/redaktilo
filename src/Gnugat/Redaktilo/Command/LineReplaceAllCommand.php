@@ -28,9 +28,7 @@ class LineReplaceAllCommand implements Command
     private $textSanitizer;
 
     /**
-     * @param ContentFactory $contentFactory
-     * @param TextFactory    $textFactory
-     * @param TextSanitizer  $textSanitizer
+     * @param TextFactory $textFactory
      */
     public function __construct(ContentFactory $contentFactory, TextSanitizer $textSanitizer)
     {
@@ -38,7 +36,7 @@ class LineReplaceAllCommand implements Command
         $this->textSanitizer = $textSanitizer;
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function execute(array $input)
     {
         $text = $this->textSanitizer->sanitize($input);
@@ -51,7 +49,7 @@ class LineReplaceAllCommand implements Command
         $text->setLines($replacedText->getLines());
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritdoc} */
     public function getName()
     {
         return 'replace_all';

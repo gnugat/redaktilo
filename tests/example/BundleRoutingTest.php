@@ -12,16 +12,17 @@
 namespace Sensio\Bundle\GeneratorBundle\Manipulator;
 
 use Gnugat\Redaktilo\EditorFactory;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
-class BundleRoutingTest extends \PHPUnit_Framework_TestCase
+class BundleRoutingTest extends TestCase
 {
     const CONFIG = '%s/tests/fixtures/%s/routing.yml';
 
     private $configPath;
     private $expectedConfigPath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $rootPath = __DIR__.'/../..';
 
@@ -43,10 +44,10 @@ class BundleRoutingTest extends \PHPUnit_Framework_TestCase
         $file = $editor->open($this->configPath, true);
 
         $definitionLine = 'acme_demo:';
-        $resourceLine   = '    resource: "@AcmeDemoBundle/Controller/"';
-        $typeLine       = '    type: annotation';
-        $prefixLine     = '    prefix: /';
-        $emptyLine      = '';
+        $resourceLine = '    resource: "@AcmeDemoBundle/Controller/"';
+        $typeLine = '    type: annotation';
+        $prefixLine = '    prefix: /';
+        $emptyLine = '';
 
         $editor->insertAbove($file, $definitionLine);
         $editor->insertBelow($file, $resourceLine);

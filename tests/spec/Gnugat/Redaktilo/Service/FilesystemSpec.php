@@ -13,7 +13,6 @@ namespace spec\Gnugat\Redaktilo\Service;
 
 use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Service\ContentFactory;
-use Gnugat\Redaktilo\Service\LineBreak;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 

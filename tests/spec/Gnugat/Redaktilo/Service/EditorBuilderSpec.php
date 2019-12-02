@@ -16,6 +16,7 @@ use Gnugat\Redaktilo\Command\CommandInvoker;
 use Gnugat\Redaktilo\Search\SearchEngine;
 use Gnugat\Redaktilo\Search\SearchStrategy;
 use PhpSpec\ObjectBehavior;
+use PHPUnit\Framework\Constraint\IsEqual;
 
 class EditorBuilderSpec extends ObjectBehavior
 {
@@ -25,20 +26,20 @@ class EditorBuilderSpec extends ObjectBehavior
 
         $editor->shouldBeAnInstanceOf('Gnugat\Redaktilo\Editor');
 
-        $editor->shouldHaveSearchStrategies(array(
+        $editor->shouldHaveSearchStrategies([
             'Gnugat\Redaktilo\Search\PhpSearchStrategy',
             'Gnugat\Redaktilo\Search\LineNumberSearchStrategy',
             'Gnugat\Redaktilo\Search\LineRegexSearchStrategy',
             'Gnugat\Redaktilo\Search\SameSearchStrategy',
-        ));
+        ]);
 
-        $editor->shouldHaveCommands(array(
+        $editor->shouldHaveCommands([
             'insert_above' => 'Gnugat\Redaktilo\Command\LineInsertAboveCommand',
             'insert_below' => 'Gnugat\Redaktilo\Command\LineInsertBelowCommand',
             'replace' => 'Gnugat\Redaktilo\Command\LineReplaceCommand',
             'replace_all' => 'Gnugat\Redaktilo\Command\LineReplaceAllCommand',
             'remove' => 'Gnugat\Redaktilo\Command\LineRemoveCommand',
-        ));
+        ]);
     }
 
     function it_can_have_custom_search_strategies(SearchStrategy $searchStrategy)
@@ -81,13 +82,13 @@ class EditorBuilderSpec extends ObjectBehavior
         expect(static::readProperty($editor->getWrappedObject(), 'commandInvoker'))->toBe($commandInvoker);
     }
 
-    function getMatchers()
+    function getMatchers(): array
     {
         $readProperty = function ($object, $propertyName) {
             return EditorBuilderSpec::readProperty($object, $propertyName);
         };
 
-        return array(
+        return [
             'haveSearchStrategies' => function ($subject, $expected) use ($readProperty) {
                 $engine = $readProperty($subject, 'searchEngine');
                 $strategies = array_map(
@@ -100,7 +101,7 @@ class EditorBuilderSpec extends ObjectBehavior
                     )
                 );
 
-                $constraint = new \PHPUnit_Framework_Constraint_IsEqual($expected);
+                $constraint = new IsEqual($expected);
 
                 return $constraint->evaluate($strategies, '', true);
             },
@@ -108,7 +109,7 @@ class EditorBuilderSpec extends ObjectBehavior
                 $commandInvoker = $readProperty($subject, 'commandInvoker');
                 $commands = array_map('get_class', $readProperty($commandInvoker, 'commands'));
 
-                $constraint = new \PHPUnit_Framework_Constraint_IsEqual($expected);
+                $constraint = new IsEqual($expected);
 
                 return $constraint->evaluate($commands, '', true);
             },
@@ -128,8 +129,8 @@ class EditorBuilderSpec extends ObjectBehavior
                 $commands = $readProperty($commandInvoker, 'commands');
 
                 return $expected == count($commands);
-            }
-        );
+            },
+        ];
     }
 
     static function readProperty($object, $propertyName)

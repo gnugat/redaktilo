@@ -25,8 +25,7 @@ class SearchEngineSpec extends ObjectBehavior
         SearchStrategy $searchStrategy1,
         SearchStrategy $searchStrategy2,
         SearchStrategy $searchStrategy3
-    )
-    {
+    ) {
         $pattern = '/ac/';
 
         $searchStrategy1->supports($pattern)->willReturn(true);

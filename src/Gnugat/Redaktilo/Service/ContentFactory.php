@@ -19,8 +19,6 @@ use Gnugat\Redaktilo\Text;
 class ContentFactory
 {
     /**
-     * @param Text $text
-     *
      * @return string
      */
     public function make(Text $text)

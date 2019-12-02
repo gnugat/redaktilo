@@ -39,7 +39,7 @@ class PhpSearchStrategy implements SearchStrategy
         $tokens = $this->converter->from($text);
         $reversedTokens = array_reverse($tokens);
         $total = count($reversedTokens);
-        for ($index = 0; $index < $total; $index++) {
+        for ($index = 0; $index < $total; ++$index) {
             $token = $reversedTokens[$index];
             if ($token->getLineNumber() === $location) {
                 break;
@@ -56,7 +56,7 @@ class PhpSearchStrategy implements SearchStrategy
         $location = (null !== $location ? $location : $text->getCurrentLineNumber()) + 1;
         $tokens = $this->converter->from($text);
         $total = count($tokens);
-        for ($index = 0; $index < $total; $index++) {
+        for ($index = 0; $index < $total; ++$index) {
             $token = $tokens[$index];
             if ($token->getLineNumber() === $location) {
                 break;
@@ -83,7 +83,6 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /**
-     * @param array $collection
      * @param int   $index
      * @param mixed $pattern
      *
@@ -94,7 +93,7 @@ class PhpSearchStrategy implements SearchStrategy
         $total = count($collection);
         while ($index < $total) {
             $found = $this->match($pattern, $collection, $index++);
-            if ($found !== false) {
+            if (false !== $found) {
                 $token = $collection[$found];
 
                 return $token->getLineNumber();
@@ -105,9 +104,7 @@ class PhpSearchStrategy implements SearchStrategy
     }
 
     /**
-     * @param array $wantedTokens
-     * @param array $tokens
-     * @param int   $index
+     * @param int $index
      *
      * @return mixed
      */
@@ -118,7 +115,7 @@ class PhpSearchStrategy implements SearchStrategy
             if (!$token->isSameAs($wantedToken)) {
                 return false;
             }
-            $index++;
+            ++$index;
         }
 
         return $index - 1;

@@ -28,8 +28,7 @@ class EditorSpec extends ObjectBehavior
         Filesystem $filesystem,
         SearchEngine $searchEngine,
         CommandInvoker $commandInvoker
-    )
-    {
+    ) {
         $file->getFilename()->willReturn(self::FILENAME);
 
         $this->beConstructedWith(
@@ -78,8 +77,7 @@ class EditorSpec extends ObjectBehavior
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
-    )
-    {
+    ) {
         $pattern = 'Nobody expects the Spanish Inquisition!';
         $foundLineNumber = 4423;
 
@@ -98,8 +96,7 @@ class EditorSpec extends ObjectBehavior
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
-    )
-    {
+    ) {
         $pattern = 'Nobody expects the Spanish Inquisition!';
         $foundLineNumber = 4423;
 
@@ -118,8 +115,7 @@ class EditorSpec extends ObjectBehavior
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
-    )
-    {
+    ) {
         $pattern = 'No one expects the Spanish inquisition!';
         $foundLineNumber = 42;
 
@@ -138,8 +134,7 @@ class EditorSpec extends ObjectBehavior
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
-    )
-    {
+    ) {
         $pattern = 'No one expects the Spanish inquisition!';
         $foundLineNumber = 42;
 
@@ -158,8 +153,7 @@ class EditorSpec extends ObjectBehavior
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
-    )
-    {
+    ) {
         $pattern = 'Nobody expects the Spanish Inquisition!';
         $foundLineNumber = 4423;
 
@@ -176,8 +170,7 @@ class EditorSpec extends ObjectBehavior
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
-    )
-    {
+    ) {
         $pattern = 'Nobody expects the Spanish Inquisition!';
         $foundLineNumber = 4423;
 
@@ -194,8 +187,7 @@ class EditorSpec extends ObjectBehavior
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
-    )
-    {
+    ) {
         $pattern = 'No one expects the Spanish inquisition!';
         $foundLineNumber = 42;
 
@@ -212,8 +204,7 @@ class EditorSpec extends ObjectBehavior
         SearchEngine $searchEngine,
         SearchStrategy $searchStrategy,
         Text $text
-    )
-    {
+    ) {
         $pattern = 'No one expects the Spanish inquisition!';
         $foundLineNumber = 42;
 
@@ -229,14 +220,13 @@ class EditorSpec extends ObjectBehavior
     function it_inserts_lines_above_the_current_one(
         CommandInvoker $commandInvoker,
         Text $text
-    )
-    {
+    ) {
         $addition = 'We are the knights who say Ni!';
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => null,
             'addition' => $addition,
-        );
+        ];
 
         $commandInvoker->run('insert_above', $input)->shouldBeCalled();
 
@@ -246,15 +236,14 @@ class EditorSpec extends ObjectBehavior
     function it_inserts_lines_above_the_given_one(
         CommandInvoker $commandInvoker,
         Text $text
-    )
-    {
+    ) {
         $lineNumber = 43;
         $addition = 'We are the knights who say Ni!';
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => $lineNumber,
             'addition' => $addition,
-        );
+        ];
 
         $commandInvoker->run('insert_above', $input)->shouldBeCalled();
 
@@ -264,14 +253,13 @@ class EditorSpec extends ObjectBehavior
     function it_inserts_lines_below_the_current_one(
         CommandInvoker $commandInvoker,
         Text $text
-    )
-    {
+    ) {
         $addition = 'We are the knights who say Ni!';
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => null,
             'addition' => $addition,
-        );
+        ];
 
         $commandInvoker->run('insert_below', $input)->shouldBeCalled();
 
@@ -281,15 +269,14 @@ class EditorSpec extends ObjectBehavior
     function it_inserts_lines_below_the_given_one(
         CommandInvoker $commandInvoker,
         Text $text
-    )
-    {
+    ) {
         $lineNumber = 43;
         $addition = 'We are the knights who say Ni!';
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => $lineNumber,
             'addition' => $addition,
-        );
+        ];
 
         $commandInvoker->run('insert_below', $input)->shouldBeCalled();
 
@@ -299,14 +286,13 @@ class EditorSpec extends ObjectBehavior
     function it_replaces_the_current_line(
         CommandInvoker $commandInvoker,
         Text $text
-    )
-    {
+    ) {
         $replacement = 'We are knights who say Ni!';
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => null,
             'replacement' => $replacement,
-        );
+        ];
 
         $commandInvoker->run('replace', $input)->shouldBeCalled();
 
@@ -316,15 +302,14 @@ class EditorSpec extends ObjectBehavior
     function it_replaces_the_given_line(
         CommandInvoker $commandInvoker,
         Text $text
-    )
-    {
+    ) {
         $lineNumber = 43;
         $replacement = 'We are knights who say Ni!';
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => $lineNumber,
             'replacement' => $replacement,
-        );
+        ];
 
         $commandInvoker->run('replace', $input)->shouldBeCalled();
 
@@ -334,15 +319,14 @@ class EditorSpec extends ObjectBehavior
     function it_replaces_all_occurences(
         CommandInvoker $commandInvoker,
         Text $text
-    )
-    {
+    ) {
         $pattern = '/*/';
         $replacement = 'Spam';
-        $input = array(
+        $input = [
             'text' => $text,
             'pattern' => $pattern,
             'replacement' => $replacement,
-        );
+        ];
 
         $commandInvoker->run('replace_all', $input)->shouldBeCalled();
 
@@ -352,12 +336,11 @@ class EditorSpec extends ObjectBehavior
     function it_removes_the_current_line(
         CommandInvoker $commandInvoker,
         Text $text
-    )
-    {
-        $input = array(
+    ) {
+        $input = [
             'text' => $text,
             'location' => null,
-        );
+        ];
 
         $commandInvoker->run('remove', $input)->shouldBeCalled();
 
@@ -367,13 +350,12 @@ class EditorSpec extends ObjectBehavior
     function it_removes_the_given_line(
         CommandInvoker $commandInvoker,
         Text $text
-    )
-    {
+    ) {
         $lineNumber = 43;
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => $lineNumber,
-        );
+        ];
 
         $commandInvoker->run('remove', $input)->shouldBeCalled();
 
@@ -383,7 +365,7 @@ class EditorSpec extends ObjectBehavior
     function it_runs_a_command(CommandInvoker $commandInvoker)
     {
         $name = 'walk_in_a_silly_way';
-        $input = array();
+        $input = [];
 
         $commandInvoker->run($name, $input)->shouldBeCalled();
 

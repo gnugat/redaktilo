@@ -50,11 +50,11 @@ class LineInsertAboveCommandSpec extends ObjectBehavior
 
         $lineNumber = 6;
 
-        $input = array(
+        $input = [
             'text' => $text,
             'location' => $lineNumber,
-            'addition' => "Pontius Pilate: '...Dickus?'"
-        );
+            'addition' => "Pontius Pilate: '...Dickus?'",
+        ];
 
         $textSanitizer->sanitize($input)->willReturn($text);
         $locationSanitizer->sanitize($input)->willReturn($lineNumber);
@@ -64,10 +64,10 @@ class LineInsertAboveCommandSpec extends ObjectBehavior
 
         $this->execute($input);
 
-        $input = array(
+        $input = [
             'text' => $text,
-            'addition' => "Pontius Pilate: '...Dickus?'"
-        );
+            'addition' => "Pontius Pilate: '...Dickus?'",
+        ];
 
         $textSanitizer->sanitize($input)->willReturn($text);
         $locationSanitizer->sanitize($input)->willReturn($lineNumber);

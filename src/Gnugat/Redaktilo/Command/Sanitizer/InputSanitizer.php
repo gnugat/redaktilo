@@ -12,15 +12,13 @@
 namespace Gnugat\Redaktilo\Command\Sanitizer;
 
 /**
- * Implementations are used by Commands to sanitize the given input
+ * Implementations are used by Commands to sanitize the given input.
  *
  * @api
  */
 interface InputSanitizer
 {
     /**
-     * @param array $input
-     *
      * @return mixed
      */
     public function sanitize(array $input);

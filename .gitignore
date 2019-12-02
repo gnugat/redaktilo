@@ -1,5 +1,7 @@
 # Temporary files
 /tests/fixtures/copies/
+.php_cs.cache
+.phpunit.result.cache
 
 # Dependencies
 

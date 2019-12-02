@@ -50,10 +50,10 @@ class LineRemoveCommandSpec extends ObjectBehavior
 
         $lineNumber = 2;
 
-        $input = array(
+        $input = [
             'text' => $text,
-            'location' => $lineNumber
-        );
+            'location' => $lineNumber,
+        ];
 
         $textSanitizer->sanitize($input)->willReturn($text);
         $locationSanitizer->sanitize($input)->willReturn($lineNumber);
@@ -64,9 +64,9 @@ class LineRemoveCommandSpec extends ObjectBehavior
 
         $this->execute($input);
 
-        $input = array(
+        $input = [
             'text' => $text,
-        );
+        ];
 
         $textSanitizer->sanitize($input)->willReturn($text);
         $locationSanitizer->sanitize($input)->willReturn($lineNumber);

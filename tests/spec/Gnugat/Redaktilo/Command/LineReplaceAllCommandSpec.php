@@ -14,8 +14,6 @@ namespace spec\Gnugat\Redaktilo\Command;
 use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
 use Gnugat\Redaktilo\EditorFactory;
 use Gnugat\Redaktilo\Service\ContentFactory;
-use Gnugat\Redaktilo\Service\LineBreak;
-use Gnugat\Redaktilo\Service\TextFactory;
 use PhpSpec\ObjectBehavior;
 
 class LineReplaceAllCommandSpec extends ObjectBehavior
@@ -47,11 +45,11 @@ class LineReplaceAllCommandSpec extends ObjectBehavior
         $expectedFilename = __DIR__.'/../../../../fixtures/expectations/life-of-brian-replace-all.txt';
         $expectedContent = file_get_contents($expectedFilename);
 
-        $this->execute(array(
+        $this->execute([
             'text' => $text,
             'pattern' => self::PATTERN,
             'replacement' => self::REPLACEMENT,
-        ));
+        ]);
 
         $actualContent = $this->contentFactory->make($text);
         expect($actualContent)->toBe($expectedContent);

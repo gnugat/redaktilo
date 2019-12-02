@@ -12,8 +12,8 @@
 namespace Gnugat\Redaktilo;
 
 use Gnugat\Redaktilo\Exception\DifferentLineBreaksFoundException;
-use Gnugat\Redaktilo\Exception\InvalidLineNumberException;
 use Gnugat\Redaktilo\Exception\InvalidArgumentException;
+use Gnugat\Redaktilo\Exception\InvalidLineNumberException;
 use Gnugat\Redaktilo\Util\StringUtil;
 
 /**
@@ -40,7 +40,6 @@ class Text
     protected $currentLineNumber = 0;
 
     /**
-     * @param array  $lines
      * @param string $lineBreak
      */
     protected function __construct(array $lines, $lineBreak = PHP_EOL)
@@ -72,7 +71,6 @@ class Text
     /**
      * Creates a Text instance from an array of lines.
      *
-     * @param array  $lines
      * @param string $lineBreak
      *
      * @return static
@@ -93,8 +91,6 @@ class Text
     }
 
     /**
-     * @param array $lines
-     *
      * @api
      */
     public function setLines(array $lines)
@@ -211,7 +207,7 @@ class Text
             throw new InvalidArgumentException('Callback has to be a valid callable, '.gettype($callback).' given.');
         }
 
-        for ($i = 0; $this->checkIfLineNumberIsValid($i, false); $i++) {
+        for ($i = 0; $this->checkIfLineNumberIsValid($i, false); ++$i) {
             $this->setCurrentLineNumber($i);
             call_user_func($callback, $this->getLine($i), $i, $this);
         }

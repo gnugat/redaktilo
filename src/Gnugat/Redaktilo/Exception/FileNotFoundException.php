@@ -22,8 +22,7 @@ class FileNotFoundException extends \RuntimeException implements Exception
     private $path;
 
     /**
-     * @param string          $path
-     * @param \Exception|null $previous
+     * @param string $path
      */
     public function __construct($path, \Exception $previous = null)
     {

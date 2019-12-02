@@ -21,30 +21,30 @@ class TextSanitizerSpec extends ObjectBehavior
     {
         $exception = '\Gnugat\Redaktilo\Exception\InvalidArgumentException';
 
-        $input = array();
+        $input = [];
         $this->shouldThrow($exception)->duringSanitize($input);
 
-        $input = array(
-            'replacement' => 'I\'m your father'
-        );
+        $input = [
+            'replacement' => 'I\'m your father',
+        ];
         $this->shouldThrow($exception)->duringSanitize($input);
 
-        $input = array(
-            'text' => null
-        );
+        $input = [
+            'text' => null,
+        ];
         $this->shouldThrow($exception)->duringSanitize($input);
     }
 
     function it_returns_the_given_text_instance(Text $text, File $file)
     {
-        $input = array(
-            'text' => $text
-        );
+        $input = [
+            'text' => $text,
+        ];
         $this->sanitize($input)->shouldReturn($text);
 
-        $input = array(
-            'text' => $file
-        );
+        $input = [
+            'text' => $file,
+        ];
         $this->sanitize($input)->shouldReturn($file);
     }
 }

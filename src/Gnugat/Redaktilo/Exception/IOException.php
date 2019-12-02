@@ -22,9 +22,8 @@ class IOException extends \RuntimeException implements Exception
     private $path;
 
     /**
-     * @param string          $path
-     * @param string          $message
-     * @param \Exception|null $previous
+     * @param string $path
+     * @param string $message
      */
     public function __construct($path, $message, \Exception $previous = null)
     {

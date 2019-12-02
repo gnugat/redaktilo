@@ -12,7 +12,6 @@
 namespace spec\Gnugat\Redaktilo\Command\Sanitizer;
 
 use Gnugat\Redaktilo\Command\Sanitizer\TextSanitizer;
-use Gnugat\Redaktilo\File;
 use Gnugat\Redaktilo\Text;
 use PhpSpec\ObjectBehavior;
 
@@ -27,11 +26,12 @@ class LocationSanitizerSpec extends ObjectBehavior
 
         $this->beConstructedWith($textSanitizer);
     }
+
     function it_uses_current_line_if_no_location_is_given(TextSanitizer $textSanitizer, Text $text)
     {
-        $input = array(
-            'text' => $text
-        );
+        $input = [
+            'text' => $text,
+        ];
 
         $textSanitizer->sanitize($input)->willReturn($text);
         $this->sanitize($input)->shouldReturn(self::LINE_NUMBER);
@@ -41,21 +41,21 @@ class LocationSanitizerSpec extends ObjectBehavior
     {
         $exception = '\Gnugat\Redaktilo\Exception\InvalidLineNumberException';
 
-        $input = array(
-            'location' => 'toto'
-        );
+        $input = [
+            'location' => 'toto',
+        ];
         $textSanitizer->sanitize($input)->willReturn($text);
         $this->shouldThrow($exception)->duringSanitize($input);
 
-        $input = array(
-            'location' => -1
-        );
+        $input = [
+            'location' => -1,
+        ];
         $textSanitizer->sanitize($input)->willReturn($text);
         $this->shouldThrow($exception)->duringSanitize($input);
 
-        $input = array(
-            'location' => 55
-        );
+        $input = [
+            'location' => 55,
+        ];
         $textSanitizer->sanitize($input)->willReturn($text);
         $this->shouldThrow($exception)->duringSanitize($input);
     }

@@ -25,10 +25,6 @@ class LineInsertBelowCommand implements Command
     /** @var LocationSanitizer */
     private $locationSanitizer;
 
-    /**
-     * @param TextSanitizer     $textSanitizer
-     * @param LocationSanitizer $locationSanitizer
-     */
     public function __construct(TextSanitizer $textSanitizer, LocationSanitizer $locationSanitizer)
     {
         $this->textSanitizer = $textSanitizer;

@@ -69,7 +69,6 @@ class TokenBuilder
     }
 
     /**
-     *
      * @param string $string
      *
      * @return Token
@@ -82,15 +81,13 @@ class TokenBuilder
     }
 
     /**
-     * @param array $rawTokens
-     *
      * @return Token[]
      */
     public function buildFromRaw(array $rawTokens)
     {
         trigger_error(__CLASS__.' is no longer supported and will be removed in version 2', \E_USER_DEPRECATED);
         $lineNumber = 0;
-        $tokens = array();
+        $tokens = [];
         foreach ($rawTokens as $rawToken) {
             $token = $this->makeFromRaw($rawToken, $lineNumber);
             if ($token->hasNumber()) {
@@ -114,7 +111,7 @@ class TokenBuilder
         $whitespace = $this->makeWhitespace(null);
         $string = $this->makeString($className);
 
-        return array($class, $whitespace, $string);
+        return [$class, $whitespace, $string];
     }
 
     /**
@@ -129,7 +126,7 @@ class TokenBuilder
         $whitespace = $this->makeWhitespace(null);
         $string = $this->makeString($functionName);
 
-        return array($function, $whitespace, $string);
+        return [$function, $whitespace, $string];
     }
 
     /**

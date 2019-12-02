@@ -25,7 +25,7 @@ class CommandInvokerSpec extends ObjectBehavior
     {
         $name = 'test';
         $exception = '\Gnugat\Redaktilo\Exception\CommandNotFoundException';
-        $input = array();
+        $input = [];
 
         $command->getName()->willReturn('some-command');
 
@@ -36,7 +36,7 @@ class CommandInvokerSpec extends ObjectBehavior
     function it_executes_the_wanted_command(Command $command)
     {
         $name = 'another-command';
-        $input = array();
+        $input = [];
 
         $command->getName()->willReturn('another-command');
         $command->execute($input)->shouldBeCalled();

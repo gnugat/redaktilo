@@ -17,7 +17,7 @@ class FileSpec extends ObjectBehavior
 {
     function let()
     {
-        $this->beConstructedThrough('fromString', array('Hello World'));
+        $this->beConstructedThrough('fromString', ['Hello World']);
     }
 
     function it_is_a_text()
