@@ -29,13 +29,13 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2 || ^8.0",
         "symfony/filesystem": "^5.0"
     },
     "require-dev": {
-        "bossa/phpspec2-expect": "^3.1",
+        "friends-of-phpspec/phpspec-expect": "^3.1 || ^4.0",
         "friendsofphp/php-cs-fixer": "^2.16",
-        "phpspec/phpspec": "^6.1",
+        "phpspec/phpspec": "^6.1 || ^7.0",
         "phpunit/phpunit": "^8.4"
     },
     "extra": {
