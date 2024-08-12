@@ -5,14 +5,12 @@ editor-like object.
 
 *Because your code too needs an editor to manipulate files*.
 
-> [![Travis CI](https://travis-ci.org/gnugat/redaktilo.png)](https://travis-ci.org/gnugat/redaktilo)
-
 ## Getting started
 
 Use [Composer](http://getcomposer.org/) to install Redaktilo in your projects:
 
 ```console
-$ composer require "gnugat/redaktilo:^1.0"
+$ composer require "gnugat/redaktilo:^2.0"
 ```
 
 Redaktilo provides an `Editor` class which can be instanciated using
