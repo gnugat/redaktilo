@@ -22,32 +22,54 @@ Here's some tips to make you the best contributor ever:
 
 Run the tests using the following script:
 
-    bin/tester.sh
+```console
+$ bin/tester.sh
+```
 
 ## Standard code
 
 Use [PHP CS fixer](http://cs.sensiolabs.org/) to make your code compliant with
 Redaktilo's coding standards:
 
-    php-cs-fixer fix --config=sf23 .
+```console
+$ php-cs-fixer fix --config=sf23 .
+```
 
 ## Specifications
 
-Redaktilo drives its development using [phpspec](http://www.phpspec.net/):
+Redaktilo drives its development using [phpspec](http://www.phpspec.net/).
 
-    # Generate the specification class:
-    phpspec describe 'Gnugat\Redaktilo\MyNewClass'
+First boostrap the code for the Specification:
 
-    # Customize the specification class:
-    $EDITOR tests/spec/Gnugat/Redaktilo/MyNewClass.php
+```console
+$ phpspec describe 'Gnugat\Redaktilo\MyNewClass'
+```
 
-    # Generate the specified class:
-    phpspec run
+Then write the code for the Specification:
 
-    # Customize the class:
-    $EDITOR src/Gnugat/Redaktilo/MyNewClass.php
+```console
+$ $EDITOR spec/Gnugat/Redaktilo/MyNewClass.php
+```
 
-    phpspec run # Should be green!
+Next, bootstrap the code for the corresponding clas:
+
+```console
+$ phpspec run
+```
+
+Follow that by writing the code of the corresponding class:
+
+```console
+$ $EDITOR src/Gnugat/Redaktilo/MyNewClass.php
+```
+
+Finally, execute the specifications:
+
+```
+$ phpspec run
+```
+
+They should be green!
 
 ## Use cases
 
@@ -61,18 +83,24 @@ Have a look at `tests/examples`, you might add your own.
 To keep your fork up-to-date, you should track the upstream (original) one
 using the following command:
 
-    git remote add upstream https://github.com/gnugat/redaktilo.git
+```console
+$ git remote add upstream https://github.com/gnugat/redaktilo.git
+```
 
 Then get the upstream changes:
 
-    git checkout master
-    git pull --rebase origin master
-    git pull --rebase upstream master
-    git checkout <your-branch>
-    git rebase master
+```console
+git checkout main
+git pull --rebase origin main
+git pull --rebase upstream main
+git checkout <your-branch>
+git rebase main
+```
 
 Finally, publish your changes:
 
-    git push -f origin <your-branch>
+```console
+$ git push -f origin <your-branch>
+```
 
 Your pull request will be automatically updated.
