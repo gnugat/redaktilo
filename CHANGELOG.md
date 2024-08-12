@@ -5,6 +5,10 @@
 * bumped requirement to Symfony 5
 * bumped requirement to PHP 7.2
 
+## 1.7.4: PHP 8
+
+* added support for PHP 8
+
 ## 1.7.3: Symfony 4
 
 * added support for Symfony 4
