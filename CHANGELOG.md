@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 1.7.4: PHP 8
+
+* added support for PHP 8
+
 ## 2.0.0: Symfony 5 / PHP 7.2
 
 * bumped requirement to Symfony 5
