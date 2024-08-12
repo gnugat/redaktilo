@@ -12,7 +12,9 @@ editor-like object.
 
 Use [Composer](http://getcomposer.org/) to install Redaktilo in your projects:
 
-    composer require "gnugat/redaktilo:^1.0"
+```console
+$ composer require "gnugat/redaktilo:^1.0"
+```
 
 Redaktilo provides an `Editor` class which can be instanciated using
 `EditorFactory`:
